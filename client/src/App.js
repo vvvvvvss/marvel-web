@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import {Switch, Redirect, Route} from 'react-router-dom';
+import { createTheme, Paper, ThemeProvider } from '@mui/material';
+import Home from './pages/Home/Home.js';
+import { useState } from 'react';
 
-function App() {
+const App = ()=> {
+
+  const [mode, setMode] = useState('dark');
+
+  const darkTheme = createTheme({
+    palette : {
+      mode : 'dark'
+    },
+    typography : {
+      fontFamily : 'Montserrat',color:'#ffffff'
+    }
+});
+
+  const lightMode = createTheme({
+    palette : {
+      mode : 'light'
+    },
+    typography : {
+      fontFamily : 'Montserrat'
+    }
+});
+
+  const user = '';
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ThemeProvider theme={mode==='dark' ? darkTheme : lightMode}>
+        <Switch>
+            <Route path="/" exact component={Home} /> 
+        </Switch>
+      </ThemeProvider>
     </div>
   );
 }
