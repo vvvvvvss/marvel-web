@@ -14,20 +14,24 @@ export const darkTheme = createTheme({
       fontFamily : 'Montserrat',color:'#ffffff'
     },
     components : {
-      MuiChip : {
-        variants :[{
-          props : { variant : 'navbar'},
-          style : {
-            border: '1.5px solid #696969', height: '40px', borderRadius: '100px', fontWeight:'500',
-            padding: '0px 0px 0px 0px', backgroundColor : 'rgba(0,0,0,0)',"&:hover":{backgroundColor : '#404040'}
-          }
-        }],
-      },
       MuiButton : {
         variants : [
           {props :{variant : 'rounded-outlined'}, 
-          style :{borderRadius:'100px', border:'1px solid', color:'#FFD7EA'}}
+          style :{borderRadius:'100px', border:'1px solid', color:'#FFD7EA'}},
+          {props :{variant : 'rounded-avatar'}, 
+          style :{borderRadius:'100px', border: '1px solid #FFD7EA',color:'#FFD7EA',
+          padding:'5px 12px 5px 10px', }},
         ]
+      },
+      MuiPaper : {
+        styleOverrides : {
+          root : {backgroundColor : '#031117'}
+        }
+      },
+      MuiAppBar:{
+        styleOverrides:{
+          root:{backgroundColor : '#6A353B'}
+        }
       }
     }
 });

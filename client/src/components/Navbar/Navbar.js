@@ -31,20 +31,17 @@ const Navbar = () => {
     return (
         <div>
             <Slide appear={false} direction="down" in={!trigger}>
-            <AppBar className={classes.navbar}>
+            <AppBar>
             <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
                 <Typography variant="h6" component="div">
                 UVCE MARVEL
                 </Typography>
                 <div>
                     { authUser?.id ?
-                        <>
-                        <Chip className={classes.usnChip} clickable
-                        avatar={<Avatar alt={authUser?.name} src={authUser?.profilePic}/>}
-                        label={authUser?.name} size='medium'
-                        variant="navbar"
-                        />
-                        </>
+                        <Button clickable variant='rounded-avatar' className={classes.usnChip}
+                        startIcon={<Avatar alt={authUser?.name} src={authUser?.profilePic} 
+                        sx={{height : 25, width : 25}}/>} style={{marginRight : '20px'}}
+                        label={authUser?.name}>{authUser?.name}</Button>
                         : <> </>
                     }
                     { !authUser?.id ? 

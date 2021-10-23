@@ -9,16 +9,16 @@ const Home = () => {
     return (
         <div square className={classes.window}>
             <Navbar/>
-            <div style={{marginTop : '60px', backgroundColor : '#313131', height : '1000px'}}>
+            <Paper square style={{marginTop : '60px',height : '1000px'}}>
                 <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'200px'}}>
                 <Link to='/dashboard' style={{textDecoration : 'none'}}>
-                <Button variant='outlined'>
+                <Button variant='contained' color='primary'>
                     Go to Dashboard
                 </Button>
                 </Link>
                 
                 </div>
-            </div>
+            </Paper>
         </div>
     )
 }
