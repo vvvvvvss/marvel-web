@@ -10,6 +10,7 @@ const taskReportSchema = mongoose.Schema({
     content : { type : String, required : true, maxLength : 6000},
     reviewStatus : { type : String, 
                 enum : {values : ['PENDING', 'APPROVED', 'FLAGGED']}, default : 'PENDING'},
+    taskNo : { type : Number , required : true}
 });
 
 export default mongoose.model("taskReports", taskReportSchema);

@@ -2,36 +2,32 @@ import {Switch, Redirect, Route} from 'react-router-dom';
 import { createTheme, Paper, ThemeProvider } from '@mui/material';
 import Home from './pages/Home/Home.js';
 import { useState } from 'react';
+import { darkTheme, lightTheme } from './utils/themes.js';
+import StuDashboard from './pages/StuDashboard/StuDashboard.js';
+import InsDashboard from './pages/InsDashboard/InsDashboard.js';
+import { useSelector } from 'react-redux';
 
 const App = ()=> {
 
   const [mode, setMode] = useState('dark');
-
-  const darkTheme = createTheme({
-    palette : {
-      mode : 'dark'
-    },
-    typography : {
-      fontFamily : 'Montserrat',color:'#ffffff'
-    }
-});
-
-  const lightMode = createTheme({
-    palette : {
-      mode : 'light'
-    },
-    typography : {
-      fontFamily : 'Montserrat'
-    }
-});
-
-  const user = '';
+  const {authUser} = useSelector((state) => (state.auth));
 
   return (
     <div>
-      <ThemeProvider theme={mode==='dark' ? darkTheme : lightMode}>
+      <ThemeProvider theme={mode==='dark' ? darkTheme : lightTheme}>
         <Switch>
             <Route path="/" exact component={Home} /> 
+            <Route path="/dashboard" exact component={
+              ()=>{
+                if(authUser?.enrollmentStatus==='UNKNOWN' || !authUser?.id){
+                  return <Redirect to="/"/>
+                }else if(authUser?.currentRole==='STU'){
+                  return <StuDashboard/>
+                }else if(authUser?.currentRole==='INS'){
+                  return <InsDashboard/>
+                }
+              }
+            }/>
         </Switch>
       </ThemeProvider>
     </div>
