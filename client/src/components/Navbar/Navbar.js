@@ -1,4 +1,4 @@
-import { Button, DialogTitle, useScrollTrigger } from "@mui/material";
+import { Button, CircularProgress, DialogTitle, useScrollTrigger } from "@mui/material";
 import { Slide, AppBar, Toolbar, Typography, Chip, Avatar
       } from "@mui/material";
 import { useState } from "react";
@@ -6,14 +6,14 @@ import GoogleLogin, {GoogleLogout} from 'react-google-login';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {auth} from '../../actions/auth.js'
-import useStyles from './styles.js'
+import useStyles from './styles.js';
 
 const Navbar = () => {
     const trigger = useScrollTrigger();
     const dispatch = useDispatch();
     const history = useHistory();
-    const {authUser} = useSelector((state)=> state.auth);
-    const classes = useStyles();
+    const {authUser, isAuthLoading} = useSelector((state)=> state.auth);
+    const styles = useStyles();
 
     const googleSuccess = (res)=> {
         console.log('initial token recieved');
@@ -34,16 +34,18 @@ const Navbar = () => {
             <AppBar>
             <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
                 <Typography variant="h6" component="div">
-                UVCE MARVEL
+                <span className={styles.uvce}>UVCE&nbsp;</span>
+                <span className={styles.marvel}>MARVEL</span>
                 </Typography>
-                <div>
+
+                {isAuthLoading ? <CircularProgress/> : 
+                <div className={styles.righttoolbar}>
                     { authUser?.id ?
-                        <Button clickable variant='rounded-avatar' className={classes.usnChip}
-                        startIcon={<Avatar alt={authUser?.name} src={authUser?.profilePic} 
-                        sx={{height : 25, width : 25}}/>} style={{marginRight : '20px'}}
-                        label={authUser?.name}>{authUser?.name}</Button>
+                         <Avatar alt={authUser?.name} src={authUser?.profilePic} 
+                        style={{marginRight:'20px'}}/>
                         : <> </>
                     }
+                    <div>
                     { !authUser?.id ? 
                     <GoogleLogin
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
@@ -55,17 +57,20 @@ const Navbar = () => {
                     onSuccess={googleSuccess} onFailure={googleError} 
                     cookiePolicy="single_host_origin" isSignedIn={true}/>
                     :
-                    <GoogleLogout
+                    <div className={styles.logout}>
+                    <GoogleLogout 
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
                     render={(renderProps) => (
                         <Button onClick={renderProps.onClick} disabled={renderProps.disabled} 
-                        variant="rounded-outlined" color='primary' >
+                        variant='rounded-outlined' className={styles.logoutbutton}>
                         Logout
                         </Button>
                     )}
                     onLogoutSuccess={logout} onFailure={googleError}/>
+                    </div>
                     }
-                </div>
+                    </div>
+                </div>}
             </Toolbar>
             </AppBar>
             </Slide>

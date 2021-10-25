@@ -1,22 +1,36 @@
-import { Button, Paper, Typography} from '@mui/material';
+import { Button, Paper, Typography, Alert} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import useStyles from './styles.js';
 import {Link} from 'react-router-dom';
+import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
     const classes = useStyles();
+    const history = useHistory();
+    const {authUser} = useSelector(state => state.auth);
 
     return (
         <div square className={classes.window}>
             <Navbar/>
-            <Paper square style={{marginTop : '60px',height : '1000px'}}>
+            <Paper square style={{paddingTop : '60px',height : '1000px'}}>
                 <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'200px'}}>
-                <Link to='/dashboard' style={{textDecoration : 'none'}}>
-                <Button variant='contained' color='primary'>
+
+                <div>
+                { authUser?.enrollmentStatus==='UNKNOWN' &&
+                    <Alert severity="warning">
+                    Thankyou for showing interest in UVCE Marvel. You can continue to explore&nbsp;
+                    our Blogs, Stories, Syllabus etc. If you are expecting Dashboard access, contact us.
+                  </Alert>
+                }
+                { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
+               <Button variant='contained' color='primary' onClick={()=>(history.push('/dashboard'))}>
                     Go to Dashboard
                 </Button>
-                </Link>
+                }
+                </div>
                 
+
                 </div>
             </Paper>
         </div>

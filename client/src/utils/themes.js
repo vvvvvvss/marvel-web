@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 
 export const darkTheme = createTheme({
     palette : {
@@ -17,10 +17,10 @@ export const darkTheme = createTheme({
       MuiButton : {
         variants : [
           {props :{variant : 'rounded-outlined'}, 
-          style :{borderRadius:'100px', border:'1px solid', color:'#FFD7EA'}},
-          {props :{variant : 'rounded-avatar'}, 
-          style :{borderRadius:'100px', border: '1px solid #FFD7EA',color:'#FFD7EA',
-          padding:'5px 12px 5px 10px', }},
+          style :{borderRadius:'100px', border:'1.5px solid', color:'#FFD7EA',backgroundColor:'#350006',
+                  transition: '200ms',
+                  letterSpacing: '0.23em', fontWeight:'600',filter: 'drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.25))',
+                '&:hover':{ filter : 'drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.25))',backgroundColor:'#350006' }}},
         ]
       },
       MuiPaper : {
@@ -30,7 +30,7 @@ export const darkTheme = createTheme({
       },
       MuiAppBar:{
         styleOverrides:{
-          root:{backgroundColor : '#6A353B'}
+          root:{background : 'linear-gradient(90deg, #8B2D44 0%, #C17689 100%)'}
         }
       }
     }

@@ -1,5 +1,5 @@
 import {Switch, Redirect, Route} from 'react-router-dom';
-import { createTheme, Paper, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home/Home.js';
 import { useState } from 'react';
 import { darkTheme, lightTheme } from './utils/themes.js';
