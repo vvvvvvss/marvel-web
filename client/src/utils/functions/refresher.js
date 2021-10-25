@@ -3,7 +3,7 @@ const tokenRefresher = (res) => {
     const refresh = async()=>{
         const newToken = await res.reloadAuthResponse().catch((err)=>(console.log(err)));
         console.log('new token recieved', newToken);
-        sessionStorage.setItem('deez', newToken.tokenId);
+        sessionStorage.setItem('deez', newToken.id_token);
         setTimeout(refresh, timeToRefresh);
     }
 

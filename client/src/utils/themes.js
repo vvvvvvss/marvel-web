@@ -26,12 +26,26 @@ export const darkTheme = createTheme({
       MuiPaper : {
         styleOverrides : {
           root : {backgroundColor : '#031117'}
-        }
+        },
+        variants : [
+          { props : { variant : 'widget'},
+          style : { borderRadius : '12px', border : '1.5px solid #288C9A', padding :'15px 15px 15px 15px'}}
+        ]
       },
       MuiAppBar:{
         styleOverrides:{
           root:{background : 'linear-gradient(90deg, #8B2D44 0%, #C17689 100%)'}
-        }
+        },
+      },
+      MuiTypography : {
+        variants : [
+          { props : {variant : 'widget-heading'},
+          style : { fontSize : '12px',letterSpacing : '0.23em', textTransform:'uppercase',
+          fontWeight:'600', color:'#D3FFFF', fontFamily : 'Montserrat'}}
+        ]
+      },
+      MuiChip :{
+        styleOverrides : { root: { color:'#FFD7EA',border : '1px solid #FFD7EA'}}
       }
     }
 });

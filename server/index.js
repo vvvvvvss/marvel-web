@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import utilRoutes from './routes/utils.js';
+import devRoutes from './routes/devRoutes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/', (req,res)=> {
 
 //starting points for routes
 app.use('', utilRoutes);
+app.use('/dev', devRoutes);
 
 //connecting to mongodb
 const PORT = process.env.PORT || 3000;
