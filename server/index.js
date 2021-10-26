@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import utilRoutes from './routes/utils.js';
 import devRoutes from './routes/devRoutes.js';
+import getRoutes from './routes/getRoutes.js';
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.get('/', (req,res)=> {
 
 //starting points for routes
 app.use('', utilRoutes);
-app.use('/dev', devRoutes);
+// app.use('/dev', devRoutes); // only for dev use
+app.use('/get', getRoutes);
 
 //connecting to mongodb
 const PORT = process.env.PORT || 3000;

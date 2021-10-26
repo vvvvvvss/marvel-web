@@ -1,7 +1,7 @@
 import { Chip, Paper, Typography } from '@mui/material'
 import React from 'react'
 import Navbar from '../../components/Navbar/Navbar.js';
-import Syllabus from '../../components/Widgets/Syllabus.js';
+import Syllabus from '../../components/Widgets/dbLandT.js';
 import styles from './dashboard.module.css';
 
 const StuDashboard = () => {
@@ -15,9 +15,6 @@ const StuDashboard = () => {
                 <Typography>Student dashboard</Typography>
             </Paper>
             <Paper variant='widget' style={{height:'100px'}}>
-                <Typography>Student dashboard</Typography>
-            </Paper>
-            <Paper variant='widget' style={{height:'500px'}}>
                 <Typography>Student dashboard</Typography>
             </Paper>
             </div>

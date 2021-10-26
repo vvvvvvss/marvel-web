@@ -10,3 +10,4 @@ API.interceptors.request.use((req) => {
 })
 
 export const auth = async (token) => API.post('/auth', {token : token});
+export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${courseCode}?scope=${scope}`);

@@ -4,7 +4,7 @@ export const darkTheme = createTheme({
     palette : {
       mode : 'dark',
       primary :{
-        main : '#9B2D48', light : '#FFD7EA', dark : '#350006'
+        main : '#CC4E6C', light : '#FFD7EA', dark : '#350006'
       },
       secondary : {
         main : '#288C9A', light : '#D3FFFF', dark : '#001C28'
@@ -34,19 +34,22 @@ export const darkTheme = createTheme({
       },
       MuiAppBar:{
         styleOverrides:{
-          root:{background : 'linear-gradient(90deg, #8B2D44 0%, #C17689 100%)'}
+          root:{background : 'linear-gradient(90deg, #8B2D44 0%, #C17689 100%)',}
         },
       },
       MuiTypography : {
         variants : [
           { props : {variant : 'widget-heading'},
           style : { fontSize : '12px',letterSpacing : '0.23em', textTransform:'uppercase',
-          fontWeight:'600', color:'#D3FFFF', fontFamily : 'Montserrat'}}
+          fontWeight:'600', color:'#D3FFFF', fontFamily : 'Montserrat'}},
+          { props : { variant : 'heading'},
+          style : { fontFamily : 'Montserrat', fontWeight : '600', fontSize:'14px',letterSpacing:'0.23em',
+          color:'#D3FFFF',backgroundColor:'#1E2629' ,lineHeight : '40px', textTransform:'uppercase'}}
         ]
       },
       MuiChip :{
-        styleOverrides : { root: { color:'#FFD7EA',border : '1px solid #FFD7EA'}}
-      }
+        styleOverrides : { root: { color:'#FFD7EA',border : '1.5px solid #FFD7EA',fontWeight:'500'}}
+      },
     }
 });
 
