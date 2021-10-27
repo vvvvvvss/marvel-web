@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import auth from './auth.js';
-import stuDashboard from "./stuDashboard.js";
+import dashboard from "./dashboard.js";
 
-const reducer = combineReducers({auth, stuDashboard});
+const reducer = combineReducers({auth, dashboard});
 
 export default reducer;

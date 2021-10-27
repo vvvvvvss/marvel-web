@@ -8,3 +8,12 @@ export const getCourseData=(courseCode, scope) => async(dispatch)=>{
     }
     dispatch({type : 'END_SYLLABUS_LOADING'});
 }
+
+export const getProfileData=(id, scope)=>async(dispatch)=>{
+    dispatch({type : 'START_PROFILE_LOADING'});
+    const {data} = await API.getProfileData(id,scope).catch((err)=>(console.log(err)));
+    if(data?.status==='200'){
+        dispatch({type : 'GET_PROFILE', payload : data?.profile});
+    }
+    dispatch({type:'END_PROFILE_LOADING'});
+}
