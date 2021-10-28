@@ -22,11 +22,21 @@ app.get('/', (req,res)=> {
 
 //starting points for routes
 app.use('', utilRoutes);
-// app.use('/dev', devRoutes); // only for dev use
+app.use('/dev', devRoutes); // only for dev use
 app.use('/get', getRoutes);
 
-//connecting to mongodb
+
+
+//connecting to cosmos
 const PORT = process.env.PORT || 3000;
-mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME+"?ssl=true&replicaSet=globaldb", { 
+  auth : {
+    username: process.env.COSMOSDB_USER,
+     password: process.env.COSMOSDB_PASSWORD
+  },
+  useNewUrlParser: true, 
+  useUnifiedTopology: true,
+  retryWrites : false 
+})
   .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
-  .catch((error) => console.log(`${error} did not connect`));
+  .catch((error) => console.log(`${error}`));
