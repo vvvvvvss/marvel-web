@@ -16,8 +16,10 @@ const DbProfile = () => {
     const handleSave=()=>{
         dispatch(updateProfile(profile?.id, profileCopy ));
         setChanged(false);
-        setProfileCopy(profile);
     }
+    useEffect(() => {
+        setProfileCopy(profile);
+    }, [profile])
     return (
         <>
         <Paper variant='widget' style={{height:'max-content'}}>
@@ -35,22 +37,22 @@ const DbProfile = () => {
 
                     {/* EDITABLE FORM */}
                 <TextField label="Bio" defaultValue={profileCopy?.bio} value={profileCopy?.bio} variant='standard' multiline
-                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}}
+                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,bio : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
                 
                 <TextField label="LinkedIn" defaultValue={profileCopy?.linkedIn} value={profileCopy?.linkedIn} variant='standard' multiline
-                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}}
+                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,linkedIn : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
 
                 <TextField label="GitHub" defaultValue={profileCopy?.gitHub} value={profileCopy?.gitHub} variant='standard' multiline
-                InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}}
+                InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,gitHub : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
 
                 <TextField label="Website"defaultValue={profileCopy?.website} value={profileCopy?.website} variant='standard' multiline
-                InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}}
+                InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,website : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
                 
@@ -64,8 +66,6 @@ const DbProfile = () => {
                 }
                 </div>  
             </div>}
-            
-            
         </Paper>
         </>
     )

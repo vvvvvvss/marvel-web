@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     profilePic : {type : String},
     bio : {type : String, maxLength : 200},
     regNo : { type : String },
-    id: { type: String, required : true },
+    id: { type: String, required : true,unique:true },
     currentStuCourse : {type : String},
     currentInsCourse : { type : [String]},
     currentLevel : {type : String, enum : {values : ['1','2','3']}},

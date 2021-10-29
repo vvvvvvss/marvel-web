@@ -2,7 +2,7 @@ const initialState = {
     isSyllabusLoading : false,
     isProfileLoading : false,
     syllabus : {},
-    profile : {},
+    profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:''},
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -16,7 +16,7 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'END_PROFILE_LOADING' :
             return {...state, isProfileLoading:false}
         case 'GET_PROFILE':
-            return {...state, profile : action.payload}
+            return {...state, profile : {...state.profile, ...action.payload}}
         case 'GET_COURSE' :
             return {...state, syllabus : action.payload}
         default:

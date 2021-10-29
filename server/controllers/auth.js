@@ -17,7 +17,7 @@ try {
     
     const existingUser = await user.aggregate([
         {$match : { id : userData?.sub }},
-        {$project : { joinedAt : 0, _id : 0}}, { $limit : 1}
+        {$project : { joinedAt : 0, _id : 0, bio:0,linkedIn:0,gitHub:0,website:0,}}, { $limit : 1}
     ]);
 
     const isActiveStudent = ((existingUser[0]?.currentRole==='STU')&&

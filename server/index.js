@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import utilRoutes from './routes/utils.js';
 import devRoutes from './routes/devRoutes.js';
 import getRoutes from './routes/getRoutes.js';
+import updateRoutes from './routes/updateRoutes.js';
 
 const app = express();
 
@@ -22,9 +23,9 @@ app.get('/', (req,res)=> {
 
 //starting points for routes
 app.use('', utilRoutes);
-app.use('/dev', devRoutes); // only for dev use
+// app.use('/dev', devRoutes); // only for dev use
 app.use('/get', getRoutes);
-
+app.use('/update',updateRoutes);
 
 
 //connecting to cosmos

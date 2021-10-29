@@ -1,5 +1,5 @@
 import express from 'express';
-import {getCourse, getProfile} from '../controllers/getRoutes.js';
+import {getCourse, getProfile} from '../controllers/get.js';
 
 const router = express.Router();
 
