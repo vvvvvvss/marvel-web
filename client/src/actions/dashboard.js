@@ -21,7 +21,6 @@ export const getProfileData=(id, scope)=>async(dispatch)=>{
 export const updateProfile=(id, newProfile)=>async(dispatch)=>{
     dispatch({type : 'START_PROFILE_LOADING'});
     const {data} = await API.updateProfile(id, newProfile).catch((err)=>(console.log(err)));
-    console.log(data);
     if(data?.status==='201'){
         dispatch({type : 'GET_PROFILE', payload : data?.profile});
     }else{

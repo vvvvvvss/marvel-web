@@ -29,7 +29,7 @@ export const getProfile = async(req, res)=>{
         if(scope==='dashboard'){
             returnedProfile = await user.aggregate([
             {$match : {id : id}}, {$limit : 1},
-            {$project : { bio : 1, linkedIn:1, gitHub:1, website:1, id:1}}
+            {$project : { bio : 1, linkedIn:1, gitHub:1, website:1, id:1, currentLevel :1}}
             ])
         }
         if(!returnedProfile[0]) return res.json({status : '404'});

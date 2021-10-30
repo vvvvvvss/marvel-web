@@ -1,5 +1,5 @@
 .window {
-    padding: 85px 20px 75px 20px; 
+    padding: 85px 20px 75px 20px; display: flex;
     justify-content: center;
 }
 

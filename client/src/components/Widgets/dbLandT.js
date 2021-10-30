@@ -42,7 +42,7 @@ const DbLandT = () => {
                             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} options={{wrapper : 'p'},{
                                             overrides: {
                                                 p :{
-                                                    component: Typography,
+                                                    component: Typography
                                                 },
                                                 a :{
                                                     component : Link,

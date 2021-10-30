@@ -17,7 +17,8 @@ try {
     
     const existingUser = await user.aggregate([
         {$match : { id : userData?.sub }},
-        { $limit : 1}
+        { $limit : 1},
+        {$project : {id:1, name:1,email:1,profilePic:1}}
     ]);
 
     if(!existingUser[0] ||existingUser[0].enrollmentStatus==='UNKNOWN'){

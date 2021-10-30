@@ -2,7 +2,7 @@ const initialState = {
     isSyllabusLoading : false,
     isProfileLoading : false,
     syllabus : {},
-    profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:''},
+    profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
 }
 
 const dashboardReducer = (state=initialState, action)=>{

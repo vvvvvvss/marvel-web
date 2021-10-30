@@ -37,7 +37,7 @@ const DbProfile = () => {
 
                     {/* EDITABLE FORM */}
                 <TextField label="Bio" defaultValue={profileCopy?.bio} value={profileCopy?.bio} variant='standard' multiline
-                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
+                InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:200}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,bio : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
                 

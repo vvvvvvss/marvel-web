@@ -8,7 +8,6 @@ const userSchema = mongoose.Schema({
     name: { type: String, required:  true },
     email: { type: String, required: true },
     profilePic : {type : String},
-    bio : {type : String, maxLength : 200},
     regNo : { type : String },
     id: { type: String, required : true,unique:true },
     currentStuCourse : {type : String},
@@ -17,7 +16,11 @@ const userSchema = mongoose.Schema({
     currentRole : {type : String, enum : {values : ['STU','INS']}},
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},
     joinedAt : {type : Date, default : new Date()},
-    enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN']}, default : 'UNKNOWN'}
+    enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN']}, default : 'UNKNOWN'},
+    bio : {type : String, maxLength : 200},
+    gitHub : {type : String, maxLength:80},
+    linkedIn : {type : String, maxLength:80},
+    website : {type : String, maxLength:80},
 });
 
 export default mongoose.model("users", userSchema);

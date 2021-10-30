@@ -29,7 +29,9 @@ export const darkTheme = createTheme({
         },
         variants : [
           { props : { variant : 'widget'},
-          style : { borderRadius : '12px', border : '1.5px solid #288C9A', padding :'15px 15px 15px 15px'}}
+          style : { borderRadius : '12px', border : '1.5px solid #288C9A', padding :'15px 15px 15px 15px'}},
+          { props : { variant : 'window'},
+          style : {backgroundColor : '#000000'}}
         ]
       },
       MuiAppBar:{

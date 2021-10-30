@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const courseSchema = mongoose.Schema({
     domainName : { type: String, enum:{values : ['AI-ML','IOT','D-P','EV-RE','CL-CY']}},
     courseCode : { type : String, unique : true },
-    submissionStatus : {type : String},
+    submissionStatus : {isAccepting : {type :Boolean, default:false}, forLevel : {type : String}},
     courseBadge : { type :String},
     intro : { type : String},
     levels : [
