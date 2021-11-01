@@ -8,12 +8,11 @@ import Markdown from 'markdown-to-jsx';
 const DbLandT = () => {
     const {authUser} = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
 
     useEffect(() => {
         dispatch(getCourseData(authUser?.currentStuCourse,'dashboard'));
     }, []);
-
-    const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
 
     return (
     <Paper variant='widget' style={{height:'max-content'}}>
@@ -25,14 +24,14 @@ const DbLandT = () => {
       {isSyllabusLoading ? <CircularProgress/> : 
        <>
         { syllabus?.levels?.map((lvl)=>(
-            <>
+            <div key={lvl?.levelNo}>
             <br/>
             <Typography variant='heading' component='div' key={lvl.levelNo}>&nbsp;&nbsp;
                     {`Level  ${lvl?.levelNo}`}
             </Typography>
             { lvl.tasks.map((tsk)=>{
                 return(
-                    <Accordion>
+                    <Accordion key={tsk?.taskNo}>
                         <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         >
@@ -56,7 +55,7 @@ const DbLandT = () => {
                     </Accordion>
                 )
             })}
-            </>
+            </div>
         ))}
         </>}
     </Paper>

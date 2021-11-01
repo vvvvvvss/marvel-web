@@ -2,7 +2,7 @@ import { Paper, Typography, Stepper, Step, StepLabel, CircularProgress } from "@
 import { useSelector } from "react-redux";
 
 const DbProgress = () => {
-    const {profile, syllabus, isProfileLoading} = useSelector(state => state.dashboard);
+    const {profile, syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
 
     return (
         <>
@@ -10,7 +10,7 @@ const DbProgress = () => {
                 <Typography variant='widget-heading'>Progress</Typography>
                 <br/><br/><br/>
 
-                {isProfileLoading ? <CircularProgress/> :
+                {isSyllabusLoading ? <CircularProgress/> :
                 <>
                 <Stepper activeStep={Number(profile?.currentLevel -1 )}>
                 {syllabus?.levels?.map((level) => (

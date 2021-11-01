@@ -11,7 +11,7 @@ const Home = () => {
     const {authUser} = useSelector(state => state.auth);
 
     return (
-        <div square className={classes.window}>
+        <div className={classes.window}>
             <Navbar/>
             <Paper square style={{paddingTop : '60px',height : '1000px'}}>
                 <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'200px'}}>

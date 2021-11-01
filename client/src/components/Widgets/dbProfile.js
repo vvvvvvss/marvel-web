@@ -6,10 +6,12 @@ import {getProfileData, updateProfile} from '../../actions/dashboard.js';
 const DbProfile = () => {
     const {authUser} = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getProfileData(authUser?.id, 'dashboard'))
-    }, [])
     const {profile, isProfileLoading} = useSelector(state => state.dashboard);
+
+    useEffect(() => {
+        dispatch(getProfileData(authUser?.id, 'dashboard'));
+    }, [])
+
     const [changed, setChanged] = useState(false);
     const [profileCopy, setProfileCopy] = useState(profile);
 
@@ -36,22 +38,22 @@ const DbProfile = () => {
                 <Typography variant='button'>{authUser?.name}</Typography><br/><br/>
 
                     {/* EDITABLE FORM */}
-                <TextField label="Bio" defaultValue={profileCopy?.bio} value={profileCopy?.bio} variant='standard' multiline
+                <TextField label="Bio" value={profileCopy?.bio} variant='standard' multiline
                 InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:200}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,bio : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
                 
-                <TextField label="LinkedIn" defaultValue={profileCopy?.linkedIn} value={profileCopy?.linkedIn} variant='standard' multiline
+                <TextField label="LinkedIn" value={profileCopy?.linkedIn} variant='standard' multiline
                 InputProps={{ style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,linkedIn : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
 
-                <TextField label="GitHub" defaultValue={profileCopy?.gitHub} value={profileCopy?.gitHub} variant='standard' multiline
+                <TextField label="GitHub" value={profileCopy?.gitHub} variant='standard' multiline
                 InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,gitHub : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
 
-                <TextField label="Website"defaultValue={profileCopy?.website} value={profileCopy?.website} variant='standard' multiline
+                <TextField label="Website" value={profileCopy?.website} variant='standard' multiline
                 InputProps={{style:{fontSize: '13px', lineHeight:'24px'}}} inputProps={{maxLength:80}}
                 onChange={(e)=>{setChanged(true);setProfileCopy({...profileCopy,website : e.target.value});}}
                 fullWidth size='small' color='secondary'/><br/><br/>
