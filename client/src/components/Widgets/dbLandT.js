@@ -38,7 +38,8 @@ const DbLandT = () => {
                         <Typography variant='subtitle2'>{`Task  ${tsk?.taskNo}`}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} options={{wrapper : 'p'},{
+                            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
+                            options={{wrapper : 'p'},{
                                             overrides: {
                                                 p :{
                                                     component: Typography
