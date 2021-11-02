@@ -46,7 +46,9 @@ export const darkTheme = createTheme({
           fontWeight:'600', color:'#D3FFFF', fontFamily : 'Montserrat'}},
           { props : { variant : 'heading'},
           style : { fontFamily : 'Montserrat', fontWeight : '600', fontSize:'14px',letterSpacing:'0.23em',
-          color:'#D3FFFF',backgroundColor:'#1E2629' ,lineHeight : '40px', textTransform:'uppercase'}}
+          color:'#D3FFFF',backgroundColor:'#1E2629' ,lineHeight : '40px', textTransform:'uppercase'}},
+          { props : { variant : 'code'},
+          style : { fontFamily : 'Source Code Pro', backgroundColor:'#1E2629', padding:'10px',borderRadius:'0px'}}
         ]
       },
       MuiChip :{
