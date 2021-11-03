@@ -7,7 +7,7 @@ import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
 import "react-mde/lib/styles/css/react-mde-all.css";
-import { Box, padding } from "@mui/system";
+import sanitizer from 'sanitize-html';
 
 const DbForm = ({setFormOpen, type}) => {
     const {syllabus} = useSelector(state => state.dashboard);
@@ -50,7 +50,7 @@ const DbForm = ({setFormOpen, type}) => {
             <Paper
               style={{display: 'flex', justifyContent: 'center',alignItems: 'center',cursor:'pointer',maxHeight: '120px'}}
               onClick={()=>{setFormData({...formData?.coverPhoto});onImageUpload();}} 
-              {...dragProps} variant='widget'
+              {...dragProps}
             >
               <Typography variant='caption'>Cover Photo. Click or Drop here</Typography>
             </Paper>
@@ -62,29 +62,39 @@ const DbForm = ({setFormOpen, type}) => {
           </div>
         )}
       </ImageUploading>
-      <br/>
       
       <Paper className='container'><ReactMde
-        value={formData?.description}
+        value={formData?.description} label='description'
         onChange={(e)=>(setFormData({...formData, description : e}))}
         selectedTab={editorTab}
         onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
         generateMarkdownPreview={markdown =>
           Promise.resolve(
-          <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
+            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
           options={{wrapper : 'p'},{
             overrides: {
-                p :{ component: Typography }, 
+                p :{ component: Typography , props: {variant : 'body2'}}, 
+                h1 : { component : Typography, props : {variant : 'h1'}},
                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                 code : {component : Typography, props : {variant : 'code', component : 'div'}},
-                img : {props : {width : '100%', height : '150px', style:{objectFit : 'cover'}}}
+                img : { props : {width : '100%' }},
+                iframe : { props : {width : '100%', height : '315', frameborder : '0'}}
             },
         }}>
-          {markdown}
-        </Markdown>)
+          {sanitizer(markdown, {
+              allowedTags: ['br', 'iframe'],
+              allowedAttributes: {
+                'iframe': ['src']
+              },
+              allowedIframeHostnames: ['www.youtube.com'],
+              nestingLimit : 5
+            })}
+        </Markdown>
+        )
         }
       />
       </Paper>
+
       <Button onClick={()=>(console.log(formData))}>test</Button>
 
         </div>
