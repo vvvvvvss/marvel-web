@@ -7,7 +7,7 @@ export const darkTheme = createTheme({
         main : '#CC4E6C', light : '#FFD7EA', dark : '#350006'
       },
       secondary : {
-        main : '#288C9A', light : '#D3FFFF', dark : '#001C28'
+        main : '#35B0C0', light : '#D3FFFF', dark : '#001C28'
       }
     },
     typography : {
@@ -48,7 +48,7 @@ export const darkTheme = createTheme({
           style : { fontFamily : 'Montserrat', fontWeight : '600', fontSize:'14px',letterSpacing:'0.23em',
           color:'#D3FFFF',backgroundColor:'#1E2629' ,lineHeight : '40px', textTransform:'uppercase'}},
           { props : { variant : 'code'},
-          style : { fontFamily : 'Source Code Pro', backgroundColor:'#1E2629', padding:'10px',borderRadius:'0px'}}
+          style : { fontFamily : 'Source Code Pro', backgroundColor:'#273135', padding:'8px',borderRadius:'5px'}}
         ]
       },
       MuiChip :{

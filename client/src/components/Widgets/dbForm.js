@@ -6,7 +6,7 @@ import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
-import "react-mde/lib/styles/css/react-mde-all.css";
+import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 
 const DbForm = ({setFormOpen, type}) => {
@@ -25,6 +25,11 @@ const DbForm = ({setFormOpen, type}) => {
         reader.onloadend = ()=>{ setFormData({...formData, coverPhoto : reader?.result}); }
       } catch (error) { console.log(error); }
       };
+
+    const htmlDecode = (input)=> {
+        var doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+      }
 
     return (
         <>
@@ -47,7 +52,7 @@ const DbForm = ({setFormOpen, type}) => {
         <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
         {({ onImageUpload, dragProps, }) => (
           <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
-            <Paper
+            <Paper variant='widget'
               style={{display: 'flex', justifyContent: 'center',alignItems: 'center',cursor:'pointer',maxHeight: '120px'}}
               onClick={()=>{setFormData({...formData?.coverPhoto});onImageUpload();}} 
               {...dragProps}
@@ -62,7 +67,7 @@ const DbForm = ({setFormOpen, type}) => {
           </div>
         )}
       </ImageUploading>
-      
+      <br/>
       <Paper className='container'><ReactMde
         value={formData?.description} label='description'
         onChange={(e)=>(setFormData({...formData, description : e}))}
@@ -71,24 +76,20 @@ const DbForm = ({setFormOpen, type}) => {
         generateMarkdownPreview={markdown =>
           Promise.resolve(
             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-          options={{wrapper : 'p'},{
-            overrides: {
+          options={
+            {wrapper : 'p'},
+            { overrides: {
                 p :{ component: Typography , props: {variant : 'body2'}}, 
-                h1 : { component : Typography, props : {variant : 'h1'}},
                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                code : {component : Typography, props : {variant : 'code', component : 'div'}},
+                code : {component : Typography, props : { variant : 'code',component : 'code'}},
                 img : { props : {width : '100%' }},
                 iframe : { props : {width : '100%', height : '315', frameborder : '0'}}
             },
         }}>
-          {sanitizer(markdown, {
-              allowedTags: ['br', 'iframe'],
-              allowedAttributes: {
-                'iframe': ['src']
-              },
-              allowedIframeHostnames: ['www.youtube.com'],
-              nestingLimit : 5
-            })}
+          {htmlDecode(sanitizer(markdown, {
+              allowedTags: ['iframe'], allowedAttributes: { 'iframe': ['src'] },
+              allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            }))}
         </Markdown>
         )
         }
