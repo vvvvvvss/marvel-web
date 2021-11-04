@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from "react-redux";
 import { useState } from "react";
@@ -45,7 +45,7 @@ const DbForm = ({setFormOpen, type}) => {
         <div style={{padding : '90px 10px 90px 10px',width:'100%', maxWidth:'700px'}}>
         
         <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
-        fullWidth variant='outlined' label='Title' required inputProps={{maxLength : 80}}
+        fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}
         InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
         <br/><br/>
 
@@ -95,7 +95,20 @@ const DbForm = ({setFormOpen, type}) => {
         }
       />
       </Paper>
-
+      <br/>
+      {/* <Paper variant='widget'>
+        {formData?.tags?.map((tag)=>(
+          <Chip key={tag} value={tag} variant='filled' 
+          onDelete={(i)=>(setFormData({...formData, tags : formData?.tags.filter((i!==tag))}))}/>
+        ))}
+        <TextField
+        onChange={(e)=>{console.log(e)}} 
+        label='Tags' placeholder='Some relevant tags. Press enter after each tag to add.'
+        >
+        </TextField>
+      </Paper> */}
+      
+      <br/>
       <Button onClick={()=>(console.log(formData))}>test</Button>
 
         </div>
