@@ -16,11 +16,14 @@ const userSchema = mongoose.Schema({
     currentRole : {type : String, enum : {values : ['STU','INS']}},
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},
     joinedAt : {type : Date, default : new Date()},
-    enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN']}, default : 'UNKNOWN'},
+    enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN','BANNED']}, default : 'UNKNOWN'},
     bio : {type : String, maxLength : 200},
     gitHub : {type : String, maxLength:80},
     linkedIn : {type : String, maxLength:80},
     website : {type : String, maxLength:80},
+    bannedAt : {type :String},
+    bannedByName : {type :String},
+    bannedById : {type : String}
 });
 
 export default mongoose.model("users", userSchema);

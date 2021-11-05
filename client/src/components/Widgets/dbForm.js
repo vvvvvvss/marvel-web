@@ -38,7 +38,7 @@ const DbForm = ({setFormOpen, type}) => {
         <Toolbar>
             <IconButton edge="start" onClick={()=>{setFormOpen(false);}} ><CloseIcon/></IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {type==='PR' ? `Project Report Lvl ${syllabus?.submissionStatus?.forLevel}` : 'Blog'}
+            {type==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
             </Typography>
         </Toolbar>
         </AppBar>

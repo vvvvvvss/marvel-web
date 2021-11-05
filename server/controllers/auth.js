@@ -1,6 +1,5 @@
 import {OAuth2Client} from 'google-auth-library';
 import dotenv from 'dotenv';
-import bannedUser from '../models/bannedUser.js';
 import user from '../models/user.js';
 
 export const authController = async (req, res) => {
@@ -11,10 +10,6 @@ try {
     const ticket = await gClient.verifyIdToken({idToken : token, audience : process.env.CIENT_ID});
     const userData = ticket.getPayload();
 
-    // BANNED USER
-    const isBanned = await bannedUser.findOne({id : userData?.sub}).lean();
-    if(isBanned) return res.json({status : '404', authUser : null});
-    
     const existingUser = await user.aggregate([
         {$match : { id : userData?.sub }},
         {$project : { joinedAt : 0, _id : 0, bio:0,linkedIn:0,gitHub:0,website:0,}}, { $limit : 1}
@@ -25,7 +20,9 @@ try {
     const isActiveInstrutor=((existingUser[0]?.currentRole==='INS')&&
                             (existingUser[0]?.enrollmentStatus==='ACTIVE'));
     const isInactiveUser=(existingUser[0]?.enrollmentStatus==='INACTIVE');
-    
+
+    // BANNED USER 
+    if(existingUser[0]?.enrollmentStatus==='BANNED') return res.json({status : '404', message : 'banned'})   
     // NEW UNKNOWN USER
     if(!existingUser[0]?.id) {
         const newUser = new user({id : userData?.sub,
