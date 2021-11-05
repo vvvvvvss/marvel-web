@@ -13,8 +13,9 @@ const DbForm = ({setFormOpen, type}) => {
     const {syllabus} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
-        title : '', description : '', tags : [], coverPhoto : ''
+        title : '', description : '', tags : [ ], coverPhoto : ''
     });
+    const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
 
     const handleImageUpload = async (imageList) => {
@@ -49,67 +50,86 @@ const DbForm = ({setFormOpen, type}) => {
         InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
         <br/><br/>
 
+        {/* IMAGE UPLOAD */}
         <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
-        {({ onImageUpload, dragProps, }) => (
-          <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
-            <Paper variant='widget'
-              style={{display: 'flex', justifyContent: 'center',alignItems: 'center',cursor:'pointer',maxHeight: '120px'}}
-              onClick={()=>{setFormData({...formData?.coverPhoto});onImageUpload();}} 
-              {...dragProps}
-            >
-              <Typography variant='caption'>Cover Photo. Click or Drop here</Typography>
-            </Paper>
-            {formData?.coverPhoto &&
-            <div style={{maxHeight: '150px',minHeight:'100%',}}>
-            <img src={formData?.coverPhoto} alt='cover photo' height='150'width='100%' style={{borderRadius:'12px',objectFit:'cover'}}/>
+          {({ onImageUpload, dragProps, }) => (
+            <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
+              <Paper variant='widget'
+                style={{display: 'flex', justifyContent: 'center',alignItems: 'center',cursor:'pointer',maxHeight: '120px'}}
+                onClick={()=>{setFormData({...formData, coverPhoto : ''});onImageUpload();}} 
+                {...dragProps}
+              >
+                <Typography variant='caption'>Cover Photo. Click or Drop here</Typography>
+              </Paper>
+              {formData?.coverPhoto &&
+              <div style={{maxHeight: '150px',minHeight:'100%',}}>
+              <img src={formData?.coverPhoto} alt='cover photo' height='150'width='100%' style={{borderRadius:'12px',objectFit:'cover'}}/>
+              </div>
+              }
             </div>
+          )}
+        </ImageUploading>
+
+        <br/>
+        {/* DESCRIPTION MARKDOWN */}
+        <Paper className='container'><ReactMde
+          value={formData?.description} label='description'
+          onChange={(e)=>(setFormData({...formData, description : e}))}
+          selectedTab={editorTab}
+          onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
+          generateMarkdownPreview={markdown =>
+            Promise.resolve(
+              <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
+            options={
+              {wrapper : 'p'},
+              { overrides: {
+                  p :{ component: Typography , props: {variant : 'body2'}}, 
+                  a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
+                  img : { props : {width : '100%' }},
+                  iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
+                  blockquote : {props : {style : {color : '#c4c4c4'}}}
+              },
+          }}>
+            {htmlDecode(sanitizer(markdown, {
+                allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+                allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+              }))}
+          </Markdown>
+          )
+          }
+        />
+        </Paper>
+        <br/>
+          
+        {/* CHIPS */}
+        <Paper variant='widget'>
+          <TextField fullWidth color='secondary' value={newTag}
+          onChange={(e)=>{
+            if(e.nativeEvent?.data === ','){
+              if(formData?.tags?.length < 8){
+                if(formData?.tags?.includes(e.target?.value?.slice(0,-1))) return alert(`You've already added that tag`);
+                setFormData({...formData, tags : [...formData?.tags, e.target?.value?.slice(0,-1)]})
+                setNewTag('');
+              }else{alert('Maximum number of tags is 8');}
+            }else{
+              setNewTag(`${e.target.value}`);
             }
-          </div>
-        )}
-      </ImageUploading>
-      <br/>
-      <Paper className='container'><ReactMde
-        value={formData?.description} label='description'
-        onChange={(e)=>(setFormData({...formData, description : e}))}
-        selectedTab={editorTab}
-        onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
-        generateMarkdownPreview={markdown =>
-          Promise.resolve(
-            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-          options={
-            {wrapper : 'p'},
-            { overrides: {
-                p :{ component: Typography , props: {variant : 'body2'}}, 
-                a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                code : {component : Typography, props : { variant : 'code',component : 'code'}},
-                img : { props : {width : '100%' }},
-                iframe : { props : {width : '100%', height : '315', frameborder : '0'}}
-            },
-        }}>
-          {htmlDecode(sanitizer(markdown, {
-              allowedTags: ['iframe'], allowedAttributes: { 'iframe': ['src'] },
-              allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
-            }))}
-        </Markdown>
-        )
-        }
-      />
-      </Paper>
-      <br/>
-      {/* <Paper variant='widget'>
-        {formData?.tags?.map((tag)=>(
-          <Chip key={tag} value={tag} variant='filled' 
-          onDelete={(i)=>(setFormData({...formData, tags : formData?.tags.filter((i!==tag))}))}/>
-        ))}
-        <TextField
-        onChange={(e)=>{console.log(e)}} 
-        label='Tags' placeholder='Some relevant tags. Press enter after each tag to add.'
-        >
-        </TextField>
-      </Paper> */}
-      
-      <br/>
-      <Button onClick={()=>(console.log(formData))}>test</Button>
+          }} 
+          label='Relevant Tags' placeholder='Press comma ( , ) after each tag to add.'
+          />
+          
+          <br/><br/>
+          {formData?.tags?.map((tag)=>(
+            <span key={tag}>
+            <Chip key={tag} label={tag} variant='outlined' color='secondary'
+            onDelete={(i)=>(setFormData({...formData, tags : formData?.tags.filter((i)=>(i!==tag))}))}/>
+            &nbsp;&nbsp;
+            </span>
+          ))}
+        </Paper>
+        
+        <br/>
+        <Button onClick={()=>(console.log(formData))}>test</Button>
 
         </div>
         </div>
