@@ -28,3 +28,17 @@ export const updateProfile=(id, newProfile)=>async(dispatch)=>{
     }
     dispatch({type : 'END_PROFILE_LOADING'});
 }
+
+export const createPR = (formData)=> async (dispatch) => {
+    dispatch({type : 'START_CREATE_LOADING'});
+    const {data} = await API.createPR(formData).catch(err => console.log(err));
+    console.log(data);
+    dispatch({type : 'END_CREATE_LOADING'});
+}
+
+export const createBlog = (formData)=> async (dispatch) => {
+    dispatch({type : 'START_CREATE_LOADING'});
+    const {data} = await API.createBlog(formData).catch(err => console.log(err));
+    console.log(data);
+    dispatch({type : 'END_CREATE_LOADING'});
+}

@@ -13,7 +13,7 @@ try {
     const existingUser = await user.aggregate([
         {$match : { id : userData?.sub }},
         { $limit : 1},
-        {$project : {id:1, name:1,email:1,profilePic:1}}
+        {$project : {bio : 0,gitHub:0,linkedIn:0,website:0}}
     ]);
 
     if(existingUser?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
@@ -27,6 +27,6 @@ try {
     
 } catch (err) {
     console.log(err);
-    res.json({status : 'BRUH', message : 'Request failed. wdk why.', authUser : null})
+    return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }

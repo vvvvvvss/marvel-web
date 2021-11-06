@@ -13,3 +13,5 @@ export const auth = async (token) => API.post('/auth', {token : token});
 export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${courseCode}?scope=${scope}`);
 export const getProfileData = async (id, scope)=>API.get(`/get/profile/${id}?scope=${scope}`);
 export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/${id}`, newProfile);
+export const createPR = async (formData) => API.post(`/create/pr`,formData);
+export const createBlog = async (formData) => API.post(`/create/blog`,formData);

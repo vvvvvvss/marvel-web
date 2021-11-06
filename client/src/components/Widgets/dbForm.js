@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
@@ -8,6 +8,7 @@ import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
+import { createBlog, createPR } from "../../actions/dashboard";
 
 const DbForm = ({setFormOpen, type}) => {
     const {syllabus} = useSelector(state => state.dashboard);
@@ -17,6 +18,7 @@ const DbForm = ({setFormOpen, type}) => {
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
+    const dispatch = useDispatch();
 
     const handleImageUpload = async (imageList) => {
       const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -31,6 +33,14 @@ const DbForm = ({setFormOpen, type}) => {
         var doc = new DOMParser().parseFromString(input, "text/html");
         return doc.documentElement.textContent;
       }
+
+    const handleSubmit = ()=>{
+      if(type==='PR'){
+        dispatch(createPR(formData));
+      }else if(type==='BLOG'){
+        dispatch(createBlog(formData));
+      }
+    }
 
     return (
         <>
@@ -117,19 +127,23 @@ const DbForm = ({setFormOpen, type}) => {
           }} 
           label='Relevant Tags' placeholder='Press comma ( , ) after each tag to add.'
           />
-          
-          <br/><br/>
+          {/* <br/><br/> */}
           {formData?.tags?.map((tag)=>(
             <span key={tag}>
-            <Chip key={tag} label={tag} variant='outlined' color='secondary'
-            onDelete={(i)=>(setFormData({...formData, tags : formData?.tags.filter((i)=>(i!==tag))}))}/>
+            <Chip style={{marginTop : '10px'}} key={tag} label={tag} variant='outlined' color='secondary'
+            onDelete={()=>(setFormData({...formData, tags : formData?.tags.filter((i)=>(i!==tag))}))}/>
             &nbsp;&nbsp;
             </span>
           ))}
         </Paper>
         
         <br/>
-        <Button onClick={()=>(console.log(formData))}>test</Button>
+        <div style={{display: 'flex',justifyContent: 'flex-end'}}>
+           &nbsp;&nbsp;&nbsp;&nbsp;
+          <Button size='large' onClick={handleSubmit} variant='contained'>Submit</Button>
+         
+        </div>
+        
 
         </div>
         </div>

@@ -25,7 +25,6 @@ const userSchema = mongoose.Schema({
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},
     enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN','BANNED']}, default : 'UNKNOWN'},
     
-    
     // DIRECTLY EDITABLE
     bio : {type : String, maxLength : 200},
     gitHub : {type : String, maxLength:80},
