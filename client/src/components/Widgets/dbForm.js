@@ -36,9 +36,12 @@ const DbForm = ({setFormOpen, type}) => {
 
     const handleSubmit = ()=>{
       if(type==='PR'){
-        dispatch(createPR(formData));
+        if(!formData?.description)return alert('The content of your Project Report cannot be empty!');
+        else dispatch(createPR(formData));
       }else if(type==='BLOG'){
-        dispatch(createBlog(formData));
+        if(!formData?.description) return alert('The content of your Blog Post cannot be empty!');
+        if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
+        else dispatch(createBlog(formData));
       }
     }
 
@@ -55,13 +58,13 @@ const DbForm = ({setFormOpen, type}) => {
         <div style={{display: 'flex', justifyContent: 'center'}}>
         <div style={{padding : '90px 10px 90px 10px',width:'100%', maxWidth:'700px'}}>
         
-        <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
+        {type==='BLOG' && <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
         fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}
-        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
+        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>}
         <br/><br/>
 
         {/* IMAGE UPLOAD */}
-        <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
+        {type==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
           {({ onImageUpload, dragProps, }) => (
             <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
               <Paper variant='widget'
@@ -78,7 +81,7 @@ const DbForm = ({setFormOpen, type}) => {
               }
             </div>
           )}
-        </ImageUploading>
+        </ImageUploading>}
 
         <br/>
         {/* DESCRIPTION MARKDOWN */}

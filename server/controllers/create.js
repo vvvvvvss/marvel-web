@@ -1,3 +1,4 @@
+import cloudinary from 'cloudinary';
 
 export const createPR = (req , res) => {
     try {

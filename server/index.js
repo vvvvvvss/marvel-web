@@ -7,7 +7,8 @@ import utilRoutes from './routes/utils.js';
 import devRoutes from './routes/devRoutes.js';
 import getRoutes from './routes/getRoutes.js';
 import updateRoutes from './routes/updateRoutes.js';
-import createRoutes from './routes/createRoutes.js'
+import createRoutes from './routes/createRoutes.js';
+import cloudinary from 'cloudinary';
 
 const app = express();
 
@@ -17,6 +18,12 @@ dotenv.config();
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors());
+
+cloudinary.config({ 
+  cloud_name: process.env.CLDNRY_CLOUD_NAME, 
+  api_key: process.env.CLDNRY_API_KEY, 
+  api_secret: process.env.CLDNRY_API_SECRET 
+});
 
 app.get('/', (req,res)=> {
   res.send('Welcome to UVCE Marvel REST API.')
