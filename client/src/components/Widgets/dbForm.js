@@ -36,6 +36,7 @@ const DbForm = ({setFormOpen, type}) => {
 
     const handleSubmit = ()=>{
       if(type==='PR'){
+        if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.description)return alert('The content of your Project Report cannot be empty!');
         else dispatch(createPR(formData));
       }else if(type==='BLOG'){
@@ -58,9 +59,9 @@ const DbForm = ({setFormOpen, type}) => {
         <div style={{display: 'flex', justifyContent: 'center'}}>
         <div style={{padding : '90px 10px 90px 10px',width:'100%', maxWidth:'700px'}}>
         
-        {type==='BLOG' && <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
+        <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
         fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}
-        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>}
+        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
         <br/><br/>
 
         {/* IMAGE UPLOAD */}
