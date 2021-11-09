@@ -4,6 +4,7 @@ const initialState = {
     isCreateLoading : false,
     syllabus : {},
     profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
+    submissions : []
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -24,6 +25,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, profile : {...state.profile, ...action.payload}}
         case 'GET_COURSE' :
             return {...state, syllabus : action.payload}
+        case 'CREATE_PR' :
+            return {...state, submissions : state.submissions?.unshift(action?.payload)};
         default:
             return state;
     }

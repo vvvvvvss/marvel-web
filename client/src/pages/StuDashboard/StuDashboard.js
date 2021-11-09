@@ -25,6 +25,7 @@ const StuDashboard = () => {
             <Syllabus/>
             <DbProgress/>
             <DbProfile/>
+
             </div>
 
             <Dialog fullScreen open={formOpen} onClose={()=>(setFormOpen(false))}>

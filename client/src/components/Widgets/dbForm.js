@@ -14,7 +14,7 @@ const DbForm = ({setFormOpen, type}) => {
     const {syllabus} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
-        title : '', description : '', tags : [ ], coverPhoto : ''
+        title : '', content : '', tags : [ ], coverPhoto : ''
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
@@ -37,10 +37,10 @@ const DbForm = ({setFormOpen, type}) => {
     const handleSubmit = ()=>{
       if(type==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
-        if(!formData?.description)return alert('The content of your Project Report cannot be empty!');
+        if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
         else dispatch(createPR(formData));
       }else if(type==='BLOG'){
-        if(!formData?.description) return alert('The content of your Blog Post cannot be empty!');
+        if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
         else dispatch(createBlog(formData));
       }
@@ -87,8 +87,8 @@ const DbForm = ({setFormOpen, type}) => {
         <br/>
         {/* DESCRIPTION MARKDOWN */}
         <Paper className='container'><ReactMde
-          value={formData?.description} label='description'
-          onChange={(e)=>(setFormData({...formData, description : e}))}
+          value={formData?.content} label='content'
+          onChange={(e)=>(setFormData({...formData, content : e}))}
           selectedTab={editorTab}
           onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
           generateMarkdownPreview={markdown =>
