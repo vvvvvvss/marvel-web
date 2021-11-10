@@ -54,3 +54,9 @@ export const createBlog = (formData)=> async (dispatch) => {
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
 }
+
+export const getSubmissionsStu = (tab) => async (dispatch) => {
+    try {
+        console.log(tab);
+    } catch (error) { }
+}

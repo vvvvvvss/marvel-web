@@ -6,8 +6,31 @@
 .grid {
     display: grid;
     max-width: 1300px;
+    height: 100vh;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     justify-content: space-evenly;
     align-items: flex-start;
 }
+
+.singlegrid {
+    display : grid;
+    grid-template-columns: 1fr;
+    gap : 20px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+background-color: grey;
+}
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #FFD7EA;
+    border-radius: 10px;
+  }

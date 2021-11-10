@@ -1,5 +1,5 @@
 import { Paper,Backdrop,SpeedDial,SpeedDialAction, Dialog, Slide} from '@mui/material'
-import React, {useState} from 'react'
+import {useState} from 'react'
 import Navbar from '../../components/Navbar/Navbar.js';
 import Syllabus from '../../components/Widgets/dbLandT.js';
 import DbProfile from '../../components/Widgets/dbProfile.js';
@@ -10,6 +10,7 @@ import BookIcon from '@mui/icons-material/AutoStories';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
 import { useSelector } from 'react-redux';
+import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 
 const StuDashboard = () => {
     const [dial, setDial] = useState(false);
@@ -23,9 +24,11 @@ const StuDashboard = () => {
         <Paper variant='window' className={styles.window}>
             <div className={styles.grid}>
             <Syllabus/>
+            <div className={styles.singlegrid} >
             <DbProgress/>
+            <DbSubmissions />
+            </div>
             <DbProfile/>
-
             </div>
 
             <Dialog fullScreen open={formOpen} onClose={()=>(setFormOpen(false))}>
