@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Typography, Paper, IconButton, Card, Tab, Tabs, Chip, Button} from "@mui/material";
+import { Typography, Paper, IconButton, Card, Tab, Tabs, Chip, Button, Divider} from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {getSubmissionsStu} from '../../actions/dashboard.js'
 
@@ -14,7 +14,7 @@ const DbSubmissions = () => {
     }, [tab]);
 
     return (
-        <Paper variant='widget'>
+        <Paper variant='widget'  >
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Typography variant='widget-heading'>submissions</Typography>
         <IconButton size='small'><RefreshIcon color='secondary' /></IconButton>
@@ -26,15 +26,14 @@ const DbSubmissions = () => {
         <br/>
         <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
            <Card variant='outlined'>
-            <span style={{display : 'flex', justifyContent: 'space-between'}}>
+            {/* <span style={{display : 'flex', justifyContent: 'space-between'}}>
                 <Typography variant='code-small'>Project Report</Typography>
                 <Chip size='small' variant='outlined' label='Level 1' />
-            </span>
-            <br/>
+            </span> */}
             <Typography variant='body1'>Medium sized blog heading that will extend 2 lines for sure</Typography>
-            <br/>
+            <br style={{height:'5px'}} />
             <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                <span>mohammed rayan sailani</span>&nbsp;&nbsp; | &nbsp;&nbsp;<span>3 days ago</span>
+                <span>level 1</span>&nbsp;&nbsp; | &nbsp;&nbsp;<span>3 days ago</span>
             </Typography>
             <br/><br/>
             <span style={{display:'flex',justifyContent:'space-between'}}>
