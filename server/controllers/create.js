@@ -33,7 +33,10 @@ export const createPR = async (req , res) => {
 
 export const createBlog = (req , res) => {
     try {
-        console.log(req.body);
+        const cleanContent = sanitizer(req.body.content, {
+            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+        })
     } catch (error) {
         console.log(error);
     }

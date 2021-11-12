@@ -1,4 +1,6 @@
 import course from "../models/course.js";
+import blogs from '../models/blogPost.js';
+import prs from '../models/projectReport.js';
 import user from '../models/user.js';
 
 export const getCourse = async ( req, res) =>{
@@ -35,6 +37,35 @@ export const getProfile = async(req, res)=>{
         if(!returnedProfile[0]) return res.json({status : '404'});
         
         return res.json({profile : returnedProfile[0], status : '200'});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getSubmissionsStuBlog = async (req, res)=>{
+    try {
+        const returnedBlogPosts = await blogs.aggregate([
+            { $match : { authorId : req.user.id }},
+            { $sort : { _id : -1 } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 }
+        ]) ;
+        const total = await blogs.countDocuments({ authorId : req.user.id});
+        return res.json({status : 200, total : total, submissions : returnedBlogPosts});        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getSubmissionsStuPr = async (req, res)=>{
+    try {
+        const condition = (req.user.enrollmentStatus==='ACTIVE') &&
+                            ( req.user.currentRole === 'STU');
+        if(!condition) return res.json({message : 'you cannot be doing this'});
+        const returnedPRs = await prs.aggregate([
+            { $match : { $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]}},
+            { $sort : { _id : -1 }},
+            { $limit : 3 },
+        ]);
+        return res.json({status : 200, submisions : returnedPRs});
     } catch (error) {
         console.log(error);
     }

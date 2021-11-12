@@ -55,8 +55,11 @@ export const createBlog = (formData)=> async (dispatch) => {
     dispatch({type : 'END_CREATE_LOADING'});
 }
 
-export const getSubmissionsStu = (tab) => async (dispatch) => {
+export const getSubmissionsStu = (tab, page) => async (dispatch) => {
     try {
-        console.log(tab);
+        dispatch({type : 'START_SUB_LOADING'});
+        const {data} = await API.getSubmissionsStu(tab, page);
+        console.log(data);
+        dispatch({type : 'END_SUB_LOADING'});
     } catch (error) { }
 }

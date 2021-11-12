@@ -1,6 +1,6 @@
 import express from 'express';
 import {updateProfile} from '../controllers/update.js';
-import { identityMW } from '../middleware/identityMW.js';
+import identityMW from '../middleware/identityMW.js';
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import {OAuth2Client} from 'google-auth-library';
 import dotenv from 'dotenv';
 import user from '../models/user.js';
 
-export const identityMW = async (req, res, next) => {
+const identityMW = async (req, res, next) => {
 try {
     dotenv.config();
     const token = req.headers.authorization.split(' ')[1];
@@ -30,3 +30,5 @@ try {
     return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }
+
+export default identityMW;
