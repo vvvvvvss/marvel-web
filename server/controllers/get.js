@@ -43,15 +43,17 @@ export const getProfile = async(req, res)=>{
 }
 
 export const getSubmissionsStuBlog = async (req, res)=>{
+    console.log(req.query);
     try {
         const returnedBlogPosts = await blogs.aggregate([
             { $match : { authorId : req.user.id }},
             { $sort : { _id : -1 } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 }
         ]) ;
-        const total = await blogs.countDocuments({ authorId : req.user.id});
-        return res.json({status : 200, total : total, submissions : returnedBlogPosts});        
+        const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
+        return res.json({status : '200', total : (Math.floor(total/3)+1), submissions : returnedBlogPosts});        
     } catch (error) {
         console.log(error);
+        return res.json({status : 'BRUH', message : 'Something happened idk wat'});
     }
 }
 
@@ -65,8 +67,9 @@ export const getSubmissionsStuPr = async (req, res)=>{
             { $sort : { _id : -1 }},
             { $limit : 3 },
         ]);
-        return res.json({status : 200, submisions : returnedPRs});
+        return res.json({status : '200', submissions : returnedPRs});
     } catch (error) {
         console.log(error);
+        return res.json({message : 'Something happened idk wat', status : 'BRUH'});
     }
 }

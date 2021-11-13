@@ -50,7 +50,9 @@ export const createBlog = (formData)=> async (dispatch) => {
     dispatch({type : 'START_CREATE_LOADING'});
     try {
         const {data} = await API.createBlog(formData).catch(err => console.log(err));
-        console.log(data);
+        if(data?.status==='201'){
+            dispatch({type : 'CREATE_BLOG', payload : data?.createdPost});
+        }else{ alert('Something went wrong :(')};
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
 }
@@ -59,7 +61,9 @@ export const getSubmissionsStu = (tab, page) => async (dispatch) => {
     try {
         dispatch({type : 'START_SUB_LOADING'});
         const {data} = await API.getSubmissionsStu(tab, page);
-        console.log(data);
+        if (data?.status ==='200'){
+            dispatch({type : `GET_SUB_${tab.toUpperCase()}`, payload : { subs : data?.submissions, total : data?.total}});
+        }else { alert("something went wrong :(") };
         dispatch({type : 'END_SUB_LOADING'});
     } catch (error) { }
 }

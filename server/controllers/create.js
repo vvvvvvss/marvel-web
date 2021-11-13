@@ -1,6 +1,7 @@
 import cloudinary from 'cloudinary';
 import projectReport from '../models/projectReport.js';
 import sanitizer from 'sanitize-html';
+import blogPost from '../models/blogPost.js';
 
 export const createPR = async (req , res) => {
     try {
@@ -28,16 +29,32 @@ export const createPR = async (req , res) => {
         return res.json({pr : createdPR, status : '201', message : 'successfully created pr'});
     } catch (error) {
         console.log(error);
+        return res.json({status : 'BRUH', message :'Something happened idk wat'});
     }
 }
 
-export const createBlog = (req , res) => {
+export const createBlog = async (req , res) => {
     try {
         const cleanContent = sanitizer(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
             allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
-        })
+        });
+        const newBlogPost = new blogPost({
+        authorId : req.user.id, authorName:req.user?.name,
+        authorSlug : req.user.slug, authorImage : req.user?.profilePic,
+        createdAt : new Date(), title : req.body.title, tags : req.body?.tags,
+        content : cleanContent, reviewStatus : 'PENDING', feedback : ''
+        });
+
+        newBlogPost.coverPhoto = (await cloudinary.v2.uploader.upload(req.body.coverPhoto, {
+            resource_type: "image", public_id: `blog/${newBlogPost?._id}`,
+            overwrite: true, secure : true
+        })).secure_url;
+
+        const createdPost = await newBlogPost.save();
+        return res.json({status : '201', createdPost : createdPost});
     } catch (error) {
         console.log(error);
+        return res.json({status : 'BRUH', message :'Something happened idk wat'});
     }
 }

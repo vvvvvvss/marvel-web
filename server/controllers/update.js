@@ -21,5 +21,6 @@ export const updateProfile = async (req, res)=>{
         return res.json({profile :{bio,linkedIn,gitHub,website}, status:'201'});
     } catch (error) {
         console.log(error);
+        return res.json({status : 'BRUH', message :'Something happened idk wat'});
     }
 }

@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -11,7 +11,7 @@ import sanitizer from 'sanitize-html';
 import { createBlog, createPR } from "../../actions/dashboard";
 
 const DbForm = ({setFormOpen, type}) => {
-    const {syllabus} = useSelector(state => state.dashboard);
+    const {isCreateLoading} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : ''
@@ -38,11 +38,11 @@ const DbForm = ({setFormOpen, type}) => {
       if(type==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else dispatch(createPR(formData));
+        else {dispatch(createPR(formData)); setFormOpen(false);}
       }else if(type==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else dispatch(createBlog(formData));
+        else {dispatch(createBlog(formData)); setFormOpen(false);}
       }
     }
 
@@ -86,7 +86,7 @@ const DbForm = ({setFormOpen, type}) => {
 
         <br/>
         {/* DESCRIPTION MARKDOWN */}
-        <Paper className='container'><ReactMde
+        <Paper className='container'><ReactMde 
           value={formData?.content} label='content'
           onChange={(e)=>(setFormData({...formData, content : e}))}
           selectedTab={editorTab}
@@ -144,7 +144,9 @@ const DbForm = ({setFormOpen, type}) => {
         <br/>
         <div style={{display: 'flex',justifyContent: 'flex-end'}}>
            &nbsp;&nbsp;&nbsp;&nbsp;
-          <Button size='large' onClick={handleSubmit} variant='contained'>Submit</Button>
+          <Button size='large' onClick={handleSubmit} variant='contained'>
+            { isCreateLoading ? <CircularProgress/> : 'Submit'}
+          </Button>
          
         </div>
         

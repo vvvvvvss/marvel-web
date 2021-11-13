@@ -14,9 +14,10 @@ import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 
 const StuDashboard = () => {
     const [dial, setDial] = useState(false);
-    const {syllabus} = useSelector(state => state.dashboard);
+    const {syllabus, submissions : {prs}} = useSelector(state => state.dashboard);
     const [formOpen, setFormOpen] = useState(false);
     const [type, setType] = useState('');
+    const {authUser} = useSelector(state => state.auth);
 
     return (
         <>
@@ -51,7 +52,8 @@ const StuDashboard = () => {
                     icon={<BookIcon/>}
                     onClick={()=>{setType('BLOG');setFormOpen(true);}}
                 />
-                 {syllabus?.submissionStatus?.isAccepting &&
+                 {syllabus?.submissionStatus?.isAccepting && !prs.some((i)=>(i.level === authUser?.currentLevel))
+                  &&
                   <SpeedDialAction
                     tooltipTitle={`Project Report Lvl ${syllabus?.submissionStatus?.forLevel}`}
                     tooltipOpen  sx={{whiteSpace : 'nowrap'}}
