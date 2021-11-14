@@ -10,17 +10,21 @@ const DbSubmissions = () => {
     const dispatch = useDispatch();
     const [tab, setTab] = useState('pr');
     const [page , setPage] = useState(1);
-
+    
     useEffect(() => {
         dispatch(getSubmissionsStu(tab, page));
     }, [tab, page]);
 
+    const colorDecide = (status) => {
+        if(status==='PENDING') return 'warning';
+        else if (status==='FLAGGED') return 'error';
+        else if (status==='APPROVED' || 'FEATURED') return 'success';
+    }
+
     return (
         <Paper variant='widget'  >
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Typography variant='widget-heading'>submissions</Typography>
-        <IconButton size='small'><RefreshIcon color='secondary' /></IconButton>
-        </div>
+        <br/><br/>
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
         <Tab label="Project reports" value='pr'/>
         <Tab label="Blog posts" value='blog'/>
@@ -43,7 +47,7 @@ const DbSubmissions = () => {
             </Typography>
             <br/><br/>
             <span style={{display:'flex',justifyContent:'space-between'}}>
-                <Chip label={sub?.reviewStatus} color='success' size='small' variant='filled' />
+                <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
                 <Button variant='text' color='secondary' size='small' >view</Button>&nbsp;&nbsp;
                 <Button variant='text' color='secondary' size='small' >edit</Button>
@@ -67,7 +71,7 @@ const DbSubmissions = () => {
             </Typography>
             <br/><br/>
             <span style={{display:'flex',justifyContent:'space-between'}}>
-                <Chip label={sub?.reviewStatus} color='success' size='small' variant='filled' />
+                <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
                 <Button variant='text' color='secondary' size='small' >view</Button>&nbsp;&nbsp;
                 <Button variant='text' color='secondary' size='small' >edit</Button>

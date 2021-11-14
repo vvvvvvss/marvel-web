@@ -44,6 +44,7 @@ export const createPR = (formData)=> async (dispatch) => {
         }else{ alert('Something went wrong :(. Try again. If the problem persists, contact the developer.')}
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
+    dispatch({type : 'CLOSE_FORM'})
 }
 
 export const createBlog = (formData)=> async (dispatch) => {
@@ -55,6 +56,7 @@ export const createBlog = (formData)=> async (dispatch) => {
         }else{ alert('Something went wrong :(')};
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
+    dispatch({type : 'CLOSE_FORM'});
 }
 
 export const getSubmissionsStu = (tab, page) => async (dispatch) => {

@@ -10,7 +10,7 @@ import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import { createBlog, createPR } from "../../actions/dashboard";
 
-const DbForm = ({setFormOpen, type}) => {
+const DbForm = ({ type}) => {
     const {isCreateLoading} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
@@ -34,15 +34,16 @@ const DbForm = ({setFormOpen, type}) => {
         return doc.documentElement.textContent;
       }
 
-    const handleSubmit = ()=>{
+    const handleSubmit = (e)=>{
+      e.preventDefault();
       if(type==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else {dispatch(createPR(formData)); setFormOpen(false);}
+        else {dispatch(createPR(formData));}
       }else if(type==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {dispatch(createBlog(formData)); setFormOpen(false);}
+        else {dispatch(createBlog(formData));}
       }
     }
 
@@ -50,7 +51,7 @@ const DbForm = ({setFormOpen, type}) => {
         <>
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{setFormOpen(false);}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {type==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
             </Typography>
@@ -144,7 +145,7 @@ const DbForm = ({setFormOpen, type}) => {
         <br/>
         <div style={{display: 'flex',justifyContent: 'flex-end'}}>
            &nbsp;&nbsp;&nbsp;&nbsp;
-          <Button size='large' onClick={handleSubmit} variant='contained'>
+          <Button size='large' disabled={isCreateLoading} onClick={handleSubmit} variant='contained'>
             { isCreateLoading ? <CircularProgress/> : 'Submit'}
           </Button>
          

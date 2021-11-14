@@ -1,4 +1,5 @@
 const initialState = {
+    formOpen : false,
     isSyllabusLoading : false,
     isProfileLoading : false,
     isCreateLoading : false,
@@ -10,6 +11,10 @@ const initialState = {
 
 const dashboardReducer = (state=initialState, action)=>{
     switch (action.type) {
+        case 'OPEN_FORM' :
+            return {...state, formOpen : true}
+        case 'CLOSE_FORM' :
+            return {...state, formOpen : false}
         case 'START_SYLLABUS_LOADING':
             return {...state, isSyllabusLoading : true}
         case 'END_SYLLABUS_LOADING' : 
