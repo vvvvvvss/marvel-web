@@ -73,3 +73,19 @@ export const getSubmissionsStuPr = async (req, res)=>{
         return res.json({message : 'Something happened idk wat', status : 'BRUH'});
     }
 }
+
+export const getPR = async (req, res) => {
+    try {
+        const {id}= req.params;
+    } catch (error) {
+        
+    }
+}
+
+export const getBlog = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}

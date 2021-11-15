@@ -73,7 +73,7 @@ export const getSubmissionsStu = (tab, page) => async (dispatch) => {
 export const getPost = (type, id) => async (dispatch) => {
     try {
         dispatch({type:'START_VIEW_LOADING'});
-        const {data} = await API.getPost(type,id);
+        const {data} = await API.getPost(type?.toLowerCase(),id);
         if(data?.status==='200'){
             dispatch({type : 'GET_VIEW_POST', payload : data?.post});
         }else{alert("Something went wrong :(")}
