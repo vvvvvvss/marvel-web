@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress, Dialog } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -10,8 +10,8 @@ import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import { createBlog, createPR } from "../../actions/dashboard";
 
-const DbForm = ({ type}) => {
-    const {isCreateLoading} = useSelector(state => state.dashboard);
+const DbForm = () => {
+    const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : ''
@@ -36,11 +36,11 @@ const DbForm = ({ type}) => {
 
     const handleSubmit = (e)=>{
       e.preventDefault();
-      if(type==='PR'){
+      if(formType==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
         else {dispatch(createPR(formData));}
-      }else if(type==='BLOG'){
+      }else if(formType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
         else {dispatch(createBlog(formData));}
@@ -49,11 +49,12 @@ const DbForm = ({ type}) => {
 
     return (
         <>
+        <Dialog open={formOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_FORM'}))} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>{dispatch({formType:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {type==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
+            {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
             </Typography>
         </Toolbar>
         </AppBar>
@@ -66,7 +67,7 @@ const DbForm = ({ type}) => {
         <br/><br/>
 
         {/* IMAGE UPLOAD */}
-        {type==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
+        {formType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
           {({ onImageUpload, dragProps, }) => (
             <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
               <Paper variant='widget'
@@ -154,7 +155,7 @@ const DbForm = ({ type}) => {
 
         </div>
         </div>
-        </>
+        </Dialog></>
     )
 }
 

@@ -16,3 +16,4 @@ export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/$
 export const createPR = async (formData) => API.post(`/create/pr`,formData);
 export const createBlog = async (formData) => API.post(`/create/blog`,formData);
 export const getSubmissionsStu = async (tab,page) => API.get(`/get/submissionsStu/${tab}?page=${page}`);
+export const getPost = async (type, id) => API.get(`get/${type}/${id}`);

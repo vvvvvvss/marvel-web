@@ -5,7 +5,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
 import { useDispatch, useSelector } from 'react-redux';
 
-const Dial = ({setType}) => {
+const Dial = () => {
     const {authUser} = useSelector(state => state.auth);
     const [dial, setDial] = useState(false);
     const {syllabus, submissions : {prs}} = useSelector(state => state.dashboard);
@@ -27,7 +27,7 @@ const Dial = ({setType}) => {
                     tooltipTitle={`Blog`}
                     tooltipOpen sx={{whiteSpace : 'nowrap'}}
                     icon={<BookIcon/>}
-                    onClick={()=>{setType('BLOG');dispatch({type : 'OPEN_FORM'});}}
+                    onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
                  {syllabus?.submissionStatus?.isAccepting && !prs.some((i)=>(i.level === authUser?.currentLevel))
                   &&
@@ -35,7 +35,7 @@ const Dial = ({setType}) => {
                     tooltipTitle={`Project Report Lvl ${syllabus?.submissionStatus?.forLevel}`}
                     tooltipOpen  sx={{whiteSpace : 'nowrap'}}
                     icon={<AssignmentIcon/>}
-                    onClick={()=>{setType('PR');dispatch({type : 'OPEN_FORM'});}}
+                    onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'PR'});dispatch({type : 'OPEN_FORM'});}}
                 />}
             </SpeedDial>
         </div>

@@ -7,14 +7,11 @@ import DbProgress from '../../components/Widgets/dbProgress.js';
 import Dial from '../../components/SpeedDial.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import styles from './dashboard.module.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector} from 'react-redux';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 
 const StuDashboard = () => {
-    const {syllabus, submissions : {prs}, formOpen} = useSelector(state => state.dashboard);
-    const [type, setType] = useState('');
-    const {authUser} = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    const {formOpen} = useSelector(state => state.dashboard);
 
     return (
         <>
@@ -29,11 +26,9 @@ const StuDashboard = () => {
             <DbProfile/>
             </div>
 
-            <Dialog fullScreen open={formOpen} onClose={()=>(dispatch({type : 'CLOSE_FORM'}))}>
-                <DbForm type={type}/>
-            </Dialog>
+            { formOpen && <DbForm/>}
 
-            <Dial setType={setType} />
+            <Dial/>
         </Paper>
         
         </>

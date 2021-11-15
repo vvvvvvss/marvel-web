@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Typography, Paper, IconButton, Card, Tab, Tabs, Chip, Button, Pagination, CircularProgress} from "@mui/material";
-import RefreshIcon from '@mui/icons-material/Refresh';
 import {getSubmissionsStu} from '../../actions/dashboard.js';
+import DbViewPost from "./dbViewPost.js";
 import moment from 'moment';
 
 const DbSubmissions = () => {
-    const {submissions, isSubLoading} = useSelector(state => state.dashboard);
+    const {submissions, isSubLoading, viewPostOpen} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
     const [tab, setTab] = useState('pr');
     const [page , setPage] = useState(1);
@@ -22,6 +22,7 @@ const DbSubmissions = () => {
     }
 
     return (
+    <>
         <Paper variant='widget'  >
         <Typography variant='widget-heading'>submissions</Typography>
         <br/><br/>
@@ -49,8 +50,13 @@ const DbSubmissions = () => {
             <span style={{display:'flex',justifyContent:'space-between'}}>
                 <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
-                <Button variant='text' color='secondary' size='small' >view</Button>&nbsp;&nbsp;
-                <Button variant='text' color='secondary' size='small' >edit</Button>
+                <Button variant='text' color='secondary' size='small' 
+                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?._id,type:'PR'}});dispatch({type:'OPEN_VIEW'});}}>
+                    view
+                </Button>&nbsp;&nbsp;
+                <Button variant='text' color='secondary' size='small' >
+                    edit
+                </Button>
                 </div>
                 </span>
         </Card> <br/> </div>
@@ -73,10 +79,13 @@ const DbSubmissions = () => {
             <span style={{display:'flex',justifyContent:'space-between'}}>
                 <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
-                <Button variant='text' color='secondary' size='small' >view</Button>&nbsp;&nbsp;
+                <Button variant='text' color='secondary' size='small' 
+                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?._id,type:'BLOG'}});dispatch({type:'OPEN_VIEW'});}}    >
+                    view
+                </Button>&nbsp;&nbsp;
                 <Button variant='text' color='secondary' size='small' >edit</Button>
                 </div>
-                </span>
+            </span>
             </Card> <br/></div>
         ))}</div>}
         </>}
@@ -85,9 +94,11 @@ const DbSubmissions = () => {
         <Pagination count={submissions?.total} variant="outlined" page={page} 
         color="secondary" onChange={(e, page)=>(setPage(page))}
         style={{justifySelf:'center'}}/>}
-        </div>}
-        
+        </div>} 
         </Paper>
+        {viewPostOpen && <DbViewPost/>}
+        
+    </>
     )
 }
 

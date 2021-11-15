@@ -7,11 +7,10 @@ const DbProgress = () => {
     const Message = ()=>{
         if(submissions?.prs.some((i)=>(i.level===authUser.currentLevel))){
             return <Typography variant='caption'><em>You have submitted your Project report for current level.</em></Typography>
-        }else if(syllabus.submissionStatus.isAccepting){
+        }else if(syllabus?.submissionStatus?.isAccepting){
             return <Typography variant='caption'><em>{`Submissions are open for level ${syllabus?.submissionStatus?.forLevel} Project report.`} </em></Typography>
         }else return <Typography variant='caption'><em>Submissions are'nt open for this level</em></Typography>
     };
-
     return (
         <>
              <Paper variant='widget' style={{height:'max-content'}}>
