@@ -77,15 +77,39 @@ export const getSubmissionsStuPr = async (req, res)=>{
 export const getPR = async (req, res) => {
     try {
         const {id}= req.params;
+        const returnedPr = await prs.findOne({slug : id}).lean();
+        if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
+        if(['PENDING','FLAGGED'].includes(returnedPr?.reviewStatus)){
+            if(!req.user){ return res.json({status:'404'}); }
+            if((req.user?.id===returnedPr?.authorId) || 
+            (req.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
+                return res.json({post : returnedPr,status:'200'});
+            }
+        }else{
+            return res.json({post : {...returnedPr, feedback:null}, status:'200'});
+        }
     } catch (error) {
-        
+        console.log(error);
+        return res.json({message:'Something went wrong:(',status:'404'});
     }
 }
 
 export const getBlog = async (req, res) => {
     try {
-        
+        const {id} = req.params;
+        const returnedBlog = await blogs.findOne({slug : id}).lean();
+        if(!returnedBlog) return res.json({message:'That does not exist',status:'404'});
+        if(['PENDING','FLAGGED'].includes(returnedBlog?.reviewStatus)){
+            if(!req.user)return res.json({status:'404'});
+            if((req.user?.id===returnedBlog?.authorId)||
+             (req.user?.currentRole==='INS' && req.user?.currentInsCourse.includes(returnedBlog?.authorCourseCode))){
+                 return res.json({post : returnedBlog, status:'200'});
+             }
+        }else{
+            return res.json({post:{...returnedBlog, feedback:null}, status:'200'});
+        }
     } catch (error) {
-        
-    }
+        console.log(error);
+        return res.json({message:'Something went wrong:(',status:'404'});
+     }
 }

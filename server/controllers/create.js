@@ -40,7 +40,7 @@ export const createBlog = async (req , res) => {
             allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
         });
         const newBlogPost = new blogPost({
-        authorId : req.user.id, authorName:req.user?.name,
+        authorId : req.user.id, authorName:req.user?.name, authorCourseCode : `${req.user?.currentRole==='STU' ? req.user?.currentStuCourse : 'NA'}`,
         authorSlug : req.user.slug, authorImage : req.user?.profilePic,
         createdAt : new Date(), title : req.body.title, tags : req.body?.tags,
         content : cleanContent, reviewStatus : 'PENDING', feedback : ''

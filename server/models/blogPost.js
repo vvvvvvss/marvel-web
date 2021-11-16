@@ -8,6 +8,7 @@ const blogPostSchema = mongoose.Schema({
     authorImage : {type : String},
     createdAt : { type : Date, default : new Date()},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
+    authorCourseCode : { type : String},
 
     // EDITABLE DATA
     title : {type : String},

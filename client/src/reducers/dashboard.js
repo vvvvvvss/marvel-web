@@ -42,6 +42,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, isSubLoading : false}
         case 'START_VIEW_LOADING':
             return {...state, isViewLoading : true}
+        case 'END_VIEW_LOADING':
+            return {...state, isViewLoading:false}
         case 'END_START_LOADING':
             return {...state, isViewLoading : false}
         case 'GET_PROFILE':

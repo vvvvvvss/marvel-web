@@ -9,6 +9,7 @@ import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import { createBlog, createPR } from "../../actions/dashboard";
+import he from 'he';
 
 const DbForm = () => {
     const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
@@ -29,11 +30,6 @@ const DbForm = () => {
       } catch (error) { console.log(error); }
       };
 
-    const htmlDecode = (input)=> {
-        var doc = new DOMParser().parseFromString(input, "text/html");
-        return doc.documentElement.textContent;
-      }
-
     const handleSubmit = (e)=>{
       e.preventDefault();
       if(formType==='PR'){
@@ -52,7 +48,7 @@ const DbForm = () => {
         <Dialog open={formOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_FORM'}))} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{dispatch({formType:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
             </Typography>
@@ -99,17 +95,18 @@ const DbForm = () => {
             options={
               {wrapper : 'p'},
               { overrides: {
-                  p :{ component: Typography , props: {variant : 'body2'}}, 
+                  p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                  img : { props : {width : '100%' }},
+                  img : { props : {width : '100%',height:'150px',style:{objectFit:'cover'} }},
                   iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
-                  blockquote : {props : {style : {color : '#c4c4c4'}}}
+                  code : { component:Typography ,props : { variant:'code-small' }}
               },
           }}>
-            {htmlDecode(sanitizer(markdown, {
-                allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+            {
+            he.decode( sanitizer(markdown, {
+                allowedTags: ['iframe','br','strong'], allowedAttributes: { 'iframe': ['src'] },
                 allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
-              }))}
+              }) ) }
           </Markdown>
           )
           }

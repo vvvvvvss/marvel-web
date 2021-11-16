@@ -60,6 +60,9 @@ export const darkTheme = createTheme({
       },
       MuiCard : {
         styleOverrides : { root : { padding : '10px', backgroundColor : '#112020',borderRadius:'8px',border :'1px solid #5B7B80' }}
+      },
+      MuiLink:{
+        styleOverrides:{root : { color : '#CC4E6C'}}
       }
     }
 });

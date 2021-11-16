@@ -51,7 +51,7 @@ const DbSubmissions = () => {
                 <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
                 <Button variant='text' color='secondary' size='small' 
-                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?._id,type:'PR'}});dispatch({type:'OPEN_VIEW'});}}>
+                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?.slug,type:'PR'}});dispatch({type:'OPEN_VIEW'});}}>
                     view
                 </Button>&nbsp;&nbsp;
                 <Button variant='text' color='secondary' size='small' >
@@ -80,7 +80,7 @@ const DbSubmissions = () => {
                 <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled' />
                 <div>
                 <Button variant='text' color='secondary' size='small' 
-                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?._id,type:'BLOG'}});dispatch({type:'OPEN_VIEW'});}}    >
+                onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?.slug,type:'BLOG'}});dispatch({type:'OPEN_VIEW'});}}    >
                     view
                 </Button>&nbsp;&nbsp;
                 <Button variant='text' color='secondary' size='small' >edit</Button>
