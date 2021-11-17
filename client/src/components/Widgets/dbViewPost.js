@@ -1,4 +1,4 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { getPost } from "../../actions/dashboard.js";
@@ -24,7 +24,7 @@ const DbViewPost = () => {
             <Typography variant='h6' >{`${viewPostType} Review`}</Typography>
         </Toolbar>
         </AppBar>
-        <div style={{display:'flex',justifyContent:'center',padding: '0px 20px 0px 20px'}} >
+        <div style={{display:'flex',justifyContent:'center',padding: '0px 20px 30px 20px'}} >
         <div style={{paddingTop:'90px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',maxWidth:'650px'}}>
         
         {isViewLoading ? <CircularProgress/> :
@@ -57,13 +57,27 @@ const DbViewPost = () => {
                     a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                     img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
                     iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
-                    code : { component:Typography ,props : { variant:'code-small' }}
+                    code : { component:Typography ,props : { variant:'code-small' }},
+                    blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
                 },
             }}>
-                { he.decode(viewPost?.content) }
+            { he.decode(`${viewPost?.content}`) }
             </Markdown>
             <br/>
             <Divider/>
+            <br/>
+            <div style={{display:'flex',justifyContent:'flex-start'}}>
+                 { viewPost?.tags?.map((tag)=>(
+                <Chip label={tag} key={tag} variant='outlined' size='medium' color='primary' style={{margin : '4px 8px 4px 0px'}}/>
+            ))}
+            </div>
+            <br/>
+            <Divider/>
+            <br/>
+            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+                <Typography variant='button' fontWeight='600' >Approve</Typography>
+                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
+            </Button>
         </div>
         }
         </div>

@@ -43,7 +43,6 @@ export const getProfile = async(req, res)=>{
 }
 
 export const getSubmissionsStuBlog = async (req, res)=>{
-    console.log(req.query);
     try {
         const returnedBlogPosts = await blogs.aggregate([
             { $match : { authorId : req.user.id }},
