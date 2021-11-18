@@ -8,7 +8,7 @@ import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
-import { createBlog, createPR } from "../../actions/dashboard";
+import { createBlog, createPR } from "../../actions/dashboard.js";
 import he from 'he';
 
 const DbForm = () => {
@@ -49,7 +49,7 @@ const DbForm = () => {
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
             <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography variant="h6" component="div">
             {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
             </Typography>
         </Toolbar>

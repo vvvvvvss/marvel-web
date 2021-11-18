@@ -4,9 +4,10 @@ import { Typography, Paper, IconButton, Card, Tab, Tabs, Chip, Button, Paginatio
 import {getSubmissionsStu} from '../../actions/dashboard.js';
 import DbViewPost from "./dbViewPost.js";
 import moment from 'moment';
+import DbEditPost from "./dbEditPost.js";
 
 const DbSubmissions = () => {
-    const {submissions, isSubLoading, viewPostOpen} = useSelector(state => state.dashboard);
+    const {submissions, isSubLoading, viewPostOpen, editPostOpen} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
     const [tab, setTab] = useState('pr');
     const [page , setPage] = useState(1);
@@ -37,7 +38,7 @@ const DbSubmissions = () => {
         {tab==='pr' ? 
         <> 
         {!submissions?.prs?.length ? 
-        <Typography variant='caption' >You have not submitted any project reports for this level</Typography> :
+        <Typography variant='caption' >You have not submitted any project reports for this Course.</Typography> :
         <div>
         {submissions?.prs?.map((sub)=>(
         <div key={sub?.slug}> <Card variant='outlined'>
@@ -54,7 +55,9 @@ const DbSubmissions = () => {
                 onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?.slug,type:'PR'}});dispatch({type:'OPEN_VIEW'});}}>
                     view
                 </Button>&nbsp;&nbsp;
-                <Button variant='text' color='secondary' size='small' >
+                <Button variant='text' color='secondary' size='small' 
+                onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:sub?.slug, type:'PR'}});dispatch({type:'OPEN_EDIT'})}}
+                >
                     edit
                 </Button>
                 </div>
@@ -83,7 +86,9 @@ const DbSubmissions = () => {
                 onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id:sub?.slug,type:'BLOG'}});dispatch({type:'OPEN_VIEW'});}}    >
                     view
                 </Button>&nbsp;&nbsp;
-                <Button variant='text' color='secondary' size='small' >edit</Button>
+                <Button variant='text' color='secondary' size='small' 
+                onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:sub?.slug, type:'BLOG'}});dispatch({type:'OPEN_EDIT'})}}
+                >edit</Button>
                 </div>
             </span>
             </Card> <br/></div>
@@ -97,7 +102,7 @@ const DbSubmissions = () => {
         </div>} 
         </Paper>
         {viewPostOpen && <DbViewPost/>}
-        
+        {editPostOpen && <DbEditPost/>}
     </>
     )
 }

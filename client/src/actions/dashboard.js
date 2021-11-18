@@ -80,3 +80,14 @@ export const getPost = (type, id) => async (dispatch) => {
         dispatch({type : 'END_VIEW_LOADING'});
     } catch (error) { }
 }
+
+export const getPostToEdit = (id, type) => async (dispatch)=>{
+    try {
+        dispatch({type:'START_EDIT_LOADING'});
+        const {data} = await API.getPostToEdit(id, type?.toLowerCase());
+        if(data?.status==='200'){
+            dispatch({type : 'GET_EDIT_POST', payload:data?.post});
+        }else{alert('Something went wrong :(')}
+        dispatch({type:'END_EDIT_LOADING'});
+    } catch (error) { }
+}

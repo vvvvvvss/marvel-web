@@ -79,7 +79,7 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
-            <Typography variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;<Chip label={viewPost?.reviewStatus} color={colorDecide(viewPost?.reviewStatus)} variant='filled' /> </Typography>
+            <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;<Chip label={viewPost?.reviewStatus} color={colorDecide(viewPost?.reviewStatus)} variant='filled' /> </Typography>
             <br/>
             { authUser?.currentRole==='INS' &&
             <>
@@ -97,18 +97,16 @@ const DbViewPost = () => {
             </Button>
             </>
             }
-            <br/>
             { viewPost?.feedback &&
-                <div>
-                    <Card>
-                        <Typography variant='button' >Feedback :</Typography><br/>
-                        <Typography variant='body2' >{viewPost?.feedback}</Typography>
-                    </Card>
-                </div>
+            <Card>
+                <Typography variant='button' >Feedback :</Typography><br/>
+                <Typography variant='body2' >{viewPost?.feedback}</Typography>
+            </Card>
             }
             <br/>
             { authUser?.currentRole==='STU' &&
-            <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+            <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
+            onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType}});dispatch({type:'OPEN_EDIT'})}}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
                 <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
             </Button>}
