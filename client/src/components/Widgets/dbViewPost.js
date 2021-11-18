@@ -1,4 +1,4 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { getPost } from "../../actions/dashboard.js";
@@ -10,12 +10,17 @@ import he from 'he';
 const DbViewPost = () => {
     const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
-
+    const {authUser} = useSelector(state => state.auth)
     useEffect(() => {
         dispatch(getPost(viewPostType,viewPostId));
     }, [])
 
-    console.log(isViewLoading, viewPost);
+    const colorDecide = (status) => {
+        if(status==='PENDING') return 'warning';
+        else if (status==='FLAGGED') return 'error';
+        else if (status==='APPROVED' || 'FEATURED') return 'success';
+    }
+
     return (
         <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
         <AppBar sx={{ position: 'fixed' }}>
@@ -74,10 +79,40 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
+            <Typography variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;<Chip label={viewPost?.reviewStatus} color={colorDecide(viewPost?.reviewStatus)} variant='filled' /> </Typography>
+            <br/>
+            { authUser?.currentRole==='INS' &&
+            <>
             <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
                 <Typography variant='button' fontWeight='600' >Approve</Typography>
                 <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
             </Button>
+            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+                <Typography variant='button' fontWeight='600' >Approve</Typography>
+                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
+            </Button>
+            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+                <Typography variant='button' fontWeight='600' >Approve</Typography>
+                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
+            </Button>
+            </>
+            }
+            <br/>
+            { viewPost?.feedback &&
+                <div>
+                    <Card>
+                        <Typography variant='button' >Feedback :</Typography><br/>
+                        <Typography variant='body2' >{viewPost?.feedback}</Typography>
+                    </Card>
+                </div>
+            }
+            <br/>
+            { authUser?.currentRole==='STU' &&
+            <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+                <Typography variant='button' fontWeight='600' >Edit</Typography>
+                <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
+            </Button>}
+            
         </div>
         }
         </div>

@@ -21,7 +21,9 @@ export const darkTheme = createTheme({
                   transition: '200ms',
                   letterSpacing: '0.23em', fontWeight:'600',filter: 'drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.25))',
                 '&:hover':{ filter : 'drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.25))',backgroundColor:'#350006' }}},
-        ]
+          {props :{color : 'secondary', variant:'contained'}, 
+          style :{ backgroundColor:'#09606C',border:'1px solid #09606C',color: '#D3FFFF','&:hover':{border:'1px solid #D3FFFF', backgroundColor:'#0E373D'}}},
+              ]
       },
       MuiPaper : {
         styleOverrides : {
