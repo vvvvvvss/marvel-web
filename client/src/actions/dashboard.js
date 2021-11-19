@@ -35,28 +35,16 @@ export const updateProfile=(id, newProfile)=>async(dispatch)=>{
     dispatch({type : 'END_PROFILE_LOADING'});
 }
 
-export const createPR = (formData)=> async (dispatch) => {
+export const createPost = (formData, formType)=> async (dispatch) => {
     dispatch({type : 'START_CREATE_LOADING'});
     try {
-        const {data} = await API.createPR(formData).catch(err => console.log(err));
+        const {data} = await API.createPost(formData, formType.toLowerCase()).catch(err => console.log(err));
         if(data?.status==='201'){
-            dispatch({type : 'CREATE_PR', payload : data?.pr})
-        }else{ alert('Something went wrong :(. Try again. If the problem persists, contact the developer.')}
+            dispatch({type : `CREATE_${formType}`, payload : data?.post})
+        }else{ alert('Something went wrong :(.')};
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
     dispatch({type : 'CLOSE_FORM'})
-}
-
-export const createBlog = (formData)=> async (dispatch) => {
-    dispatch({type : 'START_CREATE_LOADING'});
-    try {
-        const {data} = await API.createBlog(formData).catch(err => console.log(err));
-        if(data?.status==='201'){
-            dispatch({type : 'CREATE_BLOG', payload : data?.createdPost});
-        }else{ alert('Something went wrong :(')};
-    } catch (error) { }
-    dispatch({type : 'END_CREATE_LOADING'});
-    dispatch({type : 'CLOSE_FORM'});
 }
 
 export const getSubmissionsStu = (tab, page) => async (dispatch) => {
@@ -81,13 +69,15 @@ export const getPost = (type, id) => async (dispatch) => {
     } catch (error) { }
 }
 
-export const getPostToEdit = (id, type) => async (dispatch)=>{
+export const editPost = (formData, id, type) => async (dispatch) => {
     try {
-        dispatch({type:'START_EDIT_LOADING'});
-        const {data} = await API.getPostToEdit(id, type?.toLowerCase());
-        if(data?.status==='200'){
-            dispatch({type : 'GET_EDIT_POST', payload:data?.post});
-        }else{alert('Something went wrong :(')}
-        dispatch({type:'END_EDIT_LOADING'});
+        dispatch({type:'START_CREATE_LOADING'});
+        const {data} = await API.editPost(formData, id, type.toLowerCase());
+        if (data?.status==='201'){
+            dispatch({type:`EDIT_${type}`, payload : data?.post});
+        }else{alert('Something went wrong :(')};
+        dispatch({type : 'CLOSE_EDIT'});
+        dispatch({type : 'END_CREATE_LOADING'});
     } catch (error) { }
 }
+

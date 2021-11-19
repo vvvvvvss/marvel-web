@@ -9,10 +9,10 @@ import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import he from 'he';
-import {getPostToEdit} from '../../actions/dashboard.js';
+import { getPost } from "../../actions/dashboard.js";
 
 const DbEditPost = () => {
-    const {editPost, isEditLoading, editPostType, editPostOpen, editPostId,isCreateLoading} = useSelector(state => state.dashboard)
+    const {viewPost, isViewLoading, editPostType, editPostOpen, editPostId,isCreateLoading} = useSelector(state => state.dashboard)
     const [editorTab, setEditorTab] = useState('write');
     const [newTag, setNewTag] = useState('');
     const [formData, setFormData] = useState({
@@ -21,12 +21,14 @@ const DbEditPost = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const func = async ()=>{
-            await dispatch(getPostToEdit(editPostId, editPostType));
+        if( !viewPost?.slug || (viewPost?.slug !== editPostId)){
+            dispatch(getPost(editPostType, editPostId));
         }
-        func();
-        setFormData({title: editPost?.title, content: editPost?.content, tags: editPost?.tags, coverPhoto: editPost?.coverPhoto});
     }, [editPostId])
+
+    useEffect(() => {
+        setFormData({title: viewPost?.title, content: he.decode(viewPost?.content), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});
+    }, [viewPost])
 
     const handleImageUpload = async (imageList) => {
         const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -42,11 +44,11 @@ const DbEditPost = () => {
     if(editPostType==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else {console.log('submit pr',formData)}
+        else {editPost(formData, editPostId, editPostType)};
     }else if(editPostType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {console.log('submit blog',formData)}
+        else {editPost(formData, editPostId, editPostType)};
     }
     }
 
@@ -59,9 +61,9 @@ const DbEditPost = () => {
                     <Typography variant='h6' >{`Edit ${editPostType}`}</Typography>
                 </Toolbar>
             </AppBar>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                {isEditLoading ? <CircularProgress/> : 
-                <div style={{padding : '90px 10px 90px 10px',width:'100%', maxWidth:'700px'}} >
+            <div style={{display: 'flex', justifyContent: 'center',padding : '90px 10px 90px 10px'}}>
+                {isViewLoading ? <CircularProgress/> : 
+                <div style={{width:'100%', maxWidth:'700px'}} >
                     
                 <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
                 fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}

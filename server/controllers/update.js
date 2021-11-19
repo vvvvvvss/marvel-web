@@ -1,3 +1,4 @@
+import blogPost from "../models/blogPost.js";
 import user from "../models/user.js";
 
 export const updateProfile = async (req, res)=>{
@@ -22,5 +23,17 @@ export const updateProfile = async (req, res)=>{
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message :'Something happened idk wat'});
+    }
+}
+
+export const updateBlog = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const existingBlog = await blogPost.findOne({slug : id}).lean();
+        if(!existingBlog) return res.json({status:'404', message:'that post does not exist'});
+        const condition = (req.user?.id === existingBlog?.authorId);
+    } catch (error) {
+        console.log(error);
+        return res.json({status : 'BRUH', message:'Somthing went wrong :('})
     }
 }

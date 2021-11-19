@@ -1,7 +1,7 @@
 const initialState = {
     formOpen : false, formType : '',
     viewPostOpen : false, viewPostId : '', viewPostType:'', isViewLoading : false, viewPost : {},
-    editPostOpen : false, editPostId : '', editPostType:'',isEditLoading : false, editPost : {},
+    editPostOpen : false, editPostId : '', editPostType:'',isEditLoading : false,
     isSyllabusLoading : false,
     isProfileLoading : false,
     isCreateLoading : false,
@@ -74,8 +74,6 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, submissions : {...state.submissions, blogs : action.payload.subs, total : action.payload.total}};
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
-        case 'GET_EDIT_POST':
-            return {...state, editPost : action.payload}
         default:
             return state;
     }

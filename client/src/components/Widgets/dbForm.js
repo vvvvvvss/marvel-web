@@ -8,7 +8,7 @@ import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
-import { createBlog, createPR } from "../../actions/dashboard.js";
+import { createPost } from "../../actions/dashboard.js";
 import he from 'he';
 
 const DbForm = () => {
@@ -35,11 +35,11 @@ const DbForm = () => {
       if(formType==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else {dispatch(createPR(formData));}
+        else {dispatch(createPost(formData, formType));}
       }else if(formType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {dispatch(createBlog(formData));}
+        else {dispatch(createPost(formData, formType));}
       }
     }
 

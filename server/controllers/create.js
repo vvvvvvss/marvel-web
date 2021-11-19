@@ -26,7 +26,7 @@ export const createPR = async (req , res) => {
           });
 
         const createdPR = await newPR.save();
-        return res.json({pr : createdPR, status : '201', message : 'successfully created pr'});
+        return res.json({post : createdPR, status : '201', message : 'successfully created pr'});
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message :'Something happened idk wat'});
@@ -52,7 +52,7 @@ export const createBlog = async (req , res) => {
         })).secure_url;
 
         const createdPost = await newBlogPost.save();
-        return res.json({status : '201', createdPost : createdPost});
+        return res.json({status : '201', post : createdPost});
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message :'Something happened idk wat'});
