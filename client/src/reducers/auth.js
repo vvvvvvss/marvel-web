@@ -12,7 +12,8 @@ const authReducers = (state=initialState, action) => {
         case 'AUTH' : 
             return {...state, authUser : action.payload};
         case 'LOGOUT' :
-            return {...state, authUser : {}};
+            sessionStorage.clear();
+            return {...state, authUser : null};
         default:
             return state;
     }

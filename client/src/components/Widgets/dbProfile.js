@@ -10,7 +10,7 @@ const DbProfile = () => {
 
     useEffect(() => {
         dispatch(getProfileData(authUser?.id, 'dashboard'));
-    }, [])
+    }, [authUser])
 
     const [changed, setChanged] = useState(false);
     const [profileCopy, setProfileCopy] = useState(profile);

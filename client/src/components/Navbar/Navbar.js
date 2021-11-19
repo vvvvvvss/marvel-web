@@ -1,7 +1,6 @@
 import { Button, CircularProgress, DialogTitle, useScrollTrigger } from "@mui/material";
 import { Slide, AppBar, Toolbar, Typography, Chip, Avatar
       } from "@mui/material";
-import { useState } from "react";
 import GoogleLogin, {GoogleLogout} from 'react-google-login';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
@@ -22,7 +21,7 @@ const Navbar = () => {
 
     const logout = ()=>{
         dispatch({type : 'LOGOUT'});
-        sessionStorage.clear();
+        window.location.reload();
     }
     const googleError = (err) => {
         console.log(err.message);
@@ -51,8 +50,8 @@ const Navbar = () => {
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
                     render={(renderProps) => (
                         <Button onClick={renderProps.onClick} disabled={renderProps.disabled} 
-                        variant="contained" >
-                        Log in
+                        variant="rounded-outlined" >
+                        Login
                         </Button>)}
                     onSuccess={googleSuccess} onFailure={googleError} 
                     cookiePolicy="single_host_origin" isSignedIn={true}/>

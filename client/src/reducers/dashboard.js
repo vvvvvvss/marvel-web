@@ -79,7 +79,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, submissions : {...state.submissions, blogs : state.submissions.blogs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload}
         case 'EDIT_PR' :
             return {...state, submissions : {...state.submissions, prs : state.submissions.prs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action.payload}
-        default: return state;
+        default: 
+            return state;
     }
 }
 
