@@ -6,7 +6,6 @@ const blogPostSchema = mongoose.Schema({
     authorName : { type : String, required : true },
     authorSlug : { type : String},
     authorImage : {type : String},
-    createdAt : { type : Date, default : new Date()},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
     authorCourseCode : { type : String},
 
@@ -20,6 +19,7 @@ const blogPostSchema = mongoose.Schema({
     reviewStatus : { type : String, 
         enum : {values : ['PENDING', 'APPROVED', 'FLAGGED','FEATURED']}, default : 'PENDING'},
     feedback : { type : String, maxLength : 150 },
-});
+},
+{ timestamps : true });
 
 export default mongoose.model('blogPost',blogPostSchema);

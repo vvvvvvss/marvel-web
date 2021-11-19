@@ -59,23 +59,27 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, isEditLoading : true}
         case 'END_EDIT_LOADING':
             return {...state, isEditLoading:false}
-        //data
+        //getting case
         case 'GET_PROFILE':
             return {...state, profile : {...state.profile, ...action.payload}}
         case 'GET_COURSE' :
             return {...state, syllabus : action.payload}
-        case 'CREATE_PR' :
-            return {...state, submissions : { ...state?.submissions, prs : [action.payload, ...state.submissions.prs]}};
-        case 'CREATE_BLOG':
-            return {...state, submissions : { ...state?.submissions, blogs : [action.payload, ...state.submissions.blogs].slice(0,-1)}};
         case 'GET_SUB_PR':
             return {...state, submissions : {...state.submissions, prs : action.payload.subs}};
         case 'GET_SUB_BLOG':
             return {...state, submissions : {...state.submissions, blogs : action.payload.subs, total : action.payload.total}};
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
-        default:
-            return state;
+        // create or subbing
+        case 'CREATE_PR' :
+            return {...state, submissions : { ...state?.submissions, prs : [action.payload, ...state.submissions.prs]}};
+        case 'CREATE_BLOG':
+            return {...state, submissions : { ...state?.submissions, blogs : [action.payload, ...state.submissions.blogs].slice(0,-1)}};
+        case 'EDIT_BLOG' :
+            return {...state, submissions : {...state.submissions, blogs : state.submissions.blogs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload}
+        case 'EDIT_PR' :
+            return {...state, submissions : {...state.submissions, prs : state.submissions.prs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action.payload}
+        default: return state;
     }
 }
 

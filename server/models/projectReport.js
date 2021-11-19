@@ -12,7 +12,6 @@ const projectReportSchema = mongoose.Schema({
     level : {type : Number},
     courseCode : {type : String},
     domain : {type : String},
-    createdAt : { type : Date, default : new Date()},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
 
     // EDITABLE DATA
@@ -24,6 +23,7 @@ const projectReportSchema = mongoose.Schema({
     reviewStatus : { type : String, 
                 enum : {values : ['PENDING', 'APPROVED', 'FLAGGED','FEATURED']}, default : 'PENDING'},
     feedback : { type : String, maxLength : 150 },
-});
+},
+{timestamps : true});
 
 export default mongoose.model("projectReports", projectReportSchema);

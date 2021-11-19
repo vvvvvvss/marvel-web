@@ -18,7 +18,7 @@ export const createPR = async (req , res) => {
         authorSlug : req.user.slug, authorImage : req.user.profilePic,
         level : req.user.currentLevel, courseCode : req.user.currentStuCourse,
         domain : req.user.currentStuCourse.slice(0,-4), reviewStatus : 'PENDING',
-        createdAt : new Date(), feedback : ''});
+        feedback : ''});
 
         newPR.content = sanitizer(req.body?.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
@@ -42,7 +42,7 @@ export const createBlog = async (req , res) => {
         const newBlogPost = new blogPost({
         authorId : req.user.id, authorName:req.user?.name, authorCourseCode : `${req.user?.currentRole==='STU' ? req.user?.currentStuCourse : 'NA'}`,
         authorSlug : req.user.slug, authorImage : req.user?.profilePic,
-        createdAt : new Date(), title : req.body.title, tags : req.body?.tags,
+        title : req.body.title, tags : req.body?.tags,
         content : cleanContent, reviewStatus : 'PENDING', feedback : ''
         });
 

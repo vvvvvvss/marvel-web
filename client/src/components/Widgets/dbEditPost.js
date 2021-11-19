@@ -9,7 +9,7 @@ import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import he from 'he';
-import { getPost } from "../../actions/dashboard.js";
+import { getPost, editPost } from "../../actions/dashboard.js";
 
 const DbEditPost = () => {
     const {viewPost, isViewLoading, editPostType, editPostOpen, editPostId,isCreateLoading} = useSelector(state => state.dashboard)
@@ -44,12 +44,12 @@ const DbEditPost = () => {
     if(editPostType==='PR'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else {editPost(formData, editPostId, editPostType)};
+        else {dispatch(editPost(formData, editPostId, editPostType));};
     }else if(editPostType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {editPost(formData, editPostId, editPostType)};
-    }
+        else {dispatch(editPost(formData, editPostId, editPostType));};
+    }else {console.log('meh')}
     }
 
     return (

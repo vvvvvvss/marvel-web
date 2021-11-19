@@ -11,13 +11,13 @@ const userSchema = mongoose.Schema({
     profilePic : {type : String},
     regNo : { type : String },
     id: { type: String, required : true,unique:true },
-    joinedAt : {type : Date, default : new Date()},
 
     // META DATA ( changes. auto )
     currentRole : {type : String, enum : {values : ['STU','INS']}},
     currentStuCourse : {type : String},
     currentInsCourse : { type : [String]},
     currentLevel : {type : Number},
+    totalLevels : {type : Number},
     roleHistory : [{
         role : {type : String, enum : {values : ['STU','INS']}},
         startTime : {type : Date},endTime : {type : Date}
@@ -35,6 +35,7 @@ const userSchema = mongoose.Schema({
     bannedAt : {type :String},
     bannedByName : {type :String},
     bannedById : {type : String}
-});
+},
+{timestamps: true });
 
 export default mongoose.model("users", userSchema);
