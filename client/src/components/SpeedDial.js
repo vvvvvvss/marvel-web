@@ -4,6 +4,7 @@ import BookIcon from '@mui/icons-material/AutoStories';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
 import { useDispatch, useSelector } from 'react-redux';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const Dial = () => {
     const {authUser} = useSelector(state => state.auth);
@@ -15,7 +16,7 @@ const Dial = () => {
         <div>
             <Backdrop open={dial} />
             <SpeedDial
-                ariaLabel="start writing"
+                ariaLabel='start writing'
                 sx={{ position: 'fixed', bottom: 25, right: 25  }}
                 icon={<><CreateIcon/>&nbsp;&nbsp;write</>} 
                 FabProps={{variant:'extended'}}
@@ -29,7 +30,8 @@ const Dial = () => {
                     icon={<BookIcon/>}
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
-                 {syllabus?.submissionStatus?.isAccepting && !prs.some((i)=>(i.level === authUser?.currentLevel))
+                 {(authUser?.currentRole==='STU') &&
+                 (syllabus?.submissionStatus?.isAccepting && !prs.some((i)=>(i.level === authUser?.currentLevel))) 
                   &&
                   <SpeedDialAction
                     tooltipTitle={`Project Report Lvl ${syllabus?.submissionStatus?.forLevel}`}
@@ -37,6 +39,14 @@ const Dial = () => {
                     icon={<AssignmentIcon/>}
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'PR'});dispatch({type : 'OPEN_FORM'});}}
                 />}
+                {authUser?.currentRole==='INS' &&
+                <SpeedDialAction
+                tooltipTitle={`Resource Article`}
+                tooltipOpen sx={{whiteSpace:'nowrap'}}
+                icon={<ReceiptIcon/>}
+                onClick={()=>{dispatch({type:'SET_FORM_TYPE', payload :'RSA'});dispatch({type:'OPEN_FORM'});}}
+                />
+                }
             </SpeedDial>
         </div>
     )

@@ -40,17 +40,17 @@ export const createPost = (formData, formType)=> async (dispatch) => {
     try {
         const {data} = await API.createPost(formData, formType.toLowerCase()).catch(err => console.log(err));
         if(data?.status==='201'){
-            dispatch({type : `CREATE_${formType}`, payload : data?.post})
+            dispatch({type : `CREATE_${formType}`, payload : data?.post});
         }else{ alert('Something went wrong :(.')};
     } catch (error) { }
     dispatch({type : 'END_CREATE_LOADING'});
     dispatch({type : 'CLOSE_FORM'})
 }
 
-export const getSubmissionsStu = (tab, page) => async (dispatch) => {
+export const getSubmissions = (tab, page, role) => async (dispatch) => {
     try {
         dispatch({type : 'START_SUB_LOADING'});
-        const {data} = await API.getSubmissionsStu(tab, page);
+        const {data} = await API.getSubmissions(tab, page);
         if (data?.status ==='200'){
             dispatch({type : `GET_SUB_${tab.toUpperCase()}`, payload : { subs : data?.submissions, total : data?.total}});
         }else { alert("something went wrong :(") };

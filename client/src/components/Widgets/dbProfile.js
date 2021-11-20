@@ -1,4 +1,4 @@
-import { Avatar, Paper,Typography, Chip, TextField, Button, CircularProgress } from "@mui/material";
+import { Avatar, Paper,Typography, Chip, TextField, Button, CircularProgress, Skeleton } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {useEffect, useState} from 'react';
 import {getProfileData, updateProfile} from '../../actions/dashboard.js';
@@ -16,7 +16,7 @@ const DbProfile = () => {
     const [profileCopy, setProfileCopy] = useState(profile);
 
     const handleSave=()=>{
-        dispatch(updateProfile(profile?.id, profileCopy ));
+        dispatch(updateProfile(profile?.id, profileCopy));
         setChanged(false);
     }
     useEffect(() => {
@@ -24,14 +24,22 @@ const DbProfile = () => {
     }, [profile])
     return (
         <>
-        <Paper variant='widget' style={{height:'max-content'}}>
-            <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center'}}>
+        <Paper variant='widget' style={{height:'max-content',}}>
+            <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center', minWidth:'100%'}}>
             <Typography variant='widget-heading'>Public Profile</Typography>
             <Chip size='small' variant='outlined' label={authUser?.currentRole==='STU'?'STUDENT':'INSTRUCTOR'}></Chip>
             </div>
             <br/>
 
-            { isProfileLoading ? <CircularProgress/> :  
+            { isProfileLoading ? 
+            <div style={{display: 'grid',gridTemplateColumns:'1fr 5fr',columnGap:'20px'}}>
+                <Skeleton variant='circular' sx={{width:60,height:60}}/>
+                <div>
+                    <Skeleton variant='rectangular' height='24px' style={{borderRadius:'12px'}} ></Skeleton>
+                    <br/>
+                    <Skeleton variant='rectangular' height='180px' style={{borderRadius:'12px'}} ></Skeleton><br/>
+                </div>
+            </div> :  
             <div style={{display: 'grid',gridTemplateColumns:'1fr 5fr',columnGap:'20px'}}>
                 <Avatar sx={{width:60,height:60}} src={authUser?.profilePic}/>
                 <div>

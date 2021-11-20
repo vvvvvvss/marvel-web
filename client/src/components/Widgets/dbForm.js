@@ -32,9 +32,9 @@ const DbForm = () => {
 
     const handleSubmit = (e)=>{
       e.preventDefault();
-      if(formType==='PR'){
-        if(!formData?.title) return alert('Title of your project report cannot be empty.')
-        if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
+      if(formType==='PR' || formType==='RSA'){
+        if(!formData?.title) return alert(`Title of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
+        if(!formData?.content)return alert(`The content of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
         else {dispatch(createPost(formData, formType));}
       }else if(formType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
@@ -50,7 +50,7 @@ const DbForm = () => {
         <Toolbar>
             <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
             <Typography variant="h6" component="div">
-            {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : 'Blog'}
+            {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='RSA' ? 'Resource Article' : 'Blog'}
             </Typography>
         </Toolbar>
         </AppBar>

@@ -2,6 +2,7 @@ import cloudinary from 'cloudinary';
 import projectReport from '../models/projectReport.js';
 import sanitizer from 'sanitize-html';
 import blogPost from '../models/blogPost.js';
+import rsa from '../models/rsa.js';
 
 export const createPR = async (req , res) => {
     try {
@@ -56,5 +57,30 @@ export const createBlog = async (req , res) => {
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message :'Something happened idk wat'});
+    }
+}
+
+export const createRSA = async (req, res) => {
+    try {
+        const condition = req.user.currentRole==='INS' && req.user.enrollmentStatus==='ACTIVE';
+        if(!condition) return res.json({message : 'Access denied.', status:'404'});
+        
+        const cleanContent = sanitizer(req.body.content, {
+            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+        });
+
+        const newRSA = new rsa({
+            title : req.body.title, content : cleanContent, tags: req.body.tags, 
+            authorId : req.user.id, authorName : req.user.name, authorSlug : req.user.slug,
+            authorImage : req.user.profilePic, courseCode : req.body.course, 
+            domain : req.body.course.splice(0,-4),
+        });
+
+        const createdRSA = await newRSA.save();
+        return res.json({status:'201', post : createdRSA});
+    } catch (error) {
+        console.log(error);
+        return res.json({status : 'BRUH', message:'Something went wrong :('});
     }
 }

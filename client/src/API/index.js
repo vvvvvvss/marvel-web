@@ -14,6 +14,6 @@ export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${
 export const getProfileData = async (id, scope)=>API.get(`/get/profile/${id}?scope=${scope}`);
 export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/${id}`, newProfile);
 export const createPost = async (formData, formType) => API.post(`/create/${formType}`,formData);
-export const getSubmissionsStu = async (tab,page) => API.get(`/get/submissionsStu/${tab}?page=${page}`);
+export const getSubmissions = async (tab,page) => API.get(`/get/submissions/${tab}?page=${page}`);
 export const getPost = async (type, id) => API.get(`/get/${type}/${id}`);
 export const editPost = async (formData, id, type)=> API.post(`/update/${type}/${id}`, formData);

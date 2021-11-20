@@ -8,13 +8,13 @@ export const updateProfile = async (req, res)=>{
     try {
         const newProfile = req.body;
         if(newProfile?.linkedIn){
-            const linkedInRegex = new RegExp('^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$');
+            const linkedInRegex = /^https:\/\/[a-z]{2,3}\.linkedin\.com\/.*$/gim
             if(!linkedInRegex.test(newProfile?.linkedIn)) return res.json({status:'linkedInError'});
         }else if(newProfile?.gitHub){
-            const gitHubRegex = new RegExp('/^(http(s?):\/\/)?(www\.)?github\.([a-z])+\/([A-Za-z0-9]{1,})+\/?$/i');
+            const gitHubRegex = /https:\/\/github\.com\/[^\/]+\//gm
             if(!gitHubRegex.test(newProfile?.gitHub)) return res.json({status:'gitHubError'});
         }else if(newProfile?.website){
-            const websiteRegex = new RegExp('/^([a-zA-Z]+):\/\/(-\.)?(([^\s\/?\.#\-]+|([^\s\/?\.#\-]-[^\s\/?\.#\-]))\.?)+(\/[^\s]*)?$/mg');
+            const websiteRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
             if(!websiteRegex.test(newProfile?.website)) return res.json({status:'websiteError'});
         }
         const oldProfile = await user.findOne({id: req?.user?.id});
