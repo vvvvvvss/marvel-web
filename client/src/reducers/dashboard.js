@@ -8,7 +8,7 @@ const initialState = {
     isSubLoading : false,
     syllabus : {},
     profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
-    submissions : {prs : [], blogs : [], total : 1}
+    submissions : {prs : [], blogs : [], rsas:[], total : 1}
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -67,7 +67,9 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'GET_SUB_PR':
             return {...state, submissions : {...state.submissions, prs : action.payload.subs}};
         case 'GET_SUB_BLOG':
-            return {...state, submissions : {...state.submissions, blogs : action.payload.subs, total : action.payload.total}};
+            return {...state, submissions : {...state.submissions, blogs : action.payload.subs, total : action.payload?.total}};
+        case 'GET_SUB_RSA' : 
+            return {...state, submissions : {...state.submissions, rsas : action.payload?.subs, total : action.payload?.total}}
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
         // create or subbing

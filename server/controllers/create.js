@@ -73,8 +73,8 @@ export const createRSA = async (req, res) => {
         const newRSA = new rsa({
             title : req.body.title, content : cleanContent, tags: req.body.tags, 
             authorId : req.user.id, authorName : req.user.name, authorSlug : req.user.slug,
-            authorImage : req.user.profilePic, courseCode : req.body.course, 
-            domain : req.body.course.splice(0,-4),
+            authorImage : req.user.profilePic, courseCode : req.body.courseCode, 
+            domain : req.body.courseCode.slice(0,-4),
         });
 
         const createdRSA = await newRSA.save();

@@ -2,6 +2,7 @@ import course from "../models/course.js";
 import blogs from '../models/blogPost.js';
 import prs from '../models/projectReport.js';
 import user from '../models/user.js';
+import rsa from '../models/rsa.js';
 
 export const getCourse = async ( req, res) =>{
     try {
@@ -42,21 +43,21 @@ export const getProfile = async(req, res)=>{
     }
 }
 
-export const getSubmissionsStuBlog = async (req, res)=>{
+export const getSubmissionsBlog = async (req, res)=>{
     try {
         const returnedBlogPosts = await blogs.aggregate([
             { $match : { authorId : req.user.id }},
             { $sort : { _id : -1 } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 }
         ]) ;
         const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
-        return res.json({status : '200', total : (Math.floor(total/3)+1), submissions : returnedBlogPosts});        
+        return res.json({status : '200', total : (Math.ceil(total/3)), submissions : returnedBlogPosts});        
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message : 'Something happened idk wat'});
     }
 }
 
-export const getSubmissionsStuPr = async (req, res)=>{
+export const getSubmissionsPr = async (req, res)=>{
     try {
         const condition = (req.user.enrollmentStatus==='ACTIVE') &&
                             ( req.user.currentRole === 'STU');
@@ -70,6 +71,26 @@ export const getSubmissionsStuPr = async (req, res)=>{
     } catch (error) {
         console.log(error);
         return res.json({message : 'Something happened idk wat', status : 'BRUH'});
+    }
+}
+
+export const getSubmissionsRsa = async (req, res) => {
+    try {
+        const {page} = req.query;
+        const condition = req.user.currentRole==='INS'&&req.user.enrollmentStatus==='ACTIVE';
+        if(!condition) return res.json({message: 'Access denied.', status:'404'});
+
+        const returnedRsa = await rsa.aggregate([
+            { $match : { $and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]}},
+            {$sort : {_id : -1}},
+            {$skip : (Number(page)-1)*4},
+            {$limit : 4}
+        ]);
+        const total = await rsa.countDocuments({$and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]});
+        return res.json({submissions : returnedRsa, total: (Math.ceil(total/4)), status:'200'});
+    } catch (error) {
+        console.log(error);
+        return res.json({status:'404', message:'Something went wrong :('});
     }
 }
 

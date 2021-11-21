@@ -22,7 +22,6 @@ const DbSubmissions = () => {
         else if (status==='FLAGGED') return 'error';
         else if (status==='APPROVED' || 'FEATURED') return 'success';
     }
-
     return (
     <>
         <Paper variant='widget'  >
@@ -31,7 +30,7 @@ const DbSubmissions = () => {
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
         {authUser?.currentRole==='STU' ?
          <Tab label="Project reports" value='pr'/> : 
-         <Tab label="Resource Articles" value='rsa'/> 
+         <Tab label="Res Articles" value='rsa'/> 
          }
         <Tab label="Blog posts" value='blog'/>
         </Tabs>
@@ -42,7 +41,7 @@ const DbSubmissions = () => {
 
         {!submissions?.[`${tab}s`]?.length ? 
         <Typography variant='caption'>
-        {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${(tab==='pr' || tab==='rsa') ? 'for this Course' : ''}.`}
+        {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${(tab==='pr' || tab==='rsa') ? ' for this Course' : ''}.`}
         </Typography> :
         <div>
         {submissions?.[`${tab}s`]?.map((sub)=>(

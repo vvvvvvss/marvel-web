@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress, Dialog } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -15,7 +15,7 @@ const DbForm = () => {
     const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const [formData, setFormData] = useState({
-        title : '', content : '', tags : [ ], coverPhoto : ''
+        title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
@@ -61,6 +61,20 @@ const DbForm = () => {
         fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}
         InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
         <br/><br/>
+
+        {(authUser?.currentRole==='INS' && formType==='RSA') && 
+        <FormControl fullWidth>
+        <InputLabel color='secondary' id='course-select' >Course code</InputLabel>
+        <Select color='secondary'
+        labelId="course-select"
+        value={formData?.courseCode}
+        label="Course Code"
+        onChange={(e)=>(setFormData({...formData, courseCode : e.target.value}))}
+      >
+        {authUser?.currentInsCourse.map((course)=>(
+          <MenuItem key={course} value={course}>{course}</MenuItem>
+        ))}
+      </Select><br/></FormControl>}
 
         {/* IMAGE UPLOAD */}
         {formType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
