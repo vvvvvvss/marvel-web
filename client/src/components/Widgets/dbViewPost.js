@@ -40,9 +40,10 @@ const DbViewPost = () => {
         
         {isViewLoading ? <CircularProgress/> :
          <div>
-            <div style={{height:'350px', width: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'16px'}}>
-                <img width='100%' height='350px' style={{objectFit:'cover', borderRadius:'16px', width:'100%'}} 
+            <div style={{height:'350px', minWidth: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'16px'}}>
+                <img width='100%' height='350px' style={{objectFit:'cover', borderRadius:'16px', minWidth:'100%', aspectRatio:'16 / 9'}} 
                 src={viewPostType==='BLOG'? viewPost?.coverPhoto : viewPostType==='pr' ? pr_legend : rsa_legend} />
+
                 <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%', background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',borderRadius:'16px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
                 <Typography style={{padding: '20px 30px 0px 30px'}} variant='h4' fontWeight='600'>{viewPost?.title}</Typography><br/>
                 <span style={{display:'flex',alignItems:'center',padding: '0px 30px 20px 30px',justifyContent:'space-between'}} >
@@ -117,7 +118,9 @@ const DbViewPost = () => {
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
             onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType}});dispatch({type:'OPEN_EDIT'})}}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
+                {authUser?.currentRole!=='INS' &&
                 <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
+                }
             </Button>}
             
         </div>

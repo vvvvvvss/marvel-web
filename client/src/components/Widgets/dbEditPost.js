@@ -27,7 +27,7 @@ const DbEditPost = () => {
     }, [editPostId]);
 
     useEffect(() => {
-        setFormData({title: viewPost?.title, content: he.decode(viewPost?.content), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});
+        setFormData({title: viewPost?.title, content: he.decode(`${viewPost?.content}`), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});
     }, [viewPost])
 
     const handleImageUpload = async (imageList) => {
@@ -109,11 +109,10 @@ const DbEditPost = () => {
                         code : { component:Typography ,props : { variant:'code-small' }}
                     },
                 }}>
-                    {
-                    `${he.decode( sanitizer(markdown, {
+                { he.decode(sanitizer(`${markdown}`, {
                         allowedTags: ['iframe','br','strong'], allowedAttributes: { 'iframe': ['src'] },
-                        allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5 }))}`
-                    }
+                        allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+                }))}
                 </Markdown>
                 )
                 }

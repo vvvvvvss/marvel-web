@@ -1,5 +1,5 @@
 import express from 'express';
-import {updateProfile, updateBlog, updatePR} from '../controllers/update.js';
+import {updateProfile, updateBlog, updatePR, updateRSA} from '../controllers/update.js';
 import identityMW from '../middleware/identityMW.js';
 
 const router = express.Router();
@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/profile/:id',identityMW,updateProfile);
 router.post('/blog/:id', identityMW, updateBlog);
 router.post('/pr/:id', identityMW, updatePR);
-// router.post('/rsa/:id', identityMW, updateRSA);
+router.post('/rsa/:id', identityMW, updateRSA);
 
 export default router;
