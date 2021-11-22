@@ -8,7 +8,8 @@ const initialState = {
     isSubLoading : false,
     syllabus : {},
     profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
-    submissions : {prs : [], blogs : [], rsas:[], total : 1}
+    submissions : {subs:[], total : 1},
+    toReview : [], isToReviewLoading : false
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -64,27 +65,17 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, profile : {...state.profile, ...action.payload}}
         case 'GET_COURSE' :
             return {...state, syllabus : action.payload}
-        case 'GET_SUB_PR':
-            return {...state, submissions : {...state.submissions, prs : action.payload.subs}};
-        case 'GET_SUB_BLOG':
-            return {...state, submissions : {...state.submissions, blogs : action.payload.subs, total : action.payload?.total}};
-        case 'GET_SUB_RSA' : 
-            return {...state, submissions : {...state.submissions, rsas : action.payload?.subs, total : action.payload?.total}}
+        case 'GET_SUB':
+            return {...state, submissions : {...state.submissions, subs : action.payload?.subs, total : action.payload?.total}};
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
         // create or subbing
         case 'CREATE_PR' :
-            return {...state, submissions : { ...state?.submissions, prs : [action.payload, ...state.submissions.prs]}};
-        case 'CREATE_BLOG':
-            return {...state, submissions : { ...state?.submissions, blogs : [action.payload, ...state.submissions.blogs].slice(0,-1)}};
-        case 'EDIT_BLOG' :
-            return {...state, submissions : {...state.submissions, blogs : state.submissions.blogs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload}
-        case 'EDIT_PR' :
-            return {...state, submissions : {...state.submissions, prs : state.submissions.prs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action.payload}
-        case 'EDIT_RSA':
-            return {...state, submissions : {...state.submissions, rsas : state.submissions.rsas.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action.payload};
-        case 'CREATE_RSA' : 
-            return {...state, submissions : {...state.submissions, rsas : [action.payload, ...state.submissions.rsa].slice(0,-1)}}
+            return {...state, submissions : { ...state?.submissions, subs : [action.payload, ...state.submissions.subs]}};
+        case 'CREATE_BLOG' || 'CREATE_RSA':
+            return {...state, submissions : {...state?.submissions, subs : [action.payload, ...state.submissions.subs].slice(0,-1)}};
+        case 'EDIT_POST' :
+            return {...state, submissions : {...state.submissions, subs : state.submissions.subs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload}
         default: 
             return state;
     }

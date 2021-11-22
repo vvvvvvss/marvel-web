@@ -6,6 +6,7 @@ import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import Dial from '../../components/SpeedDial.js';
 import { useSelector } from 'react-redux';
+import DbToReview from '../../components/Widgets/dbReview';
 
 const InsDashboard = () => {
     const {formOpen} = useSelector(state => state.dashboard);
@@ -15,7 +16,7 @@ const InsDashboard = () => {
         <Navbar/>
         <Paper variant='window' className={styles.window}>
             <div className={styles.grid}>
-            <Paper variant='widget' style={{height:'420px'}}/>
+            <DbToReview/>
             <DbSubmissions/>
             <DbProfile/>
             </div>

@@ -67,7 +67,7 @@ export const getSubmissionsPr = async (req, res)=>{
             { $sort : { _id : -1 }},
             { $limit : 3 },
         ]);
-        return res.json({status : '200', submissions : returnedPRs});
+        return res.json({status : '200', submissions : returnedPRs, total : 1});
     } catch (error) {
         console.log(error);
         return res.json({message : 'Something happened idk wat', status : 'BRUH'});

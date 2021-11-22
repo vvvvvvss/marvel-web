@@ -2,8 +2,8 @@ import { Paper, Typography, Stepper, Step, StepLabel, CircularProgress } from "@
 import { useSelector } from "react-redux";
 
 const DbProgress = () => {
-    const {profile, syllabus, isSyllabusLoading, submissions} = useSelector(state => state.dashboard);
-    const {authUser} = useSelector(state => state.auth)
+    const { syllabus, isSyllabusLoading, submissions} = useSelector(state => state.dashboard);
+    const {authUser} = useSelector(state => state.auth);
     const Message = ()=>{
         if(submissions?.prs.some((i)=>(i.level===authUser.currentLevel))){
             return <Typography variant='caption'><em>You have submitted your Project report for current level.</em></Typography>
@@ -19,7 +19,7 @@ const DbProgress = () => {
 
                 {isSyllabusLoading ? <CircularProgress/> :
                 <>
-                <Stepper activeStep={Number(profile?.currentLevel -1 )}>
+                <Stepper activeStep={Number(authUser?.currentLevel -1 )}>
                 {syllabus?.levels?.map((level) => (
                     <Step key={level?.levelNo}>
                     <StepLabel>{`Lvl ${level?.levelNo}`}</StepLabel>

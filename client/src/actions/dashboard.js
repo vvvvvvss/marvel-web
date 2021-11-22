@@ -52,7 +52,7 @@ export const getSubmissions = (tab, page, role) => async (dispatch) => {
         dispatch({type : 'START_SUB_LOADING'});
         const {data} = await API.getSubmissions(tab, page);
         if (data?.status ==='200'){
-            dispatch({type : `GET_SUB_${tab.toUpperCase()}`, payload : { subs : data?.submissions, total : data?.total}});
+            dispatch({type : `GET_SUB`, payload : { subs : data?.submissions, total : data?.total}});
         }else { alert("something went wrong :(") };
         dispatch({type : 'END_SUB_LOADING'});
     } catch (error) { }
@@ -74,7 +74,7 @@ export const editPost = (formData, id, type) => async (dispatch) => {
         dispatch({type:'START_CREATE_LOADING'});
         const {data} = await API.editPost(formData, id, type.toLowerCase());
         if (data?.status==='201'){
-            dispatch({type:`EDIT_${type}`, payload : data?.post});
+            dispatch({type:`EDIT_POST`, payload : data?.post});
         }else{alert('Something went wrong :(')};
         dispatch({type : 'CLOSE_EDIT'});
         dispatch({type : 'END_CREATE_LOADING'});
