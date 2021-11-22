@@ -133,3 +133,16 @@ export const getBlog = async (req, res) => {
         return res.json({message:'Something went wrong:(',status:'404'});
      }
 }
+
+export const getRsa = async (req, res) => {
+    try {
+        const {id} = req.params;
+        if(!req.user.enrollmentStatus==='ACTIVE')return res.json({status:'404', message:'Access denied.'})
+        const returnedRsa = await rsa.findOne({slug : id}).lean();
+        if(!returnedRsa) return res.json({status:'404', message:'It does not exist'});
+        return res.json({post : returnedRsa, status:'200'});
+    } catch (error) {
+        console.log(error);
+        return res.josn({message:'Something went wrong:(', status:'BRUH'})
+    }
+}

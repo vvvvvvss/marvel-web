@@ -3,6 +3,7 @@ import user from "../models/user.js";
 import cloudinary from "cloudinary";
 import sanitize from "sanitize-html";
 import projectReport from "../models/projectReport.js";
+import rsa from "../models/rsa.js";
 
 export const updateProfile = async (req, res)=>{
     try {
@@ -82,5 +83,29 @@ export const updatePR = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message:'Somthing went wrong :('})
+    }
+}
+
+export const updateRSA = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const returnedRsa = await rsa.findOne({slug : id});
+        const condition = ((req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') && req.user.id===returnedRsa?.authorId);
+        if(!condition) return res.json({message:'Access denied.', status:'404'});
+        
+        const cleanContent = sanitize(req.body.content, {
+            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+        });
+        
+        Object.assign(returnedRsa, {
+            title : req.body.title,
+            content : cleanContent, tags : req.body.tags
+        });
+        const newRsa = await returnedRsa.save();
+        return res.json({post : newRsa, status : '201'});
+    } catch (error) {
+        console.log(error);
+        return res.json({status : 'BRUH', message:'Something went wrong:('});
     }
 }

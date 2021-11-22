@@ -24,7 +24,7 @@ const DbEditPost = () => {
         if( !viewPost?.slug || (viewPost?.slug !== editPostId)){
             dispatch(getPost(editPostType, editPostId));
         }
-    }, [editPostId])
+    }, [editPostId]);
 
     useEffect(() => {
         setFormData({title: viewPost?.title, content: he.decode(viewPost?.content), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});
@@ -41,7 +41,7 @@ const DbEditPost = () => {
   
     const handleSubmit = (e)=>{
     e.preventDefault();
-    if(editPostType==='PR'){
+    if(editPostType==='PR' || editPostType==='RSA'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
         else {dispatch(editPost(formData, editPostId, editPostType));};
@@ -49,8 +49,7 @@ const DbEditPost = () => {
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
         else {dispatch(editPost(formData, editPostId, editPostType));};
-    }else {console.log('meh')}
-    }
+    }else {console.log('meh')} }
 
     return (
         <>
@@ -58,7 +57,7 @@ const DbEditPost = () => {
             <AppBar>
                 <Toolbar>
                     <IconButton onClick={()=>(dispatch({type:'CLOSE_EDIT'}))}><CloseIcon/></IconButton>
-                    <Typography variant='h6' >{`Edit ${editPostType}`}</Typography>
+                    <Typography variant='h6' >{`Edit ${editPostType==='RSA'?'Resource Article': editPostType}`}</Typography>
                 </Toolbar>
             </AppBar>
             <div style={{display: 'flex', justifyContent: 'center',padding : '90px 10px 90px 10px'}}>
@@ -111,10 +110,10 @@ const DbEditPost = () => {
                     },
                 }}>
                     {
-                    he.decode( sanitizer(markdown, {
+                    `${he.decode( sanitizer(markdown, {
                         allowedTags: ['iframe','br','strong'], allowedAttributes: { 'iframe': ['src'] },
-                        allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
-                    }) ) }
+                        allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5 }))}`
+                    }
                 </Markdown>
                 )
                 }

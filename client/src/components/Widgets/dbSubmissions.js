@@ -50,11 +50,15 @@ const DbSubmissions = () => {
             <Typography variant='body1'>{sub?.title}</Typography>
             <br style={{height:'5px'}} />
             <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                { tab==='pr' && <><span>{`Level ${sub?.level}`}</span>&nbsp;&nbsp; | &nbsp;&nbsp;</>}<span>{moment(sub?.createdAt).fromNow()}</span>
+                {(tab==='pr' || tab==='rsa') && 
+                <><span>{`${tab==='pr'?'Level':''} ${sub?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>
+                &nbsp;&nbsp; | &nbsp;&nbsp;</>}
+                <span>{moment(sub?.createdAt).fromNow()}</span>
             </Typography>
             <br/><br/>
             <span style={{display:'flex',justifyContent:'space-between'}}>
-            {authUser?.currentRole==='STU' ? <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled'/> 
+            {(tab==='pr'||tab==='blog') ? 
+            <Chip label={sub?.reviewStatus} color={colorDecide(sub?.reviewStatus)} size='small' variant='filled'/> 
             :
             <Chip label={'PUBLIC'} color={'success'} size='small' variant='filled'/>}
             <div>

@@ -41,10 +41,12 @@ export const createBlog = async (req , res) => {
             allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
         });
         const newBlogPost = new blogPost({
-        authorId : req.user.id, authorName:req.user?.name, authorCourseCode : `${req.user?.currentRole==='STU' ? req.user?.currentStuCourse : 'NA'}`,
+        authorId : req.user.id, authorName:req.user?.name,
+        authorCourseCode : `${req.user?.currentRole==='STU' ? req.user?.currentStuCourse : 'NA'}`,
         authorSlug : req.user.slug, authorImage : req.user?.profilePic,
         title : req.body.title, tags : req.body?.tags,
-        content : cleanContent, reviewStatus : 'PENDING', feedback : ''
+        content : cleanContent,
+        reviewStatus : `${req.user.currentRole==='INS' ? 'APPROVED':'PENDING'}`, feedback : ''
         });
 
         newBlogPost.coverPhoto = (await cloudinary.v2.uploader.upload(req.body.coverPhoto, {

@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/profile/:id',identityMW,updateProfile);
 router.post('/blog/:id', identityMW, updateBlog);
 router.post('/pr/:id', identityMW, updatePR);
-// router.post('/rsa/:id', identityMW, updateRsa);
+// router.post('/rsa/:id', identityMW, updateRSA);
 
 export default router;

@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema({
     currentLevel : {type : Number},
     totalLevels : {type : Number},
     roleHistory : [{
-        role : {type : String, enum : {values : ['STU','INS']}},
+        role : {type : String, enum : {values : ['STU','INS', 'NA']}},
         startTime : {type : Date},endTime : {type : Date}
     }],
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},

@@ -12,7 +12,9 @@ const DbViewPost = () => {
     const dispatch = useDispatch();
     const {authUser} = useSelector(state => state.auth)
     useEffect(() => {
-        dispatch(getPost(viewPostType,viewPostId));
+        if(!viewPost || viewPost?.slug !== viewPostId){
+            dispatch(getPost(viewPostType,viewPostId));
+        }
     }, [])
 
     const colorDecide = (status) => {
@@ -20,13 +22,17 @@ const DbViewPost = () => {
         else if (status==='FLAGGED') return 'error';
         else if (status==='APPROVED' || 'FEATURED') return 'success';
     }
+    const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
+    const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
     return (
         <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
             <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_VIEW'});}} ><CloseIcon/></IconButton>
-            <Typography variant='h6' >{`${viewPostType} Review`}</Typography>
+            <Typography variant='h6' >
+                {`${viewPostType==='PR'?'Project Report' : viewPostType==='BLOG' ? 'Blog post' : 'Resource Article'}`}
+            </Typography>
         </Toolbar>
         </AppBar>
         <div style={{display:'flex',justifyContent:'center',padding: '0px 20px 30px 20px'}} >
@@ -35,7 +41,8 @@ const DbViewPost = () => {
         {isViewLoading ? <CircularProgress/> :
          <div>
             <div style={{height:'350px', width: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'16px'}}>
-                <img width='100%' height='350px' style={{objectFit:'cover', borderRadius:'16px'}} src={viewPost?.coverPhoto} />
+                <img width='100%' height='350px' style={{objectFit:'cover', borderRadius:'16px', width:'100%'}} 
+                src={viewPostType==='BLOG'? viewPost?.coverPhoto : viewPostType==='pr' ? pr_legend : rsa_legend} />
                 <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%', background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',borderRadius:'16px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
                 <Typography style={{padding: '20px 30px 0px 30px'}} variant='h4' fontWeight='600'>{viewPost?.title}</Typography><br/>
                 <span style={{display:'flex',alignItems:'center',padding: '0px 30px 20px 30px',justifyContent:'space-between'}} >
@@ -79,9 +86,11 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
-            <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;<Chip label={viewPost?.reviewStatus} color={colorDecide(viewPost?.reviewStatus)} variant='filled' /> </Typography>
+            <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
+            <Chip label={viewPostType==='RSA' ? 'PUBLIC' : viewPost?.reviewStatus } color={viewPostType==='RSA'?'success': colorDecide(viewPost?.reviewStatus)} variant='filled'/> 
+            </Typography>
             <br/>
-            { authUser?.currentRole==='INS' &&
+            { (authUser?.currentRole==='INS' && viewPost?.authorId !== authUser?.id) &&
             <>
             <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
                 <Typography variant='button' fontWeight='600' >Approve</Typography>
@@ -97,14 +106,14 @@ const DbViewPost = () => {
             </Button>
             </>
             }
-            { viewPost?.feedback &&
+            { (viewPost?.feedback && authUser?.currentRole==='STU') &&
             <Card>
                 <Typography variant='button' >Feedback :</Typography><br/>
                 <Typography variant='body2' >{viewPost?.feedback}</Typography>
             </Card>
             }
             <br/>
-            { authUser?.currentRole==='STU' &&
+            { authUser.id===viewPost?.authorId &&
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
             onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType}});dispatch({type:'OPEN_EDIT'})}}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
