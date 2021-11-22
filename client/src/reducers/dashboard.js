@@ -9,7 +9,7 @@ const initialState = {
     syllabus : {},
     profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
     submissions : {subs:[], total : 1},
-    toReview : [], isToReviewLoading : false
+    toReview : {list : [], total : 1}, isToReviewLoading : false
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -60,6 +60,10 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, isEditLoading : true}
         case 'END_EDIT_LOADING':
             return {...state, isEditLoading:false}
+        case 'START_TOREVIEW_LOADING':
+            return {...state, isToReviewLoading : true}
+        case 'END_TOREVIEW_LOADING':
+            return {...state, isToReviewLoading : false}
         //getting
         case 'GET_PROFILE':
             return {...state, profile : {...state.profile, ...action.payload}}
@@ -69,6 +73,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, submissions : {...state.submissions, subs : action.payload?.subs, total : action.payload?.total}};
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
+        case 'GET_TOREVIEW':
+            return {...state, toReview : {list : action.payload?.list, total : action.payload?.total}}
         // create or subbing
         case 'CREATE_PR' :
             return {...state, submissions : { ...state?.submissions, subs : [action.payload, ...state.submissions.subs]}};

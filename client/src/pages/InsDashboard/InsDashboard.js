@@ -6,7 +6,7 @@ import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import Dial from '../../components/SpeedDial.js';
 import { useSelector } from 'react-redux';
-import DbToReview from '../../components/Widgets/dbReview';
+import DbToReview from '../../components/Widgets/dbToReview.js';
 
 const InsDashboard = () => {
     const {formOpen} = useSelector(state => state.dashboard);
