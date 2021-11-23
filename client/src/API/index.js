@@ -17,3 +17,4 @@ export const createPost = async (formData, formType) => API.post(`/create/${form
 export const getSubmissions = async (tab,page) => API.get(`/get/submissions/${tab}?page=${page}`);
 export const getPost = async (type, id) => API.get(`/get/${type}/${id}`);
 export const editPost = async (formData, id, type)=> API.post(`/update/${type}/${id}`, formData);
+export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/toreview/${tab}?page=${page}&crsfltr=${courseFilter || 'none'}`);

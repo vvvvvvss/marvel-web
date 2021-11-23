@@ -31,7 +31,7 @@ const Dial = () => {
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
                  {(authUser?.currentRole==='STU') &&
-                 (syllabus?.submissionStatus?.isAccepting && !prs.some((i)=>(i.level === authUser?.currentLevel))) 
+                 (syllabus?.submissionStatus?.isAccepting && !prs?.some((i)=>(i?.level === authUser?.currentLevel))) 
                   &&
                   <SpeedDialAction
                     tooltipTitle={`Project Report Lvl ${syllabus?.submissionStatus?.forLevel}`}

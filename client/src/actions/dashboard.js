@@ -81,3 +81,11 @@ export const editPost = (formData, id, type) => async (dispatch) => {
     } catch (error) { }
 }
 
+export const getToReview = (tab, page, courseFilter) => async (dispatch) => {
+    try {
+        dispatch({type : 'START_TOREVIEW_LOADING'});
+        const {data} = await API.getToReview(tab, page, courseFilter?.join(','));
+        console.log(data);
+        dispatch({type : 'END_TOREVIEW_LOADING'});
+    } catch (error) { }
+}

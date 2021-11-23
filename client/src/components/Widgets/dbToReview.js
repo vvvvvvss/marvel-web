@@ -1,6 +1,7 @@
 import { Paper, Typography, Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {getToReview} from '../../actions/dashboard.js';
 
 const DbToReview = () => {
     const dispatch = useDispatch();
@@ -8,7 +9,7 @@ const DbToReview = () => {
     const {authUser} = useSelector(state => state.auth);
     const [tab, setTab] = useState('pr');
     const [page, setPage] = useState(1);
-    const [courseFilter, setCourseFilter] = useState('none');
+    const [courseFilter, setCourseFilter] = useState([]);
 
     useEffect(() => {
         dispatch(getToReview(tab, page, courseFilter));
@@ -34,4 +35,4 @@ const DbToReview = () => {
     )
 }
 
-export default DbToReview
+export default DbToReview;

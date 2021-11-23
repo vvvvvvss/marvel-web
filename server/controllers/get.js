@@ -146,3 +146,44 @@ export const getRsa = async (req, res) => {
         return res.josn({message:'Something went wrong:(', status:'BRUH'})
     }
 }
+
+export const getToReviewPrs = async (req, res) => {
+    try {
+        console.log('request recieved for pr');
+        const courseArray = (req.query?.crsfltr==='none' || req.query?.crsFltr==='') ? 
+                            req.user?.currentInsCourse : 
+                            req.query?.crsFiltr?.split(',');
+
+        const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') 
+                        && courseArray.some((c)=>(req.user.currentInsCourse.includes(c)));
+
+        if(!condition) return  res.json({status:'404', message:'Access denied.'});
+
+        const returnedPrs = await prs.aggregate([
+            {$match : {$and : [{reviewStatus : 'PENDING'},{courseCode : {$in : courseArray}}]}},
+            {$sort : {_id : -1}},
+            {$skip : (Number(req.query.page)-1)*5},
+            {$limit : 5},
+            {$lookup : {
+                from : 'courses',
+                localField : 'courseCode',
+                foreignField : 'courseCode',
+                as : "course"
+            }},
+        ]);
+        console.log(returnedPrs);
+        return res.json({status : '200', posts : returnedPrs});
+    } catch (error) {
+        console.log(error);
+        return res.json({message:'Something went wrong:('});
+    }
+}
+
+export const getToReviewBlogs = async (req, res) => {
+    try {
+        console.log('request recieved for blog');
+    } catch (error) {
+        console.log(error);
+        return res.json({message:'Something went wrong:('});
+    }
+}
