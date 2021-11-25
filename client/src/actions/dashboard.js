@@ -58,10 +58,10 @@ export const getSubmissions = (tab, page, role) => async (dispatch) => {
     } catch (error) { }
 }
 
-export const getPost = (type, id) => async (dispatch) => {
+export const getPost = (type, id, scope) => async (dispatch) => {
     try {
         dispatch({type:'START_VIEW_LOADING'});
-        const {data} = await API.getPost(type?.toLowerCase(),id);
+        const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
         if(data?.status==='200'){
             dispatch({type : 'GET_VIEW_POST', payload : data?.post});
         }else{alert("Something went wrong :(")}
@@ -85,7 +85,9 @@ export const getToReview = (tab, page, courseFilter) => async (dispatch) => {
     try {
         dispatch({type : 'START_TOREVIEW_LOADING'});
         const {data} = await API.getToReview(tab, page, courseFilter?.join(','));
-        console.log(data);
+        if(data?.status==='200'){
+            dispatch({type : 'GET_TOREVIEW', payload : {posts : data?.posts, total : data?.total}});
+        }else alert("Something went wrong :(");
         dispatch({type : 'END_TOREVIEW_LOADING'});
     } catch (error) { }
 }

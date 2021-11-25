@@ -54,10 +54,11 @@ export const darkTheme = createTheme({
         ]
       },
       MuiChip :{
-        styleOverrides : { root: { }},
         variants : [
-          { props : {variant:'outlined'},
-            style : {color:'#FFD7EA',border : '1.5px solid #FFD7EA',fontWeight:'500'}}
+          { props : {variant:'outlined', color:'primary'},
+            style : {color:'#FFD7EA',border : '1px solid #FFD7EA',fontWeight:'500'}},
+          { props : {variant:'outlined', color:'secondary'},
+            style : {color:'#D3FFFF',border : '1px solid #D3FFFF',fontWeight:'500'}},
         ]
       },
       MuiCard : {

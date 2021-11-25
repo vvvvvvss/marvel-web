@@ -8,14 +8,15 @@ import Markdown from 'markdown-to-jsx';
 import he from 'he';
 
 const DbViewPost = () => {
-    const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading} = useSelector(state => state.dashboard);
+    const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
-    const {authUser} = useSelector(state => state.auth)
+    const {authUser} = useSelector(state => state.auth);
+
     useEffect(() => {
         if(!viewPost || viewPost?.slug !== viewPostId){
-            dispatch(getPost(viewPostType,viewPostId));
+            dispatch(getPost(viewPostType,viewPostId, viewPostScope));
         }
-    }, [])
+    }, [viewPost, viewPostId, viewPostScope, viewPostType])
 
     const colorDecide = (status) => {
         if(status==='PENDING') return 'warning';
@@ -50,7 +51,7 @@ const DbViewPost = () => {
                     <span style={{display:'flex',alignItems: 'center',justifyContent:'flex-start'}}>
                         <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px'}} />
                         <Typography variant='body2' color='#c4c4c4' fontWeight='500'> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}&nbsp;&nbsp;{viewPostType==='PR' && <span>&#8226;&nbsp;&nbsp;{`Lv ${viewPost?.level}`}</span>}
                         </Typography>
                     </span>
                     <Typography variant='caption' color='#a1a1a1'> 
@@ -94,7 +95,7 @@ const DbViewPost = () => {
             { (authUser?.currentRole==='INS' && viewPost?.authorId !== authUser?.id) &&
             <>
             <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
-                <Typography variant='button' fontWeight='600' >Approve</Typography>
+                <Typography variant='button' fontWeight='600' >{`Approve `}</Typography>
                 <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
             </Button>
             <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>

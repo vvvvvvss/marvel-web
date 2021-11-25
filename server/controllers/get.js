@@ -96,13 +96,30 @@ export const getSubmissionsRsa = async (req, res) => {
 
 export const getPR = async (req, res) => {
     try {
-        const {id}= req.params;
-        const returnedPr = await prs.findOne({slug : id}).lean();
+        const {id} = req.params;
+        if(req.query?.scope==='ins'&& !(req?.user?.currentRole==='INS'&& req?.user?.enrollmentStatus==='ACTIVE')){
+            return res.json({message:'Access denied.', status : '404'});
+        };
+        let returnedPr;
+        if(req.query?.scope==='ins'){
+            returnedPr = (await prs.aggregate([
+                {$match : {slug : id}}, {$limit : 1},
+                {$lookup : {
+                from : 'courses', localField : 'courseCode', foreignField : 'courseCode', as : "course"
+                }},  
+                {$addFields : {"course" : {$arrayElemAt : ["$course", 0]}}},
+                {$addFields : {totalLevels : {$size : "$course.levels"}}},
+                {$project : {course : 0,}},
+            ]))[0];
+        } else {
+            returnedPr = await prs.findOne({slug : id}).lean();
+        };
+
         if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedPr?.reviewStatus)){
-            if(!req.user){ return res.json({status:'404'}); }
-            if((req.user?.id===returnedPr?.authorId) || 
-            (req.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
+            if(!req?.user){ return res.json({status:'404'}); }
+            if((req?.user?.id===returnedPr?.authorId) || 
+            (req?.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
                 return res.json({post : returnedPr,status:'200'});
             }
         }else{
@@ -164,14 +181,7 @@ export const getToReviewPrs = async (req, res) => {
             {$sort : {_id : -1}},
             {$skip : (Number(req.query.page)-1)*5},
             {$limit : 5},
-            {$lookup : {
-                from : 'courses',
-                localField : 'courseCode',
-                foreignField : 'courseCode',
-                as : "course"
-            }},
         ]);
-        console.log(returnedPrs);
         return res.json({status : '200', posts : returnedPrs});
     } catch (error) {
         console.log(error);
@@ -181,7 +191,17 @@ export const getToReviewPrs = async (req, res) => {
 
 export const getToReviewBlogs = async (req, res) => {
     try {
-        console.log('request recieved for blog');
+        const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS');
+        if(!condition) return res.json({message: 'Access denied.', status:'404'});
+
+        const returnedBlogs = await blogs.aggregate([
+            {$match : {$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : req.user.currentInsCourse}}]}},
+            {$sort : {_id : 1}},
+            {$skip : (Number(req.query.page)-1)*5},
+            {$limit : 5}
+        ]);
+
+        return res.json({status: '200', posts: returnedBlogs});
     } catch (error) {
         console.log(error);
         return res.json({message:'Something went wrong:('});

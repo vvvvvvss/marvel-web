@@ -27,7 +27,7 @@ const DbProfile = () => {
         <Paper variant='widget' style={{height:'max-content',}}>
             <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center', minWidth:'100%'}}>
             <Typography variant='widget-heading'>Public Profile</Typography>
-            <Chip size='small' variant='outlined' label={authUser?.currentRole==='STU'?'STUDENT':'INSTRUCTOR'}></Chip>
+            <Chip size='small' variant='outlined' color='primary' label={authUser?.currentRole==='STU'?'STUDENT':'INSTRUCTOR'}></Chip>
             </div>
             <br/>
 

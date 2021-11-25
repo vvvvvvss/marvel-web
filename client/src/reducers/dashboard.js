@@ -1,6 +1,6 @@
 const initialState = {
     formOpen : false, formType : '',
-    viewPostOpen : false, viewPostId : '', viewPostType:'', isViewLoading : false, viewPost : {},
+    viewPostOpen : false, viewPostId : '', viewPostType:'', isViewLoading : false, viewPost : {}, viewPostScope:'',
     editPostOpen : false, editPostId : '', editPostType:'',isEditLoading : false,
     isSyllabusLoading : false,
     isProfileLoading : false,
@@ -9,7 +9,7 @@ const initialState = {
     syllabus : {},
     profile : {bio : '',linkedIn : '',gitHub:'',website:'',id:'',currentLevel : ''},
     submissions : {subs:[], total : 1},
-    toReview : {list : [], total : 1}, isToReviewLoading : false
+    toReview : {posts : [], total : 1}, isToReviewLoading : false
 }
 
 const dashboardReducer = (state=initialState, action)=>{
@@ -27,7 +27,7 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'CLOSE_VIEW':
             return {...state, viewPostOpen:false}
         case 'SET_VIEW_ID':
-            return {...state, viewPostId : action.payload?.id, viewPostType : action.payload?.type}
+            return {...state, viewPostId : action.payload?.id, viewPostType : action.payload?.type, viewPostScope:action.payload?.scope}
         //form
         case 'OPEN_FORM' :
             return {...state, formOpen : true}
@@ -74,7 +74,7 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
         case 'GET_TOREVIEW':
-            return {...state, toReview : {list : action.payload?.list, total : action.payload?.total}}
+            return {...state, toReview : {posts : action.payload?.posts, total : action.payload?.total}}
         // create or subbing
         case 'CREATE_PR' :
             return {...state, submissions : { ...state?.submissions, subs : [action.payload, ...state.submissions.subs]}};

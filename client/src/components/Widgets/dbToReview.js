@@ -1,5 +1,6 @@
-import { Paper, Typography, Tab, Tabs } from "@mui/material";
+import { Paper, Typography, Tab, Tabs, Skeleton, Card, Chip, Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {getToReview} from '../../actions/dashboard.js';
 
@@ -25,11 +26,56 @@ const DbToReview = () => {
             <Tab label="Blog posts" value='blog'/>
             </Tabs>
             <br/>
-            {toReview?.list.map((sub)=>(
-                <div>
-                    
+            {isToReviewLoading ? 
+            <div>
+                <Skeleton variant='rectangular' height='100px' animation='wave' style={{borderRadius: '8px'}}/><br/>
+                <Skeleton variant='rectangular' height='100px' animation='wave' style={{borderRadius: '8px'}}/><br/>
+                <Skeleton variant='rectangular' height='100px' animation='wave' style={{borderRadius: '8px'}}/><br/>
+            </div> 
+            : 
+            <div>
+            { !toReview?.posts.length ? 
+            <Typography variant='caption' >
+                There are submissions to Review for now!
+            </Typography>
+            :
+            <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
+            {toReview?.posts?.map((sub)=>(
+                <div key={sub?.slug}> 
+                <Card variant='outlined'>
+                    <Typography variant='body1'>{sub?.title}</Typography>
+                    <br/>
+                    <Typography style={{color:'#c4c4c4'}} variant='caption'>
+                        <span>{sub?.authorName}</span>
+                        &nbsp;&nbsp; &#8226; &nbsp;&nbsp;
+                        {tab==='pr'&& <span>{`Lv ${sub?.level}`}&nbsp;&nbsp; &#8226; &nbsp;&nbsp;</span>}
+                        <span>{moment(sub?.updatedAt).fromNow()}</span>
+                    </Typography>
+                    <br/><br/>
+                    <span style={{display:'flex',justifyContent:'space-between'}}>
+                    {(tab==='pr') ?
+                    <Chip label={sub?.courseCode} color='primary' variant='outlined' size='small'/> :
+                    <div></div>
+                    }
+                    <div>
+                    <Button variant='text' color='secondary' size='small' 
+                    onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id: sub?.slug, type: tab.toUpperCase(), scope:'INS'}});dispatch({type:'OPEN_VIEW'});}}>
+                        view
+                    </Button>&nbsp;&nbsp;
+                    <Button variant='text' color='secondary' size='small' 
+                    onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id: sub?.slug, type: tab.toUpperCase(), scope:'INS'}});dispatch({type:'OPEN_EDIT'})}}
+                    >
+                        edit
+                    </Button>
+                    </div>
+                    </span>
+                </Card> <br/> 
                 </div>
             ))}
+            </div>}
+            </div>
+            }
+            
         </Paper>
         </div>
     )
