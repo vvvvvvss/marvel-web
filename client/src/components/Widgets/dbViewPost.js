@@ -1,8 +1,8 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, Grow} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { getPost } from "../../actions/dashboard.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
@@ -11,6 +11,8 @@ const DbViewPost = () => {
     const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
     const {authUser} = useSelector(state => state.auth);
+    const [feedbackOpen, setFeedbackOpen] = useState(false);
+    const [feedback, setFeedback] = useState('');
 
     useEffect(() => {
         if(!viewPost || viewPost?.slug !== viewPostId){
@@ -25,6 +27,10 @@ const DbViewPost = () => {
     }
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
+
+    const submitFeedback = () => {
+        console.log(feedback);
+    };
 
     return (
         <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
@@ -88,24 +94,36 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
-            <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
+            { authUser?.currentRole==='STU' && <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
             <Chip label={viewPostType==='RSA' ? 'PUBLIC' : viewPost?.reviewStatus } color={viewPostType==='RSA'?'success': colorDecide(viewPost?.reviewStatus)} variant='filled'/> 
-            </Typography>
+            </Typography>}
             <br/>
             { (authUser?.currentRole==='INS' && viewPost?.authorId !== authUser?.id) &&
             <>
-            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
-                <Typography variant='button' fontWeight='600' >{`Approve `}</Typography>
-                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
+            <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+                <Typography variant='button' fontWeight='600' >{`Approve ${viewPost?.totalLevels===viewPost?.level ? 'and Award Certificate':''}`}</Typography>
+                <Typography variant='caption' >{viewPost?.totalLevels===viewPost?.level ? 'Certificate will be awarded for Course completion.' :'Post becomes public.'}</Typography>
+            </Button> <br/>
+            <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
+                <Typography variant='button' fontWeight='600'>Flag and provide feedback</Typography>
+                <Typography variant='caption' >write a feedback on how they can improve this and approve when you are satisfied.</Typography>
             </Button>
-            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
-                <Typography variant='button' fontWeight='600' >Approve</Typography>
-                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
-            </Button>
-            <Button variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
-                <Typography variant='button' fontWeight='600' >Approve</Typography>
-                <Typography variant='caption' >It becomes public. Student can share with anybody and it appears in their profile page.</Typography>
-            </Button>
+            <br/>
+            { feedbackOpen && <Grow in>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
+                <TextField  value={feedback} onChange={(e)=>(setFeedback(e.target.value))} fullWidth
+                variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 360}}/>
+                <br/>
+                <div>
+                <Button onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
+                    cancel
+                </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
+                <Button onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
+                    submit feedback
+                </Button>
+                </div>
+            </div>
+            </Grow>}
             </>
             }
             { (viewPost?.feedback && authUser?.currentRole==='STU') &&
