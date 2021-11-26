@@ -1,4 +1,4 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, Grow} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { getPost } from "../../actions/dashboard.js";
@@ -102,14 +102,14 @@ const DbViewPost = () => {
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
                 <Typography variant='button' fontWeight='600' >{`Approve ${viewPost?.totalLevels===viewPost?.level ? 'and Award Certificate':''}`}</Typography>
-                <Typography variant='caption' >{viewPost?.totalLevels===viewPost?.level ? 'Certificate will be awarded for Course completion.' :'Post becomes public.'}</Typography>
+                <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and post becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
             <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
                 <Typography variant='button' fontWeight='600'>Flag and provide feedback</Typography>
                 <Typography variant='caption' >write a feedback on how they can improve this and approve when you are satisfied.</Typography>
             </Button>
             <br/>
-            { feedbackOpen && <Grow in>
+            { feedbackOpen && 
             <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                 <TextField  value={feedback} onChange={(e)=>(setFeedback(e.target.value))} fullWidth
                 variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 360}}/>
@@ -123,7 +123,7 @@ const DbViewPost = () => {
                 </Button>
                 </div>
             </div>
-            </Grow>}
+            }
             </>
             }
             { (viewPost?.feedback && authUser?.currentRole==='STU') &&
