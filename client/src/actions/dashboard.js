@@ -91,3 +91,14 @@ export const getToReview = (tab, page, courseFilter) => async (dispatch) => {
         dispatch({type : 'END_TOREVIEW_LOADING'});
     } catch (error) { }
 }
+
+export const submitFB = (fb, id ,type) => async (dispatch) => {
+    try {
+        dispatch({type:'START_CREATE_LOADING'});
+        const {data} = await API.submitFeedback(fb, type?.toLowerCase());
+        if(data?.status==='201'){
+            dispatch({type: `REVIEW_${type}`, payload: id});
+        }else {alert("Something went wrong :(")}
+        dispatch({type : 'END_CREATE_LOADING'});
+    } catch (error) { }
+}

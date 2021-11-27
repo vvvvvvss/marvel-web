@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
+import { submitFB } from "../../actions/dashboard.js";
 
 const DbViewPost = () => {
-    const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope} = useSelector(state => state.dashboard);
+    const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope, isCreateLoading} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
     const {authUser} = useSelector(state => state.auth);
     const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -29,7 +30,7 @@ const DbViewPost = () => {
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
     const submitFeedback = () => {
-        console.log(feedback);
+        dispatch(submitFB(feedback, viewPost?.slug, viewPostType));
     };
 
     return (
@@ -102,7 +103,7 @@ const DbViewPost = () => {
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
                 <Typography variant='button' fontWeight='600' >{`Approve ${viewPost?.totalLevels===viewPost?.level ? 'and Award Certificate':''}`}</Typography>
-                <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and post becomes public.' : 'Blog becomes public'}</Typography>
+                <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
             <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
                 <Typography variant='button' fontWeight='600'>Flag and provide feedback</Typography>
@@ -115,10 +116,10 @@ const DbViewPost = () => {
                 variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 360}}/>
                 <br/>
                 <div>
-                <Button onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
+                <Button disabled={isCreateLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
                     cancel
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
-                <Button onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
+                <Button disabled={isCreateLoading} onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
                     submit feedback
                 </Button>
                 </div>
