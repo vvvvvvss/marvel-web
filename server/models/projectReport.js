@@ -22,7 +22,7 @@ const projectReportSchema = mongoose.Schema({
     // META DATA
     reviewStatus : { type : String, 
                 enum : {values : ['PENDING', 'APPROVED', 'FLAGGED','FEATURED']}, default : 'PENDING'},
-    feedback : { type : String, maxLength : 150 },
+    feedback : { type : String, maxLength : 500 },
 },
 {timestamps : true});
 

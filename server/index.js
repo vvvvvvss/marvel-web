@@ -9,6 +9,7 @@ import getRoutes from './routes/getRoutes.js';
 import updateRoutes from './routes/updateRoutes.js';
 import createRoutes from './routes/createRoutes.js';
 import cloudinary from 'cloudinary';
+import actionRoutes from './routes/actionRoutes.js'
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('', utilRoutes);
 app.use('/get', getRoutes);
 app.use('/update',updateRoutes);
 app.use('/create', createRoutes);
+app.use('/action', actionRoutes)
 
 //connecting to cosmos
 const PORT = process.env.PORT || 3000;

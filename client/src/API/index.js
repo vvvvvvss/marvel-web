@@ -18,5 +18,5 @@ export const getSubmissions = async (tab,page) => API.get(`/get/submissions/${ta
 export const getPost = async (type, id, scope) => API.get(`/get/${type}/${id}?scope=${scope || 'none'}`);
 export const editPost = async (formData, id, type)=> API.post(`/update/${type}/${id}`, formData);
 export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/toreview/${tab}?page=${page}&crsfltr=${courseFilter || 'none'}`);
-export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,fb);
-
+export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
+export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);

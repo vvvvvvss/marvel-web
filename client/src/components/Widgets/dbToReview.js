@@ -1,4 +1,4 @@
-import { Paper, Typography, Tab, Tabs, Skeleton, Card, Chip, Button } from "@mui/material";
+import { Paper, Typography, Tab, Tabs, Skeleton, Card, Chip, Button, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +33,7 @@ const DbToReview = () => {
                 <Skeleton variant='rectangular' height='100px' animation='wave' style={{borderRadius: '8px'}}/><br/>
             </div> 
             : 
-            <div>
+            <div style={{display:'flex', flexDirection:'column'}}>
             { !toReview?.posts.length ? 
             <Typography variant='caption' >
                 There are submissions to Review for now!
@@ -73,6 +73,10 @@ const DbToReview = () => {
                 </div>
             ))}
             </div>}
+            <br/>
+            { toReview?.posts?.length !==0 && <Pagination count={toReview?.total} variant="outlined" page={page} 
+            color="secondary" onChange={(e, page)=>(setPage(page))}
+            style={{alignSelf:'center'}}/>}
             </div>
             }
             

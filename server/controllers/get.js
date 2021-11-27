@@ -47,7 +47,8 @@ export const getSubmissionsBlog = async (req, res)=>{
     try {
         const returnedBlogPosts = await blogs.aggregate([
             { $match : { authorId : req.user.id }},
-            { $sort : { _id : -1 } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 }
+            { $sort : { _id : -1, } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 },
+            {$project : {content : 0, coverPhoto : 0, tags : 0, feedback :0}}
         ]) ;
         const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
         return res.json({status : '200', total : (Math.ceil(total/3)), submissions : returnedBlogPosts});        
@@ -66,6 +67,7 @@ export const getSubmissionsPr = async (req, res)=>{
             { $match : { $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]}},
             { $sort : { _id : -1 }},
             { $limit : 3 },
+            {$project : {content : 0, tags : 0, feedback :0}}
         ]);
         return res.json({status : '200', submissions : returnedPRs, total : 1});
     } catch (error) {
@@ -84,7 +86,8 @@ export const getSubmissionsRsa = async (req, res) => {
             { $match : { $and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]}},
             {$sort : {_id : -1}},
             {$skip : (Number(page)-1)*4},
-            {$limit : 4}
+            {$limit : 4},
+            {$project : {content : 0, tags : 0, feedback :0}}
         ]);
         const total = await rsa.countDocuments({$and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]});
         return res.json({submissions : returnedRsa, total: (Math.ceil(total/4)), status:'200'});
@@ -166,7 +169,6 @@ export const getRsa = async (req, res) => {
 
 export const getToReviewPrs = async (req, res) => {
     try {
-        console.log('request recieved for pr');
         const courseArray = (req.query?.crsfltr==='none' || req.query?.crsFltr==='') ? 
                             req.user?.currentInsCourse : 
                             req.query?.crsFiltr?.split(',');
@@ -181,6 +183,7 @@ export const getToReviewPrs = async (req, res) => {
             {$sort : {_id : -1}},
             {$skip : (Number(req.query.page)-1)*5},
             {$limit : 5},
+            {$project : {content : 0, tags : 0, feedback :0}}
         ]);
         return res.json({status : '200', posts : returnedPrs});
     } catch (error) {
@@ -198,7 +201,8 @@ export const getToReviewBlogs = async (req, res) => {
             {$match : {$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : req.user.currentInsCourse}}]}},
             {$sort : {_id : 1}},
             {$skip : (Number(req.query.page)-1)*5},
-            {$limit : 5}
+            {$limit : 5},
+            {$project : {content : 0, coverPhoto : 0, tags : 0, feedback :0}}
         ]);
 
         return res.json({status: '200', posts: returnedBlogs});

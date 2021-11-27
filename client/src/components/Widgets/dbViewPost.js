@@ -1,4 +1,4 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { getPost } from "../../actions/dashboard.js";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
-import { submitFB } from "../../actions/dashboard.js";
+import { submitFB, approve } from "../../actions/dashboard.js";
 
 const DbViewPost = () => {
     const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope, isCreateLoading} = useSelector(state => state.dashboard);
@@ -14,12 +14,13 @@ const DbViewPost = () => {
     const {authUser} = useSelector(state => state.auth);
     const [feedbackOpen, setFeedbackOpen] = useState(false);
     const [feedback, setFeedback] = useState('');
+    const [confirm, setConfirm] = useState(false);
 
     useEffect(() => {
         if(!viewPost || viewPost?.slug !== viewPostId){
             dispatch(getPost(viewPostType,viewPostId, viewPostScope));
         }
-    }, [viewPost, viewPostId, viewPostScope, viewPostType])
+    }, [ viewPostScope, viewPostType, dispatch]);
 
     const colorDecide = (status) => {
         if(status==='PENDING') return 'warning';
@@ -31,6 +32,10 @@ const DbViewPost = () => {
 
     const submitFeedback = () => {
         dispatch(submitFB(feedback, viewPost?.slug, viewPostType));
+    };
+
+    const handleApprove = ()=>{
+        dispatch(approve(viewPost?.slug, viewPostType))
     };
 
     return (
@@ -67,7 +72,14 @@ const DbViewPost = () => {
                 </span>
                 </div>
             </div>
-            <br/><br/>
+            <br/>
+            { (viewPost?.feedback && authUser?.currentRole==='STU') &&
+            <Card>
+                <Typography variant='button' >Feedback :</Typography><br/>
+                <Typography variant='body2' >{viewPost?.feedback}</Typography>
+            </Card>
+            }
+            <br/>
             <Divider/>
             <br/>
             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'32px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
@@ -101,7 +113,8 @@ const DbViewPost = () => {
             <br/>
             { (authUser?.currentRole==='INS' && viewPost?.authorId !== authUser?.id) &&
             <>
-            <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}>
+            <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
+            onClick={()=>(setConfirm(true))}>
                 <Typography variant='button' fontWeight='600' >{`Approve ${viewPost?.totalLevels===viewPost?.level ? 'and Award Certificate':''}`}</Typography>
                 <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
@@ -113,26 +126,21 @@ const DbViewPost = () => {
             { feedbackOpen && 
             <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                 <TextField  value={feedback} onChange={(e)=>(setFeedback(e.target.value))} fullWidth
-                variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 360}}/>
+                variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 500}}/>
                 <br/>
                 <div>
                 <Button disabled={isCreateLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
                     cancel
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
                 <Button disabled={isCreateLoading} onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
-                    submit feedback
+                    {isCreateLoading ? <CircularProgress/> :'submit feedback'}
                 </Button>
                 </div>
             </div>
             }
             </>
             }
-            { (viewPost?.feedback && authUser?.currentRole==='STU') &&
-            <Card>
-                <Typography variant='button' >Feedback :</Typography><br/>
-                <Typography variant='body2' >{viewPost?.feedback}</Typography>
-            </Card>
-            }
+           
             <br/>
             { authUser.id===viewPost?.authorId &&
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
@@ -146,6 +154,30 @@ const DbViewPost = () => {
         </div>
         }
         </div>
+        <Dialog
+        open={confirm}
+        onClose={()=>(setConfirm(false))}
+      >
+        <DialogTitle>
+          {"Are you sure you want to Approve?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            By approving, the {viewPost?.level===viewPost?.totalLevels&&viewPostType==='PR' ? 
+            "Student will be awarded the certificate of course completion and their course session will be completed. ":
+            viewPostType==='PR' ? 
+            "Student will proceed to next level and this Project report will become public. ":
+            "Blog post will become public for others to see. "}
+            This action CANNOT be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>(setConfirm(false))} color='secondary' variant='outlined' disabled={isCreateLoading}>Disagree</Button>
+          <Button onClick={handleApprove} variant='contained' color='secondary' disabled={isCreateLoading}>
+            {isCreateLoading ? <CircularProgress/> : 'agree'}
+          </Button>
+        </DialogActions>
+      </Dialog>
         </div>
         </Dialog>
     )

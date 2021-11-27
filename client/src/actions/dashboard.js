@@ -64,7 +64,7 @@ export const getPost = (type, id, scope) => async (dispatch) => {
         const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
         if(data?.status==='200'){
             dispatch({type : 'GET_VIEW_POST', payload : data?.post});
-        }else{alert("Something went wrong :(")}
+        }else{alert("Something went wrong at getpost:(")};
         dispatch({type : 'END_VIEW_LOADING'});
     } catch (error) { }
 }
@@ -73,9 +73,9 @@ export const editPost = (formData, id, type) => async (dispatch) => {
     try {
         dispatch({type:'START_CREATE_LOADING'});
         const {data} = await API.editPost(formData, id, type.toLowerCase());
-        if (data?.status==='201'){
+        if(data?.status==='201'){
             dispatch({type:`EDIT_POST`, payload : data?.post});
-        }else{alert('Something went wrong :(')};
+        }else{alert('Something went wrong at editpost :(')};
         dispatch({type : 'CLOSE_EDIT'});
         dispatch({type : 'END_CREATE_LOADING'});
     } catch (error) { }
@@ -87,7 +87,7 @@ export const getToReview = (tab, page, courseFilter) => async (dispatch) => {
         const {data} = await API.getToReview(tab, page, courseFilter?.join(','));
         if(data?.status==='200'){
             dispatch({type : 'GET_TOREVIEW', payload : {posts : data?.posts, total : data?.total}});
-        }else alert("Something went wrong :(");
+        }else alert("Something went wrong:(");
         dispatch({type : 'END_TOREVIEW_LOADING'});
     } catch (error) { }
 }
@@ -95,10 +95,23 @@ export const getToReview = (tab, page, courseFilter) => async (dispatch) => {
 export const submitFB = (fb, id ,type) => async (dispatch) => {
     try {
         dispatch({type:'START_CREATE_LOADING'});
-        const {data} = await API.submitFeedback(fb, type?.toLowerCase());
+        const {data} = await API.submitFeedback(fb, id ,type?.toLowerCase());
         if(data?.status==='201'){
             dispatch({type: `REVIEW_${type}`, payload: id});
         }else {alert("Something went wrong :(")}
         dispatch({type : 'END_CREATE_LOADING'});
+        dispatch({type: 'CLOSE_VIEW'});
+    } catch (error) { }
+}
+
+export const approve = (id, type) => async (dispatch) => {
+    try {
+        dispatch({type : 'START_CREATE_LOADING'});
+        const {data} = await API.approve(id, type?.toLowerCase());
+        if(data?.status==='201'){
+            dispatch({type: `REVIEW_${type}`, payload: id});
+        }else {alert("Something went wrong :(")};
+        dispatch({type : 'END_CREATE_LOADING'});
+        dispatch({type : 'CLOSE_VIEW'});
     } catch (error) { }
 }

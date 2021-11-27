@@ -81,7 +81,7 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'CREATE_BLOG' || 'CREATE_RSA':
             return {...state, submissions : {...state?.submissions, subs : [action.payload, ...state.submissions.subs].slice(0,-1)}};
         case 'EDIT_POST' :
-            return {...state, submissions : {...state?.submissions, subs : state.submissions.subs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload}
+            return {...state, submissions : {...state?.submissions, subs : state.submissions.subs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload, viewPostId:action.payload?.slug}
         case 'REVIEW_BLOG' || 'REVIEW_PR':
             return {...state, toReview : {...state?.toReview, posts : state.toReview.posts.filter((k)=>(k?.slug !== action.payload))}}
         default: 

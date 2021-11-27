@@ -68,15 +68,15 @@ export const updatePR = async (req, res) => {
         if(!existingPR) return res.json({status:'404', message:'that post does not exist'});
         if(existingPR?.authorId !== req.user.id) return res.json({message:'Access denied', status:'404'});
         
-        const cleanContent = sanitizer(req.body.content, {
+        const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
             allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
         });
         Object.assign(existingPR,
             {
                 title : req.body.title, content: cleanContent,
-                 tags : req.body.tags, reviewStatus: 'PENDING', feedback:''
-            })
+                tags : req.body.tags, reviewStatus: 'PENDING', feedback:''
+            });
 
         const editedPost = await existingPR.save();
         return res.json({status : '201', post: editedPost});

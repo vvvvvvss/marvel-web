@@ -8,7 +8,7 @@ export const darkTheme = createTheme({
       },
       secondary : {
         main : '#35B0C0', light : '#D3FFFF', dark : '#001C28'
-      }, warning : {main :'#7C742D'} , success:{main:'#257E16'}, error :{main:'#EA0101'}
+      }, warning : {main :'#7C742D'} , success:{main:'#257E16'}, error :{main:'#B50000'}
     },
     typography : {
       fontFamily : 'Montserrat',color:'#ffffff'
