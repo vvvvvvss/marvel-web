@@ -17,7 +17,6 @@ const userSchema = mongoose.Schema({
     currentStuCourse : {type : String},
     currentInsCourse : { type : [String]},
     currentLevel : {type : Number},
-    totalLevels : {type : Number},
     roleHistory : [{
         role : {type : String, enum : {values : ['STU','INS', 'NA']}},
         startTime : {type : Date},endTime : {type : Date}

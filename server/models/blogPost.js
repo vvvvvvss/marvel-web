@@ -22,4 +22,4 @@ const blogPostSchema = mongoose.Schema({
 },
 { timestamps : true });
 
-export default mongoose.model('blogPost',blogPostSchema);
+export default mongoose.model('blogPosts',blogPostSchema);

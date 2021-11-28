@@ -8,7 +8,7 @@ export const getCourse = async ( req, res) =>{
     try {
         const {id} = req.params;
         const {scope} = req.query;
-        let returnedCourse ={};
+        let returnedCourse = {};
         if(scope==='dashboard'){
             returnedCourse = await course.aggregate([
             { $match : {courseCode : id.trim()}}, { $limit : 1}, { $project : {_id : 0, intro : 0}} ]);
@@ -62,7 +62,7 @@ export const getSubmissionsPr = async (req, res)=>{
     try {
         const condition = (req.user.enrollmentStatus==='ACTIVE') &&
                             ( req.user.currentRole === 'STU');
-        if(!condition) return res.json({message : 'you cannot be doing this'});
+        if(!condition) return res.json({message : 'you cannot be doing this', staus:'404'});
         const returnedPRs = await prs.aggregate([
             { $match : { $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]}},
             { $sort : { _id : -1 }},
