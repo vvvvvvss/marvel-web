@@ -69,7 +69,7 @@ const DbToReview = () => {
                     </Button>
                     </div>
                     </span>
-                </Card> <br/> 
+                </Card> 
                 </div>
             ))}
             </div>}

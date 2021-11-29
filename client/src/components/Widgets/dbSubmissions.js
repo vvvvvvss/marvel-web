@@ -39,12 +39,12 @@ const DbSubmissions = () => {
 
         <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
 
-        {!submissions?.subs?.length ? 
+        {!submissions?.[tab==='pr' ? 'prs' : 'others']?.length ? 
         <Typography variant='caption'>
         {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${(tab==='pr' || tab==='rsa') ? ' for this Course' : ''}.`}
         </Typography> :
         <div>
-        {submissions?.subs?.map((sub)=>(
+        {submissions?.[tab==='pr' ? 'prs' : 'others']?.map((sub)=>(
         <div key={sub?.slug}> 
         <Card variant='outlined'>
             <Typography variant='body1'>{sub?.title}</Typography>

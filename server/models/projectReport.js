@@ -26,4 +26,10 @@ const projectReportSchema = mongoose.Schema({
 },
 {timestamps : true});
 
+projectReportSchema.virtual('course', {
+    ref: 'courses',
+    localField: 'courseCode',
+    foreignField: 'courseCode'
+  });
+
 export default mongoose.model("projectReports", projectReportSchema);

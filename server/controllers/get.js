@@ -10,11 +10,9 @@ export const getCourse = async ( req, res) =>{
         const {scope} = req.query;
         let returnedCourse = {};
         if(scope==='dashboard'){
-            returnedCourse = await course.aggregate([
-            { $match : {courseCode : id.trim()}}, { $limit : 1}, { $project : {_id : 0, intro : 0}} ]);
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id').lean().exec();
         }else{
-            returnedCourse = await course.aggregate([ 
-            { $match : {courseCode : id.trim()}}, { $limit : 1}, { $project : {_id : 0}} ]);
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro').lean().exec();
         }
         if(!returnedCourse[0]) return res.json({status : '404'})
         return res.json({status : '200', course : returnedCourse[0]});
@@ -105,15 +103,8 @@ export const getPR = async (req, res) => {
         };
         let returnedPr;
         if(req.query?.scope==='ins'){
-            returnedPr = (await prs.aggregate([
-                {$match : {slug : id}}, {$limit : 1},
-                {$lookup : {
-                from : 'courses', localField : 'courseCode', foreignField : 'courseCode', as : "course"
-                }},  
-                {$addFields : {"course" : {$arrayElemAt : ["$course", 0]}}},
-                {$addFields : {totalLevels : {$size : "$course.levels"}}},
-                {$project : {course : 0,}},
-            ]))[0];
+            returnedPr = await prs.findOne({slug : id}).lean().exec();
+            returnedPr.totalLevels = (await course.findOne({courseCode : returnedPr?.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         } else {
             returnedPr = await prs.findOne({slug : id}).lean();
         };
@@ -185,6 +176,9 @@ export const getToReviewPrs = async (req, res) => {
             {$limit : 5},
             {$project : {content : 0, tags : 0, feedback :0}}
         ]);
+
+    // console.log( await user.db.db.admin().command({getLastRequestStatistics : 1})); 
+
         return res.json({status : '200', posts : returnedPrs});
     } catch (error) {
         console.log(error);
