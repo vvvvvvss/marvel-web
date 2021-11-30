@@ -36,7 +36,7 @@ const DbToReview = () => {
             <div style={{display:'flex', flexDirection:'column'}}>
             { !toReview?.posts.length ? 
             <Typography variant='caption' >
-                There are submissions to Review for now!
+                There are no submissions to Review for now!
             </Typography>
             :
             <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>

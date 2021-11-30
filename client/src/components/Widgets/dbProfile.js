@@ -9,7 +9,7 @@ const DbProfile = () => {
     const {profile, isProfileLoading} = useSelector(state => state.dashboard);
 
     useEffect(() => {
-        dispatch(getProfileData(authUser?.id, 'dashboard'));
+        dispatch(getProfileData(authUser?.slug, 'dashboard'));
     }, [authUser])
 
     const [changed, setChanged] = useState(false);

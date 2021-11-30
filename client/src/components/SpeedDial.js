@@ -30,7 +30,7 @@ const Dial = () => {
                     icon={<BookIcon/>}
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
-                 {(authUser?.currentRole==='STU') &&
+                 {(authUser?.currentRole==='STU') && (authUser?.currentLevel===syllabus?.submissionStatus?.forLevel) &&
                  (syllabus?.submissionStatus?.isAccepting && !prs?.some((i)=>(i?.level === authUser?.currentLevel))) 
                   &&
                   <SpeedDialAction

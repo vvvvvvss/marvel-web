@@ -10,12 +10,14 @@ export const getCourse = async ( req, res) =>{
         const {scope} = req.query;
         let returnedCourse = {};
         if(scope==='dashboard'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id').lean().exec();
-        }else{
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro').lean().exec();
+        }else if(scope==='switch'){
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id submissionStatus totalLevels').lean().exec();
+        }else{
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id').lean().exec();
         }
-        if(!returnedCourse[0]) return res.json({status : '404'})
-        return res.json({status : '200', course : returnedCourse[0]});
+        if(!returnedCourse) return res.json({status : '404'});
+        return res.json({status : '200', course : returnedCourse});
     } catch (error) {
         console.log(error);
     }
@@ -28,14 +30,11 @@ export const getProfile = async(req, res)=>{
 
         let returnedProfile;
         if(scope==='dashboard'){
-            returnedProfile = await user.aggregate([
-            {$match : {id : id}}, {$limit : 1},
-            {$project : { bio : 1, linkedIn:1, gitHub:1, website:1, id:1, currentLevel :1}}
-            ])
+            returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id').exec();
         }
-        if(!returnedProfile[0]) return res.json({status : '404'});
+        if(!returnedProfile) return res.json({status : '404'});
         
-        return res.json({profile : returnedProfile[0], status : '200'});
+        return res.json({profile : returnedProfile, status : '200'});
     } catch (error) {
         console.log(error);
     }
@@ -48,6 +47,7 @@ export const getSubmissionsBlog = async (req, res)=>{
             { $sort : { _id : -1, } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 },
             {$project : {content : 0, coverPhoto : 0, tags : 0, feedback :0}}
         ]) ;
+        // console.log(await blogs.db.db.admin().command({getLastRequestStatistics : 1}));
         const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
         return res.json({status : '200', total : (Math.ceil(total/3)), submissions : returnedBlogPosts});        
     } catch (error) {

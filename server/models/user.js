@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
     id: { type: String, required : true,unique:true },
 
     // META DATA ( changes. auto )
-    currentRole : {type : String, enum : {values : ['STU','INS']}},
+    currentRole : {type : String, enum : {values : ['STU','INS','NA']}},
     currentStuCourse : {type : String},
     currentInsCourse : { type : [String]},
     currentLevel : {type : Number},

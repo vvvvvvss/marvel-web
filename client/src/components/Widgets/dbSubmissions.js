@@ -53,7 +53,7 @@ const DbSubmissions = () => {
                 {(tab==='pr' || tab==='rsa') && 
                 <><span>{`${tab==='pr'?'Level':''} ${sub?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>
                 &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
-                <span>{moment(sub?.createdAt).fromNow()}</span>
+                <span>{moment(sub?.updatedAt).fromNow()}</span>
             </Typography>
             <br/><br/>
             <span style={{display:'flex',justifyContent:'space-between'}}>

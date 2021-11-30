@@ -21,15 +21,9 @@ const projectReportSchema = mongoose.Schema({
 
     // META DATA
     reviewStatus : { type : String, 
-                enum : {values : ['PENDING', 'APPROVED', 'FLAGGED','FEATURED']}, default : 'PENDING'},
+                enum : {values : ['PENDING', 'APPROVED', 'FLAGGED']}, default : 'PENDING'},
     feedback : { type : String, maxLength : 500 },
 },
 {timestamps : true});
-
-projectReportSchema.virtual('course', {
-    ref: 'courses',
-    localField: 'courseCode',
-    foreignField: 'courseCode'
-  });
 
 export default mongoose.model("projectReports", projectReportSchema);

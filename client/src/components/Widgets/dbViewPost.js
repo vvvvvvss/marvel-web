@@ -35,7 +35,7 @@ const DbViewPost = () => {
     };
 
     const handleApprove = ()=>{
-        dispatch(approve(viewPost?.slug, viewPostType))
+        dispatch(approve(viewPost?.slug, viewPostType));
     };
 
     return (
