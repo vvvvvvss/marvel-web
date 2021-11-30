@@ -18,7 +18,7 @@ const AcceptSwitch = () => {
         switches.push(
             <div>
             <div style={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
-            <Typography variant='body2' component='div'>{`Lv ${i}`}</Typography>
+            <Typography variant='body2' component='div'>&nbsp;&nbsp;&nbsp;&nbsp;{`Lv ${i}`}</Typography>
             <Switch key={i} checked={syllabus?.submissionStatus?.forLevel===i} 
             disabled={!(syllabus?.submissionStatus?.forLevel===i)} 
             /> 
