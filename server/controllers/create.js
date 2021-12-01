@@ -3,11 +3,14 @@ import projectReport from '../models/projectReport.js';
 import sanitizer from 'sanitize-html';
 import blogPost from '../models/blogPost.js';
 import rsa from '../models/rsa.js';
+import course from '../models/course.js';
 
 export const createPR = async (req , res) => {
     try {
         const condition = (req.user.currentRole==='STU') && (req.user.enrollmentStatus==='ACTIVE');
         if(!condition) return res.json({status : '404', message : 'you cannot do this.'});
+        const courseData = await course.findOne({courseCode: req.user.currentStuCourse}).select('-_id submissionStatus');
+        if(!(courseData?.submissionStatus?.isAccepting)||courseData?.submissionStatus?.forLevel !== req.user.currentLevel) return res.json({message:'Access denied.', status: '404'});
         const existingPR = await projectReport.aggregate([
             { $match : { $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}, {level : req.user.currentLevel}]}},
             { $limit : 1}

@@ -107,3 +107,26 @@ export const approvePR = async (req, res) => {
         return res.json({status : 'BRUH', message : 'Something went wrong.', error: error})
     }
 }
+
+export const toggleSub = async (req, res) => {
+    try {
+        const condition = (req.user.enrollmentStatus==='ACTIVE'&& req.user.currentRole==='INS')&&
+                        (req.user.currentInsCourse.includes(req.params.id));
+        if(!condition) return res.json({message: 'Access denied.', status: '404'});
+        const courseData = await course.findOne({courseCode : req.params.id});
+        if(Number(req.query.level)>courseData?.totalLevels || Number(req.query.level)<=0){
+            return res.json({message: 'Access denied.', status: '404'});
+        }
+        courseData.submissionStatus.forLevel = courseData?.submissionStatus?.isAccepting ? 0 : Number(req.query.level);
+        courseData.submissionStatus.isAccepting = !courseData?.submissionStatus?.isAccepting;
+        const newCourseData = await courseData.save();
+        return res.json({status: '201', course : {
+            totalLevels : newCourseData?.totalLevels,
+            submissionStatus : newCourseData?.submissionStatus,
+            courseCode : newCourseData?.courseCode
+        }});
+    } catch (error) {
+        console.log(error);
+        return res.json({status :'BRUH', message : 'Something went wrong:('})
+    }
+}

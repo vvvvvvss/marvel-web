@@ -109,11 +109,22 @@ export const approve = (id, type) => async (dispatch) => {
     try {
         dispatch({type : 'START_CREATE_LOADING'});
         const {data} = await API.approve(id, type?.toLowerCase());
-        console.log(data);
         if(data?.status==='201'){
             dispatch({type: `REVIEW`, payload: id});
         }else {alert("Something went wrong. could not approve.")};
         dispatch({type : 'END_CREATE_LOADING'});
         dispatch({type : 'CLOSE_VIEW'});
+    } catch (error) { }
+}
+
+export const toggleSub = (course, level) => async (dispatch) => {
+    try {
+        dispatch({type : 'START_CREATE_LOADING'});
+        const {data} = await API.toggleSub(course, level);
+        console.log(data);
+        if(data?.status==='201'){
+            dispatch({type : 'GET_COURSE', payload : data?.course});
+        }else{alert("Something went wrong while changing submission status :(")};
+        dispatch({type: 'END_CREATE_LOADING'});
     } catch (error) { }
 }

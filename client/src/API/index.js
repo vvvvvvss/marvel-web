@@ -20,3 +20,4 @@ export const editPost = async (formData, id, type)=> API.post(`/update/${type}/$
 export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/toreview/${tab}?page=${page}&crsfltr=${courseFilter || 'none'}`);
 export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
 export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);
+export const toggleSub = async (course, level) => API.post(`/action/togglesub/${course}?level=${level}`);

@@ -9,7 +9,7 @@ import getRoutes from './routes/getRoutes.js';
 import updateRoutes from './routes/updateRoutes.js';
 import createRoutes from './routes/createRoutes.js';
 import cloudinary from 'cloudinary';
-import actionRoutes from './routes/actionRoutes.js'
+import actionRoutes from './routes/actionRoutes.js';
 
 const app = express();
 
@@ -47,7 +47,7 @@ mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB
   },
   useNewUrlParser: true, 
   useUnifiedTopology: true,
-  retryWrites : false 
+  retryWrites : false, retryReads: true
 })
   .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
   .catch((error) => console.log(`${error}`));
