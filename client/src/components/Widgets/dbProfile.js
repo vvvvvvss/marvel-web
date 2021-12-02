@@ -33,11 +33,11 @@ const DbProfile = () => {
 
             { isProfileLoading ? 
             <div style={{display: 'grid',gridTemplateColumns:'1fr 5fr',columnGap:'20px'}}>
-                <Skeleton variant='circular' sx={{width:60,height:60}}/>
+                <Skeleton variant='circular' animation='wave' sx={{width:60,height:60}}/>
                 <div>
-                    <Skeleton variant='rectangular' height='24px' style={{borderRadius:'12px'}} ></Skeleton>
+                    <Skeleton variant='rectangular' height='24px'  animation='wave' style={{borderRadius:'12px'}} ></Skeleton>
                     <br/>
-                    <Skeleton variant='rectangular' height='180px' style={{borderRadius:'12px'}} ></Skeleton><br/>
+                    <Skeleton variant='rectangular' height='180px'  animation='wave' style={{borderRadius:'12px'}} ></Skeleton><br/>
                 </div>
             </div> :  
             <div style={{display: 'grid',gridTemplateColumns:'1fr 5fr',columnGap:'20px'}}>
