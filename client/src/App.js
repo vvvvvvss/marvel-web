@@ -6,6 +6,7 @@ import { darkTheme, lightTheme } from './utils/themes.js';
 import StuDashboard from './pages/StuDashboard/StuDashboard.js';
 import InsDashboard from './pages/InsDashboard/InsDashboard.js';
 import { useSelector } from 'react-redux';
+import CoursePage from './pages/coursePage/coursePage.js';
 
 const App = ()=> {
 
@@ -28,6 +29,7 @@ const App = ()=> {
                 }
               }
             }/>
+            <Route path="/course/:id" exact component={CoursePage} />
         </Switch>
       </ThemeProvider>
     </div>

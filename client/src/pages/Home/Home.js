@@ -1,8 +1,7 @@
 import { Button, Paper, Typography, Alert} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import useStyles from './styles.js';
-import {Link} from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Home = () => {

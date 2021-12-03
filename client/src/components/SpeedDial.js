@@ -1,10 +1,11 @@
 import {useState} from 'react';
 import { Backdrop,SpeedDial,SpeedDialAction,} from '@mui/material';
-import BookIcon from '@mui/icons-material/AutoStories';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
 import { useDispatch, useSelector } from 'react-redux';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+
 
 const Dial = () => {
     const {authUser} = useSelector(state => state.auth);
@@ -27,7 +28,7 @@ const Dial = () => {
                 <SpeedDialAction
                     tooltipTitle={`Blog`}
                     tooltipOpen sx={{whiteSpace : 'nowrap'}}
-                    icon={<BookIcon/>}
+                    icon={<NewspaperIcon/>}
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
                  {(authUser?.currentRole==='STU') && (authUser?.currentLevel===syllabus?.submissionStatus?.forLevel) &&

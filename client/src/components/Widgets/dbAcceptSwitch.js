@@ -13,7 +13,6 @@ const AcceptSwitch = () => {
         dispatch(getCourseData(course, 'switch'));
     }, [course]);
 
-    console.log(syllabus);
     const switches = [];
     for (let i = 1; i <= syllabus?.totalLevels; i++) {
         switches.push(

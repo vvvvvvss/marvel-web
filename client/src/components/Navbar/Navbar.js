@@ -1,4 +1,4 @@
-import { Button, Chip, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, useScrollTrigger } from "@mui/material";
+import { Button, Chip, CircularProgress, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, useScrollTrigger, Collapse } from "@mui/material";
 import { Slide, AppBar, Toolbar, Typography, Avatar, Box
       } from "@mui/material";
 import GoogleLogin, {GoogleLogout} from 'react-google-login';
@@ -9,6 +9,15 @@ import useStyles from './styles.js';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import FaceIcon from '@mui/icons-material/Face';
+import SearchIcon from '@mui/icons-material/Search';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import BookIcon from '@mui/icons-material/AutoStories';
+import InfoIcon from '@mui/icons-material/Info';
+import Dashboard from "@mui/icons-material/Dashboard";
+import LogoutIcon from '@mui/icons-material/Logout';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
 
 const Navbar = () => {
     const trigger = useScrollTrigger();
@@ -17,6 +26,7 @@ const Navbar = () => {
     const {authUser, isAuthLoading} = useSelector((state)=> state.auth);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const styles = useStyles();
+    const [crsListOpen, setCrsListOpen] = useState(false);
 
     const googleSuccess = (res)=> {
         dispatch(auth(res, history));
@@ -77,36 +87,84 @@ const Navbar = () => {
             </Toolbar>
 
             {/*Drawer starts here*/}
-            <Drawer open={drawerOpen} onClose={()=>(setDrawerOpen(false))} variant='temporary' color='primary'
-            anchor='left' >
-            <Box style={{paddingTop:'30px', height:'100%', width:'100%'}}>
-                {authUser?.id && <div style={{display:'flex', flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
-                    <Avatar src={authUser?.profilePic} sx={{width: '60px',height:'60px'}}/>
-                    <br/>
+            <Drawer open={drawerOpen} onClose={()=>(setDrawerOpen(false))} variant='temporary'
+            anchor='left'>
+            <Box style={{padding:'30px 0px 0px 0px', height:'100%', width:'100%'}}>
+                {authUser?.id && 
+                <div style={{display:'flex', flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
+                    <Avatar src={authUser?.profilePic} sx={{width: '70px',height:'70px',marginBottom:'5px'}}/>
+                    <Typography variant='body1' sx={{marginBottom:'8px'}}>{authUser?.name}</Typography>
                     <Chip label={authUser?.currentRole==='STU' ? 'STUDENT': 'INSTRUCTOR'} variant='outlined' color='primary' size='small'/>
                     <br/>
-                    <GoogleLogout 
-                    clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
-                    render={(renderProps) => (
-                        <Button onClick={renderProps.onClick} disabled={renderProps.disabled} 
-                        color='secondary' variant='contained'>
-                        Logout
-                        </Button>
-                    )}
-                    onLogoutSuccess={logout} onFailure={googleError}/>
-                    <br/>
-                    <List>
-                        <ListItem button onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><FaceIcon/></ListItemIcon>
-                            <ListItemText>My profile</ListItemText>
-                        </ListItem>
-                        <ListItem button onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><FaceIcon/></ListItemIcon>
-                            <ListItemText>Course page</ListItemText>
-                        </ListItem>
-                    </List>
                 </div>}
+                <List>
+                {authUser?.id && 
+                <>
+                <Divider/>
+                <ListItemButton button onClick={()=>(history.push(`/profile/${authUser?.slug}`))}>
+                    <ListItemIcon><FaceIcon/></ListItemIcon>
+                    <ListItemText>My profile</ListItemText>
+                </ListItemButton>
+                { authUser?.currentRole==='STU' ? 
+                <ListItemButton button onClick={()=>(console.log('profile'))}>
+                    <ListItemIcon><BookIcon/></ListItemIcon>
+                    <ListItemText>My Course
+                    </ListItemText>
+                </ListItemButton> 
+                : 
+                <>
+                <ListItemButton onClick={()=>(setCrsListOpen((p)=>(!p)))}>
+                <ListItemIcon>
+                  <BookIcon/>
+                </ListItemIcon>
+                <ListItemText primary="My Courses" />
+                {crsListOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={crsListOpen}  timeout="auto" unmountOnExit>
+                <List component="div" disablePadding style={{backgroundColor:'#001C28'}}>
+                  {authUser?.currentInsCourse?.map((c)=>(
+                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}`))}>
+                          <ListItemIcon></ListItemIcon>
+                          <ListItemText primaryTypographyProps={{variant:'body2'}} >{c}</ListItemText>
+                      </ListItemButton>
+                  ))}
+                </List>
+              </Collapse> </>}
+                <ListItemButton onClick={()=>(history.push('/dashboard'))}>
+                    <ListItemIcon><Dashboard/></ListItemIcon>
+                    <ListItemText>Dashboard</ListItemText>
+                </ListItemButton>
+                <Divider/></>}
+                <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><SearchIcon/></ListItemIcon>
+                            <ListItemText>Search</ListItemText>
+                        </ListItemButton>
+                        <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><BookIcon/></ListItemIcon>
+                            <ListItemText>Explore Courses</ListItemText>
+                        </ListItemButton>
+                        <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><NewspaperIcon/></ListItemIcon>
+                            <ListItemText>Explore Blog</ListItemText>
+                        </ListItemButton>
+                        <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><AssignmentIcon/></ListItemIcon>
+                            <ListItemText>Explore PRs</ListItemText>
+                        </ListItemButton>
+                        <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><InfoIcon/></ListItemIcon>
+                            <ListItemText>About</ListItemText>
+                        </ListItemButton>
+                </List>
+            <footer>
+                <Divider/>
+                <ListItemButton onClick={()=>(console.log('profile'))}>
+                            <ListItemIcon><LogoutIcon color='primary'/></ListItemIcon>
+                            <ListItemText primaryTypographyProps={{color:'#FFD7EA'}} >Logout</ListItemText>
+                </ListItemButton>
+            </footer>
             </Box>
+            
             </Drawer>
             </AppBar>
             </Slide>
