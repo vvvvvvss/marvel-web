@@ -13,7 +13,8 @@ const courseSchema = mongoose.Schema({
             {taskNo : {type : Number},
             description : {type : String}},
         ]}
-    ]
+    ],
+    rankingScore : {type : Number, default: 1}
 });
 
 export default mongoose.model('courses', courseSchema);

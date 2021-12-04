@@ -13,7 +13,11 @@ export const getCourse = async ( req, res) =>{
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro').lean().exec();
         }else if(scope==='switch'){
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id submissionStatus totalLevels').lean().exec();
-        }else{
+        }else if(scope==='overview'){
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('_id -levels -submissionStatus');
+        }else if(scope==='levels'){
+            returnedCourse = await course.findOne({courseCode: id.trim()}).select('-_id levels');
+        } else{
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id').lean().exec();
         }
         if(!returnedCourse) return res.json({status : '404'});

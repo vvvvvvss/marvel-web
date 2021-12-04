@@ -17,7 +17,7 @@ const RSASchema = mongoose.Schema({
     title :{ type : String, maxLength : 120, required : true},
     content : { type : String, required : true, maxLength : 10000},
     tags : { type : [String], default : []},
-
+    
 },{timestamps:true});
 
 export default mongoose.model("resourceArticles", RSASchema);

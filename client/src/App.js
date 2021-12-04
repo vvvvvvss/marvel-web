@@ -26,6 +26,8 @@ const App = ()=> {
                   return <StuDashboard/>
                 }else if(authUser?.currentRole==='INS'){
                   return <InsDashboard/>
+                }else {
+                  return <Redirect to="/" />
                 }
               }
             }/>

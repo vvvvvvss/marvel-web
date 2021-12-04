@@ -19,6 +19,7 @@ const blogPostSchema = mongoose.Schema({
     reviewStatus : { type : String, 
         enum : {values : ['PENDING', 'APPROVED', 'FLAGGED','FEATURED']}, default : 'PENDING'},
     feedback : { type : String, maxLength : 500 },
+    rankingScore : {type : Number, default: 1}
 },
 { timestamps : true });
 
