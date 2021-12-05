@@ -14,7 +14,7 @@ export const getCourse = async ( req, res) =>{
         }else if(scope==='switch'){
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id submissionStatus totalLevels').lean().exec();
         }else if(scope==='overview'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('_id -levels -submissionStatus');
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -levels -submissionStatus').lean().exec();
         }else if(scope==='levels'){
             returnedCourse = await course.findOne({courseCode: id.trim()}).select('-_id levels');
         } else{

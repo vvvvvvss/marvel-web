@@ -1,14 +1,14 @@
 import * as API from '../API/index.js';
 
 export const getCourseData=(courseCode, scope) => async(dispatch)=>{
-    dispatch({type : 'START_SYLLABUS_LOADING'});
+    dispatch({type : `START_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
     try {
         const {data} = await API.getCourseData(courseCode, scope);
         if(data?.status ==='200'){
-            dispatch({type : 'GET_COURSE', payload : data?.course});
+            dispatch({type : `${scope==='overview' ? 'GET_OVERVIEW': 'GET_COURSE'}`, payload : data?.course});
         }else{ alert("Something went wrong at syllabus widget.")}; 
     } catch (error) { };
-    dispatch({type : 'END_SYLLABUS_LOADING'});
+    dispatch({type : `END_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
 }
 
 export const getProfileData=(id, scope)=>async(dispatch)=>{

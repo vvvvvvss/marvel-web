@@ -1,27 +1,36 @@
 import { Paper, Typography } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCourseData } from '../../actions/dashboard.js';
 import { useDispatch, useSelector } from 'react-redux';
+import {getRsaFeedByCourse} from '../../actions/other.js'
 
 const CoursePage = () => {
     const {id} = useParams();
     const {authUser} = useSelector(state => state.auth);
-    const {v} = new URLSearchParams(useLocation().search);
+    const query = new URLSearchParams(useLocation().search);
     const history = useHistory();
     const dispatch = useDispatch();
-    const {syllabus} = useSelector((state)=>(state.dashboard));
-    const {isFeedLoading, feed} = useSelector((state)=>(state.other));
-    const [tab, setTab] = useState(v==='overview'? 'levels' : v==='rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
+    const {syllabus, isSyllabusLoading} = useSelector((state)=>(state.dashboard));
+    const {isFeedLoading, feed, isOverviewLoading, overview} = useSelector((state)=>(state.other));
+    const [tab, setTab] = useState(query.get('v')==='overview'? 'levels' : query.get('v')==='rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
+    const [page, setPage] = useState(Number(query.get('page'))||1);
+    const [searchTitle, setSearchTitle] = useState("");
     
     useEffect(()=>{
             dispatch(getCourseData(id.trim(), 'overview'));
     },[id]);
 
     useEffect(() => {
-            dispatch(getCourseData(id?.trim(), tab));
-    }, [tab]);
+        if(tab==='rsa'){
+            dispatch(getRsaFeedByCourse(id, page, searchTitle))
+        }else if(tab==='levels'){
+            dispatch(getCourseData(id?.trim(), 'levels'));
+        }
+    }, [tab, page, searchTitle]);
+
+    console.log(syllabus, feed, overview, isOverviewLoading);
 
     return (
         <div>

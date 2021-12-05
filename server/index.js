@@ -5,12 +5,14 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import utilRoutes from './routes/utils.js';
 import devRoutes from './routes/devRoutes.js';
+import feedRoutes from './routes/feedRoutes.js';
 import searchRoutes from './routes/searchRoutes.js'
 import getRoutes from './routes/getRoutes.js';
 import updateRoutes from './routes/updateRoutes.js';
 import createRoutes from './routes/createRoutes.js';
 import cloudinary from 'cloudinary';
 import actionRoutes from './routes/actionRoutes.js';
+
 const app = express();
 
 dotenv.config();
@@ -37,6 +39,7 @@ app.use('/get', getRoutes);
 app.use('/update',updateRoutes);
 app.use('/create', createRoutes);
 app.use('/action', actionRoutes);
+app.use('/feed', feedRoutes);
 app.use('/search', searchRoutes);
 
 //connecting to cosmos
