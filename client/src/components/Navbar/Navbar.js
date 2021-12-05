@@ -101,12 +101,12 @@ const Navbar = () => {
                 {authUser?.id && 
                 <>
                 <Divider/>
-                <ListItemButton button onClick={()=>(history.push(`/profile/${authUser?.slug}`))}>
+                <ListItemButton onClick={()=>(history.push(`/profile/${authUser?.slug}`))}>
                     <ListItemIcon><FaceIcon/></ListItemIcon>
                     <ListItemText>My profile</ListItemText>
                 </ListItemButton>
                 { authUser?.currentRole==='STU' ? 
-                <ListItemButton button onClick={()=>(console.log('profile'))}>
+                <ListItemButton onClick={()=>(console.log('profile'))}>
                     <ListItemIcon><BookIcon/></ListItemIcon>
                     <ListItemText>My Course
                     </ListItemText>

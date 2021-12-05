@@ -10,7 +10,7 @@ export const getCourse = async ( req, res) =>{
         const {scope} = req.query;
         let returnedCourse = {};
         if(scope==='dashboard'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro').lean().exec();
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro -caption -courseDuration').lean().exec();
         }else if(scope==='switch'){
             returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id submissionStatus totalLevels').lean().exec();
         }else if(scope==='overview'){

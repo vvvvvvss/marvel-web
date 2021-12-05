@@ -71,8 +71,9 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, syllabus : action.payload}
         case 'GET_SUB_PR':
             return {...state, submissions : {...state.submissions, prs : action.payload?.subs, total : action.payload?.total}};
-        case 'GET_SUB_BLOG' || 'GET_SUB_RSA':
-            return {...state, submissions : {...state.submissions, others : action.payload?.subs, total : action?.payload?.total}};
+        case 'GET_SUB_BLOG':
+        case 'GET_SUB_RSA':
+            return {...state, submissions : {...state.submissions, others : action.payload?.subs, total : action.payload?.total}};
         case 'GET_VIEW_POST':
             return {...state, viewPost : action.payload}
         case 'GET_TOREVIEW':
@@ -80,11 +81,13 @@ const dashboardReducer = (state=initialState, action)=>{
         // create or subbing
         case 'CREATE_PR' :
             return {...state, submissions : { ...state?.submissions, prs : [action.payload, ...state.submissions.prs]}};
-        case 'CREATE_BLOG' || 'CREATE_RSA':
+        case 'CREATE_BLOG':
+        case 'CREATE_RSA':
             return {...state, submissions : {...state?.submissions, others :  state?.submissions?.others?.length>=3 ? [action.payload, ...state.submissions.others].slice(0,-1) : [action?.payload, ...state.submissions?.others]}};
         case 'EDIT_PR' :
             return {...state, submissions : {...state?.submissions, prs : state.submissions.prs.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost:action.payload, viewPostId:action.payload?.slug}
-        case 'EDIT_BLOG' || 'EDIT_RSA' : 
+        case 'EDIT_BLOG':
+        case 'EDIT_RSA' : 
             return {...state, submissions : {...state?.submissions, others : state.submissions?.others?.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action?.payload, viewPostId: action?.payload?.slug}
         case 'REVIEW':
             return {...state, toReview : {...state?.toReview, posts : state.toReview?.posts?.filter((k)=>(k?.slug !== action.payload))}}

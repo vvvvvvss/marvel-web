@@ -16,7 +16,7 @@ const AcceptSwitch = () => {
     const switches = [];
     for (let i = 1; i <= syllabus?.totalLevels; i++) {
         switches.push(
-            <div>
+            <div key={i}>
             <div style={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
             <Typography variant='body2' component='div'>&nbsp;&nbsp;&nbsp;&nbsp;{`Lv ${i}`}</Typography>
             <Switch key={i} checked={syllabus?.submissionStatus?.forLevel===i} 
@@ -32,7 +32,7 @@ const AcceptSwitch = () => {
 
     return (
         <div>
-            <Paper variant='widget' maxHeight='max-content'>
+            <Paper variant='widget' style={{maxHeight:'max-content'}}>
                 <Typography variant='widget-heading'>controls</Typography>
                 <br/><br/>
                 <Typography variant='caption' >You can open and close Submissions for the different courses that you instruct for.</Typography>
@@ -42,7 +42,7 @@ const AcceptSwitch = () => {
                 onChange={(e)=>(setCourse(e.target.value))}
             >
                 {authUser?.currentInsCourse?.map((c)=>(
-                    <MenuItem value={c}>{c}</MenuItem>
+                    <MenuItem key={c} value={c}>{c}</MenuItem>
                 ))}
             </Select>
             <br/>

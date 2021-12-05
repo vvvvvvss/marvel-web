@@ -14,8 +14,8 @@ const DbSubmissions = () => {
     const [page , setPage] = useState(1);
     
     useEffect(() => {
-        dispatch(getSubmissions(tab, page, authUser?.currentRole));
-    }, [tab, page, authUser]);
+        dispatch(getSubmissions(tab, page));
+    }, [tab, page]);
 
     const colorDecide = (status) => {
         if(status==='PENDING') return 'warning';

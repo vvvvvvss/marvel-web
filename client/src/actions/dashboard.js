@@ -47,7 +47,7 @@ export const createPost = (formData, formType)=> async (dispatch) => {
     dispatch({type : 'CLOSE_FORM'})
 }
 
-export const getSubmissions = (tab, page, role) => async (dispatch) => {
+export const getSubmissions = (tab, page) => async (dispatch) => {
     try {
         dispatch({type : 'START_SUB_LOADING'});
         const {data} = await API.getSubmissions(tab, page);
