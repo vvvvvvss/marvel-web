@@ -5,7 +5,7 @@ export const getRsaFeedByCourse = (courseCode, page, title) => async (dispatch) 
     try {
         const {data} = await API.getRsaFeedByCourse(courseCode, page, title);
         if(data?.status==='200'){
-            dispatch({type: 'GET_FEED', payload: data?.feed});
+            dispatch({type: 'GET_FEED', payload: { feed: data?.feed, total:data?.total}});
         }else {alert("Something went wrong while getting resourse articles. :(")};
     } catch (error) {alert("Something went wrong while getting resourse articles. :(");}
     dispatch({type: 'END_FEED_LOADING'});

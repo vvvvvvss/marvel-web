@@ -1,4 +1,4 @@
-import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, Accordion, AccordionSummary,AccordionDetails,AppBar, Toolbar, Card,Button, Avatar, TextField, Skeleton, CircularProgress } from '@mui/material';
+import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, Accordion, AccordionSummary,AccordionDetails,AppBar, Toolbar, Card,Button, Avatar, TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -17,17 +17,21 @@ const CoursePage = () => {
     const {id} = useParams();
     const {authUser} = useSelector(state => state.auth);
     const query = new URLSearchParams(useLocation().search);
+    const hashParam = useLocation()?.hash;
     const history = useHistory();
     const dispatch = useDispatch();
     const {syllabus, isSyllabusLoading} = useSelector((state)=>(state.dashboard));
-    const {isFeedLoading, feed, isOverviewLoading, overview} = useSelector((state)=>(state.other));
-    const [tab, setTab] = useState(query.get('v')==='overview'? 'levels' : query.get('v')==='rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
+    const {isFeedLoading, feed, isOverviewLoading, overview, totalFeedPages} = useSelector((state)=>(state.other));
+    const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
     const [page, setPage] = useState(Number(query.get('page'))||1);
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
-    
     useEffect(()=>{
-            dispatch(getCourseData(id.trim(), 'overview'));
+        dispatch(getCourseData(id.trim(), 'overview'));
+        return () => {
+            dispatch({type:'CLEAR_FEED'});
+            dispatch({type:'CLEAR_OVERVIEW'});
+        }
     },[id]);
 
     useEffect(() => {
@@ -38,16 +42,30 @@ const CoursePage = () => {
         }
     }, [tab, page, searchTitle]);
 
+    const handleShare = () => {
+        try {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard successfully.!")
+        } catch (error) {
+            alert("Coud'nt copy link to clipboard :(")
+        }
+    }
+
     return (
         <div>
         <Navbar/>
-        <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212'}}>
+        <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
         <div>
         {/* HERO STARTS HERE */}
         <Paper square elevation={0} sx={{maxWidth:'1300px', display:'grid', gridTemplateColumns: '1fr 1fr',width:'100%'}}>
-            <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center'}}>
+            <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:'350px'}}>
+            { isOverviewLoading ? <div>
+                <Skeleton variant='text' variant='rectangular' height='350px' width='600px' animation='wave' sx={{borderRadius:'12px'}} />
+            </div> :
             <div style={{maxWidth:'600px'}}>   
-                <IconButton sx={{position:'absolute',right :'20px',top:'90px',color:'primary.light'}} ><ShareIcon/></IconButton>
+                <IconButton sx={{position:'absolute',right :'20px',top:'90px',color:'primary.light'}} onClick={handleShare}>
+                    <ShareIcon/>
+                </IconButton>
                 <Typography variant='button' sx={{paddingLeft: '10px',color:'primary.light'}}>course&nbsp;&nbsp;&#8226;&nbsp;&nbsp;{overview?.domainName}</Typography>
                 <Typography variant='h2' fontWeight='600' sx={{color:'primary.main'}}>
                     {overview?.courseCode}
@@ -63,9 +81,16 @@ const CoursePage = () => {
                 <Divider/>
                 <br/>
                 <Typography variant='body2' sx={{paddingLeft: '10px',color:'primary.light'}}>{overview?.caption}</Typography>
-            </div>
+            </div>}
             </Paper>
             <Paper square elevation={0} sx={{padding:'85px 30px 20px 30px', maxHeight:'350px',overflowY:'auto'}}>
+            { isOverviewLoading ? 
+            <>
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px'}} />
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px'}} />
+            <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px'}} />
+            </>
+            :
             <Typography variant='body2' lineHeight='26px' component='span' sx={{color:'secondary.light'}}>
             <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px'}} 
                 options={
@@ -80,7 +105,7 @@ const CoursePage = () => {
                 }
             }}>
             {`${overview?.intro}`}
-            </Markdown></Typography>
+            </Markdown></Typography>}
             </Paper>
         </Paper>
         <Divider/>
@@ -95,6 +120,7 @@ const CoursePage = () => {
         </AppBar>}
         {tab==='levels' ? 
         <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>
+        { isSyllabusLoading ? <CircularProgress/> :
         <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr', justifyItems:'center',width:'max-content',gap:'20px'}} >
         { syllabus?.levels?.map((lvl)=>(
         <div key={lvl?.levelNo} style={{maxWidth:'500px'}}>
@@ -130,19 +156,21 @@ const CoursePage = () => {
         })}
             </div>
         ))}
-        </Box>  
+        </Box>}  
         </Box>  
         :
         <Box display='flex' flexDirection='column' alignItems='center' width='100%' paddingTop='20px'>
         <div style={{maxWidth:'1000px',display:'flex'}}>
-            <TextField value={titleField} onChange={(e)=>(setTitleField(e.target.value))} fullWidth />&nbsp;&nbsp;&nbsp;&nbsp;
+            <TextField placeholder='Search by Title' value={titleField} onChange={(e)=>(setTitleField(e.target.value))} fullWidth />&nbsp;&nbsp;&nbsp;&nbsp;
             <Button onClick={(e)=>(setSearchTitle(titleField))} variant='outlined'><SearchIcon/></Button>
         </div><br/>
-        {isFeedLoading ? 
-        <CircularProgress/> : 
+        {isFeedLoading ?
+        <CircularProgress/>
+         : feed?.length===0 ? 
+        <TextField>There are no Resource Articles for this Course yet.</TextField> :
         <Box display='grid' gridTemplateColumns='1fr 1fr' gap='20px' maxWidth='1000px'>
         {feed?.map((p)=>(
-            <Card variant='outlined' sx={{width:'400px',paddingLeft: '12px'}}>
+        <Card key={p?.slug} variant='outlined' sx={{width:'400px',paddingLeft: '12px'}}>
             <Typography variant='h6'>{p?.title}</Typography>
             <Typography style={{color:'#c4c4c4', display:'flex',alignItems:'center',marginTop:'8px'}} variant='caption'>
                 <Avatar src={p?.authorImage} alt={p?.authorName} sx={{width:'25px',height:'25px'}}/>&nbsp;&nbsp;&nbsp;
@@ -155,7 +183,12 @@ const CoursePage = () => {
                 Read
             </Button>&nbsp;&nbsp;</div>
         </Card>
-        ))}</Box>}
+        ))}
+        </Box>}
+        <br/><br/>
+        <Pagination count={totalFeedPages} variant="outlined" page={page} 
+        color="secondary" onChange={(e, page)=>(setPage(page))}
+        style={{justifySelf:'center'}}/>
         </Box>}
         <br/><br/><br/>
         </div>

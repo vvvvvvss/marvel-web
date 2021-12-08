@@ -24,4 +24,4 @@ export const toggleSub = async (course, level) => API.post(`/action/togglesub/${
 export const search = async (type, domain, title, courseCode, authorName, authorSlug) => (
     API.get(`/search/${type}?domain=${domain || ''}&title=${title || ''}&coursecode=${courseCode || ''}&authorName=${authorName || ''}&authorslug=${authorSlug}`)
 );
-export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title}`);
+export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title || 'none'}`);
