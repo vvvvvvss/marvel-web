@@ -35,6 +35,8 @@ export const getProfile = async(req, res)=>{
         let returnedProfile;
         if(scope==='dashboard'){
             returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id').exec();
+        }else if(scope==='page'){
+            returnedProfile = await user.findOne({slug: id})
         }
         if(!returnedProfile) return res.json({status : '404'});
         
