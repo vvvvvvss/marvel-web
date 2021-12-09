@@ -34,15 +34,18 @@ export const getProfile = async(req, res)=>{
 
         let returnedProfile;
         if(scope==='dashboard'){
-            returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id').exec();
+            returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id enrollmentStatus').exec();
         }else if(scope==='page'){
             returnedProfile = await user.findOne({slug: id})
+            .select("-_id slug name profilePic id currentRole currentStuCourse currentInsCourse currentLevel bio gitHub website linkedIn enrollmentStatus")
         }
-        if(!returnedProfile) return res.json({status : '404'});
+        if((!returnedProfile || returnedProfile?.enrollmentStatus==='UNKNOW')|| 
+        returnedProfile?.enrollmentStatus==='BANNED') return res.json({status : '404'});
         
         return res.json({profile : returnedProfile, status : '200'});
     } catch (error) {
         console.log(error);
+        return res.json({message:'Something went wrong :(',status:'BRUH'})
     }
 }
 

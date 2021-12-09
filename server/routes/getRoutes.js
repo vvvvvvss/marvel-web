@@ -16,5 +16,4 @@ router.get('/rsa/:id', identityMW, getRsa);
 router.get('/toreview/pr', identityMW, getToReviewPrs);
 router.get('/toreview/blog', identityMW, getToReviewBlogs);
 
-
 export default router;

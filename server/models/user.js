@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     name: { type: String, required:  true },
     email: { type: String, required: true },
     profilePic : {type : String},
-    regNo : { type : String },
+    marvelId : { type : String },
     id: { type: String, required : true,unique:true },
 
     // META DATA ( changes. auto )

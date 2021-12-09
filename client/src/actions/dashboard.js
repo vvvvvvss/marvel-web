@@ -12,14 +12,14 @@ export const getCourseData=(courseCode, scope) => async(dispatch)=>{
 }
 
 export const getProfileData=(id, scope)=>async(dispatch)=>{
-    dispatch({type : 'START_PROFILE_LOADING'});
+    dispatch({type : `START_${scope==='page'?'OVERVIEW':'PROFILE'}_LOADING`});
     try {
         const {data} = await API.getProfileData(id,scope);
         if(data?.status==='200'){
-            dispatch({type : 'GET_PROFILE', payload : data?.profile});
+            dispatch({type : `GET_${scope==='page'?'OVERVIEW':'PROFILE'}`, payload : data?.profile});
         }else{alert("Something went wrong at profile widget.")};
     } catch (error) { }
-    dispatch({type:'END_PROFILE_LOADING'});
+    dispatch({type : `END_${scope==='page'?'OVERVIEW':'PROFILE'}_LOADING`});
 }
 
 export const updateProfile=(id, newProfile)=>async(dispatch)=>{
