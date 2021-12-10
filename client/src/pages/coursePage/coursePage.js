@@ -167,7 +167,7 @@ const CoursePage = () => {
         {isFeedLoading ?
         <CircularProgress/>
          : feed?.length===0 ? 
-        <TextField>There are no Resource Articles for this Course yet.</TextField> :
+        <TextField variant="h6" fontWeight='600' color='#808080'>There are no Resource Articles for this Course yet.</TextField> :
         <Box display='grid' gridTemplateColumns='1fr 1fr' gap='20px' maxWidth='1000px'>
         {feed?.map((p)=>(
         <Card key={p?.slug} variant='outlined' sx={{width:'400px',paddingLeft: '12px'}}>

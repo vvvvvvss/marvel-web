@@ -1,4 +1,4 @@
-import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, Card, TextField } from "@mui/material";
+import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, Card, TextField, Skeleton, Pagination } from "@mui/material";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,13 +18,11 @@ const ProfilePage = () => {
     const query = new URLSearchParams(location?.search);
     const {id} = useParams();
     const dispatch = useDispatch();
-    const {overview, isOverviewLoading} = useSelector(state => state.other);
-    const {feed, isFeedLoading} = useSelector(state=>state.other);
-    const [tab, setTab] = useState(['#pr','#blog','#cert'].includes(location?.hash) ? location?.hash?.slice(1) : 'pr');
+    const {overview, isOverviewLoading,feed, isFeedLoading, totalFeedPages} = useSelector(state => state.other);
+    const [tab, setTab] = useState(['#pr','#blog','#cert','#rsa'].includes(location?.hash) ? location?.hash?.slice(1) : 'blog');
     const [page, setPage] = useState(query.get('page')||1);
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
-
     useEffect(() => {
         dispatch(getProfileData(id, 'page'));
     }, [id])
@@ -32,12 +30,6 @@ const ProfilePage = () => {
     useEffect(()=>{
         dispatch(getProfileFeed(id, tab, page, searchTitle));
     }, [id, tab, page, searchTitle]);
-
-    const colorDecide = (status) => {
-        if(status==='PENDING') return 'warning';
-        else if (status==='FLAGGED') return 'error';
-        else if (status==='APPROVED' || 'FEATURED') return 'success';
-    }
 
     const handleShare = () => {
         try {
@@ -56,7 +48,9 @@ const ProfilePage = () => {
     <div style={{maxWidth:'1300px',width:'100%'}}>
         <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 20px', minHeight:'300px',
         display:'flex',maxHeight:'350px',maxWidth:'1300px',width:'100%', justifyContent:'center',alignItems:'center'}}>
-        <Box maxWidth='400px' padding='0px 20px 0px 0px' display='grid' gridTemplateColumns='1fr 4fr' gap='10px' width='100%' justifyContent='right' position='relative'> 
+        {isOverviewLoading ? 
+        <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 20px 0px 0px'}}/> :
+        <Box maxWidth='400px' padding='0px 20px 0px 0px' display='grid' gridTemplateColumns='1fr 4fr' gap='10px' width='100%' position='relative'> 
         <IconButton onClick={handleShare} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
         <Avatar src={overview?.profilePic} sx={{width: '60px', height:'60px'}}/> 
         <div>
@@ -88,24 +82,26 @@ const ProfilePage = () => {
             <IconButton link href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website==="" ? true:false}  sx={{color:'secondary.main'}}><LanguageIcon/></IconButton>
         </span>
         </div>
-        </Box >
+        </Box >}
         <Divider orientation="vertical" flexItem sx={{justifySelf:'center'}}/>
+        {isOverviewLoading ? 
+        <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 0px 0px 20px'}}/> :
         <Box maxWidth='400px' padding='0px 0px 0px 20px' width='100%' >
             <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
-            <Typography variant="h2" lineHeight='1px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px'}} >&ldquo;</Typography>
+            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px'}} >&ldquo;</Typography>
             <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio}</Typography>
-            <Typography variant="h2" lineHeight='1px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px'}} >&rdquo;</Typography>
+            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px'}} >&rdquo;</Typography>
             </div>
-        </Box>
+        </Box>}
         </Paper>
         <Divider/>
         <AppBar position="sticky" sx={{background:'#1a1a1a'}}>
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
             <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))} >
-            <Tab label="PRs" value='pr'/>
             <Tab label="Blog" value='blog'/>
-            <Tab label="Certificates" value='cert'/>
+            <Tab label="PRs" value='pr'/>
             <Tab label="Res Articles" value='rsa'/>
+            <Tab label="Certificates" value='cert'/>
             </Tabs>  
         </Toolbar>
         </AppBar>
@@ -115,7 +111,8 @@ const ProfilePage = () => {
         <Button onClick={(e)=>(setSearchTitle(titleField))} variant='outlined'><SearchIcon/></Button>
         </span>
         <br/><br/>
-        {isFeedLoading ? <CircularProgress/> : 
+        {isFeedLoading ? <CircularProgress/> : feed?.length===0 ? 
+        <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
         <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr',gap:'20px'}}>
         {feed?.map((p)=>(
         <>
@@ -145,7 +142,10 @@ const ProfilePage = () => {
         ))}
         </Box>
         }
-
+        <br/><br/>
+        <Pagination count={totalFeedPages} variant="outlined" page={page} 
+        color="secondary" onChange={(e, page)=>(setPage(page))}
+        style={{justifySelf:'center'}}/>
         </Box>
     </div>
     </Paper>
