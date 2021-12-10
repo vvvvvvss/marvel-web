@@ -25,3 +25,4 @@ export const search = async (type, domain, title, courseCode, authorName, author
     API.get(`/search/${type}?domain=${domain || ''}&title=${title || ''}&coursecode=${courseCode || ''}&authorName=${authorName || ''}&authorslug=${authorSlug}`)
 );
 export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title || 'none'}`);
+export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/profile/${tab}/${id}?page=${page}&title=${title || 'none'}`);

@@ -110,7 +110,7 @@ const CoursePage = () => {
         </Paper>
         <Divider/>
         { authUser?.enrollmentStatus!=='UNKNOWN'&&
-        <AppBar position='sticky' sx={{background:'#181818',minHeight:'0px'}}> 
+        <AppBar position='sticky' sx={{background:'#181818'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
         <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
         <Tab label="Levels" value='levels'/>

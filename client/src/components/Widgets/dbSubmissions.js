@@ -48,7 +48,7 @@ const DbSubmissions = () => {
         <div key={sub?.slug}> 
         <Card variant='outlined'>
             <Typography variant='body1'>{sub?.title}</Typography>
-            <br style={{height:'5px'}} />
+            <br/>
             <Typography style={{color:'#c4c4c4'}} variant='caption'>
                 {(tab==='pr' || tab==='rsa') && 
                 <><span>{`${tab==='pr'?'Level':''} ${sub?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>

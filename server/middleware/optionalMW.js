@@ -20,7 +20,7 @@ try {
             {$project : {bio : 0,gitHub:0,linkedIn:0,website:0}}
         ]);
 
-        if(existingUser?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
+        if(existingUser[0]?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
 
         if(!existingUser[0] || existingUser[0]?.enrollmentStatus==='UNKNOWN'){
             req.user = null; next();

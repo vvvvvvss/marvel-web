@@ -37,7 +37,7 @@ export const getProfile = async(req, res)=>{
             returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id enrollmentStatus').exec();
         }else if(scope==='page'){
             returnedProfile = await user.findOne({slug: id})
-            .select("-_id slug name profilePic id currentRole currentStuCourse currentInsCourse currentLevel bio gitHub website linkedIn enrollmentStatus")
+            .select("-_id slug name profilePic id currentRole currentStuCourse currentInsCourse currentLevel bio gitHub website linkedIn enrollmentStatus").exec();
         }
         if((!returnedProfile || returnedProfile?.enrollmentStatus==='UNKNOW')|| 
         returnedProfile?.enrollmentStatus==='BANNED') return res.json({status : '404'});
