@@ -19,14 +19,14 @@ export const getRsaByCourse = async (req, res) => {
 
 export const getPrByProfile = async (req, res) => {
     try {
-        const titleQuery = req.query?.title==='none'||!req.query.title ? new RegExp("",'i') : new RegExp(req.query.title,'i')
+        const titleQuery = (req.query?.title==='none'||!req.query?.title) ? new RegExp("",'i') : new RegExp(req.query.title,'i');
         let feed;
         if(req?.user?.slug===req.params?.id){
-            feed = await prs.find({authorSlug : req.params?.id})
+            feed = await prs.find({$and:[{authorSlug : req.params?.id},{title: titleQuery}]})
             .sort({_id:-1})
             .skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         }else{
-            feed = await prs.find({$and : [{authorSlug : req.params?.id},{reviewStatus:'APPROVED'}]})
+            feed = await prs.find({$and : [{authorSlug : req.params?.id},{reviewStatus:'APPROVED'},{title : titleQuery}]})
             .sort({_id:-1})
             .skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         }
@@ -41,11 +41,13 @@ export const getPrByProfile = async (req, res) => {
 export const getBlogByProfile = async (req, res) => {
     try {
         let feed;
+        const titleQuery = (req.query?.title==='none'||!req.query?.title) ? new RegExp("",'i') : new RegExp(req.query.title,'i');
         if(req?.user?.slug===req.params.id){
-            feed = await blog.find({authorSlug:req.params.id}).sort({_id:-1})
+            feed = await blog.find({$and : [{authorSlug:req.params.id},{title:titleQuery}]}).sort({_id:-1})
                     .skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         }else{
-            feed = await blog.find({$and : [{authorSlug:req.params.id},{reviewStatus:'APPROVED'}]}).sort({_id:-1})
+            feed = await blog.find({$and : [{authorSlug:req.params.id},{reviewStatus:'APPROVED'},{title : titleQuery}]})
+            .sort({_id:-1})
             .skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         }
         return res.json({status:'200',feed:feed});
@@ -57,7 +59,8 @@ export const getBlogByProfile = async (req, res) => {
 
 export const getRsaByProfile = async (req, res) => {
     try {
-        const feed = await rsa.find({authorSlug:req.params.id}).sort({_id:-1})
+        const titleQuery = (req.query?.title==='none'||!req.query?.title) ? new RegExp("",'i') : new RegExp(req.query.title,'i');
+        const feed = await rsa.find({$and : [{authorSlug:req.params.id},{title: titleQuery}]}).sort({_id:-1})
         .skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         return res.json({status:'200',feed:feed});
     } catch (error) {
