@@ -18,6 +18,7 @@ const RSASchema = mongoose.Schema({
     content : { type : String, required : true, maxLength : 10000},
     tags : { type : [String], default : []},
     
+    rankingScore:{type: Number, default:1}
 },{timestamps:true});
 
 export default mongoose.model("resourceArticles", RSASchema);

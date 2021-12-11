@@ -135,26 +135,26 @@ const Navbar = () => {
                     <ListItemText>Dashboard</ListItemText>
                 </ListItemButton>
                 <Divider/></>}
+                <ListItemButton onClick={()=>(history.push("/search"))}>
+                    <ListItemIcon><SearchIcon/></ListItemIcon>
+                    <ListItemText>Search</ListItemText>
+                </ListItemButton>
                 <ListItemButton onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><SearchIcon/></ListItemIcon>
-                            <ListItemText>Search</ListItemText>
-                        </ListItemButton>
-                        <ListItemButton onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><BookIcon/></ListItemIcon>
-                            <ListItemText>Explore Courses</ListItemText>
-                        </ListItemButton>
-                        <ListItemButton onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><NewspaperIcon/></ListItemIcon>
-                            <ListItemText>Explore Blog</ListItemText>
-                        </ListItemButton>
-                        <ListItemButton onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><AssignmentIcon/></ListItemIcon>
-                            <ListItemText>Explore PRs</ListItemText>
-                        </ListItemButton>
-                        <ListItemButton onClick={()=>(console.log('profile'))}>
-                            <ListItemIcon><InfoIcon/></ListItemIcon>
-                            <ListItemText>About</ListItemText>
-                        </ListItemButton>
+                    <ListItemIcon><BookIcon/></ListItemIcon>
+                    <ListItemText>Explore Courses</ListItemText>
+                </ListItemButton>
+                <ListItemButton onClick={()=>(console.log('profile'))}>
+                    <ListItemIcon><NewspaperIcon/></ListItemIcon>
+                    <ListItemText>Explore Blog</ListItemText>
+                </ListItemButton>
+                <ListItemButton onClick={()=>(console.log('profile'))}>
+                    <ListItemIcon><AssignmentIcon/></ListItemIcon>
+                    <ListItemText>Explore PRs</ListItemText>
+                </ListItemButton>
+                <ListItemButton onClick={()=>(console.log('profile'))}>
+                    <ListItemIcon><InfoIcon/></ListItemIcon>
+                    <ListItemText>About</ListItemText>
+                </ListItemButton>
                 </List>
             <footer>
                 <Divider/>

@@ -67,7 +67,7 @@ export const getRsaByProfile = async (req, res) => {
     try {
         const titleQuery = (req.query?.title==='none'||!req.query?.title) ? new RegExp("",'i') : new RegExp(req.query.title,'i');
         const feed = await rsa.find({$and : [{authorSlug:req.params.id},{title: titleQuery}]}).sort({_id:-1})
-        .skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
+        .skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -rankingScore").lean().exec();
         const total = await rsa.countDocuments({$and : [{authorSlug:req.params.id},{title: titleQuery}]}).lean().exec();
         
         return res.json({status:'200',feed:feed, total : Math.ceil(total/8)});

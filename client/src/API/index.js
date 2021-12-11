@@ -21,8 +21,8 @@ export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/torev
 export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
 export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);
 export const toggleSub = async (course, level) => API.post(`/action/togglesub/${course}?level=${level}`);
-export const search = async (type, domain, title, courseCode, authorName, authorSlug) => (
-    API.get(`/search/${type}?domain=${domain || ''}&title=${title || ''}&coursecode=${courseCode || ''}&authorName=${authorName || ''}&authorslug=${authorSlug}`)
+export const getSearchFeed = async (type, domain, title, courseCode, authorName, tags, page) => (
+    API.get(`/search/${type}?domain=${domain || 'none'}&title=${title || 'none'}&courseCode=${courseCode || 'none'}&authorName=${authorName || 'none'}&tags=${tags || 'none'}&page=${page || 1}`)
 );
 export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title || 'none'}`);
 export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/profile/${tab}/${id}?page=${page}&title=${title || 'none'}`);

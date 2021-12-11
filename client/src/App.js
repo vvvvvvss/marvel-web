@@ -8,6 +8,7 @@ import InsDashboard from './pages/InsDashboard/InsDashboard.js';
 import { useSelector } from 'react-redux';
 import CoursePage from './pages/coursePage/coursePage.js';
 import ProfilePage from './pages/profilePage/ProfilePage.js';
+import Search from './pages/search/Search.js';
 
 const App = ()=> {
 
@@ -34,6 +35,7 @@ const App = ()=> {
             }/>
             <Route path="/course/:id" exact component={CoursePage} />
             <Route path="/profile/:id" exact component={ProfilePage} />
+            <Route path="/search" exact component={Search}/>
         </Switch>
       </ThemeProvider>
     </div>
