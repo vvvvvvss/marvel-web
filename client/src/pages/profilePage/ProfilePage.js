@@ -1,4 +1,4 @@
-import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, Card, TextField, Skeleton, Pagination } from "@mui/material";
+import { Typography, Paper, Divider, Avatar,CardActions, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, Card, TextField, Skeleton, Pagination, CardMedia, CardContent, CardActionArea } from "@mui/material";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,10 +31,15 @@ const ProfilePage = () => {
         dispatch(getProfileFeed(id, tab, page, searchTitle));
     }, [id, tab, page, searchTitle]);
 
-    const handleShare = () => {
+    const handleShare = (slug) => {
         try {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard successfully.!");
+        if(!slug){
+            navigator.clipboard.writeText(window.location.href);
+            alert("Profile Link copied to clipboard successfully.!");
+        }else{
+            navigator.clipboard.writeText(`${window.location.origin}/${tab}/${slug}`);
+            alert("Link copied to clipboard!")
+        }
         } catch (error) {
             alert("Coud'nt copy link to clipboard :(");
         }
@@ -51,15 +56,15 @@ const ProfilePage = () => {
         {isOverviewLoading ? 
         <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 20px 0px 0px'}}/> :
         <Box maxWidth='400px' padding='0px 20px 0px 0px' display='grid' gridTemplateColumns='1fr 4fr' gap='10px' width='100%' position='relative'> 
-        <IconButton onClick={handleShare} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
+        <IconButton onClick={()=>handleShare('')} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
         <Avatar src={overview?.profilePic} sx={{width: '60px', height:'60px'}}/> 
         <div>
             <Typography variant="h6">{overview?.name}</Typography> 
             {overview?.currentRole==='STU' ? 
             <>
             <Typography variant='caption' sx={{color: 'primary.light'}}>STUDENT</Typography>
-            <br/>
-            <Chip label={overview?.currentStuCourse} variant="filled" color='secondary' clickable/>
+            <br/><br/><Divider/><br/>
+            <Chip label={overview?.currentStuCourse} variant="outlined" color='secondary' size='small' clickable/>
             </>
             : overview?.currentRole==='INS' ? 
             <>
@@ -77,9 +82,9 @@ const ProfilePage = () => {
             }<br/><br/>
             <Divider/><br/>
         <span>
-            <IconButton link href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub==="" ? true:false}  sx={{color:'secondary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton link href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn==="" ? true:false}  sx={{color:'secondary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton link href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website==="" ? true:false}  sx={{color:'secondary.main'}}><LanguageIcon/></IconButton>
+            <IconButton link href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
+            <IconButton link href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
+            <IconButton link href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
         </span>
         </div>
         </Box >}
@@ -115,30 +120,40 @@ const ProfilePage = () => {
         <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
         <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr',gap:'20px'}}>
         {feed?.map((p)=>(
+        <div key={p?.slug}>
+        <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative'}}>
+        {["blog","cert"].includes(tab) && 
         <>
-        <Card variant='outlined' sx={{width:'400px', paddingLeft:'12px'}}>
-            <Typography variant='h6'>{p?.title}</Typography>
-            <br/>
-            <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                {(tab==='pr' || tab==='rsa') && 
-                <><span>{`${tab==='pr'?'Level':''} ${p?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>
-                &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
-                <span>{moment(p?.updatedAt).fromNow()}</span>
-            </Typography>
-            <br/><br/>
-            <span style={{display:'flex',justifyContent:'space-between'}}>
+        <IconButton onClick={()=>handleShare(p?.slug)}
+        sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
+            <CardMedia
+            component="img"
+            height="100%" sx={{maxHeight:'150px',objectFit:'cover'}}
+            image={tab==='blog'? p?.coverPhoto: p?.certImage}
+            alt={p?.title}
+            /></>}
+            <CardContent>
+               <Typography variant='h6'>{p?.title}</Typography>
+                <Typography style={{color:'#c4c4c4'}} variant='caption'>
+                    <span>{p?.authorName}</span>&nbsp;&nbsp; &#8226; &nbsp;&nbsp;
+                    {(tab==='pr' || tab==='rsa') && 
+                    <><span>{`${tab==='pr'?'Level':''} ${p?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>
+                    &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
+                    <span>{moment(p?.updatedAt).fromNow()}</span>
+                </Typography>
+            </CardContent>
+            <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end'}}>
             {((tab==='pr'||tab==='blog')&&p?.reviewStatus==='PENDING') &&
-            <Chip label={p?.reviewStatus} color={'warning'} size='small' variant='filled'/> 
+            <Chip label={p?.reviewStatus} color={'warning'} sx={{justifySelf:'center'}} size='small' variant='filled'/> 
             }
-            <div>
-            <Button variant='text' color='secondary' size='small' > view
+            {["pr","rsa"].includes(tab)&& 
+            <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
+            </Button>}&nbsp;&nbsp;
+            <Button variant='text' color='secondary' size='small'> READ
             </Button>&nbsp;&nbsp;
-            <Button variant='text' color='secondary' size='small' > edit
-            </Button>
-            </div>
-            </span>
+            </CardActions>
         </Card>
-        </>
+        </div>
         ))}
         </Box>
         }
