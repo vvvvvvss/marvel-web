@@ -126,7 +126,7 @@ export const getPR = async (req, res) => {
                 return res.json({post : returnedPr,status:'200'});
             }
         }else{
-            return res.json({post : {...returnedPr, feedback:null,reviewStatus:null}, status:'200'});
+            return res.json({post : returnedPr, status:'200'});
         }
     } catch (error) {
         console.log(error);

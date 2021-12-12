@@ -80,6 +80,7 @@ export const getRsaByProfile = async (req, res) => {
 export const getCertByProfile = async (req, res) => {
     try {
         ///getting certificates
+        return res.json({status:'200',feed:[],total:1})
     } catch (error) {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('});

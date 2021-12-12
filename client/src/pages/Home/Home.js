@@ -20,13 +20,9 @@ return (
             our Blogs, Stories, Syllabus etc. If you are expecting Dashboard access, contact us.
             </Alert>
         }
-        { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
-        <Button variant='contained' color='primary' onClick={()=>(history.push('/dashboard'))}>
-            Go to Dashboard
-        </Button>
-        }
+       <br/>
         {/* top hero  */}
-        <br/>
+        <Box sx={{display: 'flex', justifyContent:'space-evenly',alignItems:'center', transition:'300ms',width:'100%',marginTop:'30px'}}>
         {/* logo  */}
         <Box sx={{padding:'30px 30px 30px 30px',width:'100%',position:'relative',maxWidth:'300px'}}>
         <img src={'https://i.imgur.com/SXKFsOc.png'} alt='uvce marvel' style={{maxHeight :'300px',position:'absolute'}}/>
@@ -35,6 +31,12 @@ return (
             <Typography variant='h4' sx={{color:'secondary.light',fontSize:{xs:'24px',sm:'h1'}}}>Maker's space for advanced research and vital education and learning</Typography>
             <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'30px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
         </Box>
+        </Box>
+        { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
+        <Button variant='contained' color='primary' onClick={()=>(history.push('/dashboard'))}>
+            Go to Dashboard
+        </Button>
+        }
         </Box>
         {/* something  */}
     </Box>

@@ -101,9 +101,9 @@ const ProfilePage = () => {
         <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 0px 0px 20px'}}/> :
         <Box maxWidth='400px' padding='0px 0px 0px 20px' width='100%' >
             <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
-            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px'}} >&ldquo;</Typography>
+            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
             <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio}</Typography>
-            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px'}} >&rdquo;</Typography>
+            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
             </div>
         </Box>}
         </Paper>
@@ -129,7 +129,7 @@ const ProfilePage = () => {
         <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr',gap:'20px'}}>
         {feed?.map((p)=>(
         <div key={p?.slug}>
-        <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative'}}>
+        <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative', opacity:`${["PENDING","FLAGGED"].includes(p?.reviewStatus) ? '0.4':'1'}`}}>
         {["blog","cert"].includes(tab) && 
         <>
         <IconButton onClick={()=>handleShare(p?.slug)}
@@ -141,7 +141,7 @@ const ProfilePage = () => {
             alt={p?.title}
             /></>}
             <CardContent>
-               <Typography variant='h6'>{p?.title}</Typography>
+               <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>{p?.title}</Typography>
                 <Typography style={{color:'#c4c4c4'}} variant='caption'>
                     <span>{p?.authorName}</span>&nbsp;&nbsp; &#8226; &nbsp;&nbsp;
                     {(tab==='pr' || tab==='rsa') && 
@@ -150,9 +150,9 @@ const ProfilePage = () => {
                     <span>{moment(p?.updatedAt).fromNow()}</span>
                 </Typography>
             </CardContent>
-            <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end'}}>
-            {((tab==='pr'||tab==='blog')&&p?.reviewStatus==='PENDING') &&
-            <Chip label={p?.reviewStatus} color={'warning'} sx={{justifySelf:'center'}} size='small' variant='filled'/> 
+            <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end', width:'100%',position:'relative'}}>
+            {((tab==='pr'||tab==='blog')&&p?.reviewStatus==='PENDING'||p?.reviewStatus==='FLAGGED') &&
+            <Chip label={p?.reviewStatus} color={'warning'} sx={{position:'absolute',left:'12px',bottom:'12px'}} size='small' variant='filled'/> 
             }
             {["pr","rsa"].includes(tab)&& 
             <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share

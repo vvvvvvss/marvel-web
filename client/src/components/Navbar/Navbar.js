@@ -106,7 +106,7 @@ const Navbar = () => {
                     <ListItemText>My profile</ListItemText>
                 </ListItemButton>
                 { authUser?.currentRole==='STU' ? 
-                <ListItemButton onClick={()=>(console.log('profile'))}>
+                <ListItemButton onClick={()=>(history.push(`/course/${authUser?.currentStuCourse}#rsa`))}>
                     <ListItemIcon><BookIcon/></ListItemIcon>
                     <ListItemText>My Course
                     </ListItemText>
@@ -143,10 +143,10 @@ const Navbar = () => {
                     <ListItemIcon><AutoAwesomeIcon/></ListItemIcon>
                     <ListItemText>Explore (coming soon)</ListItemText>
                 </ListItemButton>
-                <ListItemButton onClick={()=>(console.log('profile'))}>
+                {/* <ListItemButton onClick={()=>(console.log('profile'))}>
                     <ListItemIcon><NewspaperIcon/></ListItemIcon>
                     <ListItemText>Blog</ListItemText>
-                </ListItemButton>
+                </ListItemButton> */}
                 <ListItemButton onClick={()=>(history.push("/about"))}>
                     <ListItemIcon><InfoIcon/></ListItemIcon>
                     <ListItemText>About</ListItemText>
