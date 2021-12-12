@@ -72,7 +72,7 @@ const ProfilePage = () => {
             <br/><br/><Divider/><br/>
             <span>
             {overview?.currentInsCourse?.map((c)=>(
-            <Link to={`/course/${c}`} style={{textDecoration:'none',  marginTop:'8px'}}>
+            <Link key={c} to={`/course/${c}`} style={{textDecoration:'none',  marginTop:'8px'}}>
             <Chip label={c} key={c} variant="outlined" color='secondary' size='small' clickable/>&nbsp;&nbsp;&nbsp;&nbsp;
             </Link>
             ))}
@@ -82,9 +82,9 @@ const ProfilePage = () => {
             }<br/><br/>
             <Divider/><br/>
         <span>
-            <IconButton link href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton link href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton link href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
+            <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
+            <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
+            <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
         </span>
         </div>
         </Box >}
@@ -149,8 +149,11 @@ const ProfilePage = () => {
             {["pr","rsa"].includes(tab)&& 
             <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
             </Button>}&nbsp;&nbsp;
+            <Link to={`/${tab}/${p?.slug}`} style={{textDecoration:'none'}}>
             <Button variant='text' color='secondary' size='small'> READ
-            </Button>&nbsp;&nbsp;
+            </Button>
+            </Link>
+            &nbsp;&nbsp;
             </CardActions>
         </Card>
         </div>

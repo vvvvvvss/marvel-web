@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import CoursePage from './pages/coursePage/coursePage.js';
 import ProfilePage from './pages/profilePage/ProfilePage.js';
 import Search from './pages/search/Search.js';
+import PostPage from './pages/PostPage/PostPage.js';
 
 const App = ()=> {
 
@@ -36,6 +37,9 @@ const App = ()=> {
             <Route path="/course/:id" exact component={CoursePage} />
             <Route path="/profile/:id" exact component={ProfilePage} />
             <Route path="/search" exact component={Search}/>
+            <Route path="/pr/:id" exact component={()=>(<PostPage viewPostType="pr"/>)}/>
+            <Route path="/blog/:id" exact component={()=>(<PostPage viewPostType="blog"/>)}/>
+            <Route path="/rsa/:id" exact component={()=>(<PostPage viewPostType="rsa"/>)}/>
         </Switch>
       </ThemeProvider>
     </div>

@@ -115,7 +115,7 @@ export const getPR = async (req, res) => {
             returnedPr = await prs.findOne({slug : id}).lean().exec();
             returnedPr.totalLevels = (await course.findOne({courseCode : returnedPr?.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         } else {
-            returnedPr = await prs.findOne({slug : id}).lean();
+            returnedPr = await prs.findOne({slug : id}).lean().exec();
         };
 
         if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
@@ -126,7 +126,7 @@ export const getPR = async (req, res) => {
                 return res.json({post : returnedPr,status:'200'});
             }
         }else{
-            return res.json({post : {...returnedPr, feedback:null}, status:'200'});
+            return res.json({post : {...returnedPr, feedback:null,reviewStatus:null}, status:'200'});
         }
     } catch (error) {
         console.log(error);
@@ -137,7 +137,7 @@ export const getPR = async (req, res) => {
 export const getBlog = async (req, res) => {
     try {
         const {id} = req.params;
-        const returnedBlog = await blogs.findOne({slug : id}).lean();
+        const returnedBlog = await blogs.findOne({slug : id}).lean().exec();
         if(!returnedBlog) return res.json({message:'That does not exist',status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedBlog?.reviewStatus)){
             if(!req.user)return res.json({status:'404'});
@@ -146,7 +146,7 @@ export const getBlog = async (req, res) => {
                  return res.json({post : returnedBlog, status:'200'});
              }
         }else{
-            return res.json({post:{...returnedBlog, feedback:null}, status:'200'});
+            return res.json({post:{...returnedBlog, feedback:null, reviewStatus:null}, status:'200'});
         }
     } catch (error) {
         console.log(error);
@@ -157,8 +157,7 @@ export const getBlog = async (req, res) => {
 export const getRsa = async (req, res) => {
     try {
         const {id} = req.params;
-        if(!req.user.enrollmentStatus==='ACTIVE')return res.json({status:'404', message:'Access denied.'})
-        const returnedRsa = await rsa.findOne({slug : id}).lean();
+        const returnedRsa = await rsa.findOne({slug : id}).lean().exec();
         if(!returnedRsa) return res.json({status:'404', message:'It does not exist'});
         return res.json({post : returnedRsa, status:'200'});
     } catch (error) {

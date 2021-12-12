@@ -59,14 +59,14 @@ export const getSubmissions = (tab, page) => async (dispatch) => {
 }
 
 export const getPost = (type, id, scope) => async (dispatch) => {
+    dispatch({type:'START_VIEW_LOADING'});
     try {
-        dispatch({type:'START_VIEW_LOADING'});
         const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
         if(data?.status==='200'){
             dispatch({type : 'GET_VIEW_POST', payload : data?.post});
         }else{alert("Something went wrong whlile retrieving post:(")};
-        dispatch({type : 'END_VIEW_LOADING'});
-    } catch (error) { }
+    } catch (error) {console.log(error)}
+    dispatch({type : 'END_VIEW_LOADING'});
 }
 
 export const editPost = (formData, id, type) => async (dispatch) => {
