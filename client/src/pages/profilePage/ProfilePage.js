@@ -18,17 +18,25 @@ const ProfilePage = () => {
     const query = new URLSearchParams(location?.search);
     const {id} = useParams();
     const dispatch = useDispatch();
+    const {authUser} = useSelector(state => state.auth);
     const {overview, isOverviewLoading,feed, isFeedLoading, totalFeedPages} = useSelector(state => state.other);
     const [tab, setTab] = useState(['#pr','#blog','#cert','#rsa'].includes(location?.hash) ? location?.hash?.slice(1) : 'blog');
     const [page, setPage] = useState(query.get('page')||1);
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
+
     useEffect(() => {
         dispatch(getProfileData(id, 'page'));
+        return ()=>{
+            dispatch({type:'CLEAR_OVERVIEW'});
+        }
     }, [id])
 
     useEffect(()=>{
         dispatch(getProfileFeed(id, tab, page, searchTitle));
+        return ()=>{
+            dispatch({type:'CLEAR_FEED'});
+        }
     }, [id, tab, page, searchTitle]);
 
     const handleShare = (slug) => {
@@ -105,7 +113,7 @@ const ProfilePage = () => {
             <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))} >
             <Tab label="Blog" value='blog'/>
             <Tab label="PRs" value='pr'/>
-            <Tab label="Res Articles" value='rsa'/>
+            {authUser?.id && <Tab label="Res Articles" value='rsa'/>}
             <Tab label="Certificates" value='cert'/>
             </Tabs>  
         </Toolbar>

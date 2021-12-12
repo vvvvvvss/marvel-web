@@ -39,7 +39,7 @@ export const getProfile = async(req, res)=>{
             returnedProfile = await user.findOne({slug: id})
             .select("-_id slug name profilePic id currentRole currentStuCourse currentInsCourse currentLevel bio gitHub website linkedIn enrollmentStatus").exec();
         }
-        if((!returnedProfile || returnedProfile?.enrollmentStatus==='UNKNOW')|| 
+        if((!returnedProfile || returnedProfile?.enrollmentStatus==='UNKNOWN')|| 
         returnedProfile?.enrollmentStatus==='BANNED') return res.json({status : '404'});
         
         return res.json({profile : returnedProfile, status : '200'});

@@ -5,8 +5,8 @@ import user from '../models/user.js';
 const optionalMW = async (req, res, next) => {
 try {
     dotenv.config();
-    const token = req.headers?.authorization?.split(' ')[1];
-    if(!token){ 
+    const token = req.headers?.authorization?.split?.(' ')[1];
+    if(!token || token==='undefined'){ 
         req.user=null; 
         next();
     }else {
@@ -31,7 +31,7 @@ try {
     }
     
 } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }

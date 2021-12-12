@@ -8,8 +8,6 @@ import {getSearchFeed} from '../../actions/other.js';
 import ShareIcon from '@mui/icons-material/Share';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
 
 const Search = () => {
     const {authUser} = useSelector(state => state.auth);

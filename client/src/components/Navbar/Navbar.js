@@ -11,13 +11,13 @@ import { useState } from "react";
 import FaceIcon from '@mui/icons-material/Face';
 import SearchIcon from '@mui/icons-material/Search';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import BookIcon from '@mui/icons-material/AutoStories';
 import InfoIcon from '@mui/icons-material/Info';
 import Dashboard from "@mui/icons-material/Dashboard";
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const Navbar = () => {
     const trigger = useScrollTrigger();
@@ -47,7 +47,7 @@ const Navbar = () => {
             <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
                 <div style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
                 <IconButton size='small' onClick={()=>(setDrawerOpen(true))}><MenuIcon/></IconButton>
-                <Typography variant="h6" component="div">
+                <Typography variant="h6" component="div" onClick={()=>(history.push('/'))} sx={{cursor:'pointer'}}>
                 <span className={styles.uvce}>UVCE&nbsp;</span> <span className={styles.marvel}>MARVEL</span>
                 </Typography>
                 </div>
@@ -94,11 +94,11 @@ const Navbar = () => {
                 <div style={{display:'flex', flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
                     <Avatar src={authUser?.profilePic} sx={{width: '70px',height:'70px',marginBottom:'5px'}}/>
                     <Typography variant='body1' sx={{marginBottom:'8px'}}>{authUser?.name}</Typography>
-                    <Chip label={authUser?.currentRole==='STU' ? 'STUDENT': 'INSTRUCTOR'} variant='outlined' color='primary' size='small'/>
+                    {authUser?.enrollmentStatus!=='UNKNOWN' && <Chip label={authUser?.currentRole==='STU' ? 'STUDENT':authUser?.currentRole==='INS'? 'INSTRUCTOR' :''} variant='outlined' color='primary' size='small'/>}
                     <br/>
                 </div>}
                 <List>
-                {authUser?.id && 
+                {(authUser?.id && authUser?.enrollmentStatus!=='UNKNOWN') &&
                 <>
                 <Divider/>
                 <ListItemButton onClick={()=>(history.push(`/profile/${authUser?.slug}`))}>
@@ -123,7 +123,7 @@ const Navbar = () => {
               <Collapse in={crsListOpen}  timeout="auto" unmountOnExit>
                 <List component="div" disablePadding style={{backgroundColor:'#001C28'}}>
                   {authUser?.currentInsCourse?.map((c)=>(
-                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}`))}>
+                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}#rsa`))}>
                           <ListItemIcon></ListItemIcon>
                           <ListItemText primaryTypographyProps={{variant:'body2'}} >{c}</ListItemText>
                       </ListItemButton>
@@ -139,29 +139,31 @@ const Navbar = () => {
                     <ListItemIcon><SearchIcon/></ListItemIcon>
                     <ListItemText>Search</ListItemText>
                 </ListItemButton>
-                <ListItemButton onClick={()=>(console.log('profile'))}>
-                    <ListItemIcon><BookIcon/></ListItemIcon>
-                    <ListItemText>Explore Courses</ListItemText>
+                <ListItemButton onClick={()=>(console.log('coming soon'))}>
+                    <ListItemIcon><AutoAwesomeIcon/></ListItemIcon>
+                    <ListItemText>Explore (coming soon)</ListItemText>
                 </ListItemButton>
                 <ListItemButton onClick={()=>(console.log('profile'))}>
                     <ListItemIcon><NewspaperIcon/></ListItemIcon>
-                    <ListItemText>Explore Blog</ListItemText>
+                    <ListItemText>Blog</ListItemText>
                 </ListItemButton>
-                <ListItemButton onClick={()=>(console.log('profile'))}>
-                    <ListItemIcon><AssignmentIcon/></ListItemIcon>
-                    <ListItemText>Explore PRs</ListItemText>
-                </ListItemButton>
-                <ListItemButton onClick={()=>(console.log('profile'))}>
+                <ListItemButton onClick={()=>(history.push("/about"))}>
                     <ListItemIcon><InfoIcon/></ListItemIcon>
                     <ListItemText>About</ListItemText>
                 </ListItemButton>
                 </List>
             <footer>
                 <Divider/>
-                <ListItemButton onClick={()=>(console.log('profile'))}>
+                <GoogleLogout 
+                    clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
+                    render={(renderProps) => (
+                <ListItemButton onClick={renderProps.onClick} disabled={renderProps.disabled}>
                             <ListItemIcon><LogoutIcon color='primary'/></ListItemIcon>
                             <ListItemText primaryTypographyProps={{color:'#FFD7EA'}} >Logout</ListItemText>
                 </ListItemButton>
+                    )}
+                    onLogoutSuccess={logout} onFailure={googleError}/>
+                
             </footer>
             </Box>
             
