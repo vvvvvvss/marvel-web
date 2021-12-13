@@ -86,3 +86,12 @@ const aimlCourseData={
         }
     ]
 }
+
+const emaildata = {
+    "name" : "Abhishek Y",
+    "link" : "https://google.com",
+    "courseCode" : "AI-ML-001",
+    "type" : "Project Report",
+    "level" : "1",
+    "insName" : "Marvel web"
+}

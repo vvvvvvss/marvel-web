@@ -12,6 +12,7 @@ import updateRoutes from './routes/updateRoutes.js';
 import createRoutes from './routes/createRoutes.js';
 import cloudinary from 'cloudinary';
 import actionRoutes from './routes/actionRoutes.js';
+import SibApiV3Sdk from 'sib-api-v3-sdk';
 
 const app = express();
 
@@ -27,6 +28,9 @@ cloudinary.config({
   api_key: process.env.CLDNRY_API_KEY, 
   api_secret: process.env.CLDNRY_API_SECRET 
 });
+
+const sibClient = SibApiV3Sdk.ApiClient.instance;
+sibClient.authentications["api-key"].api_key = process.env.SIB_API_KEY;
 
 app.get('/', (req,res)=> {
   res.send('Welcome to UVCE Marvel REST API.')
