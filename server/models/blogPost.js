@@ -13,7 +13,7 @@ const blogPostSchema = mongoose.Schema({
     title : {type : String},
     tags : {type : [String], default : []},
     coverPhoto : {type : String},
-    content : {type : String, maxLength : 10000},
+    content : {type : String, maxLength : 15000},
 
     // META DATA
     reviewStatus : { type : String, 

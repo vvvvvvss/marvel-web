@@ -45,7 +45,7 @@ export const updateBlog = async (req, res) => {
         }else {newImage = existingBlog?.coverPhoto};
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
         });
         Object.assign(existingBlog,
             {
@@ -70,7 +70,7 @@ export const updatePR = async (req, res) => {
         
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
         });
         Object.assign(existingPR,
             {
@@ -95,7 +95,7 @@ export const updateRSA = async (req, res) => {
         
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
         });
         
         Object.assign(returnedRsa, {

@@ -98,7 +98,7 @@
   position: relative; }
   .mde-textarea-wrapper textarea.mde-text {
     width: 100%; background-color: #031117; color: #fafafa;
-    border: 0; line-height: 18px; font-size: 16px;
+    border: 0; line-height: 24px; font-size: 16px;
     padding: 10px;
     vertical-align: top;
     resize: vertical;

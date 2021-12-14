@@ -83,9 +83,9 @@ export const submitFeedbackBlog = async (req, res) => {
 
 export const approveBlog = async (req, res) => {
     try {
-        const condition = req.user?.enrollmentStatus==='ACTIVE'&&req.user.currentRole==='INS';
+        const condition = req.user?.enrollmentStatus==='ACTIVE'&&req.user?.currentRole==='INS';
         if(!condition) return res.json({message:'Access denied.', status:'404'});
-        const post = await blogPost.findOne({slug : req.params.id}).exec();
+        const post = await blogPost.findOne({slug : req.params?.id}).exec();
         if(!req.user?.currentInsCourse?.includes(post?.authorCourseCode)) return res.json({message: 'Access denied.', status:'404'});
 
         Object.assign(post, {

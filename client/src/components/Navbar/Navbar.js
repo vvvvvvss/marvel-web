@@ -153,7 +153,7 @@ const Navbar = () => {
                 </List>
             <footer>
                 <Divider/>
-                <GoogleLogout 
+                { authUser?.id && <GoogleLogout 
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
                     render={(renderProps) => (
                 <ListItemButton onClick={renderProps.onClick} disabled={renderProps.disabled}>
@@ -161,7 +161,7 @@ const Navbar = () => {
                             <ListItemText primaryTypographyProps={{color:'#FFD7EA'}} >Logout</ListItemText>
                 </ListItemButton>
                     )}
-                    onLogoutSuccess={logout} onFailure={googleError}/>
+                    onLogoutSuccess={logout} onFailure={googleError}/>}
                 
             </footer>
             </Box>

@@ -107,13 +107,14 @@ const DbForm = () => {
             Promise.resolve(
               <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
             options={
-              {wrapper : 'p'},
+              {wrapper : 'div'},
               { overrides: {
                   p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                  a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                  img : { props : {width : '100%',height:'150px',style:{objectFit:'cover'} }},
+                  a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
+                  img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
                   iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
-                  code : { component:Typography ,props : { variant:'code-small' }}
+                  code : { component:Typography ,props : { variant:'code-small' }},
+                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }}
               },
           }}>
             {

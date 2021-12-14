@@ -84,14 +84,16 @@ const DbViewPost = () => {
             <br/>
             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'32px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
                 options={
-                {wrapper : 'p'},
+                {wrapper : 'div'},
                 { overrides: {
                     p :{ component: Typography , props: {variant : 'body1'}}, 
-                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
+                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                     img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
                     iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
                     code : { component:Typography ,props : { variant:'code-small' }},
-                    blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
+                    blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }},
+                    table : {props:{style : {border : '1px solid #D3FFFF'}}},
+                    hr : {props : {style : {width:'100%'}}}
                 },
             }}>
             { he.decode(`${viewPost?.content}`) }
@@ -115,7 +117,7 @@ const DbViewPost = () => {
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
             onClick={()=>(setConfirm(true))}>
-                <Typography variant='button' fontWeight='600' >{`Approve ${viewPost?.totalLevels===viewPost?.level ? 'and Award Certificate':''}`}</Typography>
+                <Typography variant='button' fontWeight='600' >{`Approve ${(viewPost?.totalLevels===viewPost?.level&&viewPostType==='pr') ? 'and Award Certificate':''}`}</Typography>
                 <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
             <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
