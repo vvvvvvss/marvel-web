@@ -10,7 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import FaceIcon from '@mui/icons-material/Face';
 import SearchIcon from '@mui/icons-material/Search';
-import NewspaperIcon from '@mui/icons-material/Newspaper';
 import BookIcon from '@mui/icons-material/AutoStories';
 import InfoIcon from '@mui/icons-material/Info';
 import Dashboard from "@mui/icons-material/Dashboard";

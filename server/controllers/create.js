@@ -25,8 +25,8 @@ export const createPR = async (req , res) => {
         feedback : ''});
 
         newPR.content = sanitizer(req.body?.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedTags: ['iframe','br','blockquote','strong'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
           });
 
         const createdPR = await newPR.save();
@@ -40,8 +40,8 @@ export const createPR = async (req , res) => {
 export const createBlog = async (req , res) => {
     try {
         const cleanContent = sanitizer(req.body.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
         });
         const newBlogPost = new blogPost({
         authorId : req.user.id, authorName:req.user?.name,
@@ -71,8 +71,8 @@ export const createRSA = async (req, res) => {
         if(!condition) return res.json({message : 'Access denied.', status:'404'});
         
         const cleanContent = sanitizer(req.body.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+            allowedTags: ['iframe','br', 'blockquote','strong'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
         });
 
         const newRSA = new rsa({

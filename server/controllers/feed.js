@@ -22,13 +22,17 @@ export const getPrByProfile = async (req, res) => {
         const titleQuery = (req.query?.title==='none'||!req.query?.title) ? new RegExp("",'i') : new RegExp(req.query.title,'i');
 
         let feed;let total;
-
         if(req?.user?.slug===req.params?.id){
             feed = await prs.find({$and:[{authorSlug : req.params?.id},{title: titleQuery}]})
             .sort({_id:-1})
             .skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
             total = await prs.countDocuments({$and:[{authorSlug : req.params?.id},{title: titleQuery}]}).lean().exec();
-        }else{
+        }else if(req?.user?.currentRole==="INS"){
+            feed = await prs.find({$and:[{authorSlug : req.params?.id},{title: titleQuery},{$or:[{courseCode: {$in:req.user?.currentInsCourse}},{reviewStatus:'APPROVED'}]}]})
+            .sort({_id:-1})
+            .skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();
+            total = await prs.countDocuments({$and:[{authorSlug : req.params?.id},{title: titleQuery}]}).lean().exec();
+        } else{
             feed = await prs.find({$and : [{authorSlug : req.params?.id},{reviewStatus:'APPROVED'},{title : titleQuery}]})
             .sort({_id:-1})
             .skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -feedback -rankingScore").lean().exec();

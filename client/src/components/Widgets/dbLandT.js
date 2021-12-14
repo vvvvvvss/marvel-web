@@ -18,7 +18,7 @@ const DbLandT = () => {
     <Paper variant='widget' style={{height:'max-content'}}>
         <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center'}}>
         <Typography variant='widget-heading'>levels & tasks&nbsp;</Typography>
-        <Chip label={syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
+        <Chip label={isSyllabusLoading ? "Loading..." : syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
         </div>
        
       {isSyllabusLoading ? <CircularProgress/> : 

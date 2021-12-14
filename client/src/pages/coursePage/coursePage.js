@@ -91,12 +91,12 @@ const CoursePage = () => {
             <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px'}} />
             </>
             :
-            <Typography variant='body2' lineHeight='26px' component='span' sx={{color:'secondary.light'}}>
+            <Typography component='div' sx={{color:'secondary.light'}}>
             <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px'}} 
                 options={
-                {wrapper : 'p'},
+                {wrapper : 'div'},
                 { overrides: {
-                    p :{ component: Typography , props: {variant : 'body1', sx:{color:'secondary.light'}}}, 
+                    p :{ component: Typography , props: {variant : 'body2', sx:{color:'secondary.light'}, lineHeight :'26px'}}, 
                     a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}},
                     img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
                     iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},

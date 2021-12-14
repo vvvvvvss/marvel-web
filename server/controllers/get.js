@@ -89,15 +89,12 @@ export const getSubmissionsRsa = async (req, res) => {
         const condition = req.user.currentRole==='INS'&&req.user.enrollmentStatus==='ACTIVE';
         if(!condition) return res.json({message: 'Access denied.', status:'404'});
 
-        const returnedRsa = await rsa.aggregate([
-            { $match : { $and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]}},
-            {$sort : {_id : -1}},
-            {$skip : (Number(page)-1)*4},
-            {$limit : 4},
-            {$project : {content : 0, tags : 0, feedback :0}}
-        ]);
+        const returnedRsa = await rsa.find({ $and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]})
+                                    .skip((Number(page)-1)*3).limit(3)
+                                    .select("-_id -content -tags -feedback").lean().exec();
+
         const total = await rsa.countDocuments({$and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]});
-        return res.json({submissions : returnedRsa, total: (Math.ceil(total/4)), status:'200'});
+        return res.json({submissions : returnedRsa, total: (Math.ceil(total/3)), status:'200'});
     } catch (error) {
         console.log(error);
         return res.json({status:'404', message:'Something went wrong :('});

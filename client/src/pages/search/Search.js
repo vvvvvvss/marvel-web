@@ -175,7 +175,7 @@ const Search = () => {
               {["pr","rsa"].includes(type)&& 
               <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
               </Button>}&nbsp;&nbsp;
-              <Button variant='text' color='secondary' size='small'> READ
+              <Button variant='text' color='secondary' size='small' onClick={()=>(history.push(`/${type}/${p?.slug}`))} > READ
               </Button>&nbsp;&nbsp;
               </CardActions>
           </Card> : 

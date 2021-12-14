@@ -118,8 +118,8 @@ const DbForm = () => {
           }}>
             {
             he.decode( sanitizer(markdown, {
-                allowedTags: ['iframe','br','strong'], allowedAttributes: { 'iframe': ['src'] },
-                allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
+                allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
+                allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
               }) ) }
           </Markdown>
           )
