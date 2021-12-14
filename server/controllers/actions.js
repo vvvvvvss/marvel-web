@@ -2,19 +2,41 @@ import blogPost from '../models/blogPost.js';
 import prs from '../models/projectReport.js';
 import user from '../models/user.js';
 import course from '../models/course.js';
+import SibApiV3Sdk from 'sib-api-v3-sdk';
+import dotenv from 'dotenv';
 
 export const submitFeedbackPr = async (req, res) => {
     try {
+        dotenv.config();
         const {id} = req.params;
         const condition = req.user.enrollmentStatus==='ACTIVE'&& req.user.currentRole==='INS';
         if(!condition) return res.json({message:'Access denied.', status:'404'});
         const returnedPost = await prs.findOne({slug : id});
+        const author = await user.findOne({id : returnedPost?.authorId}).select("email name -_id").lean().exec();
         if(!returnedPost) return res.json({message : "that does'nt exist", status:'404'});
         const condition2 = req.user?.currentInsCourse?.includes(returnedPost?.courseCode) && returnedPost?.reviewStatus==='PENDING';
         if(!condition2) return res.json({message:'Access denied.', status : '404'});
-
-        Object.assign(returnedPost, {feedback : req.body.fb, reviewStatus:'FLAGGED'});
+        Object.assign(returnedPost, {feedback : req.body.fb, reviewStatus:'FLAGGED'}, {timestamps: false});
         await returnedPost.save();
+        //email service
+        try {
+            const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+            var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+            sendSmtpEmail = {
+                sender : {email:"uvcemarvelweb@gmail.com"},
+                to: [{"name" : author?.name, "email": author?.email}],
+                templateId : 8,
+                params: {
+                    courseCode : returnedPost?.courseCode,
+                    level : returnedPost?.level,
+                    name : returnedPost?.authorName,
+                    insName : req.user?.name,
+                    link : "https://uvcemarvel.in/"
+                }
+            }
+            await apiInstance.sendTransacEmail(sendSmtpEmail);
+        } catch (error) { console.log(error); }
+
         return res.json({status : '201', message:'feedback submitted successfully.'});
     } catch (error) {
         console.log(error);
@@ -28,12 +50,30 @@ export const submitFeedbackBlog = async (req, res) => {
         const condition = req.user.enrollmentStatus==='ACTIVE'&& req.user.currentRole==='INS';
         if(!condition) return res.json({message:'Access denied.', status:'404'});
         const returnedPost = await blogPost.findOne({slug : id});
+        const author = await user.findOne({id : returnedPost?.authorId}).select("-_is email name").lean().exec();
         if(!returnedPost) return res.json({message : "that does'nt exist", status:'404'});
         const condition2 = req.user?.currentInsCourse?.includes(returnedPost?.authorCourseCode) && returnedPost?.reviewStatus==='PENDING';
         if(!condition2) return res.json({message:'Access denied.', status : '404'});
 
         Object.assign(returnedPost, {feedback : req.body.fb, reviewStatus:'FLAGGED'});
         await returnedPost.save();
+        //email
+        try {
+            const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+            var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+            sendSmtpEmail = {
+                sender : {email:"uvcemarvelweb@gmail.com"},
+                to: [{"name" : author?.name, "email": author?.email}],
+                templateId : 9,
+                params: {
+                    name : returnedPost?.authorName,
+                    title : returnedPost?.title,
+                    insName : req.user?.name,
+                    link : "https://uvcemarvel.in/"
+                }
+            }
+            await apiInstance.sendTransacEmail(sendSmtpEmail);
+        } catch (error) { console.log(error); }
         return res.json({status : '201', message:'feedback submitted successfully.'});
     } catch (error) {
         console.log(error);
@@ -53,6 +93,23 @@ export const approveBlog = async (req, res) => {
             feedback: ''
         });
         await post.save();
+        //email
+        try {
+            const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+            var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+            sendSmtpEmail = {
+                sender : {email:"uvcemarvelweb@gmail.com"},
+                to: [{"name" : author?.name, "email": author?.email}],
+                templateId : 9,
+                params: {
+                    name : post?.authorName,
+                    title : post?.title,
+                    insName : req.user?.name,
+                    link : "https://uvcemarvel.in/"
+                }
+            }
+            await apiInstance.sendTransacEmail(sendSmtpEmail);
+        } catch (error) { console.log(error); }
         return res.json({message: 'Successfully approved blogpost.', status:'201'});
     } catch (error) {
         console.log(error);
@@ -67,7 +124,7 @@ export const approvePR = async (req, res) => {
         if(!req.user?.currentInsCourse?.includes(post.courseCode)) return res.json({message : 'Access denied.', status : '404'});
         const totalLevels = (await course.findOne({courseCode: post.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         const author = await user.findOne({id : post.authorId}).exec();
-
+        //course completed.
         if(post?.level===author?.currentLevel===totalLevels){
             // award certificate. not done
             // make author inactive. role becomes na, currentStuCourse becomes na,
@@ -79,9 +136,25 @@ export const approvePR = async (req, res) => {
             // post becomes public.
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });
             await post.save();
-            // email service. not done.
+            // email service. done
+            try {
+                const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+                var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+                sendSmtpEmail = {
+                    sender : {email:"uvcemarvelweb@gmail.com"},
+                    to: [{"name" : author?.name, "email": author?.email}],
+                    templateId : 10,
+                    params: {
+                        name : returnedPost?.authorName,
+                        courseCode : returnedPost?.courseCode,
+                        insName : req.user?.name,
+                        link : "https://uvcemarvel.in/"
+                    }
+                }
+                await apiInstance.sendTransacEmail(sendSmtpEmail);
+            } catch (error) { console.log(error); }
             return res.json({status : '201', message:'successfully awarded certificate and approved.'});
-        
+        //level-up
         }else if(post?.level==author?.currentLevel && post?.level < totalLevels){
             //user proceeds next level done
             author.currentLevel +=1;
@@ -89,14 +162,49 @@ export const approvePR = async (req, res) => {
             //post becomes public. done
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });
             await post.save();
-            //email service. not done
-            return res.json({message: 'Successfully approved. Student proceeded to next level', status:'201'})
+            // email service. done
+            try {
+                const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+                var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+                sendSmtpEmail = {
+                    sender : {email:"uvcemarvelweb@gmail.com"},
+                    to: [{"name" : author?.name, "email": author?.email}],
+                    templateId : 3,
+                    params: {
+                        name : post?.authorName,
+                        courseCode : post?.courseCode,
+                        level: Number(post?.level)-1,
+                        insName : req.user?.name,
+                        link : "https://uvcemarvel.in/"
+                    }
+                }
+                await apiInstance.sendTransacEmail(sendSmtpEmail);
+            } catch (error) { console.log(error); }
 
+            return res.json({message: 'Successfully approved. Student proceeded to next level', status:'201'});
+        //just approve
         } else if(post?.level < author?.currentLevel) {
             // post becomes public no change to author. done
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });
             await post.save();
-            // email service. not done
+            // email service. done
+            try {
+                const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+                var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+                sendSmtpEmail = {
+                    sender : {email:"uvcemarvelweb@gmail.com"},
+                    to: [{"name" : author?.name, "email": author?.email}],
+                    templateId : 6,
+                    params: {
+                        name : post?.authorName,
+                        courseCode : post?.courseCode,
+                        level : post?.level,
+                        insName : req.user?.name,
+                        link : "https://uvcemarvel.in/"
+                    }
+                }
+                await apiInstance.sendTransacEmail(sendSmtpEmail);
+            } catch (error) { console.log(error); }
             return res.json({message: 'Successfully approved.', status:'201'});
 
         } else {

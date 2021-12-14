@@ -99,9 +99,8 @@ export const submitFB = (fb, id ,type) => async (dispatch) => {
     try {
         dispatch({type:'START_CREATE_LOADING'});
         const {data} = await API.submitFeedback(fb, id ,type?.toLowerCase());
-        console.log(data);
         if(data?.status==='201'){
-            dispatch({type: `REVIEW_${type}`, payload: id});
+            dispatch({type: `REVIEW`, payload: id});
         }else {alert("Something went wrong. Could not write feedback.")}
         dispatch({type : 'END_CREATE_LOADING'});
         dispatch({type: 'CLOSE_VIEW'});

@@ -62,11 +62,6 @@ const DbToReview = () => {
                     onClick={()=>{dispatch({type:'SET_VIEW_ID',payload:{id: sub?.slug, type: tab.toUpperCase(), scope:'INS'}});dispatch({type:'OPEN_VIEW'});}}>
                         view
                     </Button>&nbsp;&nbsp;
-                    <Button variant='text' color='secondary' size='small' 
-                    onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id: sub?.slug, type: tab.toUpperCase(), scope:'INS'}});dispatch({type:'OPEN_EDIT'})}}
-                    >
-                        edit
-                    </Button>
                     </div>
                     </span>
                 </Card> 
