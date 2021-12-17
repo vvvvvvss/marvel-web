@@ -11,12 +11,12 @@ import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
 import {getSearchFeed} from '../../actions/other.js';
 import ShareIcon from '@mui/icons-material/Share';
+import PostCard from "../../components/PostCard.js";
 
 const PostPage = ({viewPostType}) => {
     const { viewPost, isViewLoading} = useSelector(state => state.dashboard);
     const { feed, isFeedLoading} = useSelector(state => state.other);
     const dispatch = useDispatch();
-    const location = useLocation();
     const history = useHistory();
     const {authUser} = useSelector(state => state.auth);
     const {id} = useParams();
@@ -32,19 +32,14 @@ const PostPage = ({viewPostType}) => {
         }
     }, [id, dispatch,viewPostType]);
 
-    const handleShare = (slug) => {
+    const handleShare = () => {
         try {
-        if(!slug){
             navigator.clipboard.writeText(window.location.href);
             alert("Link copied to clipboard!");
-        }else{
-            navigator.clipboard.writeText(`${window.location.origin}/${viewPostType}/${slug}`);
-            alert("Link copied to clipboard!")
-        }
         } catch (error) {
             alert("Coud'nt copy link to clipboard :(");
         }
-    }
+    };
 
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
@@ -70,7 +65,10 @@ const PostPage = ({viewPostType}) => {
             <img width='100%' height='350px' style={{objectFit:'cover', minWidth:'100%', aspectRatio:'16 / 9',borderRadius:'12px'}} 
             src={viewPostType==='blog'? viewPost?.coverPhoto : viewPostType==='pr' ? pr_legend :viewPostType==='rsa'? rsa_legend:''} />
             
-            <IconButton onClick={handleShare} sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
+            <IconButton onClick={handleShare}
+            sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',zIndex:'100',
+            backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}>
+            <ShareIcon/></IconButton>
             
             <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
             background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
@@ -141,36 +139,7 @@ const PostPage = ({viewPostType}) => {
             feed?.length===0 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p)=>(p?.slug !== id &&
-                <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative'}}>
-                {viewPostType==='blog' && <>
-                <IconButton onClick={()=>handleShare(p?.slug)}
-                sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
-                    <CardMedia
-                    component="img"
-                    height="100%" sx={{maxHeight:'150px',objectFit:'cover'}}
-                    image={p?.coverPhoto}
-                    alt={p?.title}
-                /></>}
-                <CardContent>
-                    <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>
-                    {p?.title}
-                    </Typography>
-                    <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                        <span>{p?.authorName}</span>&nbsp;&nbsp; &#8226; &nbsp;&nbsp;
-                        {(viewPostType==='pr' || viewPostType==='rsa') && 
-                        <><span>{`${viewPostType==='pr'?'Level':''} ${p?.[viewPostType==='pr' ? 'level' : 'courseCode']}`}</span>
-                        &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
-                        <span>{moment(p?.updatedAt).fromNow()}</span>
-                    </Typography>
-                </CardContent>
-                <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end'}}>
-                    {["pr","rsa"].includes(viewPostType)&& 
-                    <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
-                    </Button>}&nbsp;&nbsp;
-                    <Button variant='text' color='secondary' size='small' onClick={()=>(history.push(`/${viewPostType}/${p?.slug}`))} > READ
-                    </Button>&nbsp;&nbsp;
-                </CardActions>
-            </Card>
+                <PostCard post={p} variant='media' type={viewPostType} scope='else'  />
             ))}
         </Box>
         </Box>

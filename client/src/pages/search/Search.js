@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@mui/system';
 import {getSearchFeed} from '../../actions/other.js';
-import ShareIcon from '@mui/icons-material/Share';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
+import PostCard from '../../components/PostCard';
+import UserCard from '../../components/UserCard';
+import CourseCard from '../../components/CourseCard';
 
 const Search = () => {
     const {authUser} = useSelector(state => state.auth);
@@ -149,59 +150,12 @@ const Search = () => {
         {feed?.map((p)=>(
         <div key={p?.slug || p?.courseCode}>
         { ["pr","blog","rsa"].includes(type) ? 
-        <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative'}}>
-          {type==='blog' && <>
-          <IconButton onClick={()=>handleShare(p?.slug)}
-          sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
-              <CardMedia
-              component="img"
-              height="100%" sx={{maxHeight:'150px',objectFit:'cover'}}
-              image={p?.coverPhoto}
-              alt={p?.title}
-          /></>}
-          <CardContent>
-            <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>
-              {p?.title}
-            </Typography>
-            <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                <span>{p?.authorName}</span>&nbsp;&nbsp; &#8226; &nbsp;&nbsp;
-                {(type==='pr' || type==='rsa') && 
-                <><span>{`${type==='pr'?'Level':''} ${p?.[type==='pr' ? 'level' : 'courseCode']}`}</span>
-                &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
-                <span>{moment(p?.updatedAt).fromNow()}</span>
-            </Typography>
-          </CardContent>
-              <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end'}}>
-              {["pr","rsa"].includes(type)&& 
-              <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
-              </Button>}&nbsp;&nbsp;
-              <Button variant='text' color='secondary' size='small' onClick={()=>(history.push(`/${type}/${p?.slug}`))} > READ
-              </Button>&nbsp;&nbsp;
-              </CardActions>
-          </Card> : 
+          <PostCard post={p} type={type} variant='media' scope='else' /> : 
           type==='user' ? 
-          <Card variant='outlined' sx={{width:'400px',height:'max-content',position:'relative',display:'grid',gridTemplateColumns: '1fr 4fr',gap:'10px',padding:'16px 20px 10px 20px'}}>
-            <Avatar src={p?.profilePic} alt={p?.name} sx={{height:'60px',width:'60px',justifySelf:'start'}}/>
-            <div>
-              <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>{p?.name}</Typography>
-              <Typography variant='caption' sx={{color:'secondary.light'}}>{p?.currentRole==='STU'?'STUDENT':p?.currentRole==='INS'?'INSTRUCTOR':''}</Typography>
-              <br/><br/>
-              <Divider/>
-              <Button variant='text' color='secondary' onClick={()=>(history.push(`/profile/${p?.slug}`))}>view</Button>
-            </div>
-          </Card>
+          <UserCard user={p} />
           :
           type==='course' ? 
-          <Card variant='outlined' sx={{width:'400px',height:'max-content',position:'relative',padding:'16px 20px 10px 20px'}}>
-            <Typography variant='h4' color='secondary' fontWeight={'600'}>{p?.courseCode}</Typography>
-            <Typography variant='caption' sx={{display:'flex',alignItems:'center',color:'secondary.light'}}>
-              {p?.courseDuration}&nbsp;&nbsp;&#8226;&nbsp;&nbsp;{p?.totalLevels}&nbsp;Levels
-            </Typography>
-            <br/><Divider/><br/>
-            <Typography variant='body2'>{p?.caption}</Typography><br/>
-            <Divider/>
-            <Button color='secondary' onClick={()=>(history.push(`/course/${p?.courseCode}`))}>view</Button>
-          </Card>
+          <CourseCard course={p} />
           : <></>
           }
           </div>

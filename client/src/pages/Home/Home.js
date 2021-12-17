@@ -28,7 +28,7 @@ return (
         <img src={'https://i.imgur.com/SXKFsOc.png'} alt='uvce marvel' style={{maxHeight :'300px',position:'absolute'}}/>
         <Box sx={{position:'relative',display:'flex',justifyContent:'center',alignItems:'center',padding:'30px 30px 30px 30px',top:'20%'}}>
             <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'20px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
-            <Typography variant='h4' sx={{color:'secondary.light',fontSize:{xs:'24px',sm:'h1'}}}>Maker's space for advanced research and vital education and learning</Typography>
+            <Typography variant='h4' sx={{color:'secondary.light',fontSize:{xs:'24px',sm:'h1'}}}>Maker space for advanced research and vital education and learning</Typography>
             <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'30px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
         </Box>
         </Box>
