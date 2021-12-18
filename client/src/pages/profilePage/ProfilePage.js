@@ -12,6 +12,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import ShareIcon from '@mui/icons-material/Share';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
+import PostCard from "../../components/PostCard";
 
 const ProfilePage = () => {
     const location = useLocation();
@@ -127,45 +128,14 @@ const ProfilePage = () => {
         {isFeedLoading ? <CircularProgress/> : feed?.length===0 ? 
         <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
         <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr',gap:'20px'}}>
-        {feed?.map((p)=>(
-        <div key={p?.slug}>
-        <Card variant='outlined' sx={{width:'400px',padding:'0px',height:'max-content',position:'relative', opacity:`${["PENDING","FLAGGED"].includes(p?.reviewStatus) ? '0.4':'1'}`}}>
-        {["blog","cert"].includes(tab) && 
+        {["blog","pr","rsa"].includes(tab) &&
         <>
-        <IconButton onClick={()=>handleShare(p?.slug)}
-        sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
-            <CardMedia
-            component="img"
-            height="100%" sx={{maxHeight:'150px',objectFit:'cover'}}
-            image={tab==='blog'? p?.coverPhoto: p?.certImage}
-            alt={p?.title}
-            /></>}
-            <CardContent>
-               <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>{p?.title}</Typography>
-                <Typography style={{color:'#c4c4c4'}} variant='caption'>
-                    <span>{p?.authorName}</span>&nbsp;&nbsp; &#8226; &nbsp;&nbsp;
-                    {(tab==='pr' || tab==='rsa') && 
-                    <><span>{`${tab==='pr'?'Level':''} ${p?.[tab==='pr' ? 'level' : 'courseCode']}`}</span>
-                    &nbsp;&nbsp; &#8226; &nbsp;&nbsp;</>}
-                    <span>{moment(p?.updatedAt).fromNow()}</span>
-                </Typography>
-            </CardContent>
-            <CardActions sx={{paddingTop: '0px',display:'flex',justifyContent: 'flex-end', width:'100%',position:'relative'}}>
-            {((tab==='pr'||tab==='blog')&&p?.reviewStatus==='PENDING'||p?.reviewStatus==='FLAGGED') &&
-            <Chip label={p?.reviewStatus} color={'warning'} sx={{position:'absolute',left:'12px',bottom:'12px'}} size='small' variant='filled'/> 
-            }
-            {["pr","rsa"].includes(tab)&& 
-            <Button variant='text' color='secondary' size='small' onClick={()=>handleShare(p?.slug)}> Share
-            </Button>}&nbsp;&nbsp;
-            <Link to={`/${tab}/${p?.slug}`} style={{textDecoration:'none'}}>
-            <Button variant='text' color='secondary' size='small'> READ
-            </Button>
-            </Link>
-            &nbsp;&nbsp;
-            </CardActions>
-        </Card>
-        </div>
+        {feed?.map((p)=>( 
+        <PostCard post={p} type={tab} variant='media' scope='else'/>
         ))}
+        </>  
+        // : Certificates map
+        }
         </Box>
         }
         <br/><br/>

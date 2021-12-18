@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '@mui/system';
 import moment from 'moment';
 import SearchIcon from '@mui/icons-material/Search';
+import PostCard from '../../components/PostCard.js';
 
 const CoursePage = () => {
     const {id} = useParams();
@@ -130,9 +131,9 @@ const CoursePage = () => {
         </Typography>
         { lvl.tasks.map((tsk)=>{
             return(
-                <Accordion key={tsk?.taskNo}>
+                <Accordion key={tsk?.taskNo} defaultExpanded expanded >
                     <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    // expandIcon={<ExpandMoreIcon />}
                     >
                     <Typography variant='subtitle2'>{`Task  ${tsk?.taskNo}`}</Typography>
                     </AccordionSummary>
@@ -170,19 +171,7 @@ const CoursePage = () => {
         <Typography variant="h6" fontWeight='600' color='#808080'>There are no Resource Articles for this Course yet.</Typography> :
         <Box display='grid' gridTemplateColumns='1fr 1fr' gap='20px' maxWidth='1000px'>
         {feed?.map((p)=>(
-        <Card key={p?.slug} variant='outlined' sx={{width:'400px',paddingLeft: '12px'}}>
-            <Typography variant='h6'>{p?.title}</Typography>
-            <Typography style={{color:'#c4c4c4', display:'flex',alignItems:'center',marginTop:'8px'}} variant='caption'>
-                <Avatar src={p?.authorImage} alt={p?.authorName} sx={{width:'25px',height:'25px'}}/>&nbsp;&nbsp;&nbsp;
-                <span>{p?.authorName}&nbsp;&nbsp;&#8226;&nbsp;&nbsp;{moment(p?.createdAt).fromNow()}</span>
-            </Typography>
-            <br/>
-            <div style={{display:'flex',justifyContent:'flex-end',width:'100%',}}>
-            <Button variant='text' color='secondary' size='small' 
-            onClick={()=>(history.push(`/rsa/${p?.slug}`))}>
-                Read
-            </Button>&nbsp;&nbsp;</div>
-        </Card>
+        <PostCard type='rsa' post={p} scope='else' variant='media' key={p?.slug}/>
         ))}
         </Box>}
         <br/><br/>
