@@ -1,4 +1,4 @@
-import { Typography, Paper, Divider, Avatar,CardActions, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, Card, TextField, Skeleton, Pagination, CardMedia, CardContent, CardActionArea } from "@mui/material";
+import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, TextField, Skeleton, Pagination} from "@mui/material";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,5 +1,5 @@
 import {Paper, Typography,Toolbar, Select, MenuItem, InputLabel, FormHelperText, 
-  FormControl, TextField, Divider, AppBar, Pagination, Button, CircularProgress, Card, CardMedia,CardContent,CardActions,IconButton, Avatar} from '@mui/material';
+  FormControl, TextField, Divider, AppBar, Pagination, Button, CircularProgress} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

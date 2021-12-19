@@ -1,5 +1,5 @@
 import { Paper, Typography, IconButton, Chip, Avatar, Link, Divider, Button, Skeleton, 
-    CircularProgress, Card, CardContent, CardMedia, CardActions} from "@mui/material";
+    CircularProgress} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getPost } from "../../actions/dashboard.js";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, Accordion, AccordionSummary,AccordionDetails,AppBar, Toolbar, Card,Button, Avatar, TextField, CircularProgress, Pagination, Skeleton, FormControl } from '@mui/material';
+import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, AppBar, Toolbar,Button,  TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -8,11 +8,10 @@ import {getRsaFeedByCourse} from '../../actions/other.js';
 import ShareIcon from '@mui/icons-material/Share';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Markdown from 'markdown-to-jsx';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '@mui/system';
-import moment from 'moment';
 import SearchIcon from '@mui/icons-material/Search';
 import PostCard from '../../components/PostCard.js';
+import LandTPage from '../../components/LandTPage.js';
 
 const CoursePage = () => {
     const {id} = useParams();
@@ -23,7 +22,7 @@ const CoursePage = () => {
     const dispatch = useDispatch();
     const {syllabus, isSyllabusLoading} = useSelector((state)=>(state.dashboard));
     const {isFeedLoading, feed, isOverviewLoading, overview, totalFeedPages} = useSelector((state)=>(state.other));
-    const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
+    const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&(authUser?.id&&authUser?.enrollmentStatus!=='UNKNOWN') ? 'rsa' : 'levels');
     const [page, setPage] = useState(Number(query.get('page'))||1);
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
@@ -110,7 +109,7 @@ const CoursePage = () => {
             </Paper>
         </Paper>
         <Divider/>
-        { authUser?.enrollmentStatus!=='UNKNOWN'&&
+        { ((authUser?.id)&&(authUser?.enrollmentStatus!=='UNKNOWN'))&&
         <AppBar position='sticky' sx={{background:'#181818'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
         <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
@@ -121,43 +120,7 @@ const CoursePage = () => {
         </AppBar>}
         {tab==='levels' ? 
         <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>
-        { isSyllabusLoading ? <CircularProgress/> :
-        <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr', justifyItems:'center',width:'max-content',gap:'20px'}} >
-        { syllabus?.levels?.map((lvl)=>(
-        <div key={lvl?.levelNo} style={{maxWidth:'500px'}}>
-        <br/>
-        <Typography variant='heading' component='div' key={lvl.levelNo}>&nbsp;&nbsp;
-                {`Level  ${lvl?.levelNo}`}
-        </Typography>
-        { lvl.tasks.map((tsk)=>{
-            return(
-                <Accordion key={tsk?.taskNo} defaultExpanded expanded >
-                    <AccordionSummary
-                    // expandIcon={<ExpandMoreIcon />}
-                    >
-                    <Typography variant='subtitle2'>{`Task  ${tsk?.taskNo}`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                        options={{wrapper : 'p'},{
-                            overrides: {
-                                p :{ component: Typography , props: {variant : 'body1', sx:{color:'secondary.light'}}}, 
-                                a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}},
-                                img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
-                                iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
-                                code : { component:Typography ,props : { variant:'code-small' }},
-                                blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
-                            }
-                        }}>
-                        {tsk?.description}
-                        </Markdown >
-                    </AccordionDetails>
-                </Accordion>
-            )
-        })}
-            </div>
-        ))}
-        </Box>}  
+        <LandTPage/> 
         </Box>  
         :
         <Box display='flex' flexDirection='column' alignItems='center' width='100%' paddingTop='20px'>

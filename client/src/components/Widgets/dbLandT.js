@@ -23,11 +23,11 @@ const DbLandT = () => {
        
       {isSyllabusLoading ? <CircularProgress/> : 
        <>
-        { syllabus?.levels?.map((lvl)=>(
-            <div key={lvl?.levelNo}>
+        { syllabus?.levels?.map((lvl, lvIndex)=>(
+            <div key={lvIndex}>
             <br/>
-            <Typography variant='heading' component='div' key={lvl.levelNo}>&nbsp;&nbsp;
-                    {`Level  ${lvl?.levelNo}`}
+            <Typography variant='heading' component='div'>&nbsp;&nbsp;
+                    {`Level  ${lvIndex+1}`}
             </Typography>
             { lvl.tasks.map((tsk)=>{
                 return(

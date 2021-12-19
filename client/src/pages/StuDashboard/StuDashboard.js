@@ -1,5 +1,4 @@
-import { Paper, Dialog} from '@mui/material'
-import {useState} from 'react'
+import { Paper} from '@mui/material'
 import Navbar from '../../components/Navbar/Navbar.js';
 import Syllabus from '../../components/Widgets/dbLandT.js';
 import DbProfile from '../../components/Widgets/dbProfile.js';
