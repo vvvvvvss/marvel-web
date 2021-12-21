@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Box } from "@mui/system";
-import {CardHeader, CircularProgress, Typography, Divider, Chip} from "@mui/material";
+import { CircularProgress, Typography, Divider, Chip} from "@mui/material";
 import TaskCard from "./TaskCard.js";
+import editCourse from '../actions/other.js';
 
 const LandTPage = () => {
     const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
@@ -9,8 +10,8 @@ const LandTPage = () => {
     const dispatch = useDispatch();
 
     const handleModify = (operation, tskIndex, lvIndex)=>{
-        console.log(operation, tskIndex, "level",lvIndex)
-    }
+        dispatch(editCourse(operation, tskIndex, lvIndex));
+    };
 
     return (
         <div>

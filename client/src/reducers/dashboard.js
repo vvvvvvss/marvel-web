@@ -91,6 +91,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, submissions : {...state?.submissions, others : state.submissions?.others?.map((k)=>(k._id===action.payload._id ? action.payload : k))}, viewPost : action?.payload, viewPostId: action?.payload?.slug}
         case 'REVIEW':
             return {...state, toReview : {...state?.toReview, posts : state.toReview?.posts?.filter((k)=>(k?.slug !== action.payload))}}
+        case 'EDIT_SYLLABUS':
+            return {...state, syllabus : {...state?.syllabus, levels : action.payload?.levels}};
         default: 
             return state;
     }

@@ -109,3 +109,32 @@ export const updateRSA = async (req, res) => {
         return res.json({status : 'BRUH', message:'Something went wrong:('});
     }
 }
+
+export const addTask = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        return res.json({status:'BRUH',message:'Something went wrong :('})
+    }
+}
+
+
+export const deleteTask = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        return res.json({status:'BRUH',message:'Something went wrong :('})
+    }
+}
+
+
+export const editTask = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        return res.json({status:'BRUH',message:'Something went wrong :('})
+    }
+}
