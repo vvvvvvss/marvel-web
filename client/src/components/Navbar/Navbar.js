@@ -105,7 +105,7 @@ const Navbar = () => {
                     <ListItemText>My profile</ListItemText>
                 </ListItemButton>
                 { authUser?.currentRole==='STU' ? 
-                <ListItemButton onClick={()=>(history.push(`/course/${authUser?.currentStuCourse}#rsa`))}>
+                <ListItemButton onClick={()=>(history.push(`/course/${authUser?.currentStuCourse}`))}>
                     <ListItemIcon><BookIcon/></ListItemIcon>
                     <ListItemText>My Course
                     </ListItemText>

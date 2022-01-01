@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box } from "@mui/system";
 import { CircularProgress, Typography, Divider, Chip} from "@mui/material";
 import TaskCard from "./TaskCard.js";
-import editCourse from '../actions/other.js';
+import {editCourse} from '../actions/other.js';
 
 const LandTPage = () => {
     const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
@@ -10,7 +10,7 @@ const LandTPage = () => {
     const dispatch = useDispatch();
 
     const handleModify = (operation, tskIndex, lvIndex)=>{
-        dispatch(editCourse(operation, tskIndex, lvIndex));
+        dispatch(editCourse(syllabus?.courseCode , operation, tskIndex, lvIndex));
     };
 
     return (

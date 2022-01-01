@@ -33,10 +33,10 @@ export const getSearchFeed = (type, domain, title, courseCode, authorName, tags,
     dispatch({type:'END_FEED_LOADING'});
 }
 
-export const editCourse = (operation, tskIndex, lvIndex, taskId, content)=>async(dispatch)=>{
+export const editCourse = (courseCode, operation, tskIndex, lvIndex, taskId, content)=>async(dispatch)=>{
     dispatch({type:'START_SYLLABUS_LOADING'});
     try {
-       const {data} = await API.editCourse(operation, tskIndex, lvIndex, taskId, content);
+       const {data} = await API.editCourse(courseCode,operation, tskIndex, lvIndex, taskId, content);
        if(data?.status==='201'){
            dispatch({type:'EDIT_SYLLABUS', payload: data?.course });
        }else if(data?.status==='500'){
