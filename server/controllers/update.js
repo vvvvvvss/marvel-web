@@ -1,5 +1,6 @@
 import blogPost from "../models/blogPost.js";
 import user from "../models/user.js";
+import course from "../models/course.js";
 import cloudinary from "cloudinary";
 import sanitize from "sanitize-html";
 import projectReport from "../models/projectReport.js";
@@ -112,13 +113,18 @@ export const updateRSA = async (req, res) => {
 
 export const addTask = async (req, res) => {
     try {
-        
+        const {tskIndex, lvIndex} = req.query;
+        const {id} = req.params;
+
+        const existingCourse = await course.findOne({courseCode:id});
+        existingCourse?.levels[Number(lvIndex)].tasks.splice(Number(tskIndex),0,{description :""});
+        const newCourseData = await existingCourse.save();
+        return res.json({status:'201', course:{levels:newCourseData?.levels}});
     } catch (error) {
         console.log(error);
-        return res.json({status:'BRUH',message:'Something went wrong :('})
+        return res.json({status:'BRUH',message:'Something went wrong :('});
     }
-}
-
+};
 
 export const deleteTask = async (req, res) => {
     try {
@@ -127,8 +133,7 @@ export const deleteTask = async (req, res) => {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('})
     }
-}
-
+};
 
 export const editTask = async (req, res) => {
     try {
@@ -137,4 +142,4 @@ export const editTask = async (req, res) => {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('})
     }
-}
+};

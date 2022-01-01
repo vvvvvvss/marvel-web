@@ -9,7 +9,7 @@ router.post('/blog/:id', identityMW, updateBlog);
 router.post('/pr/:id', identityMW, updatePR);
 router.post('/rsa/:id', identityMW, updateRSA);
 //course editing.
-router.post('/course/addTask/:id', identityMW, addTask );
+router.post('/course/addTask/:id', identityMW, addTask);
 router.post('/course/deleteTask/:id', identityMW, deleteTask);
 router.post('/course/editTask/:id', identityMW, editTask);
 

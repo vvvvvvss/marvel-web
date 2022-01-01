@@ -10,11 +10,11 @@ const courseSchema = mongoose.Schema({
     courseBadge : { type :String},
     intro : { type : String},
     levels : [
-        { levelNo : {type : Number},
+        {
         tasks : [
-            {taskNo : {type : Number},
-            taskTitle : {type : String},
-            description : {type : String}},
+            {
+                description : {type : String}
+            },
         ]}
     ],
     rankingScore : {type : Number, default: 1}
