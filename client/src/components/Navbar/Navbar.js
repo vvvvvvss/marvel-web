@@ -122,7 +122,7 @@ const Navbar = () => {
               <Collapse in={crsListOpen}  timeout="auto" unmountOnExit>
                 <List component="div" disablePadding style={{backgroundColor:'#001C28'}}>
                   {authUser?.currentInsCourse?.map((c)=>(
-                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}#rsa`))}>
+                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}`))}>
                           <ListItemIcon></ListItemIcon>
                           <ListItemText primaryTypographyProps={{variant:'body2'}} >{c}</ListItemText>
                       </ListItemButton>

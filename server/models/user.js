@@ -19,7 +19,8 @@ const userSchema = mongoose.Schema({
     currentLevel : {type : Number},
     roleHistory : [{
         role : {type : String, enum : {values : ['STU','INS', 'NA']}},
-        startTime : {type : Date},endTime : {type : Date}, stuCourse : {type : String}
+        startTime : {type : Date},endTime : {type : Date}, stuCourse : {type : String},
+        insCourse: {type: [String]}
     }],
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},
     enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN','BANNED']}, default : 'UNKNOWN'},

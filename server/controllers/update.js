@@ -116,9 +116,15 @@ export const addTask = async (req, res) => {
         const {tskIndex, lvIndex} = req.query;
         const {id} = req.params;
 
+        const condition = req.user.enrollmentStatus==="ACTIVE"&&
+                        req.user.currentRole==="INS"&&
+                        req.user.currentInsCourse.includes(id);
+        if(!condition)return res.json({status:'404', message:'Access denied.'});
+
         const existingCourse = await course.findOne({courseCode:id});
         existingCourse?.levels[Number(lvIndex)].tasks.splice(Number(tskIndex),0,{description :""});
         const newCourseData = await existingCourse.save();
+
         return res.json({status:'201', course:{levels:newCourseData?.levels}});
     } catch (error) {
         console.log(error);
@@ -128,7 +134,22 @@ export const addTask = async (req, res) => {
 
 export const deleteTask = async (req, res) => {
     try {
-        
+        const {tskIndex, lvIndex, taskId} = req.query;
+        const {id} = req.params;
+
+        const condition = req.user.enrollmentStatus==="ACTIVE"&&
+                        req.user.currentRole==="INS"&&
+                        req.user.currentInsCourse.includes(id);
+        if(!condition)return res.json({status:'404', message:'Access denied.'});
+
+        const existingCourse = await course.findOne({courseCode: id});
+        if(existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)]._id.toString() !== taskId){
+            return res.json({status:'500', course: {levels:existingCourse?.levels, courseCode:existingCourse?.courseCode}});
+        } 
+
+        existingCourse.levels[Number(lvIndex)]?.tasks?.splice(Number(tskIndex),1);
+        const newCourseData = await existingCourse.save();
+        return res.json({status:'201',course:{levels:newCourseData?.levels,courseCode:newCourseData.courseCode}});
     } catch (error) {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('})
@@ -137,9 +158,32 @@ export const deleteTask = async (req, res) => {
 
 export const editTask = async (req, res) => {
     try {
-        
+        const {tskIndex, lvIndex, taskId} = req.query;
+        const {id} = req.params;
+
+        const condition = req.user.enrollmentStatus==="ACTIVE"&&
+        req.user.currentRole==="INS"&&
+        req.user.currentInsCourse.includes(id);
+        if(!condition)return res.json({status:'404', message:'Access denied.'});
+
+        const existingCourse = await course.findOne({courseCode: id});
+        if(existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)]._id.toString() !== taskId){
+        return res.json({status:'500', course: {levels:existingCourse?.levels, courseCode:existingCourse?.courseCode}});
+        }
+
+        existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)].description = req.body.content;
+        const newCourseData = await existingCourse.save();
+        return res.json({status:'201', course:{levels:newCourseData?.levels, courseCode:newCourseData?.courseCode}});
     } catch (error) {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('})
     }
 };
+
+export const addLevel = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
+}

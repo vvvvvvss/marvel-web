@@ -3,20 +3,21 @@ import { Box } from "@mui/system";
 import { CircularProgress, Typography, Divider, Chip} from "@mui/material";
 import TaskCard from "./TaskCard.js";
 import {editCourse} from '../actions/other.js';
+import {useParams} from "react-router-dom";
 
 const LandTPage = () => {
     const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const {id} = useParams();
 
     const handleModify = (operation, tskIndex, lvIndex)=>{
-        dispatch(editCourse(syllabus?.courseCode , operation, tskIndex, lvIndex));
+        dispatch(editCourse(id , operation, tskIndex, lvIndex));
     };
 
     return (
         <div>
-        { isSyllabusLoading ? <CircularProgress/> :
-        <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr', justifyItems:'center',width:'max-content',gap:'20px'}} >
+        <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr', justifyItems:'center',width:'max-content',gap:'20px', opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
         
         { syllabus?.levels?.map((lvl, lvIndex)=>(
         <div key={lvIndex} style={{maxWidth:'500px'}}>
@@ -43,7 +44,7 @@ const LandTPage = () => {
         })}
             </div>
         ))}
-        </Box>} 
+        </Box>
         </div>
     )
 }

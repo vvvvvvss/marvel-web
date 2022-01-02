@@ -3,12 +3,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {CardHeader, Typography, Card, CardContent, Link, IconButton, Dialog,
 DialogActions, DialogContent, DialogTitle, DialogContentText, Button, CardActions} from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import sanitizer from "sanitize-html";
 import he from 'he';
 import ReactMde from "react-mde";
 import "../components/Widgets/react-mde-all.css";
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { editCourse } from "../actions/other.js";
+import { useParams } from "react-router-dom";
 
 const TaskCard = ({tsk, tskIndex, lvIndex}) => {
     const {authUser} = useSelector(state => state.auth)
@@ -17,10 +19,19 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
     const [content, setContent] = useState(tsk?.description);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [changed, setChanged] = useState(false);
+    const dispatch = useDispatch();
+    const {id} = useParams();
+
+    useEffect(() => {
+      setMode("view");setContent(tsk?.description);setChanged(false);
+    }, [tsk?._id])
 
     const handleModify = (operation) =>{
-        console.log(tskIndex, operation,"Level",lvIndex);
-    }
+      dispatch(editCourse(id, operation, tskIndex, lvIndex, tsk?._id, content));
+      setChanged(false);
+      setMode("view");
+      setConfirmOpen(false);
+    };
     
     return (
         <div>
@@ -64,7 +75,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                 <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
                 options={{wrapper : 'div'},{
                     overrides: {
-                        p :{ component: Typography , props: {variant : 'body1', sx:{color:'secondary.light'}}}, 
+                        p :{ component: Typography , props: {variant : 'body2'}}, 
                         a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}, sx:{color:'primary.light'}},
                         img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
                         iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
@@ -77,7 +88,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                 <>
                 {/* // editor */}
                 <ReactMde 
-                    value={content} label='content'
+                    value={content}
                     onChange={(e)=>{setChanged(true);setContent(e)}}
                     selectedTab={editorTab}
                     onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
@@ -96,7 +107,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                         },
                     }}>
                         {
-                        he.decode( sanitizer(markdown, {
+                        he.decode(sanitizer(markdown, {
                             allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
                             allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
                         }) ) }
@@ -110,7 +121,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
             {changed &&
             <CardActions>
             <Button variant="contained" color='secondary' onClick={()=>{setContent(tsk?.description);setChanged(false);setMode("view")}} >cancel</Button>
-            <Button variant="contained" color='secondary' onClick={()=>(handleModify("saveTask"))} >save</Button>
+            <Button variant="contained" color='secondary' onClick={()=>(handleModify("editTask"))} >save</Button>
             </CardActions>
             }
         </Card>

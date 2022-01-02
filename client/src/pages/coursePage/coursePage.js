@@ -40,7 +40,7 @@ const CoursePage = () => {
         }else if(tab==='levels'){
             dispatch(getCourseData(id?.trim(), 'levels'));
         }
-    }, [tab, page, searchTitle]);
+    }, [tab, page, searchTitle, id]);
 
     const handleShare = () => {
         try {
