@@ -1,5 +1,5 @@
 import express from 'express';
-import {updateProfile, updateBlog, updatePR, updateRSA, addTask, deleteTask, editTask} from '../controllers/update.js';
+import {updateProfile, updateBlog, updatePR, updateRSA, addTask, deleteTask, editTask, addLevel, deleteLevel} from '../controllers/update.js';
 import identityMW from '../middleware/identityMW.js';
 
 const router = express.Router();
@@ -12,5 +12,7 @@ router.post('/rsa/:id', identityMW, updateRSA);
 router.post('/course/addTask/:id', identityMW, addTask);
 router.post('/course/deleteTask/:id', identityMW, deleteTask);
 router.post('/course/editTask/:id', identityMW, editTask);
+router.post('/course/addLevel/:id', identityMW, addLevel);
+router.post('/course/deleteLevel/:id', identityMW, deleteLevel);
 
 export default router;

@@ -10,8 +10,7 @@ const courseSchema = mongoose.Schema({
     courseBadge : { type :String},
     intro : { type : String},
     levels : [
-        {
-        tasks : [
+        {tasks : [
             {
                 description : {type : String}
             },

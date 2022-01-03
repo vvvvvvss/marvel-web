@@ -26,6 +26,6 @@ export const getSearchFeed = async (type, domain, title, courseCode, authorName,
 );
 export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title || 'none'}`);
 export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/profile/${tab}/${id}?page=${page}&title=${title || 'none'}`);
-export const editCourse = async (courseCode, operation, tskIndex, lvIndex, taskId, content) => (
-    API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex) || 'none'}&lvIndex=${String(lvIndex) || 'none'}&taskId=${taskId || 'none'}`, {content : content || 'none'})
+export const editCourse = async (courseCode, operation, tskIndex, lvIndex, taskId, levelId, content) => (
+    API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex) || 'none'}&lvIndex=${String(lvIndex) || 'none'}&taskId=${taskId || 'none'}&levelId=${levelId || 'none'}`, {content : content || 'none'})
 );

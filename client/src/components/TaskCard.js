@@ -27,7 +27,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
     }, [tsk?._id])
 
     const handleModify = (operation) =>{
-      dispatch(editCourse(id, operation, tskIndex, lvIndex, tsk?._id, content));
+      dispatch(editCourse(id, operation, tskIndex, lvIndex, tsk?._id,0 ,content));
       setChanged(false);
       setMode("view");
       setConfirmOpen(false);
@@ -57,7 +57,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
         {/* TASK CARD  */}
         <Card sx={{marginTop:'15px'}} key={tskIndex}>
             <CardHeader
-            action={ authUser?.currentRole==='INS' &&
+            action={(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
             <span>
             <IconButton size="small" sx={{marginRight:'15px',color:'secondary.light'}} onClick={()=>{setConfirmOpen(true)}}>
                 <DeleteIcon/>
