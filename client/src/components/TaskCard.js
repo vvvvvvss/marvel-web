@@ -24,7 +24,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
 
     useEffect(() => {
       setMode("view");setContent(tsk?.description);setChanged(false);
-    }, [tsk?._id])
+    }, [tsk?._id, authUser?.id])
 
     const handleModify = (operation) =>{
       dispatch(editCourse(id, operation, tskIndex, lvIndex, tsk?._id,0 ,content));
@@ -103,7 +103,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                             img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
                             iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
                             code : { component:Typography ,props : { variant:'code-small' }},
-                            blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }}
+                            blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
                         },
                     }}>
                         {

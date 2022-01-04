@@ -57,8 +57,8 @@ const CoursePage = () => {
         <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
         <div>
         {/* HERO STARTS HERE */}
-        <Paper square elevation={0} sx={{maxWidth:'1300px', display:'grid', gridTemplateColumns: '1fr 1fr',width:'100%'}}>
-            <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:'350px'}}>
+        <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100%',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
+            <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:{xs:'450px',sm:'350px'}}}>
             { isOverviewLoading ? <div>
                 <Skeleton variant='text' variant='rectangular' height='350px' width='600px' animation='wave' sx={{borderRadius:'12px'}} />
             </div> :
@@ -83,7 +83,7 @@ const CoursePage = () => {
                 <Typography variant='body2' sx={{paddingLeft: '10px',color:'primary.light'}}>{overview?.caption}</Typography>
             </div>}
             </Paper>
-            <Paper square elevation={0} sx={{padding:'85px 30px 20px 30px', maxHeight:'350px',overflowY:'auto'}}>
+            <Paper square elevation={0} sx={{padding:{md:'85px 30px 20px 30px',xs:'30px 30px 20px 30px'}, maxHeight:{xs:'450px',sm:'350px'},overflowY:'auto'}}>
             { isOverviewLoading ? 
             <>
             <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px'}} />

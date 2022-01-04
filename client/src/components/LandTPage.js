@@ -46,7 +46,7 @@ const LandTPage = () => {
             <Chip variant="outlined" onClick={()=>(handleModify('addLevel',0, 0))}
             clickable label="Add new Level here" color="primary" /> 
         </Divider>
-        <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr', justifyItems:'center',width:'max-content',minWidth:'750px',gap:'20px', opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
+        <Box sx={{display:'grid',gridTemplateColumns: {xl:'1fr 1fr 1fr',lg:'1fr 1fr',md:'1fr'}, justifyItems:'center',width:'max-content',minWidth:{md:'750px',xs:'100%'},gap:'20px', opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
         {/* zeroth index level add */}
         {syllabus?.levels?.map((lvl, lvIndex)=>(
         <div key={lvIndex} style={{maxWidth:'500px', width:"100%"}}>
