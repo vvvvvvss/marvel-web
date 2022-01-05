@@ -59,60 +59,68 @@ const ProfilePage = () => {
     <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
     <Navbar/>
     {/* ENTIRE WEBSITE */}
-    <div style={{maxWidth:'1300px',width:'100%'}}>
-        <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 20px', minHeight:'300px',
-        display:'flex',maxHeight:'350px',maxWidth:'1300px',width:'100%', justifyContent:'center',alignItems:'center'}}>
-        {isOverviewLoading ? 
-        <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 20px 0px 0px'}}/> :
-        <Box maxWidth='400px' padding='0px 20px 0px 0px' display='grid' gridTemplateColumns='1fr 4fr' gap='10px' width='100%' position='relative'> 
-        <IconButton onClick={()=>handleShare('')} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
-        <Avatar src={overview?.profilePic} sx={{width: '60px', height:'60px'}}/> 
-        <div>
-            <Typography variant="h6">{overview?.name}</Typography> 
-            {overview?.currentRole==='STU' ? 
-            <>
-            <Typography variant='caption' sx={{color: 'primary.light'}}>STUDENT</Typography>
-            <br/><br/><Divider/><br/>
-            <Chip label={overview?.currentStuCourse} variant="outlined" color='secondary' size='small' clickable/>
-            </>
-            : overview?.currentRole==='INS' ? 
-            <>
-            <Typography variant='caption' sx={{color: 'primary.light'}}>INSTRUCTOR</Typography>
-            <br/><br/><Divider/><br/>
+    <div style={{maxWidth:'1580px',width:'100%'}}>
+    {/*top hero*/}
+    <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:{md:'85px 20px 20px 20px',xs:'100px 20px 20px 20px'}, minHeight:'300px',
+        display:'flex',maxHeight:'350px',width:'100%', justifyContent:'center',alignItems:'center'}}>
+        {/* hero grid  */}
+        <Box sx={{display:"grid",gridTemplateColumns:{md:'10fr 1fr 10fr',xs:'1fr'},justifyContent:'center',alignItems:'center',gridTemplateRows:{xs:'10fr 10fr',md:'1fr'}}}>
+            {/* left part  */}
+            {isOverviewLoading ?
+            <Skeleton animation='wave' sx={{width:'400px', borderRadius:'12px', height:'250px',margin:'0px 20px 0px 0px'}}/> :
+            <Box maxWidth='400px' padding='0px 20px 0px 0px' display='grid' gridTemplateColumns='1fr 4fr' gap='10px' width='100%' position='relative'> 
+            <IconButton onClick={()=>handleShare('')} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
+            <Avatar src={overview?.profilePic} sx={{width: '60px', height:'60px'}}/> 
+            <div>
+                <Typography variant="h6">{overview?.name}</Typography> 
+                {overview?.currentRole==='STU' ? 
+                <>
+                <Typography variant='caption' sx={{color: 'primary.light'}}>STUDENT</Typography>
+                <br/><br/><Divider/><br/>
+                <Chip label={overview?.currentStuCourse} variant="outlined" color='secondary' size='small' clickable/>
+                </>
+                : overview?.currentRole==='INS' ? 
+                <>
+                <Typography variant='caption' sx={{color: 'primary.light'}}>INSTRUCTOR</Typography>
+                <br/><br/><Divider/><br/>
+                <span>
+                {overview?.currentInsCourse?.map((c)=>(
+                <Link key={c} to={`/course/${c}`} style={{textDecoration:'none',  marginTop:'8px'}}>
+                <Chip label={c} key={c} variant="outlined" color='secondary' size='small' clickable/>&nbsp;&nbsp;&nbsp;&nbsp;
+                </Link>
+                ))}
+                </span>
+                </>
+                :<></>// nothing happens here
+                }<br/><br/>
+                <Divider/><br/>
             <span>
-            {overview?.currentInsCourse?.map((c)=>(
-            <Link key={c} to={`/course/${c}`} style={{textDecoration:'none',  marginTop:'8px'}}>
-            <Chip label={c} key={c} variant="outlined" color='secondary' size='small' clickable/>&nbsp;&nbsp;&nbsp;&nbsp;
-            </Link>
-            ))}
+                <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
+                <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
+                <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
             </span>
-            </>
-            :<></>// nothing happens here
-            }<br/><br/>
-            <Divider/><br/>
-        <span>
-            <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
-            <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
-        </span>
-        </div>
-        </Box >}
-        <Divider orientation="vertical" flexItem sx={{justifySelf:'center'}}/>
-        {isOverviewLoading ? 
-        <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 0px 0px 20px'}}/> :
-        <Box maxWidth='400px' padding='0px 0px 0px 20px' width='100%' >
-            <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
-            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
-            <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio}</Typography>
-            <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
             </div>
-        </Box>}
-        </Paper>
+            </Box >}
+
+            <Divider orientation="vertical" flexItem sx={{justifySelf:'center',display:{xs:'none',md:'block'}}}/>
+
+            {/* right part  */}
+            {isOverviewLoading ? 
+            <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 0px 0px 20px'}}/> :
+            <Box padding='0px 0px 0px 20px' width='100%' >
+                <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
+                <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
+                <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio}</Typography>
+                <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
+                </div>
+            </Box>}
+        </Box>{/*end of grid */}
+        </Paper> {/*end of hero*/} 
         <Divider/>
-        <AppBar position="sticky" sx={{background:'#1a1a1a'}}>
+        <AppBar position="sticky" sx={{background:'#1a1a1a',width:'100%'}} >
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
-            <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))} >
-            <Tab label="Blog" value='blog'/>
+            <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
+            <Tab label="Blog" value='blog' />
             <Tab label="PRs" value='pr'/>
             {authUser?.id && <Tab label="Res Articles" value='rsa'/>}
             <Tab label="Certificates" value='cert'/>
@@ -127,7 +135,7 @@ const ProfilePage = () => {
         <br/><br/>
         {isFeedLoading ? <CircularProgress/> : feed?.length===0 ? 
         <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
-        <Box sx={{display:'grid',gridTemplateColumns: '1fr 1fr',gap:'20px'}}>
+        <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px',padding:'0px 20px 20px 20px'}}>
         {["blog","pr","rsa"].includes(tab) &&
         <>
         {feed?.map((p)=>( 

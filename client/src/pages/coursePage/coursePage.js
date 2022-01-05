@@ -110,7 +110,7 @@ const CoursePage = () => {
         </Paper>
         <Divider/>
         { ((authUser?.id)&&(authUser?.enrollmentStatus!=='UNKNOWN'))&&
-        <AppBar position='sticky' sx={{background:'#181818'}}> 
+        <AppBar position='sticky' sx={{background:'#181818', overflowX:'auto'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
         <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
         <Tab label="Levels" value='levels'/>
@@ -132,7 +132,7 @@ const CoursePage = () => {
         <CircularProgress/>
          : feed?.length===0 ? 
         <Typography variant="h6" fontWeight='600' color='#808080'>There are no Resource Articles for this Course yet.</Typography> :
-        <Box display='grid' gridTemplateColumns='1fr 1fr' gap='20px' maxWidth='1000px'>
+        <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px',maxWidth:'1580px',justifyContent:'center'}}>
         {feed?.map((p)=>(
         <PostCard type='rsa' post={p} scope='else' variant='media' key={p?.slug}/>
         ))}

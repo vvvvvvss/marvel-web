@@ -8,6 +8,7 @@ import DbForm from '../../components/Widgets/dbForm.js';
 import styles from './dashboard.module.css';
 import { useSelector} from 'react-redux';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
+import { Box } from '@mui/system';
 
 const StuDashboard = () => {
     const {formOpen} = useSelector(state => state.dashboard);
@@ -16,20 +17,21 @@ const StuDashboard = () => {
         <>
         <Navbar/>
         <Paper variant='window' className={styles.window}>
-            <div className={styles.grid}>
+            <Box sx={{ display: "grid", maxWidth: "1300px", height: "max-content", 
+            gridTemplateColumns:{xs:'1fr',md:'1fr 1fr', lg:'1fr 1fr 1fr',xl:'1fr 1fr 1fr 1fr'} , gap: "20px", justifyContent: "space-evenly", 
+            alignItems: "flex-start"}}>
             <Syllabus/>
             <div className={styles.singlegrid} >
             <DbProgress/>
             <DbSubmissions />
             </div>
             <DbProfile/>
-            </div>
+            </Box>
 
             { formOpen && <DbForm/>}
 
             <Dial/>
         </Paper>
-        
         </>
     )
 }
