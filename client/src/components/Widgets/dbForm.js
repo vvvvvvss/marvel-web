@@ -123,7 +123,7 @@ const DbForm = () => {
                 allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
               }) ) }
           </Markdown>
-          )
+          ).catch(()=>(alert("could'nt parse your markdown.")))
           }
         />
         </Paper>

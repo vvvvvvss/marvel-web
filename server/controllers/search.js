@@ -16,10 +16,15 @@ try {
         ]
     };
 
-    const feed = await rsa.find(query).skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -rankingScore").lean().exec();
+    const feed = await rsa.find(query)
+                            .skip((Number(req.query?.page)-1)*(req.query?.scope==='rec'?4:8))
+                            .limit((req.query?.scope==='rec'?4:8))
+                            .select("-_id -content -tags -rankingScore")
+                            .lean().exec();
+
     const total = await rsa.countDocuments(query).lean().exec();
 
-    return res.json({feed: feed, total : Math.ceil(total/8), status:'200'})
+    return res.json({feed: feed, total : Math.ceil(total/(req.query?.scope==='rec'?4:8)), status:'200'})
 } catch (error) {
     console.log(error);
     return res.json({status:'BRUH', message:'Something went wrong'});
@@ -39,10 +44,13 @@ export const searchPr = async(req, res) => {
         ]
     };
 
-    const feed = await pr.find(query).skip((Number(req.query.page)-1)*8).limit(8).select("-_id -content -tags -feedback -reviewStatus").lean().exec();
+    const feed = await pr.find(query).skip((Number(req.query.page)-1)*(req.query?.scope==='rec'?4:8))
+                                    .limit((req.query?.scope==='rec'?4:8))
+                                    .select("-_id -content -tags -feedback -reviewStatus")
+                                    .lean().exec();
     const total = await pr.countDocuments(query);
     
-    return res.json({feed: feed, total: Math.ceil(total/8), status:'200'});
+    return res.json({feed: feed, total: Math.ceil(total/(req.query?.scope==='rec'?4:8)), status:'200'});
  } catch (error) {
      console.log(error);
      return res.json({status:'BRUH', message:'Something went wrong'});
@@ -59,10 +67,14 @@ export const searchBlog = async(req, res) => {
             {reviewStatus : 'APPROVED'}
         ]
     };
-    const feed = await blog.find(query).skip((Number(req.query?.page)-1)*8).limit(8).select("-_id -content -tags -authorCourseCode -reviewStatus -feedback -rankingScore").lean().exec();
+    const feed = await blog.find(query)
+                            .skip((Number(req.query?.page)-1)*(req.query?.scope==='rec'?4:8))
+                            .limit((req.query?.scope==='rec'?4:8))
+                            .select("-_id -content -tags -authorCourseCode -reviewStatus -feedback -rankingScore")
+                            .lean().exec();
     const total = await blog.countDocuments(query).lean().exec();
 
-    return res.json({feed:feed, total: Math.ceil(total/8), status:'200'});
+    return res.json({feed:feed, total: Math.ceil(total/(req.query?.scope==='rec'?4:8)), status:'200'});
  } catch (error) {
      console.log(error);
      return res.json({status:'BRUH', message:'Something went wrong'});
@@ -93,7 +105,6 @@ export const searchCourse = async(req, res) => {
         $and : [
             {domain : (req?.query?.domain==='none'||!req?.query?.domain) ? new RegExp("",'i'): new RegExp(req.query?.domain,'i')},
             {courseCode : (req?.query?.courseCode==='none'||!req?.query?.courseCode) ? new RegExp("",'i'): new RegExp(req.query?.courseCode,'i')},
-            // {tags : (req?.query?.tag==='none'||!req?.query?.tag) ? [new RegExp("",'i')]: req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))},
         ]
     };
     const feed = await course.find(query).skip((Number(req.query?.page)-1)*8).limit(8).select(("-_id -submissionStatus -intro -levels -rankingScore")).lean().exec();

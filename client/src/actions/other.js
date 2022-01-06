@@ -22,10 +22,10 @@ export const getProfileFeed = (id, tab, page, title) => async (dispatch) => {
     dispatch({type:'END_FEED_LOADING'});
 }
 
-export const getSearchFeed = (type, domain, title, courseCode, authorName, tags, page)=>async(dispatch)=>{
+export const getSearchFeed = (type, domain, title, courseCode, authorName, tags, page, scope)=>async(dispatch)=>{
     dispatch({type:'START_FEED_LOADING'});
     try {
-        const {data} = await API.getSearchFeed(type, domain, title, courseCode, authorName, tags, page);
+        const {data} = await API.getSearchFeed(type, domain, title, courseCode, authorName, tags, page, scope);
         if(data?.status==='200'){
             dispatch({type:'GET_FEED', payload: {feed: data?.feed, total: data?.total}});
         }else{alert("Something went wrong while searching.");}

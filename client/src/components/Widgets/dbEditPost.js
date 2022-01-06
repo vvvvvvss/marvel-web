@@ -114,7 +114,7 @@ const DbEditPost = () => {
                         allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
                 }))}
                 </Markdown>
-                )
+                ).catch(()=>(alert("could not parse your markdown")))
                 }
                 />
                 </Paper>

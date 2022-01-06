@@ -11,7 +11,6 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LanguageIcon from '@mui/icons-material/Language';
 import ShareIcon from '@mui/icons-material/Share';
 import SearchIcon from '@mui/icons-material/Search';
-import moment from 'moment';
 import PostCard from "../../components/PostCard";
 
 const ProfilePage = () => {
@@ -107,7 +106,7 @@ const ProfilePage = () => {
             {/* right part  */}
             {isOverviewLoading ? 
             <Skeleton animation='wave' sx={{width:'100%', maxWidth:'400px', borderRadius:'12px', height:'250px',margin:'0px 0px 0px 20px'}}/> :
-            <Box padding='0px 0px 0px 20px' width='100%' >
+            <Box padding='0px 0px 0px 20px' width='100%' maxWidth="400px" >
                 <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
                 <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
                 <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio}</Typography>

@@ -21,7 +21,6 @@ const Search = () => {
     const [tags, setTags] = useState("");
     const [page, setPage] = useState(1);
     const dispatch = useDispatch();
-    const history = useHistory();
 
     useEffect(() => {
       dispatch({type:'CLEAR_FEED'});
@@ -36,25 +35,12 @@ const Search = () => {
       }
     }
 
-    const handleShare = (slug) => {
-        try {
-        if(!slug){
-            navigator.clipboard.writeText(window.location.href);
-            alert("Profile Link copied to clipboard successfully.!");
-        }else{
-            navigator.clipboard.writeText(`${window.location.origin}/${type}/${slug}`);
-            alert("Link copied to clipboard!")
-        }
-        } catch (error) {
-            alert("Coud'nt copy link to clipboard :(");
-        }
-    }
     return (
         //entire screen
         <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh',minWidth:'100vw'}}>
         <Navbar/>
         {/* entire page */}
-        <div style={{maxWidth:'1300px',width:'100%'}}>
+        <div style={{maxWidth:'1580px',width:'100%'}}>
         {/* top hero */}
         <Paper square elevation={0} sx={{backgroundColor: '#031117', padding:'120px 20px 30px 0px', 
         display:'flex',maxHeight:{xs:'max-content',sm:'350px'},width:'100%',flexDirection:'column' ,alignItems:'center'}}>
@@ -145,7 +131,7 @@ const Search = () => {
         {isFeedLoading ? <CircularProgress/> : 
         feed?.length===0&&type!=='' ? 
         <Typography variant="h6" fontWeight='600' sx={{marginTop:'30px'}} color='#808080'>We found nothing.</Typography> : 
-        <Box sx={{display:'grid',gridTemplateColumns: {xs:'1fr',sm:'1fr 1fr'}, gap:'20px', justifyContent:'center'}} >
+        <Box sx={{display:'grid',gridTemplateColumns: {xs:'1fr',md:'1fr 1fr',xl:'1fr 1fr 1fr',}, gap:'20px', justifyContent:'center'}} >
         
         {feed?.map((p)=>(
         <div key={p?.slug || p?.courseCode}>
