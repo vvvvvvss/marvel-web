@@ -51,11 +51,11 @@ export const getProfile = async(req, res)=>{
 
 export const getSubmissionsBlog = async (req, res)=>{
     try {
-        const returnedBlogPosts = await blogs.aggregate([
-            { $match : { authorId : req.user.id }},
-            { $sort : { _id : -1, } }, { $skip : (Number(req.query.page)-1)*3}, { $limit : 3 },
-            {$project : {content : 0, coverPhoto : 0, tags : 0, feedback :0}}
-        ]) ;
+        const returnedBlogPosts = await blogs.find({authorId:req.user.id})
+                                .sort({_id:-1})
+                                .skip((Number(req.query.page)-1)*3)
+                                .limit(3).select("-content -coverPhoto -tags -feedback")
+                                .lean().exec();
         // console.log(await blogs.db.db.admin().command({getLastRequestStatistics : 1}));
         const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
         return res.json({status : '200', total : (Math.ceil(total/3)), submissions : returnedBlogPosts});        
@@ -70,12 +70,10 @@ export const getSubmissionsPr = async (req, res)=>{
         const condition = (req.user.enrollmentStatus==='ACTIVE') &&
                             ( req.user.currentRole === 'STU');
         if(!condition) return res.json({message : 'you cannot be doing this', staus:'404'});
-        const returnedPRs = await prs.aggregate([
-            { $match : { $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]}},
-            { $sort : { _id : -1 }},
-            { $limit : 3 },
-            {$project : {content : 0, tags : 0, feedback :0}}
-        ]);
+        
+        const returnedPRs = await prs.find({ $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]})
+                                    .sort({_id:-1}).limit(3)
+                                    .select("-content -feedback -tags").lean().exec();
         return res.json({status : '200', submissions : returnedPRs, total : 1});
     } catch (error) {
         console.log(error);
@@ -174,13 +172,9 @@ export const getToReviewPrs = async (req, res) => {
 
         if(!condition) return  res.json({status:'404', message:'Access denied.'});
 
-        const returnedPrs = await prs.aggregate([
-            {$match : {$and : [{reviewStatus : 'PENDING'},{courseCode : {$in : courseArray}}]}},
-            {$sort : {_id : -1}},
-            {$skip : (Number(req.query.page)-1)*5},
-            {$limit : 5},
-            {$project : {content : 0, tags : 0, feedback :0}}
-        ]);
+        const returnedPrs = await prs.find({$and : [{reviewStatus : 'PENDING'},{courseCode : {$in : courseArray}}]})
+                                    .sort({_id:-1}).skip((Number(req.query.page)-1)*5)
+                                    .limit(5).select("-content -tags -feedback").lean().exec();
 
     // console.log( await user.db.db.admin().command({getLastRequestStatistics : 1})); 
 
@@ -196,14 +190,9 @@ export const getToReviewBlogs = async (req, res) => {
         const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS');
         if(!condition) return res.json({message: 'Access denied.', status:'404'});
 
-        const returnedBlogs = await blogs.aggregate([
-            {$match : {$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : req.user.currentInsCourse}}]}},
-            {$sort : {_id : 1}},
-            {$skip : (Number(req.query.page)-1)*5},
-            {$limit : 5},
-            {$project : {content : 0, coverPhoto : 0, tags : 0, feedback :0}}
-        ]);
-
+        const returnedBlogs = await blogs.find({$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : req.user.currentInsCourse}}]})
+                                        .sort({_id:1}).skip((Number(req.query.page)-1)*5)
+                                        .limit(5).select("-content -coverPhoto -tags -feedback").lean().exec();
         return res.json({status: '200', posts: returnedBlogs});
     } catch (error) {
         console.log(error);

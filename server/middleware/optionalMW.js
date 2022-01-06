@@ -14,18 +14,15 @@ try {
         const ticket = await gClient.verifyIdToken({idToken : token, audience : process.env.CIENT_ID});
         const userData = ticket.getPayload();
 
-        const existingUser = await user.aggregate([
-            {$match : { id : userData?.sub }},
-            { $limit : 1},
-            {$project : {bio : 0,gitHub:0,linkedIn:0,website:0}}
-        ]);
+        const existingUser = await user.findOne({id : userData?.sub}, "-bio -website -linkedIn -gitHub").lean();
 
-        if(existingUser[0]?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
 
-        if(!existingUser[0] || existingUser[0]?.enrollmentStatus==='UNKNOWN'){
+        if(existingUser?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
+
+        if(!existingUser || existingUser?.enrollmentStatus==='UNKNOWN'){
             req.user = null; next();
         }else{
-            req.user = existingUser[0];
+            req.user = existingUser;
             next();
         } 
     }

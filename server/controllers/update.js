@@ -13,7 +13,7 @@ export const updateProfile = async (req, res)=>{
             const linkedInRegex = /^https:\/\/[a-z]{2,3}\.linkedin\.com\/.*$/gim
             if(!linkedInRegex.test(newProfile?.linkedIn)) return res.json({status:'linkedInError'});
         }else if(newProfile?.gitHub){
-            const gitHubRegex = /https:\/\/github\.com\/[^\/]+\//gm
+            const gitHubRegex = /https:\/\/github\.com\/[^\/]/gm
             if(!gitHubRegex.test(newProfile?.gitHub)) return res.json({status:'gitHubError'});
         }else if(newProfile?.website){
             const websiteRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
