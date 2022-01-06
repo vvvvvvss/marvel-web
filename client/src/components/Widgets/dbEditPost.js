@@ -24,7 +24,7 @@ const DbEditPost = () => {
         if( !viewPost?.slug || (viewPost?.slug !== editPostId)){
             dispatch(getPost(editPostType, editPostId));
         }
-    }, [editPostId]);
+    }, [editPostId, dispatch]);
 
     useEffect(() => {
         setFormData({title: viewPost?.title, content: he.decode(`${viewPost?.content}`), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});

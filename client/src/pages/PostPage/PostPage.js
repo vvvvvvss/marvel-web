@@ -139,8 +139,8 @@ const PostPage = ({viewPostType}) => {
             {isFeedLoading ? <CircularProgress/> : 
             feed?.length===0 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
-            feed?.map((p)=>(p?.slug !== id &&
-                <PostCard post={p} variant='media' type={viewPostType} scope='else'  />
+            feed?.map((p, i)=>(p?.slug !== id &&
+                <PostCard post={p} variant='media' type={viewPostType} scope='else' key={i} />
             ))}
         </Box>
         </Box>

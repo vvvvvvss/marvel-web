@@ -18,11 +18,6 @@ const DbSubmissions = () => {
         dispatch(getSubmissions(tab, page));
     }, [tab, page]);
 
-    const colorDecide = (status) => {
-        if(status==='PENDING') return 'warning';
-        else if (status==='FLAGGED') return 'error';
-        else if (status==='APPROVED' || 'FEATURED') return 'success';
-    }
     return (
     <>
         <Paper variant='widget'  >

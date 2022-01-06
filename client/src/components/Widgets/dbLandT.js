@@ -1,4 +1,4 @@
-import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Link, Button, CircularProgress} from '@mui/material';
+import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Link, CircularProgress} from '@mui/material';
 import { useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getCourseData} from '../../actions/dashboard.js';

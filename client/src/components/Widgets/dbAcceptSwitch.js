@@ -11,7 +11,7 @@ const AcceptSwitch = () => {
 
     useEffect(() => {
         dispatch(getCourseData(course, 'switch'));
-    }, [course]);
+    }, [course, dispatch]);
 
     const switches = [];
     for (let i = 1; i <= syllabus?.totalLevels; i++) {

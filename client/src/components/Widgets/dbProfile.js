@@ -1,4 +1,4 @@
-import { Avatar, Paper,Typography, Chip, TextField, Button, CircularProgress, Skeleton } from "@mui/material";
+import { Avatar, Paper,Typography, Chip, TextField, Button, Skeleton } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {useEffect, useState} from 'react';
 import {getProfileData, updateProfile} from '../../actions/dashboard.js';

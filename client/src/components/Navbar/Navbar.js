@@ -146,9 +146,9 @@ const Navbar = () => {
                     <ListItemIcon><NewspaperIcon/></ListItemIcon>
                     <ListItemText>Blog</ListItemText>
                 </ListItemButton> */}
-                <ListItemButton onClick={()=>(history.push("/about"))}>
+                <ListItemButton onClick={()=>{}}>
                     <ListItemIcon><InfoIcon/></ListItemIcon>
-                    <ListItemText>About</ListItemText>
+                    <ListItemText>About (coming soon)</ListItemText>
                 </ListItemButton>
                 </List>
             <footer>

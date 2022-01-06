@@ -18,9 +18,7 @@ const CoursePage = () => {
     const {authUser} = useSelector(state => state.auth);
     const query = new URLSearchParams(useLocation().search);
     const hashParam = useLocation()?.hash;
-    const history = useHistory();
     const dispatch = useDispatch();
-    const {syllabus, isSyllabusLoading} = useSelector((state)=>(state.dashboard));
     const {isFeedLoading, feed, isOverviewLoading, overview, totalFeedPages} = useSelector((state)=>(state.other));
     const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&(authUser?.id&&authUser?.enrollmentStatus!=='UNKNOWN') ? 'rsa' : 'levels');
     const [page, setPage] = useState(Number(query.get('page'))||1);
