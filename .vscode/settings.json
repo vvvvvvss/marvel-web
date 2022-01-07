@@ -4,9 +4,9 @@
         ".vscode{,/**}",
         "test{,/**}"
     ],
-    "appService.deploySubpath": "server",
+    "appService.deploySubpath": "./server",
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": false
     },
     "appService.defaultWebAppToDeploy": "/subscriptions/baf67553-6c5b-443e-a0f0-f6df205c384f/resourceGroups/marvel-web/providers/Microsoft.Web/sites/marvel-web",
 }
