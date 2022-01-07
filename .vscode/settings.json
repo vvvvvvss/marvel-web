@@ -1,0 +1,9 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/baf67553-6c5b-443e-a0f0-f6df205c384f/resourceGroups/marvel-web/providers/Microsoft.Web/sites/marvel-web",
+    "appService.deploySubpath": "server",
+        "appService.zipIgnorePattern": [
+            "node_modules{,/**}",
+            ".vscode{,/**}",
+            "test{,/**}"
+        ],
+}
