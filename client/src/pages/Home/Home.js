@@ -1,4 +1,4 @@
-import { Button, Paper, Typography, Alert} from '@mui/material';
+import { Paper, Typography, Alert} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -32,11 +32,12 @@ return (
             <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'30px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
         </Box>
         </Box>
-        { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
+
+        {/* { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
         <Button variant='contained' color='primary' onClick={()=>(history.push('/dashboard'))}>
             Go to Dashboard
         </Button>
-        }
+        } */}
         </Box>
         {/* something  */}
     </Box>
