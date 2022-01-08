@@ -25,9 +25,9 @@ const PostCard = ({type, post, variant, scope}) => {
     }
 
     return (
-        <div>
+        <>
         <Card variant='outlined' 
-        sx={{width:`${["ins-dashboard","dashboard"].includes(scope)?'100%':'400px'}`,padding:'0px',height:'max-content',position:'relative',
+        sx={{margin:{xs:'0px 20px 0px 20px',sm:'0px'},height:'max-content',position:'relative',justifySelf:'center', maxWidth:'400px', minWidth:{xs:'0px',sm:'400px'},width:'85%',
         opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.4':'1'}`}}>
           {(type==='blog' && variant==='media') && <>
           <IconButton onClick={handleShare}
@@ -43,7 +43,7 @@ const PostCard = ({type, post, variant, scope}) => {
             sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>
               {post?.title}
             </Typography>
-            <Typography sx={{color:'#c4c4c4',marginTop:["ins-dashboard","dashboard"].includes(scope)?'8px':'0px'}} variant='caption' component='div'>
+            <Typography sx={{color:'#c4c4c4',marginTop:["ins-dashboard","dashboard"].includes(scope)?'8px':'0px',textOverflow:'ellipsis'}} variant='caption' component='div'>
                 {scope!=='dashboard'&&<span>{post?.authorName}&nbsp;&nbsp; &#8226; &nbsp;&nbsp;</span>}
                 {(type==='pr' || type==='rsa') && 
                 <><span>{`${type==='pr'?'Level':''} ${post?.[type==='pr' ? 'level' : 'courseCode']}`}</span>
@@ -66,7 +66,7 @@ const PostCard = ({type, post, variant, scope}) => {
               </Button>&nbsp;&nbsp;
               </CardActions>
           </Card>
-        </div>
+        </>
     )
 }
 

@@ -80,7 +80,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                         img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
                         iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
                         code : { component:Typography ,props : { variant:'code-small' }},
-                        blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
+                        blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px', margin:"10px"} }}
                     }
                 }}>
                 {tsk?.description}

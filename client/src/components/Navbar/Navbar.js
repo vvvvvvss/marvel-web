@@ -37,6 +37,9 @@ const Navbar = () => {
     }
     const googleError = (err) => {
         console.log(err);
+        if(err.error !== 'popup_closed_by_user'){
+            alert("Looks like login did'nt go well :(. Please try again.");
+        }
     }
 
     return (
@@ -47,10 +50,10 @@ const Navbar = () => {
                 <div style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
                 <IconButton size='small' onClick={()=>(setDrawerOpen(true))}><MenuIcon/></IconButton>
                 <Typography variant="h6" component="div" onClick={()=>(history.push('/'))} sx={{cursor:'pointer'}}>
-                <span className={styles.uvce}>UVCE&nbsp;</span> <span className={styles.marvel}>MARVEL</span>
+                <span className={styles.uvce}>UVCE&nbsp;</span><span className={styles.marvel}>MARVEL</span>
                 </Typography>
                 </div>
-                {isAuthLoading ? <CircularProgress/> : 
+                {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
                          <Avatar alt={authUser?.name} src={authUser?.profilePic} 

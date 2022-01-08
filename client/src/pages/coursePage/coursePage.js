@@ -43,9 +43,9 @@ const CoursePage = () => {
     const handleShare = () => {
         try {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard successfully.!")
+        alert("Link copied to clipboard successfully.!");
         } catch (error) {
-            alert("Coud'nt copy link to clipboard :(")
+            alert("Coud'nt copy link to clipboard :(");
         }
     }
 
@@ -57,9 +57,9 @@ const CoursePage = () => {
         {/* HERO STARTS HERE */}
         <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100%',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
             <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:{xs:'450px',sm:'350px'}}}>
-            { isOverviewLoading ? <div>
-                <Skeleton variant='text' variant='rectangular' height='350px' width='600px' animation='wave' sx={{borderRadius:'12px'}} />
-            </div> :
+            { isOverviewLoading ? <>
+                <Skeleton variant='text' variant='rectangular' height='350px' animation='wave' sx={{borderRadius:'12px', width:{xs:'100%'},minWidth:{md:'600px',xs:'300px'}}} />
+            </> :
             <div style={{maxWidth:'600px'}}>   
                 <IconButton sx={{position:'absolute',right :'20px',top:'90px',color:'primary.light'}} onClick={handleShare}>
                     <ShareIcon/>
@@ -84,9 +84,9 @@ const CoursePage = () => {
             <Paper square elevation={0} sx={{padding:{md:'85px 30px 20px 30px',xs:'30px 30px 20px 30px'}, maxHeight:{xs:'450px',sm:'350px'},overflowY:'auto'}}>
             { isOverviewLoading ? 
             <>
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px'}} />
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px'}} />
-            <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px'}} />
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
+            <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
             </>
             :
             <Typography component='div' sx={{color:'secondary.light'}}>
@@ -99,7 +99,7 @@ const CoursePage = () => {
                     img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
                     iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
                     code : { component:Typography ,props : { variant:'code-small' }},
-                    blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
+                    blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px',margin:"10px 10px 10px 10px"} }}
                 }
             }}>
             {`${overview?.intro}`}
@@ -130,7 +130,7 @@ const CoursePage = () => {
         <CircularProgress/>
          : feed?.length===0 ? 
         <Typography variant="h6" fontWeight='600' color='#808080'>There are no Resource Articles for this Course yet.</Typography> :
-        <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px',maxWidth:'1580px',justifyContent:'center'}}>
+        <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px',justifyContent:'center', minWidth:{xs:'100%',sm:'max-content'}, maxWidth:{xs:'400px',sm:'max-content'}}}>
         {feed?.map((p)=>(
         <PostCard type='rsa' post={p} scope='else' variant='media' key={p?.slug}/>
         ))}
