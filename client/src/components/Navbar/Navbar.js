@@ -36,7 +36,7 @@ const Navbar = () => {
         window.location.reload();
     }
     const googleError = (err) => {
-        console.log(err.message);
+        console.log(err);
     }
 
     return (

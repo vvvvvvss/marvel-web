@@ -123,7 +123,6 @@ export const toggleSub = (course, level) => async (dispatch) => {
     try {
         dispatch({type : 'START_CREATE_LOADING'});
         const {data} = await API.toggleSub(course, level);
-        console.log(data);
         if(data?.status==='201'){
             dispatch({type : 'GET_COURSE', payload : data?.course});
         }else{alert("Something went wrong while changing submission status :(")};
