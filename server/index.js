@@ -14,9 +14,7 @@ import cloudinary from 'cloudinary';
 import actionRoutes from './routes/actionRoutes.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 
-
 const app = express();
-
 dotenv.config();
 
 //setting up bodyparser and cors
