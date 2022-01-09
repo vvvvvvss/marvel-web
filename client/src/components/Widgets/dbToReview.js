@@ -40,8 +40,8 @@ const DbToReview = () => {
             </Typography>
             :
             <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
-            {toReview?.posts?.map((sub)=>(
-                <PostCard post={sub} scope='ins-dashboard' type={tab} varaint='smol'/>
+            {toReview?.posts?.map((sub, i)=>(
+                <PostCard post={sub} scope='ins-dashboard' type={tab} varaint='smol' key={i} />
             ))}
             </div>}
             <br/>

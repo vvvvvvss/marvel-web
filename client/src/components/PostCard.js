@@ -27,18 +27,20 @@ const PostCard = ({type, post, variant, scope}) => {
     return (
         <>
         <Card variant='outlined' 
-        sx={{margin:{xs:'0px 20px 0px 20px',sm:'0px'},height:'max-content',position:'relative',justifySelf:'center', maxWidth:'400px', minWidth:{xs:'0px',sm:'400px'},width:'85%',
+        sx={{margin:{xs:'0px 20px 0px 20px',sm:["dashboard","ins-dashboard"].includes(scope)?'0px 20px 0px 20px':'0px'},height:'max-content',position:'relative',justifySelf:'center',
+        maxWidth:'400px', 
+        minWidth:{xs:`${(variant==="media"&&type==='blog')?'100%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
         opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.4':'1'}`}}>
           {(type==='blog' && variant==='media') && <>
           <IconButton onClick={handleShare}
           sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
               <CardMedia
               component="img"
-              height="100%" sx={{maxHeight:'150px',objectFit:'cover'}}
+              width="100%" sx={{maxHeight:'150px',objectFit:'cover', borderRadius:'4px'}}
               image={post?.coverPhoto}
               alt={post?.title}
           /></>}
-          <CardContent>
+          <CardContent sx={{padding:'10px'}} >
             <Typography variant={["ins-dashboard","dashboard"].includes(scope) ? 'body1' : 'h6'} fontWeight={["ins-dashboard","dashboard"].includes(scope)?'500':''}
             sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>
               {post?.title}

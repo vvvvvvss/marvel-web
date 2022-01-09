@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({baseURL : 'https://marvel-web.azurewebsites.net/'});
+const API = axios.create({baseURL : 'http://localhost:3000/'});
 
 API.interceptors.request.use((req) => {
     if(sessionStorage.getItem('deez')){
@@ -29,3 +29,4 @@ export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/pro
 export const editCourse = async (courseCode, operation, tskIndex, lvIndex, taskId, levelId, content) => (
     API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex) || 'none'}&lvIndex=${String(lvIndex) || 'none'}&taskId=${taskId || 'none'}&levelId=${levelId || 'none'}`, {content : content || 'none'})
 );
+export const deletePost = async (slug, type)=> API.post(`/action/delete/${type.toLowerCase()}/${slug}`);

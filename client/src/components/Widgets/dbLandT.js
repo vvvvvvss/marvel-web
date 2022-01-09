@@ -12,6 +12,9 @@ const DbLandT = () => {
 
     useEffect(() => {
         dispatch(getCourseData(authUser?.currentStuCourse,'dashboard'));
+        return()=>{
+            dispatch({type:"CLEAR_SYLLABUS"});
+        }
     }, []);
 
     return (

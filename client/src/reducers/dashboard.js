@@ -20,7 +20,9 @@ const dashboardReducer = (state=initialState, action)=>{
         case 'CLOSE_EDIT':
             return {...state, editPostOpen:false}
         case 'SET_EDIT_ID':
-            return {...state, editPostId : action.payload?.id , editPostType : action.payload.type}
+            return {...state, editPostId : action.payload?.id , editPostType : action.payload.type};
+        case 'DELETE_POST':
+            return {...state, submissions : {...state.submissions, others : state?.submissions?.others?.filter((p)=>(p?.slug!==action.payload))}, viewPost:{}, viewPostId:''}
         //viewpost
         case 'OPEN_VIEW':
             return {...state, viewPostOpen:true}
@@ -93,6 +95,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, toReview : {...state?.toReview, posts : state.toReview?.posts?.filter((k)=>(k?.slug !== action.payload))}}
         case 'EDIT_SYLLABUS':
             return {...state, syllabus : {...state?.syllabus, levels : action.payload?.levels}};
+        case "CLEAR_SYLLABUS":
+            return {...state, syllabus:{}};
         default: 
             return state;
     }

@@ -29,6 +29,7 @@ const CoursePage = () => {
         return () => {
             dispatch({type:'CLEAR_FEED'});
             dispatch({type:'CLEAR_OVERVIEW'});
+            dispatch({type:"CLEAR_SYLLABUS"});
         }
     },[id]);
 
@@ -52,7 +53,7 @@ const CoursePage = () => {
     return (
         <div>
         <Navbar/>
-        <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
+        <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', minWidth:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
         <div>
         {/* HERO STARTS HERE */}
         <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100%',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
@@ -89,7 +90,7 @@ const CoursePage = () => {
             <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
             </>
             :
-            <Typography component='div' sx={{color:'secondary.light'}}>
+            <Typography component='div' variant='body2' lineHeight='26px' sx={{color:'secondary.light'}}>
             <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px'}} 
                 options={
                 {wrapper : 'div'},
@@ -122,10 +123,10 @@ const CoursePage = () => {
         </Box>  
         :
         <Box display='flex' flexDirection='column' alignItems='center' width='100%' paddingTop='20px'>
-        <div style={{maxWidth:'1000px',display:'flex'}}>
+        <span style={{maxWidth:'1000px',display:'flex'}}>
             <TextField placeholder='Search by Title' value={titleField} onChange={(e)=>(setTitleField(e.target.value))} fullWidth />&nbsp;&nbsp;&nbsp;&nbsp;
             <Button onClick={(e)=>(setSearchTitle(titleField))} variant='outlined'><SearchIcon/></Button>
-        </div><br/>
+        </span><br/>
         {isFeedLoading ?
         <CircularProgress/>
          : feed?.length===0 ? 

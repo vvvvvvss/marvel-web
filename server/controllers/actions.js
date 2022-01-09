@@ -1,5 +1,6 @@
 import blogPost from '../models/blogPost.js';
 import prs from '../models/projectReport.js';
+import rsa from "../models/rsa.js";
 import user from '../models/user.js';
 import course from '../models/course.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
@@ -238,3 +239,35 @@ export const toggleSub = async (req, res) => {
         return res.json({status :'BRUH', message : 'Something went wrong:('})
     }
 }
+
+export const deleteBlog = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const existingBlog = await blogPost.findOne({slug: id}).select("-content -tags -coverPhoto").lean().exec();
+        if(!existingBlog) return res.json({status:'404', message:"That does'nt exist."});
+        if(existingBlog?.authorId !== req.user?.id) return res.json({status:'404', message:"Access denied!"});
+
+        await blogPost.deleteOne({slug: id});
+        return res.json({message:'Deleted successfully', status:'201'});
+    } catch(error) {
+        console.log(error);
+        return res.json({status:'BRUH',message : 'Something went wrong:('})
+    }
+}
+
+
+export const deleteRsa = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const existingRsa = await rsa.findOne({slug: id}).select("-content -tags").lean().exec();
+        if(!existingRsa) return res.json({status:'404', message:"That does'nt exist."});
+        if(existingRsa?.authorId !== req.user?.id) return res.json({status:'404', message:"Access denied!"});
+
+        await rsa.deleteOne({slug: id});
+        return res.json({message:'Deleted successfully', status:'201'});
+    } catch(error) {
+        console.log(error);
+        return res.json({status:'BRUH',message : 'Something went wrong:('})
+    }
+}
+

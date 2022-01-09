@@ -1,8 +1,8 @@
 import { Paper, Typography, IconButton, Chip, Avatar, Link, Divider, Button, Skeleton, 
-    CircularProgress} from "@mui/material";
+    CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getPost } from "../../actions/dashboard.js";
-import { useEffect } from "react";
+import { getPost, deletePost } from "../../actions/dashboard.js";
+import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
@@ -15,12 +15,13 @@ import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
 
 const PostPage = ({viewPostType}) => {
-    const { viewPost, isViewLoading, editPostOpen} = useSelector(state => state.dashboard);
+    const { viewPost, isViewLoading, editPostOpen, isCreateLoading} = useSelector(state => state.dashboard);
     const { feed, isFeedLoading} = useSelector(state => state.other);
     const dispatch = useDispatch();
     const history = useHistory();
     const {authUser} = useSelector(state => state.auth);
     const {id} = useParams();
+    const [delConfirm, setDelConfirm] = useState(false);
 
     useEffect(() => {
         dispatch(getPost( viewPostType ,id, 'page',history));
@@ -42,6 +43,10 @@ const PostPage = ({viewPostType}) => {
         }
     };
 
+    const handleDelete = ()=>{
+        dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
+    }
+
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -56,7 +61,7 @@ const PostPage = ({viewPostType}) => {
         {/* TOP HERO  */}
         {isViewLoading ? 
         <div style={{display:'flex',flexDirection:'column',alignItems:'center', width:'100%'}}>
-            <Skeleton variant="rectangular" animation='wave' sx={{width:{xs:"100%",md:'650px'},borderRadius:'12px',height:'300px'}}/><br/>
+            <Skeleton variant="rectangular" animation='wave' sx={{width:{xs:"100%",md:'650px'},borderRadius:'12px',height:'300px',minWidth:'300px'}}/><br/>
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px'}}/>
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px',marginTop:'5px'}}/>
         </div> 
@@ -73,20 +78,24 @@ const PostPage = ({viewPostType}) => {
             
             <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
             background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
-            <Typography sx={{padding: '20px 30px 0px 30px',fontWeight:{xs:'500',lg:'600',fontSize:{xs:'24px',lg:'45px'}}}} variant='h4'>{viewPost?.title}</Typography><br/>
-                <span style={{display:'flex',alignItems:'center',padding: '0px 30px 20px 30px',justifyContent:'space-between'}} >
-                    <span style={{display:'flex',alignItems: 'center',justifyContent:'flex-start'}}>
-                        <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px'}} />
-                        <Typography variant='body2' color='#c4c4c4' fontWeight='500'> 
-                        <Rlink style={{textDecoration:'none',color:'inherit'}} to={`/profile/${viewPost?.authorSlug}`}>&nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}&nbsp;&nbsp;</Rlink>
-                        {["rsa","pr"].includes(viewPostType) && <span>&#8226;&nbsp;&nbsp;{viewPost?.courseCode}</span>}
+            <Typography sx={{padding:{xs:'20px 12px 0px 12px',md:'20px 30px 0px 30px'} ,fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'45px'}}} >{viewPost?.title}</Typography><br/>
+                <Box sx={{display:'flex',alignItems:'center',padding:{xs:'0px 12px 12px 12px',md:'0px 30px 20px 30px'},justifyContent:'space-between'}} >
+                    <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-start',maxWidth:{xs:'70%',md:'100%'}}}>
+                        <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px',marginRight:'10px'}} />
+                        <Typography variant='body2' color='#c4c4c4' fontWeight='500' > 
+                        <Rlink style={{textDecoration:'none',color:'inherit'}} to={`/profile/${viewPost?.authorSlug}`}>
+                            {viewPost?.authorName}&nbsp;&nbsp;
+                        </Rlink>
+                        {["rsa","pr"].includes(viewPostType) && 
+                        <Rlink style={{textDecoration:'none',color:'inherit'}} to={`/course/${viewPost?.courseCode}`} >&#8226;&nbsp;&nbsp;{viewPost?.courseCode}</Rlink>
+                        }
                         {viewPostType==='pr'&&<span>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;{`Level ${viewPost?.level}`}</span>}
                         </Typography>
-                    </span>
-                    <Typography variant='caption' color='#a1a1a1'> 
+                    </Box>
+                    <Typography variant='caption' color='#a1a1a1' > 
                     &nbsp;&nbsp;{moment(viewPost?.createdAt).fromNow()}
                     </Typography>
-                </span>
+                </Box>
             </div>
         </div>
         <br/>
@@ -101,7 +110,7 @@ const PostPage = ({viewPostType}) => {
                 img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
                 iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
                 code : { component:Typography ,props : { variant:'code-small' }},
-                blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px'} }}
+                blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px',margin:'0px'}}}
             },
         }}>
         { he.decode(`${viewPost?.content}`) }
@@ -118,13 +127,22 @@ const PostPage = ({viewPostType}) => {
         <Divider/>
         <br/>
         { authUser?.id===viewPost?.authorId &&
+        <>
         <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
         onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType.toUpperCase()}});dispatch({type:'OPEN_EDIT'})}}>
             <Typography variant='button' fontWeight='600' >Edit</Typography>
             {authUser?.currentRole!=='INS' &&
             <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
             }
+        </Button>
+        <br/>
+        { viewPostType!=='pr'&& 
+        <Button variant='contained' fullWidth sx={{textTransform:'none', display:'flex',flexDirection:'column',backgroundColor:'error.dark'}}
+        onClick={()=>{setDelConfirm(true);}}>
+            <Typography variant='button' fontWeight='600'>Delete</Typography>
         </Button>}
+        </>
+        }
         </>
         }
         {/* end of left part  */}
@@ -136,7 +154,7 @@ const PostPage = ({viewPostType}) => {
             </Typography>
         <br/>
         <Box sx={{display:'grid', gridTemplateColumns:'1fr',gap:'20px'}}>
-            {isFeedLoading ? <CircularProgress/> : 
+            {isFeedLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'60px'}} /> : 
             feed?.length===0 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p, i)=>(p?.slug !== id &&
@@ -146,6 +164,31 @@ const PostPage = ({viewPostType}) => {
         </Box>
         </Box>
         {editPostOpen && <DbEditPost/>}
+
+        <Dialog
+        open={delConfirm}
+        onClose={()=>{setDelConfirm(false);}}
+      >
+        <DialogTitle>
+          {'Are you sure?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {`You're about to DELETE this 
+            ${viewPostType==='blog'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{setDelConfirm(false);}} color='secondary' 
+            variant='outlined' disabled={isCreateLoading}>Disagree
+          </Button>
+          <Button onClick={handleDelete} 
+            variant='contained' sx={{backgroundColor:'error.dark'}}
+            disabled={isCreateLoading} >
+            {isCreateLoading ? <CircularProgress/> : 'agree'}
+          </Button>
+        </DialogActions>
+      </Dialog>
         </Paper>
     )
 }

@@ -43,8 +43,8 @@ const Navbar = () => {
     }
 
     return (
-        <div>
-            <Slide appear={false} direction="down" in={!trigger}>
+        <>
+            <Slide appear={false} direction="down" in={!trigger} sx={{maxWidth: '100%'}} >
             <AppBar>
             <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
                 <div style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
@@ -56,7 +56,7 @@ const Navbar = () => {
                 {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
-                         <Avatar alt={authUser?.name} src={authUser?.profilePic} 
+                         <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>(history.push(`/profile/${authUser?.slug}`))}
                         style={{marginRight:'20px'}}/>
                         : <> </>
                     }
@@ -172,7 +172,7 @@ const Navbar = () => {
             </Drawer>
             </AppBar>
             </Slide>
-        </div>
+        </>
     )
 }
 

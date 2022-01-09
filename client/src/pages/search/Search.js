@@ -43,7 +43,7 @@ const Search = () => {
         <div style={{maxWidth:'1580px',width:'100%'}}>
         {/* top hero */}
         <Paper square elevation={0} sx={{backgroundColor: '#031117', padding:'120px 20px 30px 0px', 
-        display:'flex',maxHeight:{xs:'max-content',sm:'350px'},width:'100%',flexDirection:'column' ,alignItems:'center'}}>
+        display:'flex',maxHeight:{xs:'max-content',sm:'350px'},flexDirection:'column' ,alignItems:'center'}}>
         <Typography variant='h5' sx={{color:'primary.light',letterSpacing:'0.23em'}}>
             <span style={{fontWeight:'400'}}>SEARCH</span>&nbsp;<span style={{fontWeight:'600',color:'#D3FFFF'}}>MARVEL</span> 
         </Typography>
@@ -133,19 +133,16 @@ const Search = () => {
         <Typography variant="h6" fontWeight='600' sx={{marginTop:'30px'}} color='#808080'>We found nothing.</Typography> : 
         <Box sx={{display:'grid',gridTemplateColumns: {xs:'1fr',md:'1fr 1fr',xl:'1fr 1fr 1fr',}, gap:'20px', justifyContent:'center'}} >
         
-        {feed?.map((p)=>(
-        <div key={p?.slug || p?.courseCode}>
-        { ["pr","blog","rsa"].includes(type) ? 
-          <PostCard post={p} type={type} variant='media' scope='else' /> : 
-          type==='user' ? 
-          <UserCard user={p} />
-          :
-          type==='course' ? 
-          <CourseCard course={p} />
-          : <></>
-          }
-          </div>
-          ))}
+        {feed?.map((p,i)=>
+        { if(["pr","blog","rsa"].includes(type)){
+          return <PostCard post={p} type={type} variant='media' scope='else' key={i} />
+        }else if(type==='user'){
+          return <UserCard user={p} key={i} />
+        }else if(type==='course'){
+          return <CourseCard course={p} key={i} />
+        }
+        }
+        )}
         </Box>
         }
         </Box>

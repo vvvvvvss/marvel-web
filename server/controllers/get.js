@@ -72,7 +72,7 @@ export const getSubmissionsPr = async (req, res)=>{
         if(!condition) return res.json({message : 'you cannot be doing this', staus:'404'});
         
         const returnedPRs = await prs.find({ $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]})
-                                    .sort({_id:-1}).limit(3)
+                                    .sort({_id:-1})
                                     .select("-content -feedback -tags").lean().exec();
         return res.json({status : '200', submissions : returnedPRs, total : 1});
     } catch (error) {

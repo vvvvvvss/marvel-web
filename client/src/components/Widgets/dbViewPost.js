@@ -1,12 +1,13 @@
 import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
-import { getPost } from "../../actions/dashboard.js";
+import { getPost, deletePost } from "../../actions/dashboard.js";
 import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
 import { submitFB, approve } from "../../actions/dashboard.js";
+import { Box } from "@mui/system";
 
 const DbViewPost = () => {
     const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope, isCreateLoading} = useSelector(state => state.dashboard);
@@ -15,6 +16,7 @@ const DbViewPost = () => {
     const [feedbackOpen, setFeedbackOpen] = useState(false);
     const [feedback, setFeedback] = useState('');
     const [confirm, setConfirm] = useState(false);
+    const [delConfirm, setDelConfirm] = useState(false);
 
     useEffect(() => {
         if(!viewPost || viewPost?.slug !== viewPostId){
@@ -38,6 +40,10 @@ const DbViewPost = () => {
         dispatch(approve(viewPost?.slug, viewPostType));
     };
 
+    const handleDelete = ()=>{
+        dispatch(deletePost(viewPost?.slug, viewPostType ,'db'));
+    }
+
     return (
         <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
         <AppBar sx={{ position: 'fixed' }}>
@@ -53,23 +59,23 @@ const DbViewPost = () => {
         
         {isViewLoading ? <CircularProgress/> :
          <div>
-            <div style={{height:'350px', minWidth: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'16px'}}>
-                <img width='100%' height='350px' style={{objectFit:'cover', borderRadius:'16px', minWidth:'100%', aspectRatio:'16 / 9'}} 
+            <div style={{ minWidth: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'12px'}}>
+                <img width='100%' style={{objectFit:'cover', borderRadius:'12px', minWidth:'100%', aspectRatio:'16 / 9',maxHeight:'350px'}} 
                 src={viewPostType==='BLOG'? viewPost?.coverPhoto : viewPostType==='PR' ? pr_legend : rsa_legend} />
 
-                <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%', background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',borderRadius:'16px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-                <Typography style={{padding: '20px 30px 0px 30px'}} variant='h4' fontWeight='600'>{viewPost?.title}</Typography><br/>
-                <span style={{display:'flex',alignItems:'center',padding: '0px 30px 20px 30px',justifyContent:'space-between'}} >
-                    <span style={{display:'flex',alignItems: 'center',justifyContent:'flex-start'}}>
+                <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%', background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',borderRadius:'12px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+                <Typography sx={{padding:{xs:'20px 12px 0px 12px',md:'20px 30px 0px 30px'},fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'45px'}}}>{viewPost?.title}</Typography><br/>
+                <Box sx={{display:'flex',alignItems:'center',padding:{xs:'0px 12px 12px 12px',md:'0px 30px 20px 30px'},justifyContent:'space-between'}} >
+                    <Box sx={{display:'flex',alignItems: 'center',justifyContent:'flex-start',maxWidth:{xs:'70%',md:'100%'}}}>
                         <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px'}} />
                         <Typography variant='body2' color='#c4c4c4' fontWeight='500'> 
                         &nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}&nbsp;&nbsp;{viewPostType==='PR' && <span>&#8226;&nbsp;&nbsp;{`Lv ${viewPost?.level}`}</span>}
                         </Typography>
-                    </span>
+                    </Box>
                     <Typography variant='caption' color='#a1a1a1'> 
                     &nbsp;&nbsp;{moment(viewPost?.createdAt).fromNow()}
                     </Typography>
-                </span>
+                </Box>
                 </div>
             </div>
             <br/>
@@ -144,38 +150,51 @@ const DbViewPost = () => {
             }
            
             <br/>
-            { authUser.id===viewPost?.authorId &&
+            { authUser?.id===viewPost?.authorId &&
+            <>
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
             onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType}});dispatch({type:'OPEN_EDIT'})}}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
                 {authUser?.currentRole!=='INS' &&
                 <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
                 }
+            </Button><br/>
+            { viewPostType!=='PR'&& 
+            <Button variant='contained' fullWidth sx={{textTransform:'none', display:'flex',flexDirection:'column',backgroundColor:'error.dark'}}
+            onClick={()=>{setDelConfirm(true);}}>
+                <Typography variant='button' fontWeight='600'>Delete</Typography>
             </Button>}
+            </>}
             
         </div>
         }
         </div>
         <Dialog
-        open={confirm}
-        onClose={()=>(setConfirm(false))}
+        open={confirm || delConfirm}
+        onClose={()=>{setConfirm(false);setDelConfirm(false);}}
       >
         <DialogTitle>
-          {"Are you sure you want to Approve?"}
+          {confirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            By approving, the {viewPost?.level===viewPost?.totalLevels&&viewPostType==='PR' ? 
-            "Student will be awarded the certificate of course completion and their course session will be completed. ":
+            {confirm ? `By approving, the ${viewPost?.level===viewPost?.totalLevels&&viewPostType==='PR' ? 
+            "Student will be awarded the certificate of course completion and their course session will be completed.":
             viewPostType==='PR' ? 
             "Student will proceed to next level and this Project report will become public. ":
             "Blog post will become public for others to see. "}
-            This action CANNOT be undone.
+            This action CANNOT be undone.` : 
+            delConfirm ? `You're about to DELETE this 
+            ${viewPostType==='BLOG'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`:''}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>(setConfirm(false))} color='secondary' variant='outlined' disabled={isCreateLoading}>Disagree</Button>
-          <Button onClick={handleApprove} variant='contained' color='secondary' disabled={isCreateLoading}>
+          <Button onClick={()=>{setConfirm(false);setDelConfirm(false);}} color='secondary' 
+            variant='outlined' disabled={isCreateLoading}>Disagree
+          </Button>
+          <Button onClick={confirm ? handleApprove : delConfirm ? handleDelete : ()=>{}} 
+            variant='contained' sx={{backgroundColor:confirm?'secondary.main':delConfirm?'error.dark':''}}
+            disabled={isCreateLoading} >
             {isCreateLoading ? <CircularProgress/> : 'agree'}
           </Button>
         </DialogActions>

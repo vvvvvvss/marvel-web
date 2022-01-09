@@ -18,11 +18,11 @@ const StuDashboard = () => {
         <Navbar/>
         <Paper variant='window' className={styles.window}>
             <Box sx={{ display: "grid", maxWidth: "1580px", height: "max-content", 
-            gridTemplateColumns:{xs:'1fr', lg:'1fr 1fr 1fr',xl:'1fr 2fr 1fr'} , gap: "20px", justifyContent: "space-evenly", 
+            gridTemplateColumns:{xs:'1fr', lg:'1fr 1fr 1fr',xl:'1fr 2fr 1fr'}, gap: "20px", justifyContent: "space-evenly", 
             alignItems: "flex-start"}}>
             <Syllabus/>
             <Box sx={{ display: "grid",height: "max-content", 
-            gridTemplateColumns:{xs:'1fr',xl:'1fr 1fr'} , gap: "20px", justifyContent: "space-evenly", 
+            gridTemplateColumns:{xs:'1fr',xl:'1fr 1fr'}, gap: "20px",
             alignItems: "flex-start"}} >
             <DbProgress/>
             <DbSubmissions/>

@@ -40,8 +40,8 @@ const DbSubmissions = () => {
         {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${(tab==='pr' || tab==='rsa') ? ' for this Course' : ''}.`}
         </Typography> :
         <Box sx={{display:'grid', gridTemplateColumns: '1fr', gap:'15px'}}  >
-        {submissions?.[tab==='pr' ? 'prs' : 'others']?.map((sub)=>(
-            <PostCard type={tab} post={sub} scope='dashboard' variant='smol' />
+        {submissions?.[tab==='pr' ? 'prs' : 'others']?.map((sub, i)=>(
+            <PostCard type={tab} post={sub} scope='dashboard' variant='smol' key={i} />
         ))} </Box>}
          
         {(tab==='blog'|| tab==='rsa') && 

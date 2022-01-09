@@ -5,8 +5,7 @@ import ShareIcon from '@mui/icons-material/Share';
 const CourseCard = ({course}) => {
     const history = useHistory();
     return (
-        <div>
-            <Card variant='outlined' sx={{width:'400px',height:'max-content',position:'relative',padding:'16px 20px 10px 20px'}}>
+      <Card variant='outlined' sx={{maxWidth:'400px',height:'max-content',position:'relative',padding:'16px 20px 10px 20px',margin:{xs:'0px 20px 0px 20px',sm:'0px'}}}>
             <IconButton onClick={()=>{try {
                 navigator.clipboard.writeText(`${window.origin}/course/${course}`);
                 alert("Link copied to clipboard.");
@@ -22,8 +21,7 @@ const CourseCard = ({course}) => {
             <Typography variant='body2' sx={{margin:'10px 0px 10px 0px'}}>{course?.caption}</Typography>
             <Divider sx={{marginBottom:'10px'}} />
             <Button color='secondary' onClick={()=>(history.push(`/course/${course?.courseCode}`))}>view</Button>
-          </Card>
-        </div>
+      </Card>
     )
 }
 
