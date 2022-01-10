@@ -11,11 +11,12 @@ import CoursePage from './pages/coursePage/coursePage.js';
 import ProfilePage from './pages/profilePage/ProfilePage.js';
 import Search from './pages/search/Search.js';
 import PostPage from './pages/PostPage/PostPage.js';
+import Err from './pages/Err.js';
 
 const App = ()=> {
 
   const [mode, setMode] = useState('dark');
-  const {authUser} = useSelector((state) => (state.auth));
+  const authUser = useSelector((state) => (state.auth.authUser));
 
   return (
     <div>
@@ -40,9 +41,10 @@ const App = ()=> {
             <Route path="/course/:id" exact component={CoursePage} />
             <Route path="/profile/:id" exact component={ProfilePage} />
             <Route path="/search" exact component={Search}/>
-            <Route path="/pr/:id" exact component={()=>(<PostPage viewPostType="pr"/>)}/>
-            <Route path="/blog/:id" exact component={()=>(<PostPage viewPostType="blog"/>)}/>
-            <Route path="/rsa/:id" exact component={()=>(<PostPage viewPostType="rsa"/>)}/>
+            <Route path="/pr/:id" exact component={PostPage}/>
+            <Route path="/blog/:id" exact component={PostPage}/>
+            <Route path="/rsa/:id" exact component={PostPage}/>
+            <Route path="/404" exact component={Err} />
         </Switch>
       </ThemeProvider>
     </div>

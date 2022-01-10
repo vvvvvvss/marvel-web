@@ -5,9 +5,17 @@ import Dial from '../../components/SpeedDial.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import { useSelector} from 'react-redux';
 import { Box } from '@mui/system';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 const NotAccDashboard = () => {
     const {formOpen} = useSelector(state => state.dashboard);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        return () => {
+            dispatch({type:'CLEAR_DASHBOARD'});
+        }
+    }, []);
 
     return (
         <>

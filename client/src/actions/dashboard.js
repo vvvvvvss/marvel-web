@@ -1,23 +1,29 @@
 import * as API from '../API/index.js';
 
-export const getCourseData=(courseCode, scope) => async(dispatch)=>{
+export const getCourseData=(courseCode, scope, history) => async(dispatch)=>{
     dispatch({type : `START_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
     try {
         const {data} = await API.getCourseData(courseCode, scope);
         if(data?.status ==='200'){
             dispatch({type : `${scope==='overview' ? 'GET_OVERVIEW': 'GET_COURSE'}`, payload : data?.course});
-        }else{ alert("Something went wrong at syllabus widget.")}; 
+        }else{
+            if(scope==='dashboard'){ alert("Something went wrong at syllabus widget.");}
+            else history.push('/404');
+        }; 
     } catch (error) { };
     dispatch({type : `END_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
 }
 
-export const getProfileData=(id, scope)=>async(dispatch)=>{
+export const getProfileData=(id, scope, history)=>async(dispatch)=>{
     dispatch({type : `START_${scope==='page'?'OVERVIEW':'PROFILE'}_LOADING`});
     try {
         const {data} = await API.getProfileData(id,scope);
         if(data?.status==='200'){
             dispatch({type : `GET_${scope==='page'?'OVERVIEW':'PROFILE'}`, payload : data?.profile});
-        }else{alert("Something went wrong at profile widget.")};
+        }else{
+            if(scope==='dashboard') alert("Something went wrong at profile widget.");
+            else history?.push("/404");
+        };
     } catch (error) { }
     dispatch({type : `END_${scope==='page'?'OVERVIEW':'PROFILE'}_LOADING`});
 }
@@ -58,15 +64,18 @@ export const getSubmissions = (tab, page) => async (dispatch) => {
     } catch (error) { }
 }
 
-export const getPost = (type, id, scope, history) => async (dispatch) => {
+export const getPost = (type, id, scope) => async (dispatch) => {
     dispatch({type:'START_VIEW_LOADING'});
     try {
         const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
         if(data?.status==='200'){
-            dispatch({type : 'GET_VIEW_POST', payload : data?.post});
+            dispatch({type : 'GET_VIEW_POST', payload : {...data?.post, status:200}});
         }else{
-            if(scope==='page'){history.push('/404')}
-            else{alert("Something went wrong while retrieving post:(");}
+            if(scope==='page'){dispatch({type:"GET_VIEW_POST", payload: {status: 404}})}
+            else{
+                alert("Something went wrong while retrieving post:(");
+                dispatch({type:"CLOSE_VIEW"});
+            }
         };
     } catch (error) {console.log(error)}
     dispatch({type : 'END_VIEW_LOADING'});

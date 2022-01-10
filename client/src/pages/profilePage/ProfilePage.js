@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getProfileData } from "../../actions/dashboard.js";
 import {getProfileFeed} from "../../actions/other.js"
-import { Box, minWidth } from "@mui/system";
+import { Box } from "@mui/system";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -27,7 +27,7 @@ const ProfilePage = () => {
     const [titleField, setTitleField] = useState("");
 
     useEffect(() => {
-        dispatch(getProfileData(id, 'page'));
+        dispatch(getProfileData(id, 'page', history));
         return ()=>{
             dispatch({type:'CLEAR_OVERVIEW'});
         }
@@ -85,7 +85,7 @@ const ProfilePage = () => {
                 <span>
                 {overview?.currentInsCourse?.map((c)=>(
                 <Link key={c} to={`/course/${c}`} style={{textDecoration:'none',  marginTop:'8px'}}>
-                <Chip label={c} key={c} variant="outlined" color='secondary' size='small' clickable/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <Chip label={c} key={c} variant="outlined" color='secondary' size='small' clickable sx={{margin:'6px 8px 6px 0px'}} />
                 </Link>
                 ))}
                 </span>
@@ -137,8 +137,8 @@ const ProfilePage = () => {
         <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px'}}>
         {["blog","pr","rsa"].includes(tab) &&
         <>
-        {feed?.map((p)=>( 
-        <PostCard post={p} type={tab} variant='media' scope='else'/>
+        {feed?.map((p, i)=>( 
+        <PostCard post={p} type={tab} variant='media' scope='else' key={i}/>
         ))}
         </>  
         // : Certificates map

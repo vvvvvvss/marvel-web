@@ -95,7 +95,7 @@ const DbViewPost = () => {
                     p :{ component: Typography , props: {variant : 'body1'}}, 
                     a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                     img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
-                    iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
+                    iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
                     code : { component:Typography ,props : { variant:'code-small' }},
                     blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }},
                     table : {props:{style : {border : '1px solid #D3FFFF'}}},

@@ -8,9 +8,17 @@ import { useSelector } from 'react-redux';
 import DbToReview from '../../components/Widgets/dbToReview.js';
 import AcceptSwitch from '../../components/Widgets/dbAcceptSwitch';
 import {Box} from "@mui/system";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 const InsDashboard = () => {
     const {formOpen} = useSelector(state => state.dashboard);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        return () => {
+            dispatch({type:'CLEAR_DASHBOARD'});
+        }
+    }, []);
 
     return (
         <div>

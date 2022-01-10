@@ -105,7 +105,7 @@ const DbEditPost = () => {
                         p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                         a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                         img : { props : {width : '100%',height:'150px',style:{objectFit:'cover'} }},
-                        iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
+                        iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                         code : { component:Typography ,props : { variant:'code-small' }}
                     },
                 }}>

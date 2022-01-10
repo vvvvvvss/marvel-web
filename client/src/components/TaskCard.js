@@ -78,7 +78,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                         p :{ component: Typography , props: {variant : 'body2'}}, 
                         a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}, sx:{color:'primary.light'}},
                         img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
-                        iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
+                        iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
                         code : { component:Typography ,props : { variant:'code-small' }},
                         blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px', margin:"10px"} }}
                     }
@@ -101,7 +101,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                             p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                             a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                             img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                            iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
+                            iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                             code : { component:Typography ,props : { variant:'code-small' }},
                             blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
                         },

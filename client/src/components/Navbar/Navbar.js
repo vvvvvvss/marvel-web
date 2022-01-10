@@ -33,8 +33,8 @@ const Navbar = () => {
 
     const logout = ()=>{
         dispatch({type : 'LOGOUT'});
-        window.location.reload();
     }
+    
     const googleError = (err) => {
         console.log(err);
         if(err.error !== 'popup_closed_by_user'){

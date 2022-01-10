@@ -97,6 +97,8 @@ const dashboardReducer = (state=initialState, action)=>{
             return {...state, syllabus : {...state?.syllabus, levels : action.payload?.levels}};
         case "CLEAR_SYLLABUS":
             return {...state, syllabus:{}};
+        case "CLEAR_DASHBOARD":
+            return {...initialState};
         default: 
             return state;
     }

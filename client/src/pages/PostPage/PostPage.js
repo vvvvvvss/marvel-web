@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
-import { useParams, useHistory, Link as Rlink } from "react-router-dom";
+import { useParams, Link as Rlink, useLocation } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
 import {getSearchFeed} from '../../actions/other.js';
@@ -14,25 +14,31 @@ import ShareIcon from '@mui/icons-material/Share';
 import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
 
-const PostPage = ({viewPostType}) => {
-    const { viewPost, isViewLoading, editPostOpen, isCreateLoading} = useSelector(state => state.dashboard);
+const PostPage = () => {
+    const { viewPost, isViewLoading, isCreateLoading} = useSelector(state => state.dashboard);
     const { feed, isFeedLoading} = useSelector(state => state.other);
     const dispatch = useDispatch();
-    const history = useHistory();
-    const {authUser} = useSelector(state => state.auth);
+    const location = useLocation();
+    const viewPostType = location.pathname?.split("/")?.[1];
+    const authUser = useSelector(state => state.auth.authUser);
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
-
+    
     useEffect(() => {
-        dispatch(getPost( viewPostType ,id, 'page',history));
+            dispatch(getPost( viewPostType ,id, 'page'));
+        return () => {
+            dispatch({type:"CLEAR_DASHBOARD"});
+        }
     }, [dispatch,id]);
 
     useEffect(() => {
-        dispatch(getSearchFeed(viewPostType, null, null, null, null, viewPost?.tags?.join(','), 1, 'rec'));
+        if(viewPost?.slug){
+            dispatch(getSearchFeed(viewPostType, null, null, null, null, viewPost?.tags?.join(','), 1, 'rec'));
+        }
         return () => {
             dispatch({type:'CLEAR_FEED'});
         }
-    }, [id, dispatch,viewPostType]);
+    }, [id, dispatch, viewPost?.slug]);
 
     const handleShare = () => {
         try {
@@ -65,10 +71,12 @@ const PostPage = ({viewPostType}) => {
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px'}}/>
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px',marginTop:'5px'}}/>
         </div> 
+        : viewPost?.status===404 ? 
+        <Typography variant="h1" fontWeight={600} color='#313131' sx={{marginTop:'100px',transform:{xs:'translate(0px,0px)',md:'translate(90px,0px)'}}} >404</Typography>
         :
         <>
         <div style={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative',backgroundColor:'#000000',maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF'}}>
-            <img width='100%' style={{objectFit:'cover', minWidth:'100%', aspectRatio:'16 / 9',borderRadius:'12px'}} 
+           <img width='100%' style={{objectFit:'cover', minWidth:'100%', aspectRatio:'16 / 9',borderRadius:'12px',minHeight:'100%'}} 
             src={viewPostType==='blog'? viewPost?.coverPhoto : viewPostType==='pr' ? pr_legend :viewPostType==='rsa'? rsa_legend:''} />
             
             <IconButton onClick={handleShare}
@@ -108,7 +116,7 @@ const PostPage = ({viewPostType}) => {
                 p :{ component: Typography , props: {variant : 'body1'}}, 
                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                 img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
-                iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
+                iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
                 code : { component:Typography ,props : { variant:'code-small' }},
                 blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px',margin:'0px'}}}
             },
@@ -148,22 +156,25 @@ const PostPage = ({viewPostType}) => {
         {/* end of left part  */}
         </Box>
         {/* right part  */}
+        {viewPost?.status !==404 && 
         <Box sx={{justifySelf:{xs:'flex-start',lg:'flex-start'},width:'100%'}}>
             <Typography variant="widget-heading" component='div' sx={{width:'100%'}}>
                 Similar {`${viewPostType==='pr'?'Project Reports':viewPostType==='blog'?'Blog Posts':viewPostType==='rsa'?'Resource Articles':''}`}:
             </Typography>
         <br/>
         <Box sx={{display:'grid', gridTemplateColumns:'1fr',gap:'20px'}}>
-            {isFeedLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'60px'}} /> : 
+            {isFeedLoading||isViewLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'60px'}} /> : 
             feed?.length===0 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p, i)=>(p?.slug !== id &&
                 <PostCard post={p} variant='media' type={viewPostType} scope='else' key={i} />
             ))}
         </Box>
+        </Box>}
         </Box>
-        </Box>
-        {editPostOpen && <DbEditPost/>}
+
+        {/* editmodal */}
+        <DbEditPost/>
 
         <Dialog
         open={delConfirm}
@@ -192,6 +203,5 @@ const PostPage = ({viewPostType}) => {
         </Paper>
     )
 }
-
 export default PostPage;
 

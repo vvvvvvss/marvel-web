@@ -15,6 +15,7 @@ import LandTPage from '../../components/LandTPage.js';
 
 const CoursePage = () => {
     const {id} = useParams();
+    const history = useHistory();
     const {authUser} = useSelector(state => state.auth);
     const query = new URLSearchParams(useLocation().search);
     const hashParam = useLocation()?.hash;
@@ -24,8 +25,9 @@ const CoursePage = () => {
     const [page, setPage] = useState(Number(query.get('page'))||1);
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
+
     useEffect(()=>{
-        dispatch(getCourseData(id.trim(), 'overview'));
+        dispatch(getCourseData(id.trim(), 'overview', history));
         return () => {
             dispatch({type:'CLEAR_FEED'});
             dispatch({type:'CLEAR_OVERVIEW'});
@@ -37,7 +39,7 @@ const CoursePage = () => {
         if(tab==='rsa'){
             dispatch(getRsaFeedByCourse(id, page, searchTitle))
         }else if(tab==='levels'){
-            dispatch(getCourseData(id?.trim(), 'levels'));
+            dispatch(getCourseData(id?.trim(), 'levels', history));
         }
     }, [tab, page, searchTitle, id]);
 
