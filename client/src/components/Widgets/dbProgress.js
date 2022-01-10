@@ -22,7 +22,7 @@ const DbProgress = () => {
                 <Stepper activeStep={Number(authUser?.currentLevel -1 )}>
                 {syllabus?.levels?.map((level, lvIndex) => (
                     <Step key={lvIndex}>
-                    <StepLabel>{`Lvl ${lvIndex}`}</StepLabel>
+                    <StepLabel>{`Lvl ${lvIndex+1}`}</StepLabel>
                     </Step>
                 ))}
                 </Stepper>

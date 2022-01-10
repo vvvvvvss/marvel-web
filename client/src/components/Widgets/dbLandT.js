@@ -18,13 +18,13 @@ const DbLandT = () => {
     }, []);
 
     return (
-    <Paper variant='widget' style={{height:'max-content',maxWidth:'400px'}}>
+    <Paper variant='widget' style={{height:'max-content',maxWidth:'400px', display:'flex',flexDirection:'column'}}>
         <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center'}}>
         <Typography variant='widget-heading'>levels & tasks&nbsp;</Typography>
-        <Chip label={isSyllabusLoading ? "Loading..." : syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
+        { !isSyllabusLoading && <Chip label={syllabus?.courseCode} variant='outlined' color='primary' size='small'/>}
         </div>
        
-      {isSyllabusLoading ? <CircularProgress/> : 
+      {isSyllabusLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'90px'}} /> : 
        <>
         { syllabus?.levels?.map((lvl, lvIndex)=>(
             <div key={lvIndex}>
