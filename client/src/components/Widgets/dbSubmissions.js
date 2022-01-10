@@ -24,10 +24,10 @@ const DbSubmissions = () => {
         <Typography variant='widget-heading'>submissions</Typography>
         <br/><br/>
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
-        {authUser?.currentRole==='STU'||authUser?.enrollmentStatus==="INACTIVE" && 
+        {(authUser?.currentRole==='STU'||authUser?.enrollmentStatus==="INACTIVE") && 
         <Tab label="Project reports" value='pr'/>
         }
-        {authUser?.currentRole==='INS'||authUser?.enrollmentStatus==="INACTIVE" && 
+        {(authUser?.currentRole==='INS'||authUser?.enrollmentStatus==="INACTIVE") && 
          <Tab label="Res Articles" value='rsa'/>
          }
         <Tab label="Blog posts" value='blog'/>

@@ -7,7 +7,7 @@ import PostCard from '../PostCard.js';
 const DbToReview = () => {
     const dispatch = useDispatch();
     const { toReview, isToReviewLoading } = useSelector(state => state.dashboard);
-    const {authUser} = useSelector(state => state.auth);
+    // const {authUser} = useSelector(state => state.auth);
     const [tab, setTab] = useState('pr');
     const [page, setPage] = useState(1);
     const [courseFilter, setCourseFilter] = useState([]);

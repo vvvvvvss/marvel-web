@@ -140,7 +140,7 @@ const Search = () => {
           return <UserCard user={p} key={i} />
         }else if(type==='course'){
           return <CourseCard course={p} key={i} />
-        }
+        }else return <></>
         }
         )}
         </Box>
