@@ -13,9 +13,9 @@ const userSchema = mongoose.Schema({
     id: { type: String, required : true,unique:true },
 
     // META DATA ( changes. auto )
-    currentRole : {type : String, enum : {values : ['STU','INS','NA']}},
-    currentStuCourse : {type : String},
-    currentInsCourse : { type : [String]},
+    currentRole : {type : String, enum : {values : ['STU','INS','NA']}, default:'NA'},
+    currentStuCourse : {type : String, default : 'NA'},
+    currentInsCourse : { type : [String], default : []},
     currentLevel : {type : Number},
     roleHistory : [{
         role : {type : String, enum : {values : ['STU','INS', 'NA']}},

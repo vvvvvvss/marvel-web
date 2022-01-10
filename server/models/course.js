@@ -6,11 +6,11 @@ const courseSchema = mongoose.Schema({
     courseDuration : {type : String},
     caption : {type : String},
     submissionStatus : {isAccepting : {type :Boolean, default:false}, forLevel : {type : Number}},
-    totalLevels : {type : Number},
+    totalLevels : {type : Number, default: 0},
     courseBadge : { type :String},
     intro : { type : String},
     levels : [
-        {tasks : [
+        {tasks : [ 
             {
                 description : {type : String}
             },

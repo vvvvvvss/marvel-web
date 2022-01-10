@@ -5,6 +5,7 @@ import user from '../models/user.js';
 import course from '../models/course.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 import dotenv from 'dotenv';
+import certificate from "../models/certificate.js";
 
 export const submitFeedbackPr = async (req, res) => {
     try {
@@ -127,12 +128,19 @@ export const approvePR = async (req, res) => {
         const author = await user.findOne({id : post.authorId}).exec();
         //course completed.
         if(post?.level===author?.currentLevel===totalLevels){
-            // award certificate. not done
-            // make author inactive. role becomes na, currentStuCourse becomes na,
+            // award certificate. done
+            const newCert = new certificate({
+                awardeeId : author?.id, awardeeName: author?.name, awardeeSlug: author?.slug,
+                courseCode : post?.courseCode, domainName: post?.domainName,
+                approvedByName : req.user.name, approvedBySlug: req.user.slug, approvedById: req.user.id
+            });
+            await newCert.save();
+            // make author inactive. role becomes na, currentStuCourse becomes na, edit role history
             Object.assign(author, {
                 enrollmentStatus : 'INACTIVE', currentRole : 'NA',
                 currentStuCourse : 'NA', currentLevel : 0,
             });
+            author.roleHistory[author.roleHistory?.length - 1].endTime = new Date();
             await author.save();
             // post becomes public.
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });

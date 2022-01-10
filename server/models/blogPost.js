@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import slug from 'mongoose-slug-generator';
+
+mongoose.plugin(slug);
 
 const blogPostSchema = mongoose.Schema({
     // IDENTITY DATA

@@ -33,7 +33,7 @@ const UserCard = ({user}) => {
                 </>
                 :
                 <>
-                <Typography><em>Not active in any course</em></Typography>
+                <Typography variant='caption' sx={{color:'#b1b1b1'}} ><em>Not active in any course</em></Typography>
                 </> 
             }
               <Divider/>

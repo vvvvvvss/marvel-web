@@ -94,9 +94,9 @@ const ProfilePage = () => {
                 }<br/><br/>
                 <Divider/><br/>
             <span>
-                <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub!=="" ? false:true}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
-                <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn!=="" ? false:true}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
-                <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website!=="" ? false:true}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
+                <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub===""||!overview?.gitHub ? true:false}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
+                <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn===""||!overview?.linkedIn ? true:false}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
+                <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website===""||!overview?.website ? true:false}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
             </span>
             </div>
             </Box >}
@@ -108,7 +108,7 @@ const ProfilePage = () => {
             <Box sx={{padding:{xs:'0px',md:'0px 0px 0px 20px'}, width:'100%', maxWidth:"400px"}} >
                 <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
                 <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
-                <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio!=='' ? overview?.bio : <em style={{color:'#a1a1a1'}}>{["Zilch", "nada","N/A","nihil"][Math.ceil(Math.random()*3)]}</em>}</Typography>
+                <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio===''||!overview?.bio ? <em style={{color:'#a1a1a1'}}>{["Zilch", "nada","N/A","nihil"][Math.ceil(Math.random()*3)]}</em> : overview?.bio}</Typography>
                 <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
                 </div>
             </Box>}

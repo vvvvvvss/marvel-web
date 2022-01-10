@@ -24,9 +24,11 @@ const DbSubmissions = () => {
         <Typography variant='widget-heading'>submissions</Typography>
         <br/><br/>
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
-        {authUser?.currentRole==='STU' ?
-         <Tab label="Project reports" value='pr'/> : 
-         <Tab label="Res Articles" value='rsa'/> 
+        {authUser?.currentRole==='STU'||authUser?.enrollmentStatus==="INACTIVE" && 
+        <Tab label="Project reports" value='pr'/>
+        }
+        {authUser?.currentRole==='INS'||authUser?.enrollmentStatus==="INACTIVE" && 
+         <Tab label="Res Articles" value='rsa'/>
          }
         <Tab label="Blog posts" value='blog'/>
         </Tabs>
@@ -37,7 +39,7 @@ const DbSubmissions = () => {
 
         {!submissions?.[tab==='pr' ? 'prs' : 'others']?.length ? 
         <Typography variant='caption'>
-        {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${(tab==='pr' || tab==='rsa') ? ' for this Course' : ''}.`}
+        {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${((tab==='pr' || tab==='rsa')&&authUser?.enrollmentStatus==='ACTIVE') ? ' for this Course' : ''}.`}
         </Typography> :
         <Box sx={{display:'grid', gridTemplateColumns: '1fr', gap:'15px'}}  >
         {submissions?.[tab==='pr' ? 'prs' : 'others']?.map((sub, i)=>(

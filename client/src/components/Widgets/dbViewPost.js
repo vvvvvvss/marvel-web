@@ -193,7 +193,7 @@ const DbViewPost = () => {
             variant='outlined' disabled={isCreateLoading}>Disagree
           </Button>
           <Button onClick={confirm ? handleApprove : delConfirm ? handleDelete : ()=>{}} 
-            variant='contained' sx={{backgroundColor:confirm?'secondary.main':delConfirm?'error.dark':''}}
+            variant='contained' color={delConfirm?'error':'secondary'}
             disabled={isCreateLoading} >
             {isCreateLoading ? <CircularProgress/> : 'agree'}
           </Button>

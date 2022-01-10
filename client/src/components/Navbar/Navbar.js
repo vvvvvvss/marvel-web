@@ -96,7 +96,7 @@ const Navbar = () => {
                 <div style={{display:'flex', flexDirection:'column',justifyContent:'center',alignItems:'center',width:'100%'}}>
                     <Avatar src={authUser?.profilePic} sx={{width: '70px',height:'70px',marginBottom:'5px'}}/>
                     <Typography variant='body1' sx={{marginBottom:'8px'}}>{authUser?.name}</Typography>
-                    {authUser?.enrollmentStatus!=='UNKNOWN' && <Chip label={authUser?.currentRole==='STU' ? 'STUDENT':authUser?.currentRole==='INS'? 'INSTRUCTOR' :''} variant='outlined' color='primary' size='small'/>}
+                    {authUser?.enrollmentStatus!=='UNKNOWN' && <Chip label={authUser?.currentRole==='STU' ? 'STUDENT':authUser?.currentRole==='INS'? 'INSTRUCTOR' :'INACTIVE'} variant='outlined' color='primary' size='small'/>}
                     <br/>
                 </div>}
                 <List>
@@ -107,13 +107,13 @@ const Navbar = () => {
                     <ListItemIcon><FaceIcon/></ListItemIcon>
                     <ListItemText>My profile</ListItemText>
                 </ListItemButton>
-                { authUser?.currentRole==='STU' ? 
+                { (authUser?.currentRole==='STU'&&authUser?.enrollmentStatus==="ACTIVE") ? 
                 <ListItemButton onClick={()=>(history.push(`/course/${authUser?.currentStuCourse}`))}>
                     <ListItemIcon><BookIcon/></ListItemIcon>
                     <ListItemText>My Course
                     </ListItemText>
                 </ListItemButton> 
-                : 
+                : (authUser?.currentRole==='INS'&&authUser?.enrollmentStatus==="ACTIVE")?
                 <>
                 <ListItemButton onClick={()=>(setCrsListOpen((p)=>(!p)))}>
                 <ListItemIcon>
@@ -131,7 +131,7 @@ const Navbar = () => {
                       </ListItemButton>
                   ))}
                 </List>
-              </Collapse> </>}
+              </Collapse> </> : <></>}
                 <ListItemButton onClick={()=>(history.push('/dashboard'))}>
                     <ListItemIcon><Dashboard/></ListItemIcon>
                     <ListItemText>Dashboard</ListItemText>

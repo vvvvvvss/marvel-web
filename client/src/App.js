@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { darkTheme, lightTheme } from './utils/themes.js';
 import StuDashboard from './pages/StuDashboard/StuDashboard.js';
 import InsDashboard from './pages/InsDashboard/InsDashboard.js';
+import NotAccDashboard from './pages/NotAccDashboard/NotAccDashboard.js';
 import { useSelector } from 'react-redux';
 import CoursePage from './pages/coursePage/coursePage.js';
 import ProfilePage from './pages/profilePage/ProfilePage.js';
@@ -29,6 +30,8 @@ const App = ()=> {
                   return <StuDashboard/>
                 }else if(authUser?.currentRole==='INS'){
                   return <InsDashboard/>
+                }else if(authUser?.enrollmentStatus==='INACTIVE'&&authUser?.currentRole==='NA'){
+                  return <NotAccDashboard/>
                 }else {
                   return <Redirect to="/" />
                 }

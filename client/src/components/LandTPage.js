@@ -42,10 +42,12 @@ const LandTPage = () => {
             </Button>
             </DialogActions>
             </Dialog>
+        {/* ZEROTH INDEX LEVEL ADD */}
+        {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse.includes(id))&&
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
             <Chip variant="outlined" onClick={()=>(handleModify('addLevel',0, 0))}
-            clickable label="Add new Level here" color="primary" /> 
-        </Divider>
+            clickable label="Add new Level here" color="primary" disabled={isSyllabusLoading} /> 
+        </Divider>}
         <Box sx={{display:'grid',gridTemplateColumns: {xl:'1fr 1fr 1fr',lg:'1fr 1fr',md:'1fr'}, justifyItems:'center',width:{xs:'100%',md:"max-content"},minWidth:{md:'750px',xs:'100%'},gap:'20px', 
         opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
         {/* zeroth index level add */}
@@ -54,12 +56,12 @@ const LandTPage = () => {
         <br/>
         <Typography variant='heading' component='div' style={{justifyContent:'space-between',display:'flex'}} key={lvl.lvIndex}>&nbsp;&nbsp;
             {`Level  ${lvIndex+1}`}
-            {(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
+            {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
             <IconButton size="small" sx={{marginRight:'15px',color:'secondary.light'}} onClick={()=>{setSelectIndex({id:lvl?._id,index:lvIndex});setConfirmOpen(true);}}>
                 <DeleteIcon/>
             </IconButton>}
         </Typography>
-        {(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
+        {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
         // zeroth index task add
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
             <Chip variant="outlined" onClick={()=>(handleModify('addTask',0, lvIndex))}
@@ -69,7 +71,7 @@ const LandTPage = () => {
             return(
                 <div key={tskIndex}>
                 <TaskCard tsk={tsk} tskIndex={tskIndex} lvIndex={lvIndex} key={tskIndex}/>
-                {(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
+                {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
                 <Divider  textAlign="center" sx={{marginTop:'15px'}}> 
                     <Chip variant="outlined" onClick={()=>(handleModify("addTask",tskIndex+1, lvIndex))}
                     clickable label="Add new Task here"  /> 
@@ -77,7 +79,7 @@ const LandTPage = () => {
                 </div>
             )
         })}
-        {(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
+        {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
             <Chip variant="outlined" onClick={()=>(handleModify('addLevel',0, lvIndex+1))}
             clickable label="Add new Level here" color="primary" />

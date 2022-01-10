@@ -137,9 +137,9 @@ export const deletePost = (slug, type, scope) => async (dispatch) => {
         if(data?.status==='201'&&scope==='db'){
             dispatch({type:'DELETE_POST',payload:slug});
             dispatch({type:"CLOSE_VIEW"});
-            alert(`Your ${type==='BLOG' ? "Blog post":type==="RSA"?"Resource Article":""} was deleted successully`);
+            alert(`Your ${type.toUpperCase()==='BLOG' ? "Blog post":type.toUpperCase()==="RSA"?"Resource Article":""} was deleted successully`);
         }else if(data?.status==="201"){
-            alert(`Your ${type==='BLOG' ? "Blog post":type==="RSA"?"Resource Article":""} was deleted successully`);
+            alert(`Your ${type.toUpperCase()==='BLOG' ? "Blog post":type.toUpperCase()==="RSA"?"Resource Article":""} was deleted successully`);
             window.history.back();
         }
     } catch (error) { }

@@ -73,7 +73,7 @@ const CoursePage = () => {
                 <AccessTimeIcon sx={{color:'primary.light',height:'20px',alignSelf:'center',paddingLeft: '10px'}}/>
                 <Typography variant='overline' sx={{color:'primary.light', alignSelf:'center'}}>
                     &nbsp;&nbsp;&nbsp;&nbsp;{overview?.courseDuration}
-                    &nbsp;&nbsp;&#8226;&nbsp;&nbsp;{overview?.totalLevels} Levels
+                    &nbsp;&nbsp;&#8226;&nbsp;&nbsp;{overview?.totalLevels} {`Level${overview?.totalLevels >1 ? 's':''}`}
                 </Typography>
                 </span>
                 <br/>

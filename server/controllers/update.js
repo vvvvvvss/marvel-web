@@ -189,6 +189,7 @@ export const addLevel = async (req, res) => {
         if(!condition)return res.json({status:'404', message:'Access denied.'});
         const existingCourse = await course.findOne({courseCode:id});
         existingCourse.levels.splice(Number(lvIndex), 0, {tasks:[{description:""}]});
+        existingCourse.totalLevels+=1;
         const newCourseData = await existingCourse.save();
         return res.json({status:'201', course:{levels:newCourseData.levels}});
     } catch (error) {
@@ -208,6 +209,7 @@ export const deleteLevel = async (req,res) => {
         const existingCourse = await course.findOne({courseCode:id});
         if(existingCourse.levels[Number(lvIndex)]._id.toString()!== levelId)return res.json({status:'500',course:{levels: existingCourse.levels}});
         existingCourse.levels.splice(Number(lvIndex), 1);
+        existingCourse.totalLevels-=1;
         const newCourseData = await existingCourse.save();
         return res.json({status:"201",course:{levels:newCourseData.levels}});
     } catch (error) {

@@ -10,7 +10,7 @@ import NewspaperIcon from '@mui/icons-material/Newspaper';
 const Dial = () => {
     const {authUser} = useSelector(state => state.auth);
     const [dial, setDial] = useState(false);
-    const {syllabus, submissions : {prs}} = useSelector(state => state.dashboard);
+    const {syllabus, submissions : {prs}, isSubLoading} = useSelector(state => state.dashboard);
     const dispatch = useDispatch();
 
     return (
@@ -32,12 +32,12 @@ const Dial = () => {
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'BLOG'});dispatch({type : 'OPEN_FORM'});}}
                 />
                  {(authUser?.currentRole==='STU') && (authUser?.currentLevel===syllabus?.submissionStatus?.forLevel) &&
-                 (syllabus?.submissionStatus?.isAccepting && !prs?.some((i)=>(i?.level === authUser?.currentLevel))) 
+                 ((syllabus?.submissionStatus?.isAccepting && !prs?.some((i)=>(i?.level === authUser?.currentLevel)))&&!isSubLoading) 
                   &&
                   <SpeedDialAction
-                    tooltipTitle={`Project Report Lvl ${syllabus?.submissionStatus?.forLevel}`}
+                    tooltipTitle={`Project Report Lv ${syllabus?.submissionStatus?.forLevel}`}
                     tooltipOpen  sx={{whiteSpace : 'nowrap'}}
-                    icon={<AssignmentIcon/>}
+                    icon={<AssignmentIcon/>} 
                     onClick={()=>{dispatch({type:'SET_FORM_TYPE',payload:'PR'});dispatch({type : 'OPEN_FORM'});}}
                 />}
                 {authUser?.currentRole==='INS' &&
