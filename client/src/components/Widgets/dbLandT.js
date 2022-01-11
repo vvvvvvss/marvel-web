@@ -24,7 +24,7 @@ const DbLandT = () => {
         <Chip label={ isSyllabusLoading ? "Loading..." : syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
         </div>
        
-      {isSyllabusLoading ? <CircularProgress sx={{marginTop:'90px',alignSelf:'center'}} /> : 
+      {isSyllabusLoading ? <CircularProgress sx={{margin:'60px auto 60px auto',alignSelf:'center'}} /> : 
        <>
         { syllabus?.levels?.map((lvl, lvIndex)=>(
             <div key={lvIndex}>
@@ -42,7 +42,7 @@ const DbLandT = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                            options={{wrapper : 'p'},{
+                            options={{wrapper : 'div'},{
                                 p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                                 img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},

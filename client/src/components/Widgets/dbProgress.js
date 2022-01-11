@@ -13,11 +13,11 @@ const DbProgress = () => {
     };
     return (
         <>
-             <Paper variant='widget' style={{height:'max-content'}}>
+             <Paper variant='widget' style={{height:'max-content', display:'flex',flexDirection:'column'}}>
                 <Typography variant='widget-heading'>Progress</Typography>
-                <br/><br/><br/>
+                <br/>
 
-                {isSyllabusLoading ? <CircularProgress/> :
+                {isSyllabusLoading ? <CircularProgress sx={{justifySelf:'center'}} /> :
                 <>
                 <Stepper activeStep={Number(authUser?.currentLevel)-1}>
                 {syllabus?.levels?.map((level, lvIndex) => (
