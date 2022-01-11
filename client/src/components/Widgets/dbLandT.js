@@ -1,4 +1,4 @@
-import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Link, CircularProgress} from '@mui/material';
+import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Skeleton} from '@mui/material';
 import { useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getCourseData} from '../../actions/dashboard.js';
@@ -24,7 +24,13 @@ const DbLandT = () => {
         <Chip label={ isSyllabusLoading ? "Loading..." : syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
         </div>
        
-      {isSyllabusLoading ? <CircularProgress sx={{margin:'60px auto 60px auto',alignSelf:'center'}} /> : 
+      {isSyllabusLoading ? 
+      <>
+      <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+      <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+      <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+      </>
+       : 
        <>
         { syllabus?.levels?.map((lvl, lvIndex)=>(
             <div key={lvIndex}>

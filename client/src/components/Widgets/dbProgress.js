@@ -1,4 +1,4 @@
-import { Paper, Typography, Stepper, Step, StepLabel, CircularProgress } from "@mui/material";
+import { Paper, Typography, Stepper, Step, StepLabel, Skeleton } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const DbProgress = () => {
@@ -17,7 +17,9 @@ const DbProgress = () => {
                 <Typography variant='widget-heading'>Progress</Typography>
                 <br/>
 
-                {isSyllabusLoading ? <CircularProgress sx={{justifySelf:'center'}} /> :
+                {isSyllabusLoading ? 
+                <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+                :
                 <>
                 <Stepper activeStep={Number(authUser?.currentLevel)-1}>
                 {syllabus?.levels?.map((level, lvIndex) => (
