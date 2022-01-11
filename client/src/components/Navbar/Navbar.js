@@ -46,13 +46,13 @@ const Navbar = () => {
         <>
             <Slide appear={false} direction="down" in={!trigger} sx={{maxWidth: '100%'}} >
             <AppBar>
-            <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
-                <div style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
+            <Toolbar style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
+                <span style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
                 <IconButton size='small' onClick={()=>(setDrawerOpen(true))}><MenuIcon/></IconButton>
-                <Typography variant="h6" component="div" onClick={()=>(history.push('/'))} sx={{cursor:'pointer'}}>
+                <Typography variant="h6" onClick={()=>(history.push('/'))} sx={{cursor:'pointer'}}>
                 <span className={styles.uvce}>UVCE&nbsp;</span><span className={styles.marvel}>MARVEL</span>
                 </Typography>
-                </div>
+                </span>
                 {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
