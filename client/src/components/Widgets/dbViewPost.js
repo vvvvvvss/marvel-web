@@ -44,6 +44,8 @@ const DbViewPost = () => {
         dispatch(deletePost(viewPost?.slug, viewPostType ,'db'));
     }
 
+    console.log(viewPost);
+
     return (
         <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
         <AppBar sx={{ position: 'fixed' }}>
@@ -70,6 +72,7 @@ const DbViewPost = () => {
                         <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px'}} />
                         <Typography variant='body2' color='#c4c4c4' fontWeight='500'> 
                         &nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}&nbsp;&nbsp;{viewPostType==='PR' && <span>&#8226;&nbsp;&nbsp;{`Lv ${viewPost?.level}`}</span>}
+                        {viewPostType==='RSA' && <span>&#8226;&nbsp;&nbsp;{viewPost?.courseCode}</span>}
                         </Typography>
                     </Box>
                     <Typography variant='caption' color='#a1a1a1'> 
@@ -88,7 +91,8 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
-            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'32px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
+            <Typography component={'div'} lineHeight={'26px'}>
+            <Markdown style={{fontSize: '14px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
                 options={
                 {wrapper : 'div'},
                 { overrides: {
@@ -104,6 +108,7 @@ const DbViewPost = () => {
             }}>
             { he.decode(`${viewPost?.content}`) }
             </Markdown>
+            </Typography>
             <br/>
             <Divider/>
             <br/>

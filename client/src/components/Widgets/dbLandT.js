@@ -21,10 +21,10 @@ const DbLandT = () => {
     <Paper variant='widget' style={{height:'max-content',maxWidth:'400px', display:'flex',flexDirection:'column'}}>
         <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center'}}>
         <Typography variant='widget-heading'>levels & tasks&nbsp;</Typography>
-        <Chip label={syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
+        <Chip label={ isSyllabusLoading ? "Loading..." : syllabus?.courseCode} variant='outlined' color='primary' size='small'/>
         </div>
        
-      {isSyllabusLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'90px'}} /> : 
+      {isSyllabusLoading ? <CircularProgress sx={{marginTop:'90px',alignSelf:'center'}} /> : 
        <>
         { syllabus?.levels?.map((lvl, lvIndex)=>(
             <div key={lvIndex}>
@@ -32,26 +32,23 @@ const DbLandT = () => {
             <Typography variant='heading' component='div'>&nbsp;&nbsp;
                     {`Level  ${lvIndex+1}`}
             </Typography>
-            { lvl.tasks.map((tsk)=>{
+            { lvl.tasks.map((tsk, i)=>{
                 return(
-                    <Accordion key={tsk?.taskNo}>
+                    <Accordion key={i}>
                         <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         >
-                        <Typography variant='subtitle2'>{`Task  ${tsk?.taskNo}`}</Typography>
+                        <Typography variant='subtitle2'>{`Task  ${i+1}`}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
                             options={{wrapper : 'p'},{
-                                            overrides: {
-                                                p :{
-                                                    component: Typography
-                                                },
-                                                a :{
-                                                    component : Link,
-                                                    props : {target : '_blank',rel:'noopener noreferrer'}
-                                                }
-                                            },
+                                p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
+                                a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
+                                img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
+                                iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
+                                code : { component:Typography ,props : { variant:'code-small' }},
+                                blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
                                         }}>
                             {tsk?.description}
                             </Markdown >

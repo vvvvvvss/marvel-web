@@ -13,7 +13,7 @@ import he from 'he';
 
 const DbForm = () => {
     const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
-    const {authUser} = useSelector(state => state.auth);
+    const authUser = useSelector(state => state.auth.authUser);
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''
     });
@@ -59,11 +59,11 @@ const DbForm = () => {
         
         <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
         fullWidth variant='outlined' placeholder='An interesting title' label='Title' required inputProps={{maxLength : 80}}
-        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary'/>
+        InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary' disabled={isCreateLoading} />
         <br/><br/>
 
         {(authUser?.currentRole==='INS' && formType==='RSA') && 
-        <FormControl fullWidth>
+        <FormControl fullWidth disabled={isCreateLoading} >
         <InputLabel color='secondary' id='course-select' >Course code</InputLabel>
         <Select color='secondary'
         labelId="course-select"
@@ -77,7 +77,8 @@ const DbForm = () => {
       </Select><br/></FormControl>}
 
         {/* IMAGE UPLOAD */}
-        {formType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
+        {formType==='BLOG' && 
+        <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
           {({ onImageUpload, dragProps, }) => (
             <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
               <Paper variant='widget'
@@ -105,14 +106,14 @@ const DbForm = () => {
           onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
           generateMarkdownPreview={markdown =>
             Promise.resolve(
-              <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
+              <Markdown style={{fontFamily: 'Montserrat',fontSize: '16px',lineHeight:'26px'}} 
             options={
               {wrapper : 'div'},
               { overrides: {
                   p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                   img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                  iframe : { props : {width : '100%', height : '315', frameborder : '0'}},
+                  iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                   code : { component:Typography ,props : { variant:'code-small' }},
                   blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }}
               },
@@ -131,9 +132,9 @@ const DbForm = () => {
           
         {/* CHIPS */}
         <Paper variant='widget'>
-          <TextField fullWidth color='secondary' value={newTag}
+          <TextField fullWidth color='secondary' value={newTag} disabled={isCreateLoading}
           onChange={(e)=>{
-            if(e.nativeEvent?.data === ','){
+            if(e.target.value.slice(-1) === ','){
               if(formData?.tags?.length < 8){
                 if(formData?.tags?.includes(e.target?.value?.slice(0,-1))) return alert(`You've already added that tag`);
                 setFormData({...formData, tags : [...formData?.tags, e.target?.value?.slice(0,-1)]})
@@ -148,7 +149,7 @@ const DbForm = () => {
           {/* <br/><br/> */}
           {formData?.tags?.map((tag)=>(
             <span key={tag}>
-            <Chip style={{marginTop : '10px'}} key={tag} label={tag} variant='outlined' color='secondary'
+            <Chip style={{marginTop : '10px'}} key={tag} label={tag} variant='outlined' color='secondary' disabled={isCreateLoading}
             onDelete={()=>(setFormData({...formData, tags : formData?.tags.filter((i)=>(i!==tag))}))}/>
             &nbsp;&nbsp;
             </span>

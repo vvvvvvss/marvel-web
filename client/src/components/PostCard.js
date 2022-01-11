@@ -17,7 +17,8 @@ const PostCard = ({type, post, variant, scope}) => {
     const handleOpen = () => {
       try {
         if(["ins-dashboard","dashboard"].includes(scope)){
-          dispatch({type:'SET_VIEW_ID',payload:{id: post?.slug, type: type?.toUpperCase()}});dispatch({type:'OPEN_VIEW'});
+          dispatch({type:'SET_VIEW_ID',payload:{id: post?.slug, type: type?.toUpperCase(), scope: scope==='ins-dashboard'?'ins':'stu'}});
+          dispatch({type:'OPEN_VIEW'});
         }else {
           history.push(`/${type}/${post?.slug}`);
         }
@@ -30,7 +31,7 @@ const PostCard = ({type, post, variant, scope}) => {
         sx={{margin:{xs:'0px 20px 0px 20px',sm:["dashboard","ins-dashboard"].includes(scope)?'0px 20px 0px 20px':'0px'},height:'max-content',position:'relative',justifySelf:'center',
         maxWidth:'400px', 
         minWidth:{xs:`${(variant==="media"&&type==='blog')?'100%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
-        opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.4':'1'}`}}>
+        opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.5':'1'}`}}>
           {(type==='blog' && variant==='media') && <>
           <IconButton onClick={handleShare}
           sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
@@ -59,7 +60,7 @@ const PostCard = ({type, post, variant, scope}) => {
               color={post?.reviewStatus==='PENDING'?'warning':post.reviewStatus==='FLAGGED'?'error':post.reviewStatus==='APPROVED'?'success':'default'}
                sx={{position:'absolute',left:'12px',bottom:'12px'}} size='small' variant='filled'/> 
               }
-              {(["pr","rsa"].includes(type)&&(scope!=='dashboard')) && 
+              {(["pr","rsa"].includes(type)&&(!["dashboard","ins-dashboard"].includes(scope))) && 
                <Button variant='text' color='secondary' size='small' onClick={handleShare}> 
                 Share
               </Button>}&nbsp;&nbsp;

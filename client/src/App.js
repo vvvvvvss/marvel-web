@@ -1,7 +1,7 @@
-import {Switch, Redirect, Route} from 'react-router-dom';
+import {Switch, Redirect, Route, useLocation} from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home/Home.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { darkTheme, lightTheme } from './utils/themes.js';
 import StuDashboard from './pages/StuDashboard/StuDashboard.js';
 import InsDashboard from './pages/InsDashboard/InsDashboard.js';
@@ -14,9 +14,13 @@ import PostPage from './pages/PostPage/PostPage.js';
 import Err from './pages/Err.js';
 
 const App = ()=> {
-
+  const location = useLocation();
   const [mode, setMode] = useState('dark');
   const authUser = useSelector((state) => (state.auth.authUser));
+
+  useEffect(() => {
+      window.scrollTo(0,0);
+  }, [location?.pathname])
 
   return (
     <div>

@@ -127,7 +127,7 @@ export const approvePR = async (req, res) => {
         const totalLevels = (await course.findOne({courseCode: post.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         const author = await user.findOne({id : post.authorId}).exec();
         //course completed.
-        if(post?.level===author?.currentLevel===totalLevels){
+        if((post?.level===author?.currentLevel)&&( post?.level===totalLevels)){
             // award certificate. done
             const newCert = new certificate({
                 awardeeId : author?.id, awardeeName: author?.name, awardeeSlug: author?.slug,
@@ -143,7 +143,7 @@ export const approvePR = async (req, res) => {
             author.roleHistory[author.roleHistory?.length - 1].endTime = new Date();
             await author.save();
             // post becomes public.
-            Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });
+            Object.assign(post, { reviewStatus: 'APPROVED', feedback : ''});
             await post.save();
             // email service. done
             try {
@@ -154,8 +154,8 @@ export const approvePR = async (req, res) => {
                     to: [{"name" : author?.name, "email": author?.email}],
                     templateId : 10,
                     params: {
-                        name : returnedPost?.authorName,
-                        courseCode : returnedPost?.courseCode,
+                        name : post?.authorName,
+                        courseCode : post?.courseCode,
                         insName : req.user?.name,
                         link : "https://uvcemarvel.in/"
                     }

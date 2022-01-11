@@ -50,7 +50,7 @@ const LandTPage = () => {
         </Divider>}
         <Box sx={{display:'grid',gridTemplateColumns: {xl:'1fr 1fr 1fr',lg:'1fr 1fr',md:'1fr'}, justifyItems:'center',width:{xs:'100%',md:"max-content"},minWidth:{md:'750px',xs:'100%'},gap:'20px', 
         opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
-        {/* zeroth index level add */}
+    
         {syllabus?.levels?.map((lvl, lvIndex)=>(
         <Box key={lvIndex} sx={{maxWidth:'500px',padding:{xs:'16px',sm:'0px'}}}>
         <br/>

@@ -187,6 +187,10 @@ export const addLevel = async (req, res) => {
         const condition = req.user.enrollmentStatus==="ACTIVE" && req.user.currentRole==="INS" &&
                             req.user.currentInsCourse.includes(id);
         if(!condition)return res.json({status:'404', message:'Access denied.'});
+
+        const prCount = await projectReport.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
+        if(prCount>0) return res.json({status:'501', message:'mess' });
+        
         const existingCourse = await course.findOne({courseCode:id});
         existingCourse.levels.splice(Number(lvIndex), 0, {tasks:[{description:""}]});
         existingCourse.totalLevels+=1;
@@ -206,6 +210,10 @@ export const deleteLevel = async (req,res) => {
         const condition = req.user.enrollmentStatus==="ACTIVE" && req.user.currentRole==="INS"&&
                             req.user.currentInsCourse.includes(id);
         if(!condition) return res.json({message:"Access denied.", status:'404'});
+
+        const prCount = await projectReport.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
+        if(prCount>0) return res.json({status:'501', message:'mess' });
+
         const existingCourse = await course.findOne({courseCode:id});
         if(existingCourse.levels[Number(lvIndex)]._id.toString()!== levelId)return res.json({status:'500',course:{levels: existingCourse.levels}});
         existingCourse.levels.splice(Number(lvIndex), 1);

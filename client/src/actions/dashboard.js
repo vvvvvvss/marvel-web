@@ -1,7 +1,7 @@
 import * as API from '../API/index.js';
 
 export const getCourseData=(courseCode, scope, history) => async(dispatch)=>{
-    dispatch({type : `START_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
+    dispatch({type : `START_${scope==='overview'?'OVERVIEW' : 'SYLLABUS'}_LOADING`});
     try {
         const {data} = await API.getCourseData(courseCode, scope);
         if(data?.status ==='200'){
@@ -11,7 +11,7 @@ export const getCourseData=(courseCode, scope, history) => async(dispatch)=>{
             else history.push('/404');
         }; 
     } catch (error) { };
-    dispatch({type : `END_${scope==='overview'?'OVERVIEW' : 'COURSE'}_LOADING`});
+    dispatch({type : `END_${scope==='overview'?'OVERVIEW' : 'SYLLABUS'}_LOADING`});
 }
 
 export const getProfileData=(id, scope, history)=>async(dispatch)=>{

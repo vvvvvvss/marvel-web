@@ -121,7 +121,7 @@ const CoursePage = () => {
         </AppBar>}
         {tab==='levels' ? 
         <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>
-        <LandTPage/> 
+        <LandTPage/>
         </Box>  
         :
         <Box display='flex' flexDirection='column' alignItems='center' width='100%' paddingTop='20px'>

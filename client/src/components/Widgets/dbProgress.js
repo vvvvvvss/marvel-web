@@ -19,7 +19,7 @@ const DbProgress = () => {
 
                 {isSyllabusLoading ? <CircularProgress/> :
                 <>
-                <Stepper activeStep={Number(authUser?.currentLevel -1 )}>
+                <Stepper activeStep={Number(authUser?.currentLevel)-1}>
                 {syllabus?.levels?.map((level, lvIndex) => (
                     <Step key={lvIndex}>
                     <StepLabel>{`Lvl ${lvIndex+1}`}</StepLabel>

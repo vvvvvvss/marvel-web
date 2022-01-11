@@ -23,7 +23,7 @@ const PostPage = () => {
     const authUser = useSelector(state => state.auth.authUser);
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
-    
+
     useEffect(() => {
             dispatch(getPost( viewPostType ,id, 'page'));
         return () => {
@@ -74,6 +74,7 @@ const PostPage = () => {
         : viewPost?.status===404 ? 
         <Typography variant="h1" fontWeight={600} color='#313131' sx={{marginTop:'100px',transform:{xs:'translate(0px,0px)',md:'translate(90px,0px)'}}} >404</Typography>
         :
+        viewPost?.slug &&
         <>
         <div style={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative',backgroundColor:'#000000',maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF'}}>
            <img width='100%' style={{objectFit:'cover', minWidth:'100%', aspectRatio:'16 / 9',borderRadius:'12px',minHeight:'100%'}} 
@@ -163,7 +164,13 @@ const PostPage = () => {
             </Typography>
         <br/>
         <Box sx={{display:'grid', gridTemplateColumns:'1fr',gap:'20px'}}>
-            {isFeedLoading||isViewLoading ? <CircularProgress sx={{justifySelf:'center',marginTop:'60px'}} /> : 
+            {isFeedLoading||isViewLoading ? 
+            <>
+            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
+            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
+            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
+            </>
+            : 
             feed?.length===0 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p, i)=>(p?.slug !== id &&

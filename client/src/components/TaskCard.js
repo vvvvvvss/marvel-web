@@ -55,9 +55,9 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
         </DialogActions>
       </Dialog>
         {/* TASK CARD  */}
-        <Card sx={{marginTop:'15px', minWidth:{xs:'270px',md:'400px'}}} key={tskIndex}>
+        <Card sx={{marginTop:'15px', minWidth:{xs:'290px',sm:'475px'}}} key={tskIndex}>
             <CardHeader
-            action={(authUser.currentRole==="INS"&&authUser.currentInsCourse.includes(id))&& 
+            action={(authUser?.currentRole==="INS"&&authUser?.currentInsCourse.includes(id))&& 
             <span>
             <IconButton size="small" sx={{marginRight:'15px',color:'secondary.light'}} onClick={()=>{setConfirmOpen(true)}}>
                 <DeleteIcon/>

@@ -38,10 +38,17 @@ export const editCourse = (courseCode, operation, tskIndex, lvIndex, taskId, lev
     try {
        const {data} = await API.editCourse(courseCode, operation, tskIndex, lvIndex, taskId, levelId, content);
        if(data?.status==='201'){
+           if(operation==='addLevel')alert("Level added successfully. You might want to scroll down if you dont see it.");
            dispatch({type:'EDIT_SYLLABUS', payload: data?.course });
        }else if(data?.status==='500'){
            dispatch({type:'EDIT_SYLLABUS', payload: data?.course});
            alert("Could'nt edit Course. Looks like somebody else is also editing this course right now and we could'nt complete your request because of inconsistencies. We've updated your page with latest data!.");
+       }else if(data?.status==='501'){
+            if(operation==='addLevel'){
+                alert(`Students have submitted their project reports for level ${Number(lvIndex)+1}. Inserting a new level at that index will cause a mess. Please try inserting a level at a higher index where there has'nt been any activity, so that students can easily catchup. Thankyou.`);
+            }else if(operation==="deleteLevel"){
+                alert(`Students have submitted their project reports for that level. So you cant delete it.`);
+            }
        }else{
            alert("Something went wrong :(. Could'nt edit course.");
        }
