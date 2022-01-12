@@ -66,10 +66,9 @@ const ProfilePage = () => {
             {isOverviewLoading ?
             <Skeleton animation='wave' sx={{width:{xs:'300px',md:'400px'}, borderRadius:'12px', height:'250px',margin:{xs:'0px',md:'0px 20px 0px 0px'}}}/> :
             <Box sx={{padding:{xs:'0px',md:'0px 20px 0px 0px'}, maxWidth:'400px', display:'grid', gridTemplateColumns:'1fr 4fr', gap:'10px', width:'100%', position:'relative'}}> 
-            <IconButton onClick={()=>handleShare()} sx={{position:'absolute',right:'20px'}} ><ShareIcon/></IconButton>
             <Avatar src={overview?.profilePic} sx={{width: '60px', height:'60px'}}/> 
             <div>
-                <Typography variant="h6">{overview?.name}</Typography> 
+                <Typography variant="h6" sx={{marginRight:'20px'}} >{overview?.name}</Typography> 
                 {overview?.currentRole==='STU' ? 
                 <>
                 <Typography variant='caption' sx={{color: 'primary.light'}}>STUDENT</Typography>
@@ -97,6 +96,7 @@ const ProfilePage = () => {
                 <IconButton href={overview?.gitHub} target="_blank" rel="noopener noreferrer" disabled={overview?.gitHub===""||!overview?.gitHub ? true:false}  sx={{color:'primary.main'}}><GitHubIcon/></IconButton>&nbsp;&nbsp;
                 <IconButton href={overview?.linkedIn} target="_blank" rel="noopener noreferrer" disabled={overview?.linkedIn===""||!overview?.linkedIn ? true:false}  sx={{color:'primary.main'}}><LinkedInIcon/></IconButton>&nbsp;&nbsp;
                 <IconButton href={overview?.website} target="_blank" rel="noopener noreferrer" disabled={overview?.website===""||!overview?.website ? true:false}  sx={{color:'primary.main'}}><LanguageIcon/></IconButton>
+                <IconButton onClick={()=>handleShare()} sx={{color:'primary.main'}} ><ShareIcon/></IconButton>
             </span>
             </div>
             </Box >}
