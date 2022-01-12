@@ -171,7 +171,13 @@ export const editTask = async (req, res) => {
         return res.json({status:'500', course: {levels:existingCourse?.levels, courseCode:existingCourse?.courseCode}});
         }
 
-        existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)].description = req.body.content;
+        const cleanContent = sanitize(req.body?.content, {
+            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
+            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
+        });
+
+        existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)].description = cleanContent;
+        
         const newCourseData = await existingCourse.save();
         return res.json({status:'201', course:{levels:newCourseData?.levels, courseCode:newCourseData?.courseCode}});
     } catch (error) {

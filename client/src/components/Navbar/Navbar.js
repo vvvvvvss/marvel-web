@@ -56,7 +56,7 @@ const Navbar = () => {
                 {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
-                         <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>(history.push(`/profile/${authUser?.slug}`))}
+                         <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>{if(authUser?.enrollmentStatus!=='UNKNOWN')history.push(`/profile/${authUser?.slug}`)}}
                         style={{marginRight:'20px'}}/>
                         : <> </>
                     }
