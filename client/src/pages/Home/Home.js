@@ -1,4 +1,4 @@
-import { Paper, Typography, Alert} from '@mui/material';
+import { Paper, Typography, Alert, Button} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -22,22 +22,9 @@ return (
         }
        <br/>
         {/* top hero  */}
-        <Box sx={{display: 'flex', justifyContent:'space-evenly',alignItems:'center', transition:'300ms',width:'100%',marginTop:'30px'}}>
+        <Box sx={{width:'100%',marginTop:'50px',display:'flex',flexDirection:{xs:'column',md:'row'},justifyContent:'center',alignItems:'center'}}>
         {/* logo  */}
-        <Box sx={{padding:'30px 30px 30px 30px',width:'100%',position:'relative',maxWidth:'300px',transform:{xs:'translate(20px,0px)'}}}>
-        <img src={'https://i.imgur.com/SXKFsOc.png'} alt='uvce marvel' style={{maxHeight :'300px',position:'absolute'}}/>
-        <Box sx={{position:'relative',display:'flex',justifyContent:'center',alignItems:'center',padding:'30px 30px 30px 30px',top:'20%'}}>
-            <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'20px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
-            <Typography variant='h4' sx={{color:'secondary.light',fontSize:{xs:'24px',sm:'h1'}}}>Maker space for advanced research and vital education and learning</Typography>
-            <Typography variant="h1" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'30px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
-        </Box>
-        </Box>
-
-        {/* { ((authUser?.currentRole==='STU')||(authUser?.currentRole==='INS')) &&
-        <Button variant='contained' color='primary' onClick={()=>(history.push('/dashboard'))}>
-            Go to Dashboard
-        </Button>
-        } */}
+        <img src={'https://i.imgur.com/SXKFsOc.png'} alt='uvce marvel' style={{maxHeight :'300px'}}/>
         </Box>
         {/* something  */}
     </Box>

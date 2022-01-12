@@ -135,12 +135,11 @@ export const approvePR = async (req, res) => {
                 approvedByName : req.user.name, approvedBySlug: req.user.slug, approvedById: req.user.id
             });
             await newCert.save();
-            // make author inactive. role becomes na, currentStuCourse becomes na, edit role history
+            // make author inactive. role becomes na, currentStuCourse becomes na
             Object.assign(author, {
                 enrollmentStatus : 'INACTIVE', currentRole : 'NA',
                 currentStuCourse : 'NA', currentLevel : 0,
             });
-            author.roleHistory[author.roleHistory?.length - 1].endTime = new Date();
             await author.save();
             // post becomes public.
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : ''});
