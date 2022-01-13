@@ -120,7 +120,7 @@ const Search = () => {
         <AppBar position='sticky' sx={{background:'#181818'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
             <Pagination count={totalFeedPages} variant="outlined" page={page} 
-            color="secondary" onChange={(e, page)=>(setPage(page))}
+            color="secondary" onChange={(e, newPage)=>{if(page!==newPage){setPage(newPage);handleSearch();}}}
             style={{justifySelf:'center'}}/>
         </Toolbar>
         </AppBar>
