@@ -74,7 +74,12 @@ export const darkTheme = createTheme({
         styleOverrides : { root : { padding : '10px', backgroundColor : '#112020',borderRadius:'8px',border :'1px solid #5B7B80' }}
       },
       MuiLink:{
-        styleOverrides:{root : { color : '#FF7596'}}
+        styleOverrides:{root : { color : '#FF7596',  
+        overflowWrap:'break-word',
+        wordBreak:"break-word", 
+        wordWrap: 'break-word',
+        msWordBreak:"break-all"  
+      }}
       }
     }
 });
