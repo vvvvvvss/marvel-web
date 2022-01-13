@@ -110,7 +110,8 @@ const PostPage = () => {
         <br/>
         <Divider/>
         <br/>
-        <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'32px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start',maxWidth:'650px'}} 
+        <Typography sx={{fontSize:'14px', lineHeight:'36px'}} >
+        <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start',maxWidth:'650px'}} 
             options={
             {wrapper : 'p'},
             { overrides: {
@@ -124,14 +125,15 @@ const PostPage = () => {
         }}>
         { he.decode(`${viewPost?.content}`) }
         </Markdown>
+        </Typography>
         <br/>
         <Divider/>
         <br/>
-        <div style={{display:'flex',justifyContent:'flex-start',maxWidth:'650px'}}>
+        <Box style={{maxWidth:'650px', whiteSpace: 'pre-wrap'}}>
                 { viewPost?.tags?.map((tag)=>(
             <Chip label={tag} key={tag} variant='outlined' size='medium' color='primary' style={{margin : '4px 8px 4px 0px'}}/>
         ))}
-        </div>
+        </Box>
         <br/>
         <Divider/>
         <br/>
