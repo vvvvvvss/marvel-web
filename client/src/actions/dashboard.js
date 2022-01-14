@@ -1,6 +1,6 @@
 import * as API from '../API/index.js';
 
-export const getCourseData=(courseCode, scope, history) => async(dispatch)=>{
+export const getCourseData=(courseCode, scope, navigate) => async(dispatch)=>{
     dispatch({type : `START_${scope==='overview'?'OVERVIEW' : 'SYLLABUS'}_LOADING`});
     try {
         const {data} = await API.getCourseData(courseCode, scope);
@@ -8,7 +8,7 @@ export const getCourseData=(courseCode, scope, history) => async(dispatch)=>{
             dispatch({type : `${scope==='overview' ? 'GET_OVERVIEW': 'GET_COURSE'}`, payload : data?.course});
         }else{
             if(scope==='dashboard'){ alert("Something went wrong at syllabus widget.");}
-            else history.push('/404');
+            else navigate('/404');
         }; 
     } catch (error) { };
     dispatch({type : `END_${scope==='overview'?'OVERVIEW' : 'SYLLABUS'}_LOADING`});

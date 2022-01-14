@@ -3,7 +3,7 @@ import { Slide, AppBar, Toolbar, Typography, Avatar, Box
       } from "@mui/material";
 import GoogleLogin, {GoogleLogout} from 'react-google-login';
 import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {auth} from '../../actions/auth.js'
 import useStyles from './styles.js';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -21,14 +21,14 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 const Navbar = () => {
     const trigger = useScrollTrigger();
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const {authUser, isAuthLoading} = useSelector((state)=> state.auth);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const styles = useStyles();
     const [crsListOpen, setCrsListOpen] = useState(false);
 
     const googleSuccess = (res)=> {
-        dispatch(auth(res, history));
+        dispatch(auth(res, navigate));
     }
 
     const logout = ()=>{
@@ -49,14 +49,14 @@ const Navbar = () => {
             <Toolbar style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <span style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
                 <IconButton size='small' onClick={()=>(setDrawerOpen(true))}><MenuIcon/></IconButton>
-                <Typography variant="h6" onClick={()=>(history.push('/'))} sx={{cursor:'pointer'}}>
+                <Typography variant="h6" onClick={()=>(navigate('/'))} sx={{cursor:'pointer'}}>
                 <span className={styles.uvce}>UVCE&nbsp;</span><span className={styles.marvel}>MARVEL</span>
                 </Typography>
                 </span>
                 {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
-                         <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>{if(authUser?.enrollmentStatus!=='UNKNOWN')history.push(`/profile/${authUser?.slug}`)}}
+                         <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>{if(authUser?.enrollmentStatus!=='UNKNOWN')navigate(`/profile/${authUser?.slug}`)}}
                         style={{marginRight:'20px'}}/>
                         : <> </>
                     }
@@ -103,12 +103,12 @@ const Navbar = () => {
                 {(authUser?.id && authUser?.enrollmentStatus!=='UNKNOWN') &&
                 <>
                 <Divider/>
-                <ListItemButton onClick={()=>(history.push(`/profile/${authUser?.slug}`))}>
+                <ListItemButton onClick={()=>(navigate(`/profile/${authUser?.slug}`))}>
                     <ListItemIcon><FaceIcon/></ListItemIcon>
                     <ListItemText>My profile</ListItemText>
                 </ListItemButton>
                 { (authUser?.currentRole==='STU'&&authUser?.enrollmentStatus==="ACTIVE") ? 
-                <ListItemButton onClick={()=>(history.push(`/course/${authUser?.currentStuCourse}`))}>
+                <ListItemButton onClick={()=>(navigate(`/course/${authUser?.currentStuCourse}`))}>
                     <ListItemIcon><BookIcon/></ListItemIcon>
                     <ListItemText>My Course
                     </ListItemText>
@@ -125,19 +125,19 @@ const Navbar = () => {
               <Collapse in={crsListOpen}  timeout="auto" unmountOnExit>
                 <List component="div" disablePadding style={{backgroundColor:'#001C28'}}>
                   {authUser?.currentInsCourse?.map((c)=>(
-                      <ListItemButton key={c} onClick={()=>(history.push(`/course/${c}`))}>
+                      <ListItemButton key={c} onClick={()=>(navigate(`/course/${c}`))}>
                           <ListItemIcon></ListItemIcon>
                           <ListItemText primaryTypographyProps={{variant:'body2'}} >{c}</ListItemText>
                       </ListItemButton>
                   ))}
                 </List>
               </Collapse> </> : <></>}
-                <ListItemButton onClick={()=>(history.push('/dashboard'))}>
+                <ListItemButton onClick={()=>(navigate('/dashboard'))}>
                     <ListItemIcon><Dashboard/></ListItemIcon>
                     <ListItemText>Dashboard</ListItemText>
                 </ListItemButton>
                 <Divider/></>}
-                <ListItemButton onClick={()=>(history.push("/search"))}>
+                <ListItemButton onClick={()=>(navigate("/search"))}>
                     <ListItemIcon><SearchIcon/></ListItemIcon>
                     <ListItemText>Search</ListItemText>
                 </ListItemButton>

@@ -1,4 +1,4 @@
-import {Switch, Redirect, Route, useLocation} from 'react-router-dom';
+import {Routes, Navigate, Route, useLocation} from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home/Home.js';
 import { useState, useEffect } from 'react';
@@ -23,14 +23,14 @@ const App = ()=> {
   }, [location?.pathname])
 
   return (
-    <div>
+    <>
       <ThemeProvider theme={mode==='dark' ? darkTheme : lightTheme}>
-        <Switch>
-            <Route path="/" exact component={Home} /> 
-            <Route path="/dashboard" exact component={
+        <Routes>
+            <Route path="/" exact element={<Home/>} /> 
+            <Route path="/dashboard" exact element={
               ()=>{
                 if(authUser?.enrollmentStatus==='UNKNOWN' || !authUser?.id){
-                  return <Redirect to="/"/>
+                  return <Navigate to="/"/>
                 }else if(authUser?.currentRole==='STU'){
                   return <StuDashboard/>
                 }else if(authUser?.currentRole==='INS'){
@@ -38,20 +38,20 @@ const App = ()=> {
                 }else if(authUser?.enrollmentStatus==='INACTIVE'&&authUser?.currentRole==='NA'){
                   return <NotAccDashboard/>
                 }else {
-                  return <Redirect to="/" />
+                  return <Navigate to="/" />
                 }
               }
             }/>
-            <Route path="/course/:id" exact component={CoursePage} />
-            <Route path="/profile/:id" exact component={ProfilePage} />
-            <Route path="/search" exact component={Search}/>
-            <Route path="/pr/:id" exact component={PostPage}/>
-            <Route path="/blog/:id" exact component={PostPage}/>
-            <Route path="/rsa/:id" exact component={PostPage}/>
-            <Route path="/404" exact component={Err} />
-        </Switch>
+            <Route path="/course/:id" exact element={<CoursePage/>} />
+            <Route path="/profile/:id" exact element={<ProfilePage/>} />
+            <Route path="/search" exact element={<Search/>}/>
+            <Route path="/pr/:id" exact element={<PostPage/>}/>
+            <Route path="/blog/:id" exact element={<PostPage/>}/>
+            <Route path="/rsa/:id" exact element={<PostPage/>}/>
+            <Route path="/404" exact element={<Err/>} />
+        </Routes>
       </ThemeProvider>
-    </div>
+    </>
   );
 }
 

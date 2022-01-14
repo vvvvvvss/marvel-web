@@ -1,11 +1,11 @@
 import { Card, IconButton, CardMedia, CardContent, Typography, CardActions, Button, Chip } from "@mui/material"
 import ShareIcon from '@mui/icons-material/Share';
 import moment from 'moment';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 
 const PostCard = ({type, post, variant, scope}) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleShare = () => {
         try {
@@ -20,7 +20,7 @@ const PostCard = ({type, post, variant, scope}) => {
           dispatch({type:'SET_VIEW_ID',payload:{id: post?.slug, type: type?.toUpperCase(), scope: scope==='ins-dashboard'?'ins':'stu'}});
           dispatch({type:'OPEN_VIEW'});
         }else {
-          history.push(`/${type}/${post?.slug}`);
+          navigate(`/${type}/${post?.slug}`);
         }
       } catch (error) { }
     }

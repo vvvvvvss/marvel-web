@@ -1,9 +1,9 @@
 import { Card, Avatar, Typography, Divider, Button, Chip } from "@mui/material";
 import { Box } from "@mui/system";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserCard = ({user}) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     return (
         <div>
             <Card variant='outlined' sx={{maxWidth:{xs:'300px',sm:'400px'},height:'max-content',position:'relative',display:'grid',gridTemplateColumns: '1fr 4fr',gap:'10px',padding:'16px 20px 10px 20px'}}>
@@ -25,8 +25,8 @@ const UserCard = ({user}) => {
                 <Divider sx={{margin:'8px 0px 10px 0px'}}/>
                 <Box sx={{whiteSpace:'pre-wrap'}} >
                 {user?.currentInsCourse.map((c, i)=>(
-                <Link style={{textDecoration:'none',color:'inherit'}} to={`/course/${c}`} >
-                <Chip label={c} variant="outlined" key={i} color='secondary' size='small' sx={{margin:'0px 8px 8px 0px'}}/>                
+                <Link style={{textDecoration:'none',color:'inherit'}} to={`/course/${c}`} key={i} >
+                <Chip label={c} variant="outlined" color='secondary' size='small' sx={{margin:'0px 8px 8px 0px'}}/>                
                 </Link>
                 ))}  
                 </Box>
@@ -38,7 +38,7 @@ const UserCard = ({user}) => {
             }
               <Divider/>
               <Button variant='text' color='secondary' sx={{marginTop : '10px'}}
-              onClick={()=>(history.push(`/profile/${user?.slug}`))}>view</Button>
+              onClick={()=>(navigate(`/profile/${user?.slug}`))}>view</Button>
             </div>
           </Card>
         </div>

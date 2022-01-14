@@ -1,6 +1,6 @@
 import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, AppBar, Toolbar,Button,  TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getCourseData } from '../../actions/dashboard.js';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ import LandTPage from '../../components/LandTPage.js';
 
 const CoursePage = () => {
     const {id} = useParams();
-    const history = useHistory();
+    const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
     const query = new URLSearchParams(useLocation().search);
     const hashParam = useLocation()?.hash;
@@ -27,7 +27,7 @@ const CoursePage = () => {
     const [titleField, setTitleField] = useState("");
 
     useEffect(()=>{
-        dispatch(getCourseData(id.trim(), 'overview', history));
+        dispatch(getCourseData(id.trim(), 'overview', navigate));
         return () => {
             dispatch({type:'CLEAR_FEED'});
             dispatch({type:'CLEAR_OVERVIEW'});
@@ -39,7 +39,7 @@ const CoursePage = () => {
         if(tab==='rsa'){
             dispatch(getRsaFeedByCourse(id, page, searchTitle))
         }else if(tab==='levels'){
-            dispatch(getCourseData(id?.trim(), 'levels', history));
+            dispatch(getCourseData(id?.trim(), 'levels', navigate));
         }
     }, [tab, page, searchTitle, id]);
 

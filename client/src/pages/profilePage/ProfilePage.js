@@ -1,5 +1,5 @@
 import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, Tabs, Tab, Button, CircularProgress, TextField, Skeleton, Pagination} from "@mui/material";
-import { Link, useLocation, useParams, useHistory } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ import PostCard from "../../components/PostCard";
 
 const ProfilePage = () => {
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const query = new URLSearchParams(location?.search);
     const {id} = useParams();
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const ProfilePage = () => {
     const [titleField, setTitleField] = useState("");
 
     useEffect(() => {
-        dispatch(getProfileData(id, 'page', history));
+        dispatch(getProfileData(id, 'page', navigate));
         return ()=>{
             dispatch({type:'CLEAR_OVERVIEW'});
         }

@@ -5,21 +5,23 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@mui/system';
 import {getSearchFeed} from '../../actions/other.js';
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import PostCard from '../../components/PostCard';
 import UserCard from '../../components/UserCard';
 import CourseCard from '../../components/CourseCard';
 
 const Search = () => {
-    const {authUser} = useSelector(state => state.auth);
+    const authUser = useSelector(state => state.auth.authUser);
+    const [searchParams, setSearchParams] = useSearchParams();
     const {feed, isFeedLoading, totalFeedPages} = useSelector(state => state.other);
-    const [type, setType] = useState("");
-    const [domain, setDomain] = useState("");
-    const [title, setTitle] = useState("");
-    const [courseCode, setCourseCode] = useState("");
-    const [authorName, setAuthorName] = useState("");
-    const [tags, setTags] = useState("");
-    const [page, setPage] = useState(1);
+    const [type, setType] = useState(["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'');
+    const [domain, setDomain] = useState(["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'');
+    const [title, setTitle] = useState(searchParams.get("title") || '');
+    const [courseCode, setCourseCode] = useState(searchParams.get("courseCode") || '');
+    const [authorName, setAuthorName] = useState(searchParams.get("name") || '');
+    const [tags, setTags] = useState(searchParams.get("tags") || '');
+    const [page, setPage] = useState(searchParams.get("page") || 1);
+    const [searchCount, setSearchCount] = useState(0);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -30,10 +32,15 @@ const Search = () => {
     }, [type]);
 
     const handleSearch = () =>{
+      setSearchParams({type, domain, title, courseCode, name: authorName, tags, page});
+      setSearchCount(c=>c+1);
+    }
+
+    useEffect(() => {
       if(type!==""){
         dispatch(getSearchFeed(type, domain, title, courseCode, authorName, tags, page));
       }
-    }
+    }, [searchCount])
 
     return (
         //entire screen
@@ -120,7 +127,7 @@ const Search = () => {
         <AppBar position='sticky' sx={{background:'#181818'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
             <Pagination count={totalFeedPages} variant="outlined" page={page} 
-            color="secondary" onChange={(e, newPage)=>{if(page!==newPage){setPage(newPage);handleSearch();}}}
+            color="secondary" onChange={(e, newPage)=>{setPage(newPage);handleSearch();}}
             style={{justifySelf:'center'}}/>
         </Toolbar>
         </AppBar>

@@ -1,13 +1,13 @@
-import { Paper, Typography, Alert, Button} from '@mui/material';
+import { Paper, Alert} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {Box} from '@mui/system'
 
 const Home = () => {
-    const history = useHistory();
-    const {authUser} = useSelector(state => state.auth);
-
+    const navigate = useNavigate();
+    console.log("i rendered");
+    const authUser = useSelector(state => state.auth.authUser);
 return (
     //entire screen
     <Paper square sx={{minHeight:'100vh', display:'flex',justifyContent:'center',maxWidth:'100vw',overflowX:'hidden'}}>

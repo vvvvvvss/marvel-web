@@ -1,9 +1,9 @@
 import { Card, Typography, Divider, Button, IconButton } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ShareIcon from '@mui/icons-material/Share';
 
 const CourseCard = ({course}) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     return (
       <Card variant='outlined' sx={{maxWidth:'400px',height:'max-content',position:'relative',padding:'16px 20px 10px 20px',margin:{xs:'0px 20px 0px 20px',sm:'0px'}}}>
             <IconButton onClick={()=>{try {
@@ -20,7 +20,7 @@ const CourseCard = ({course}) => {
             <Divider sx={{marginTop:'10px'}} />
             <Typography variant='body2' sx={{margin:'10px 0px 10px 0px'}}>{course?.caption}</Typography>
             <Divider sx={{marginBottom:'10px'}} />
-            <Button color='secondary' onClick={()=>(history.push(`/course/${course?.courseCode}`))}>view</Button>
+            <Button color='secondary' onClick={()=>(navigate(`/course/${course?.courseCode}`))}>view</Button>
       </Card>
     )
 }
