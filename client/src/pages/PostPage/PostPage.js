@@ -23,13 +23,14 @@ const PostPage = () => {
     const authUser = useSelector(state => state.auth.authUser);
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
+    const [refreshCount, setRefreshCount] = useState(0);
 
     useEffect(() => {
             dispatch(getPost( viewPostType ,id, 'page'));
         return () => {
             dispatch({type:"CLEAR_DASHBOARD"});
         }
-    }, [dispatch,id]);
+    }, [dispatch,id, refreshCount]);
 
     useEffect(() => {
         if(viewPost?.slug){
@@ -72,7 +73,11 @@ const PostPage = () => {
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px',marginTop:'5px'}}/>
         </div> 
         : viewPost?.status===404 ? 
-        <Typography variant="h1" fontWeight={600} color='#313131' sx={{marginTop:'100px',transform:{xs:'translate(0px,0px)',md:'translate(90px,0px)'}}} >404</Typography>
+        <Box sx={{maxWidth:'min-content',alignItems:'center', display:'flex', flexDirection:'column',marginTop:'100px',transform:{xs:'translate(0px,0px)',md:'translate(90px,0px)'}}} >
+        <Typography variant="h1" fontWeight={600} color='#313131'>404</Typography>
+        <Typography variant="caption" sx={{color:'#a1a1a1', textAlign:'center'}} >If you just logged in and think you have access to this article, Consider trying again.</Typography>
+        <br/><Button onClick={()=>(setRefreshCount(c=>c+1))} variant='outlined' >Try again</Button>
+        </Box>
         :
         viewPost?.slug &&
         <>
