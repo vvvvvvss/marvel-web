@@ -27,21 +27,18 @@ const App = ()=> {
       <ThemeProvider theme={mode==='dark' ? darkTheme : lightTheme}>
         <Routes>
             <Route path="/" exact element={<Home/>} /> 
-            <Route path="/dashboard" exact element={
-              ()=>{
-                if(authUser?.enrollmentStatus==='UNKNOWN' || !authUser?.id){
-                  return <Navigate to="/"/>
-                }else if(authUser?.currentRole==='STU'){
-                  return <StuDashboard/>
-                }else if(authUser?.currentRole==='INS'){
-                  return <InsDashboard/>
-                }else if(authUser?.enrollmentStatus==='INACTIVE'&&authUser?.currentRole==='NA'){
-                  return <NotAccDashboard/>
-                }else {
-                  return <Navigate to="/" />
-                }
-              }
-            }/>
+
+            {authUser?.enrollmentStatus==='UNKNOWN' || !authUser?.id ? 
+            <Route path="/dashboard" exact element={<Navigate to="/" />} /> : 
+            authUser?.currentRole==='STU' ? 
+            <Route path="/dashboard" exact element={<StuDashboard/>} /> : 
+            authUser?.currentRole==='INS' ? 
+            <Route path="/dashboard" exact element={<InsDashboard/>} /> : 
+            authUser?.enrollmentStatus==='INACTIVE'&&authUser?.currentRole==='NA' ? 
+            <Route path="/dashboard" exact element={<NotAccDashboard/>} /> :
+            <Route path="/dashboard" exact element={<Navigate to="/" />} />
+            }
+
             <Route path="/course/:id" exact element={<CoursePage/>} />
             <Route path="/profile/:id" exact element={<ProfilePage/>} />
             <Route path="/search" exact element={<Search/>}/>

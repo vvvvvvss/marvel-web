@@ -45,4 +45,4 @@ const StuDashboard = () => {
     )
 }
 
-export default StuDashboard
+export default StuDashboard;
