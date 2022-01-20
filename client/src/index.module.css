@@ -16,4 +16,8 @@ background-color: grey;
 
 a {
   color: #FF7596;
+  overflow-wrap:break-word;
+  word-break:break-word; 
+  word-wrap: break-word;
+  -ms-word-break:break-all
 }

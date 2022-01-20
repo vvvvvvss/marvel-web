@@ -1,4 +1,4 @@
-import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Skeleton} from '@mui/material';
+import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Skeleton, Link} from '@mui/material';
 import { useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getCourseData} from '../../actions/dashboard.js';
@@ -47,21 +47,19 @@ const DbLandT = () => {
                         <Typography variant='subtitle2'>{`Task  ${i+1}`}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography variant='body2' lineHeight={"24px"} component={'div'} >
                             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
                             options={{wrapper : 'div'},{
-                                a :{ props : {target : '_blank',rel:'noopener noreferrer', style:{overflowWrap:'break-word',
-                                wordBreak:"break-word", 
-                                wordWrap: 'break-word',
-                                msWordBreak:"break-all"}} },
-                                img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                                iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
-                                code : { component:Typography ,props : { variant:'code-small' }},
-                                blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
-                                }}>
+                                overrides: {
+                                    p :{ component: Typography , props: {variant : 'body2'}}, 
+                                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}, sx:{color:'primary.light'}},
+                                    img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
+                                    iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
+                                    code : { component:Typography ,props : { variant:'code-small' }},
+                                    blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px', margin:"10px"} }}
+                                }
+                            }}>
                             {tsk?.description}
-                            </Markdown >
-                            </Typography>
+                            </Markdown>
                         </AccordionDetails>
                     </Accordion>
                 )

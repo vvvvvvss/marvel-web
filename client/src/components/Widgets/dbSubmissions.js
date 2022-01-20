@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Typography, Paper, Tab, Tabs, Pagination, CircularProgress} from "@mui/material";
+import { Typography, Paper, Tab, Tabs, Pagination, Skeleton} from "@mui/material";
 import {getSubmissions} from '../../actions/dashboard.js';
 import DbViewPost from "./dbViewPost.js";
 import DbEditPost from "./dbEditPost.js";
@@ -33,8 +33,12 @@ const DbSubmissions = () => {
         <Tab label="Blog posts" value='blog'/>
         </Tabs>
         <br/>
-        { isSubLoading ? <CircularProgress/> :
-
+        { isSubLoading ? 
+        <>
+        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+        </> 
+         :
         <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
 
         {!submissions?.[tab==='pr' ? 'prs' : 'others']?.length ? 
