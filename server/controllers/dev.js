@@ -68,21 +68,21 @@ export const assignIns = async (req, res) => {
 
 export const assignStu = async (req, res) => {
     try {
-        // const iot = [
-        //     "paraganvedeepa2000@gmail.com"
-        // ];
-        // // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
-        // const updated = await user.updateMany({email: {$in: iot}}, {
-        //     enrollmentStatus: "ACTIVE",
-        //     currentRole: "STU",
-        //     currentStuCourse: "IOT-001",
-        //     currentLevel : 1,
-        //     $push:{ 
-        //         roleHistory: {role: "STU", stuCourse:"IOT-001", startTime: new Date()}
-        //     },
-        // }
-        // );
-        // return res.json({updated});
+        const clcy = [
+            "vishalvinayram5432@gmail.com"
+        ];
+        // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
+        const updated = await user.updateMany({email: {$in: clcy}}, {
+            enrollmentStatus: "ACTIVE",
+            currentRole: "STU",
+            currentStuCourse: "CL-CY-001",
+            currentLevel : 1,
+            $push:{ 
+                roleHistory: {role: "STU", stuCourse:"CL-CY-001", startTime: new Date()}
+            },
+        }
+        );
+        return res.json({updated});
 
     } catch (error) {
         console.log(error);
@@ -101,8 +101,8 @@ export const play = async (req, res) => {
 
 export const play2 = async (req, res) => {
     try {
-        // const neha = await user.find({name : new RegExp("neha", "i")}).lean().exec();
-        // return res.json({neha});
+        // const data = await user.find({name : new RegExp("vishal", "i")}).lean().exec();
+        // return res.json({data});
     } catch (error) {
         return res.json(error);
     }

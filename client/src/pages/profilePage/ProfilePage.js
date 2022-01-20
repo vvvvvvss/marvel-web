@@ -2,7 +2,7 @@ import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, 
 import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getProfileData } from "../../actions/dashboard.js";
 import {getProfileFeed} from "../../actions/other.js"
 import { Box } from "@mui/system";
@@ -39,6 +39,8 @@ const ProfilePage = () => {
             dispatch({type:'CLEAR_FEED'});
         }
     }, [id, tab, page, searchTitle]);
+
+    const bioo = useMemo(() => ["Zilch", "nada","N/A","nihil"][Math.floor(Math.random()*4)], []);
 
     const handleShare = () => {
         try {
@@ -108,7 +110,7 @@ const ProfilePage = () => {
             <Box sx={{padding:{xs:'0px',md:'0px 0px 0px 20px'}, width:'100%', maxWidth:"400px"}} >
                 <div style={{padding:'20px', position:'relative',display:'flex',justifyContent: 'center'}}>
                 <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', left:'0px',top:'0px',fontFamily:'Source Code Pro'}} >&ldquo;</Typography>
-                <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio===''||!overview?.bio ? <em style={{color:'#a1a1a1'}}>{["Zilch", "nada","N/A","nihil"][Math.ceil(Math.random()*3)]}</em> : overview?.bio}</Typography>
+                <Typography variant='body2' sx={{color:'secondary.light'}}>{overview?.bio===''||!overview?.bio ? <em style={{color:'#a1a1a1'}}>{bioo}</em> : overview?.bio}</Typography>
                 <Typography variant="h2" lineHeight='0px' sx={{color:'secondary.light', position:'absolute', right:'0px',bottom:'0px',fontFamily:'Source Code Pro'}} >&rdquo;</Typography>
                 </div>
             </Box>}

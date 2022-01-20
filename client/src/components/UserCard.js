@@ -6,7 +6,9 @@ const UserCard = ({user}) => {
     const navigate = useNavigate();
     return (
         <div>
-            <Card variant='outlined' sx={{maxWidth:{xs:'300px',sm:'400px'},height:'max-content',position:'relative',display:'grid',gridTemplateColumns: '1fr 4fr',gap:'10px',padding:'16px 20px 10px 20px'}}>
+            <Card variant='outlined' 
+            sx={{maxWidth:{xs:'300px',sm:'400px'},minWidth:{lg:'400px'},
+            height:'max-content',position:'relative',display:'grid',gridTemplateColumns: '1fr 4fr',gap:'10px',padding:'16px 20px 10px 20px'}}>
             <Avatar src={user?.profilePic} alt={user?.name} sx={{height:'60px',width:'60px',justifySelf:'start'}}/>
             <div>
               <Typography variant='h6' sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>{user?.name}</Typography>
