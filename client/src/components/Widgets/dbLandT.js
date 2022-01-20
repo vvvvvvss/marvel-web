@@ -38,7 +38,7 @@ const DbLandT = () => {
             <Typography variant='heading' component='div'>&nbsp;&nbsp;
                     {`Level  ${lvIndex+1}`}
             </Typography>
-            { lvl.tasks.map((tsk, i)=>{
+            { lvl?.tasks?.map((tsk, i)=>{
                 return(
                     <Accordion key={i}>
                         <AccordionSummary
