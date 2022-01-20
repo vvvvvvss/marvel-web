@@ -47,17 +47,21 @@ const DbLandT = () => {
                         <Typography variant='subtitle2'>{`Task  ${i+1}`}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
+                            <Typography variant='body2' lineHeight={"24px"} component={'div'} >
                             <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
                             options={{wrapper : 'div'},{
-                                p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                                a :{ props : {target : '_blank',rel:'noopener noreferrer', style:{color:'#FFD7EA'}} },
+                                a :{ props : {target : '_blank',rel:'noopener noreferrer', style:{overflowWrap:'break-word',
+                                wordBreak:"break-word", 
+                                wordWrap: 'break-word',
+                                msWordBreak:"break-all"}} },
                                 img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
                                 iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                                 code : { component:Typography ,props : { variant:'code-small' }},
                                 blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
-                                        }}>
+                                }}>
                             {tsk?.description}
                             </Markdown >
+                            </Typography>
                         </AccordionDetails>
                     </Accordion>
                 )

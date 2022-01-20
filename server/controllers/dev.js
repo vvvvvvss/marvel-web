@@ -68,22 +68,27 @@ export const assignIns = async (req, res) => {
 
 export const assignStu = async (req, res) => {
     try {
-        aiml = ["nischal.vishwanath23@gmail.com",
-                "bhargav.adya.510@gmail.com",
-                "mayurbhat2082001@gmail.com",
-                "shreekanthdash4@gmail.com",
-                "abhishekyanjarappa@gmail.com",
-                "sharanEN27@gmail.com",
-                "shrishtibekalm@gmail.com",
-                "kushalsangnalmat@gmail.com",
-                "yashika.carmel@gmail.com",
-                "girishkulkarni351@gmail.com",
-                "nischal.vishwanath23@gmail.com"
-        ];
-
-        
+        // const iot = ["meghana.suresh2307@gmail.com",
+        //     "vachank777@gmail.com",
+        //     "manishkb222@gmail.com",
+        //     "bhooshankumar13@gmail.com",
+        //     "paraganvedeepa2000@gmail.com"
+        // ];
+        // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
+        // const updated = await user.updateMany({email: {$in: iot}}, {
+        //     enrollmentStatus: "ACTIVE",
+        //     currentRole: "STU",
+        //     currentStuCourse: "IOT-001",
+        //     currentLevel : 1,
+        //     $push:{ 
+        //         roleHistory: {role: "STU", stuCourse:"IOT-001", startTime: new Date()}
+        //     },
+        // }
+        // );
+        // return res.json({updated});
 
     } catch (error) {
+        console.log(error);
         return res.json({error});
     }
 }
