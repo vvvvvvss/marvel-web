@@ -28,7 +28,7 @@ try {
     }
     
 } catch (err) {
-    // console.log(err);
+    console.log(err);
     return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }

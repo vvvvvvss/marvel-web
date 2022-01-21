@@ -28,8 +28,8 @@ export const getSearchFeed = (type, domain, title, courseCode, authorName, tags,
         const {data} = await API.getSearchFeed(type, domain, title, courseCode, authorName, tags, page, scope);
         if(data?.status==='200'){
             dispatch({type:'GET_FEED', payload: {feed: data?.feed, total: data?.total}});
-        }else{alert("Something went wrong while searching.");}
-    } catch (error) {console.log(error); alert("Something went wrong while searching."); }
+        }else{alert(`Something went wrong while ${scope==='rec'?'getting similar articles':'Searching'}.`);}
+    } catch (error) {console.log(error); alert(`Something went wrong while ${scope==='rec'?'getting similar articles':'Searching'}.`); }
     dispatch({type:'END_FEED_LOADING'});
 }
 

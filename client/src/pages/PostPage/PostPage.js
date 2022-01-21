@@ -53,7 +53,7 @@ const PostPage = () => {
     const handleDelete = ()=>{
         dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
     }
-
+    console.log(feed)
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -62,22 +62,26 @@ const PostPage = () => {
         <Paper variant="window" square sx={{width:'100vw',minHeight:'100vh',display:'flex',justifyContent:"center",backgroundColor:'#121212'}} >
         <Navbar/>
         {/* entire page  */}
+        {["403", "BRUH", "404"].includes(viewPost?.status) ? 
+        <Box sx={{maxWidth:'min-content',alignItems:'center', display:'flex', flexDirection:'column',marginTop:'100px', alignSelf:'center'}} >
+        <Typography variant="h1" fontWeight={600} color='#313131'>404</Typography>
+        {(["403", "BRUH"].includes(viewPost?.status)&&authUser?.id) &&
+        <>
+        <Typography variant="caption" sx={{color:'#a1a1a1', textAlign:'center'}} >If you just logged in and think you have access to this article, Consider trying again.</Typography>
+        <br/><Button onClick={()=>(setRefreshCount(c=>c+1))} variant='outlined' >Try again</Button>
+        </>}
+        </Box>
+        :
         <Box sx={{width:'max-content',maxWidth:'1580px',marginTop:'90px',display:'grid',gridTemplateColumns:{xs:'1fr',lg:'3fr 2fr'} ,gap:'30px',padding:'0px 20px 30px 20px',justifyContent:'center'}} >
         {/* left part  */}
         <Box sx={{maxWidth:'650px', justifySelf:{xs:'center',lg:'flex-end'},width:'100%'}}>
         {/* TOP HERO  */}
         {isViewLoading ? 
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center', width:'100%'}}>
+        <Box sx={{display:'flex',flexDirection:'column',alignItems:'center', width:'100%'}}>
             <Skeleton variant="rectangular" animation='wave' sx={{width:{xs:"100%",md:'650px'},borderRadius:'12px',height:'300px',minWidth:'300px'}}/><br/>
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px'}}/>
             <Skeleton variant="text" animation='wave' sx={{width:'100%',borderRadius:'12px',height:'24px',marginTop:'5px'}}/>
-        </div> 
-        : viewPost?.status===404 ? 
-        <Box sx={{maxWidth:'min-content',alignItems:'center', display:'flex', flexDirection:'column',marginTop:'100px',transform:{xs:'translate(0px,0px)',md:'translate(90px,0px)'}}} >
-        <Typography variant="h1" fontWeight={600} color='#313131'>404</Typography>
-        <Typography variant="caption" sx={{color:'#a1a1a1', textAlign:'center'}} >If you just logged in and think you have access to this article, Consider trying again.</Typography>
-        <br/><Button onClick={()=>(setRefreshCount(c=>c+1))} variant='outlined' >Try again</Button>
-        </Box>
+        </Box> 
         :
         viewPost?.slug &&
         <>
@@ -115,10 +119,10 @@ const PostPage = () => {
         <br/>
         <Divider/>
         <br/>
-        <Typography sx={{fontSize:'14px', lineHeight:'36px'}} >
+        <Typography component={'div'} sx={{fontSize:'14px', lineHeight:'36px'}} >
         <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start',maxWidth:'650px'}} 
             options={
-            {wrapper : 'p'},
+            {wrapper : 'div'},
             { overrides: {
                 p :{ component: Typography , props: {variant : 'body1'}}, 
                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
@@ -164,7 +168,7 @@ const PostPage = () => {
         {/* end of left part  */}
         </Box>
         {/* right part  */}
-        {viewPost?.status !==404 && 
+        {viewPost?.status !=='404' && 
         <Box sx={{justifySelf:{xs:'flex-start',lg:'flex-start'},width:'100%'}}>
             <Typography variant="widget-heading" component='div' sx={{width:'100%'}}>
                 Similar {`${viewPostType==='pr'?'Project Reports':viewPostType==='blog'?'Blog Posts':viewPostType==='rsa'?'Resource Articles':''}`}:
@@ -178,14 +182,14 @@ const PostPage = () => {
             <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
             </>
             : 
-            feed?.length===0 ? 
+            feed?.length===1 ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p, i)=>(p?.slug !== id &&
                 <PostCard post={p} variant='media' type={viewPostType} scope='else' key={i} />
             ))}
         </Box>
         </Box>}
-        </Box>
+        </Box>}
 
         {/* editmodal */}
         <DbEditPost/>

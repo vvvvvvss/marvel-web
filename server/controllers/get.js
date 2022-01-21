@@ -103,7 +103,7 @@ export const getPR = async (req, res) => {
     try {
         const {id} = req.params;
         if(req.query?.scope==='ins'&& !(req?.user?.currentRole==='INS'&& req?.user?.enrollmentStatus==='ACTIVE')){
-            return res.json({message:'Access denied.', status : '404'});
+            return res.json({message:'Access denied.', status : '403'});
         };
         let returnedPr;
         if(req.query?.scope==='ins'){
@@ -115,7 +115,7 @@ export const getPR = async (req, res) => {
 
         if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedPr?.reviewStatus)){
-            if(!req?.user){ return res.json({status:'404'}); }
+            if(!req?.user){ return res.json({status:'403'}); }
             if((req?.user?.id===returnedPr?.authorId) || 
             (req?.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
                 return res.json({post : returnedPr,status:'200'});
@@ -135,7 +135,7 @@ export const getBlog = async (req, res) => {
         const returnedBlog = await blogs.findOne({slug : id}).lean().exec();
         if(!returnedBlog) return res.json({message:'That does not exist',status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedBlog?.reviewStatus)){
-            if(!req.user)return res.json({status:'404'});
+            if(!req.user)return res.json({status:'403'});
             if((req.user?.id===returnedBlog?.authorId)||
              (req.user?.currentRole==='INS' && req.user?.currentInsCourse.includes(returnedBlog?.authorCourseCode))){
                  return res.json({post : returnedBlog, status:'200'});
@@ -170,7 +170,7 @@ export const getToReviewPrs = async (req, res) => {
         const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') 
                         && courseArray.some((c)=>(req.user.currentInsCourse.includes(c)));
 
-        if(!condition) return  res.json({status:'404', message:'Access denied.'});
+        if(!condition) return  res.json({status:'403', message:'Access denied.'});
 
         const returnedPrs = await prs.find({$and : [{reviewStatus : 'PENDING'},{courseCode : {$in : courseArray}}]})
                                     .sort({_id:-1}).skip((Number(req.query.page)-1)*5)

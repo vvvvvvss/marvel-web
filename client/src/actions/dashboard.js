@@ -69,9 +69,9 @@ export const getPost = (type, id, scope) => async (dispatch) => {
     try {
         const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
         if(data?.status==='200'){
-            dispatch({type : 'GET_VIEW_POST', payload : {...data?.post, status:200}});
+            dispatch({type : 'GET_VIEW_POST', payload : {...data?.post, status:'200'}});
         }else{
-            if(scope==='page'){dispatch({type:"GET_VIEW_POST", payload: {status: 404}})}
+            if(scope==='page'){dispatch({type:"GET_VIEW_POST", payload: {status: data?.status}})}
             else{
                 alert("Something went wrong while retrieving post:(");
                 dispatch({type:"CLOSE_VIEW"});

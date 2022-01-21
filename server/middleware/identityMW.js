@@ -14,14 +14,14 @@ try {
     if(existingUser?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
 
     if(!existingUser || existingUser?.enrollmentStatus==='UNKNOWN'){
-        return res.json({message : 'unrecognizable request', status:'404'});
+        return res.json({message : 'unrecognizable request', status:'403'});
     }else{
         req.user = existingUser;
         next();
     } 
     
 } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }

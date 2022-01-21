@@ -1,5 +1,4 @@
 import { Paper } from '@mui/material';
-import Navbar from '../../components/Navbar/Navbar.js';
 import DbProfile from '../../components/Widgets/dbProfile.js';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import DbForm from '../../components/Widgets/dbForm.js';
@@ -21,8 +20,7 @@ const InsDashboard = () => {
     }, []);
 
     return (
-        <div>
-        <Navbar/>
+        <>
         <Paper variant='window' sx={{padding: "85px 20px 75px 20px", display: "flex", justifyContent: "center"}}>
             <Box sx={{ display: "grid", maxWidth: "1580px", height: "max-content", 
             gridTemplateColumns:{xs:'1fr', lg:'1fr 1fr 1fr',xl:'1fr 2fr 1fr'} , gap: "20px", justifyContent: "space-evenly", 
@@ -41,7 +39,7 @@ const InsDashboard = () => {
         {formOpen &&  <DbForm/> }
 
         <Dial/>
-        </div>
+        </>
     )
 }
 

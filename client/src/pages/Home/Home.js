@@ -21,12 +21,6 @@ return (
             </Alert>
         }
        <br/>
-        {/* top hero  */}
-        <Box sx={{width:'100%',marginTop:'50px',display:'flex',flexDirection:{xs:'column',md:'row'},justifyContent:'center',alignItems:'center'}}>
-        {/* logo  */}
-        <img src={'https://i.imgur.com/SXKFsOc.png'} alt='uvce marvel' style={{maxHeight :'300px'}}/>
-        </Box>
-        {/* something  */}
     </Box>
     </Paper>
 )
