@@ -123,7 +123,7 @@ const ProfilePage = () => {
             <Tabs textColor='inherit' value={tab} variant="scrollable" scrollButtons='auto' onChange={(e, value)=>setTab(value)}>
             <Tab label="Blog" value='blog' />
             <Tab label="PRs" value='pr'/>
-            {authUser?.enrollmentStatus!=='UNKNOWN' && <Tab label="Res Articles" value='rsa'/>}
+            {(authUser?.enrollmentStatus!=='UNKNOWN'&&authUser?.id) && <Tab label="Res Articles" value='rsa'/>}
             <Tab label="Certificates" value='cert'/>
             </Tabs>  
         </Toolbar>
