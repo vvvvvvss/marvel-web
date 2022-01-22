@@ -3,7 +3,7 @@ import { Slide, AppBar, Toolbar, Typography, Avatar, Box
       } from "@mui/material";
 import GoogleLogin, {GoogleLogout} from 'react-google-login';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {auth} from '../../actions/auth.js'
 import useStyles from './styles.js';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -20,6 +20,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const Navbar = () => {
     const trigger = useScrollTrigger();
+    const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {authUser, isAuthLoading} = useSelector((state)=> state.auth);
@@ -41,19 +42,19 @@ const Navbar = () => {
             alert("Looks like login did'nt go well :(. Please try again.");
         }
     }
-
     return (
         <>
             <Slide appear={false} direction="down" in={!trigger} sx={{maxWidth: '100%'}} >
-            <AppBar>
+            <AppBar variant={location?.pathname==='/'?'transparent':''} >
             <Toolbar style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <span style={{display:'flex', justifyContent:'flex-start',alignItems:'center'}}>
                 <IconButton size='small' onClick={()=>(setDrawerOpen(true))}><MenuIcon/></IconButton>
+                {location?.pathname!=='/'&&
                 <Typography variant="h6" onClick={()=>(navigate('/'))} sx={{cursor:'pointer'}}>
                 <span className={styles.uvce}>UVCE&nbsp;</span><span className={styles.marvel}>MARVEL</span>
-                </Typography>
+                </Typography>}
                 </span>
-                {isAuthLoading ? <CircularProgress sx={{color:"primary.dark"}} /> : 
+                {isAuthLoading ? <CircularProgress sx={{color:location?.pathname!=='/'?"primary.dark":''}} /> : 
                 <div className={styles.righttoolbar}>
                     { authUser?.id ?
                          <Avatar alt={authUser?.name} src={authUser?.profilePic} onClick={()=>{if(authUser?.enrollmentStatus!=='UNKNOWN')navigate(`/profile/${authUser?.slug}`)}}

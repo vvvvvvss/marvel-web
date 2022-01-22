@@ -48,7 +48,11 @@ export const darkTheme = createTheme({
       MuiAppBar:{
         styleOverrides:{
           root:{background : 'linear-gradient(90deg, #8B2D44 0%, #C17689 100%)',}
-        }
+        },
+        variants : [
+          { props: {variant:"transparent"},
+          style : { background : 'rgba(0,0,0,0)',backdropFilter: 'blur(25px)', padding:'25px' }}
+        ]
       },
       MuiTypography : {
         variants : [
