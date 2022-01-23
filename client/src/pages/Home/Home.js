@@ -1,13 +1,19 @@
 import { Paper, Alert, Typography, Grow} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useSelector } from 'react-redux';
-import {Box, maxHeight} from '@mui/system'
+import {Box} from '@mui/system';
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
     const authUser = useSelector(state => state.auth.authUser);
 return (
     //entire screen
     <Paper square sx={{minHeight:'100vh', display:'flex',justifyContent:'center',maxWidth:'100vw',overflowX:'hidden',backgroundColor:'#031117'}}>
+    <Helmet>
+          <title>Marvel 🚀🌘</title>
+          <meta name='description' content='UVCE Marvel | Makerspace for Advanced Research, Vital Education and Learning.' />
+          <meta property="og:title" content="Marvel 🚀🌘" />
+    </Helmet>
     <Navbar/>
     {/* entire page  */}
     <Box sx={{width: '100%',maxWidth:'1300px',padding: '120px 20px 20px 20px'}}>

@@ -5,12 +5,19 @@ import Navbar from "../components/Navbar/Navbar";
 import InsDashboard from "./InsDashboard/InsDashboard";
 import NotAccDashboard from "./NotAccDashboard/NotAccDashboard";
 import StuDashboard from "./StuDashboard/StuDashboard";
+import { Helmet } from "react-helmet";
 
 const DbStage = () => {
     const {authUser, isAuthLoading} = useSelector(state => state.auth);
   
     return( 
     <>
+    <Helmet>
+          <title>Dashboard | UVCE MARVEL 🚀🌘</title>
+          <meta name='description' content='Your Dashboard.' />
+          <meta property="og:title" content="Dashboard | UVCE MARVEL 🚀🌘" />
+    </Helmet>
+
     <Navbar/>
     {isAuthLoading ? 
     <Paper variant="window" sx={{padding: "85px 20px 75px 20px", display: "flex", justifyContent: "center", alignItems:'center', height:'70vh', flexDirection:'column'}} >

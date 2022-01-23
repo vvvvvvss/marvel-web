@@ -12,6 +12,7 @@ import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import PostCard from '../../components/PostCard.js';
 import LandTPage from '../../components/LandTPage.js';
+import { Helmet } from 'react-helmet';
 
 const CoursePage = () => {
     const {id} = useParams();
@@ -53,7 +54,13 @@ const CoursePage = () => {
     }
 
     return (
-        <div>
+        <>
+        <Helmet>
+          <title>{`${overview?.courseCode || 'Course'} | UVCE MARVEL 🚀🌘`}</title>
+          <meta name='description' content={overview?.caption || "..."} />
+          <meta property="og:title" content={`${overview?.courseCode || 'Course'} | UVCE MARVEL 🚀🌘`} />
+        </Helmet>
+
         <Navbar/>
         <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', minWidth:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
         <div>
@@ -146,7 +153,7 @@ const CoursePage = () => {
         <br/><br/><br/>
         </div>
         </Paper>
-        </div>
+        </>
     )
 }
 

@@ -13,6 +13,7 @@ import {getSearchFeed} from '../../actions/other.js';
 import ShareIcon from '@mui/icons-material/Share';
 import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
+import { Helmet } from "react-helmet";
 
 const PostPage = () => {
     const { viewPost, isViewLoading, isCreateLoading} = useSelector(state => state.dashboard);
@@ -60,6 +61,11 @@ const PostPage = () => {
     return (
         //entire screen
         <Paper variant="window" square sx={{width:'100vw',minHeight:'100vh',display:'flex',justifyContent:"center",backgroundColor:'#121212'}} >
+        <Helmet>
+          <title>{`${viewPost?.title || viewPostType?.toUpperCase()} by ${viewPost?.authorName || '...'} | UVCE MARVEL 🚀🌘`}</title>
+          <meta name='description' content={`${viewPost?.title || "..."} by ${viewPost?.authorName || '...'}`} />
+          <meta property="og:title" content={`${viewPost?.title || viewPostType} | UVCE MARVEL 🚀🌘`} />
+        </Helmet>
         <Navbar/>
         {/* entire page  */}
         {["403", "BRUH", "404"].includes(viewPost?.status) ? 

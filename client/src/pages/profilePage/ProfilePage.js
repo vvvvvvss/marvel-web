@@ -12,6 +12,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import ShareIcon from '@mui/icons-material/Share';
 import SearchIcon from '@mui/icons-material/Search';
 import PostCard from "../../components/PostCard";
+import { Helmet } from "react-helmet";
 
 const ProfilePage = () => {
     const location = useLocation();
@@ -53,6 +54,11 @@ const ProfilePage = () => {
 
     return (
     <>
+    <Helmet>
+        <title>{`${overview?.name || "Profile"} | UVCE MARVEL 🚀🌘`}</title>
+        <meta name='description' content={`Checkout ${overview?.name || 'Profile'} on Marvel 🚀🌘`} />
+        <meta property="og:title" content={`Checkout ${overview?.name || 'Profile'} on Marvel 🚀🌘`} />
+    </Helmet>
     <Navbar/>
     {/* entire screen */}
     <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh',minWidth:'100vw'}}>

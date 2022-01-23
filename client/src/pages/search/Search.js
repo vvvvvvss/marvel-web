@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import PostCard from '../../components/PostCard';
 import UserCard from '../../components/UserCard';
 import CourseCard from '../../components/CourseCard';
+import {Helmet} from 'react-helmet';
 
 const Search = () => {
     const authUser = useSelector(state => state.auth.authUser);
@@ -45,6 +46,11 @@ const Search = () => {
     return (
         //entire screen
         <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', width:'100vw',backgroundColor:'#121212',minHeight:'100vh',minWidth:'100vw'}}>
+        <Helmet>
+          <title>Search Marvel | UVCE's Reasearch Hub</title>
+          <meta name='description' content='Search across Courses, Blog Posts, Project reports, Resourse articles and People in UVCE MARVEL.' />
+          <meta property="og:title" content="Search Marvel 🚀🌘" />
+        </Helmet>
         <Navbar/>
         {/* entire page */}
         <div style={{maxWidth:'1580px',width:'100%'}}>
