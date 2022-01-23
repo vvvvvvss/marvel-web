@@ -75,7 +75,7 @@ const Search = () => {
           <MenuItem value={"course"}>Courses</MenuItem>
           <MenuItem value={"user"}>People</MenuItem>
           <MenuItem value={"blog"}>Blog posts</MenuItem>
-          <MenuItem value={"pr"}>Poject Reports</MenuItem>
+          <MenuItem value={"pr"}>Project Reports</MenuItem>
           {(authUser?.id && authUser?.enrollmentStatus!=='UNKNOWN') &&<MenuItem value={"rsa"}>Resource Articles</MenuItem>}
         </Select>
         <FormHelperText>What do you want to search for?</FormHelperText>
