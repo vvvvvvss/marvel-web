@@ -31,23 +31,11 @@ return (
         style={{width:'100%', alignSelf:'center', maxWidth:'400px', objectFit:'cover', height:'400px', "&:hover":{}}} />
         </Grow>
     </Box>
-    <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',md:'1fr 1fr'}, gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}, backgroundColor:'#3C1C55', margin:'90px -20px 0px -20px', gap:'20px', maxHeight:'450px'}} >
+    {/* <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',md:'1fr 1fr'}, gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}, margin:'70px -20px 0px -20px', gap:'20px', maxHeight:'600px'}} >
         <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642877223/Subtract2_r6bxco.png"
-        style={{objectFit:'cover',width:'100%', height:'100%' }} />
-        <Box sx={{padding:'60px 50px 30px 30px', overflowY:'scroll'}}  >
-            <Typography variant='subtitle1' sx={{color:'secondary.light'}} >
-            <span style={{fontSize:'60px', lineHeight:'0px', fontWeight:'400'}} >M</span>akerspace for Advanced Research, Vital Education and Learning or simply, MARVEL at University Visvesvaraya College of Engineering is being set up at the KR Circle campus with support from the UVCE Graduates Association. Having a determined aim in mind, we hope to turn UVCE into a hub of research and innovation through MARVEL, with encouragement from the college.
-            <br/><br/>
-            MARVEL is poised to spur genuine passion in every learner, inspire decisive action, and redefine conventional education. The goal of MARVEL is to set the ball rolling, perpetuate a sense of innovation in students and help them eventually birth ground-breaking ideas that will change the world.
-            <h3>G O A L S</h3>
-              <li>Encourage students to learn on the current trending topics apart from the regular academics and work on projects/experiments to understand them in a practical manner.</li>
-              <li>Initiate collaboration among students of different branches, but with similar interests.</li>
-              <li>Build an ecosystem in the college where the next generation of innovators can be moulded.</li>
-              <li>Develop a plan to make MARVEL sustainable for a long-time with limited resources. Build an independent structure, document every outcome and create a brand for showcasing the talent.</li>
-              <li>With the help of alumni and faculty, work on industry and academia collaboration for setting up specific R&amp;D hubs as part of MARVEL.</li>
-            </Typography>
-        </Box>
-    </Box>
+        style={{objectFit:'cover',width:'90%', alignSelf:'center', justifySelf:'center' }} />
+        
+    </Box> */}
     </Box>
     </Paper>
 )
