@@ -176,9 +176,13 @@ const PostPage = () => {
         {/* right part  */}
         {viewPost?.status !=='404' && 
         <Box sx={{justifySelf:{xs:'flex-start',lg:'flex-start'},width:'100%'}}>
+            
+           {isFeedLoading||isViewLoading ?
+           <Skeleton variant="text" animation='wave' /> :
+
             <Typography variant="widget-heading" component='div' sx={{width:'100%'}}>
                 Similar {`${viewPostType==='pr'?'Project Reports':viewPostType==='blog'?'Blog Posts':viewPostType==='rsa'?'Resource Articles':''}`}:
-            </Typography>
+            </Typography>}
         <br/>
         <Box sx={{display:'grid', gridTemplateColumns:'1fr',gap:'20px'}}>
             {isFeedLoading||isViewLoading ? 
