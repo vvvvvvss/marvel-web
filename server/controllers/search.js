@@ -12,10 +12,9 @@ try {
             {title : (req?.query?.title==='none'||!req?.query?.title) ? new RegExp("",'i'): new RegExp(req.query?.title,'i')},
             {courseCode : (req?.query?.courseCode==='none'||!req?.query?.courseCode) ? new RegExp("",'i'): new RegExp(req.query?.courseCode,'i')},
             {authorName : (req?.query?.authorName==='none'||!req?.query?.authorName) ? new RegExp("",'i'): new RegExp(req.query?.authorName,'i')},
-            {tags : {$in : (req?.query?.tags==='none'||!req?.query?.tags) ? [new RegExp("",'i')]: req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}},
+            !(req?.query?.tags==='none'||!req?.query?.tags) ? {tags : {$in : req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}} : {}
         ]
     };
-
     const feed = await rsa.find(query)
                             .skip((Number(req.query?.page)-1)*(req.query?.scope==='rec'?4:8))
                             .limit((req.query?.scope==='rec'?4:8))
@@ -39,8 +38,8 @@ export const searchPr = async(req, res) => {
             {title : (req?.query?.title==='none'||!req?.query?.title) ? new RegExp("",'i'): new RegExp(req.query?.title,'i')},
             {courseCode : (req?.query?.courseCode==='none'||!req?.query?.courseCode) ? new RegExp("",'i'): new RegExp(req.query?.courseCode,'i')},
             {authorName : (req?.query?.authorName==='none'||!req?.query?.authorName) ? new RegExp("",'i'): new RegExp(req.query?.authorName,'i')},
-            {tags : {$in : (req?.query?.tags==='none'||!req?.query?.tags) ? [new RegExp("",'i')]: req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}},
-            {reviewStatus : 'APPROVED'}
+            {reviewStatus : 'APPROVED'},
+            !(req?.query?.tags==='none'||!req?.query?.tags) ? {tags : {$in : req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}} : {}
         ]
     };
 
@@ -63,8 +62,8 @@ export const searchBlog = async(req, res) => {
         $and : [
             {title : (req?.query?.title==='none'||!req?.query?.title) ? new RegExp("",'i'): new RegExp(req.query?.title,'i')},
             {authorName : (req?.query?.authorName==='none'||!req?.query?.authorName) ? new RegExp("",'i'): new RegExp(req.query?.authorName,'i')},
-            {tags : {$in : (req?.query?.tags==='none'||!req?.query?.tags) ? [new RegExp("",'i')]: req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}},
-            {reviewStatus : 'APPROVED'}
+            {reviewStatus : 'APPROVED'},
+            !(req?.query?.tags==='none'||!req?.query?.tags) ? {tags : {$in : req.query.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}} : {}
         ]
     };
     const feed = await blog.find(query)
