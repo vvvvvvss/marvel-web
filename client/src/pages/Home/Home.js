@@ -34,7 +34,7 @@ return (
         </Box>
         <Grow in timeout={1500} >
         <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642955971/Subtract_ykjjg9.png"
-        style={{width:'100%', alignSelf:'center', maxWidth:'400px', objectFit:'cover', height:'400px', "&:hover":{}}} />
+        style={{ alignSelf:'center', maxWidth:'400px',height:'400px', "&:hover":{}}} />
         </Grow>
     </Box>
     {/* <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',md:'1fr 1fr'}, gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}, margin:'70px -20px 0px -20px', gap:'20px', maxHeight:'600px'}} >
