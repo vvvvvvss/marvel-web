@@ -33,7 +33,7 @@ return (
         </Typography>
         </Box>
         <Grow in timeout={1500} >
-        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642871840/Subtract_kt3kxv.png"
+        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642955971/Subtract_ykjjg9.png"
         style={{width:'100%', alignSelf:'center', maxWidth:'400px', objectFit:'cover', height:'400px', "&:hover":{}}} />
         </Grow>
     </Box>
