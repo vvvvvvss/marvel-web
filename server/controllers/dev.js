@@ -68,21 +68,21 @@ export const assignIns = async (req, res) => {
 
 export const assignStu = async (req, res) => {
     try {
-        const clcy = [
-            "vishalvinayram5432@gmail.com"
-        ];
-        // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
-        const updated = await user.updateMany({email: {$in: clcy}}, {
-            enrollmentStatus: "ACTIVE",
-            currentRole: "STU",
-            currentStuCourse: "CL-CY-001",
-            currentLevel : 1,
-            $push:{ 
-                roleHistory: {role: "STU", stuCourse:"CL-CY-001", startTime: new Date()}
-            },
-        }
-        );
-        return res.json({updated});
+        // const clcy = [
+        //     "vishalvinayram5432@gmail.com"
+        // ];
+        // // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
+        // const updated = await user.updateMany({email: {$in: clcy}}, {
+        //     enrollmentStatus: "ACTIVE",
+        //     currentRole: "STU",
+        //     currentStuCourse: "CL-CY-001",
+        //     currentLevel : 1,
+        //     $push:{ 
+        //         roleHistory: {role: "STU", stuCourse:"CL-CY-001", startTime: new Date()}
+        //     },
+        // }
+        // );
+        // return res.json({updated});
 
     } catch (error) {
         console.log(error);
@@ -110,14 +110,20 @@ export const play2 = async (req, res) => {
 
 export const play3 = async(req, res) => {
     try {
-    //     const data = await user.findOne({email:"uvcemarvelweb@gmail.com"});
-    //     data.roleHistory.push({role:"INS",
-    //     insCourse : ["AI-ML-001","IOT-001","CL-CY-001","EV-RE-001","D-P-001"],
-    //     startTime: new Date()
-    // });
-    //     const saved =  await data.save();
+        // const data = await user.findOne({email:"vinuthakardakal@gmail.com"});
+        // Object.assign(data, {
+        //     currentRole:'INS',
+        //     currentInsCourse: ['EV-RE-001','D-P-001'],
+        //     enrollmentStatus: "ACTIVE",
+        //     roleHistory: [...data.roleHistory, {
+        //         role:'INS', 
+        //         insCourse: ['EV-RE-001','D-P-001'],
+        //         startTime: new Date()
+        //     }]
+        // });
+        // const saved = await data.save();
         // return res.json({saved});
-    } catch (error) {
+    } catch (error) { 
         return res.json({error});
     }
 }

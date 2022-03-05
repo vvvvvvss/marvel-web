@@ -254,6 +254,7 @@ export const deleteBlog = async (req, res) => {
         if(!existingBlog) return res.json({status:'404', message:"That does'nt exist."});
         if(existingBlog?.authorId !== req.user?.id) return res.json({status:'404', message:"Access denied!"});
 
+        await cloudinary.uploader.destroy(`blog/${existingBlog?._id}`, function(result) { });
         await blogPost.deleteOne({slug: id});
         return res.json({message:'Deleted successfully', status:'201'});
     } catch(error) {

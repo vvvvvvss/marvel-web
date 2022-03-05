@@ -33,7 +33,7 @@ var apiKey = defaultClient.authentications['api-key'];
 apiKey.apiKey = process.env.SIB_API_KEY;
 
 app.get('/', (req,res)=> {
-  res.send('Welcome to UVCE Marvel REST API. v 1.04')
+  res.send('Welcome to UVCE Marvel REST API. v 1.05.')
 });
 
 //starting points for routes
