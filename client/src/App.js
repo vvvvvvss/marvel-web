@@ -27,9 +27,9 @@ const App = ()=> {
             <Route path="/course/:id" exact element={<CoursePage/>} />
             <Route path="/profile/:id" exact element={<ProfilePage/>} />
             <Route path="/search" exact element={<Search/>}/>
-            <Route path="/pr/:id" exact element={<PostPage/>}/>
-            <Route path="/blog/:id" exact element={<PostPage/>}/>
-            <Route path="/rsa/:id" exact element={<PostPage/>}/>
+            <Route path="/pr/:id" exact element={<PostPage viewPostType="pr" />}/>
+            <Route path="/blog/:id" exact element={<PostPage viewPostType="blog" />}/>
+            <Route path="/rsa/:id" exact element={<PostPage viewPostType="rsa" />}/>
             <Route path="/404" exact element={<Err/>} />
         </Routes>
       </ThemeProvider>
