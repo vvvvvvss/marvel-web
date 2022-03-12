@@ -54,7 +54,6 @@ const PostPage = () => {
     const handleDelete = ()=>{
         dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
     }
-    console.log(feed)
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -127,9 +126,9 @@ const PostPage = () => {
         <br/>
         <Typography component={'div'} sx={{fontSize:'14px', lineHeight:'36px'}} >
         <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start',maxWidth:'650px'}} 
-            options={
-            {wrapper : 'div'},
-            { overrides: {
+            options={{
+            wrapper : 'div',
+            overrides: {
                 p :{ component: Typography , props: {variant : 'body1'}}, 
                 a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                 img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
