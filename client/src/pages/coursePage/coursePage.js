@@ -68,7 +68,7 @@ const CoursePage = () => {
         <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100%',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
             <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:{xs:'450px',sm:'350px'}}}>
             { isOverviewLoading ? <>
-                <Skeleton variant='text' variant='rectangular' height='350px' animation='wave' sx={{borderRadius:'12px', width:{xs:'100%'},minWidth:{md:'600px',xs:'300px'}}} />
+                <Skeleton variant='rectangular' height='350px' animation='wave' sx={{borderRadius:'12px', width:{xs:'100%'},minWidth:{md:'600px',xs:'300px'}}} />
             </> :
             <div style={{maxWidth:'600px'}}>   
                 <IconButton sx={{position:'absolute',right :'20px',top:'90px',color:'primary.light'}} onClick={handleShare}>
@@ -91,19 +91,20 @@ const CoursePage = () => {
                 <Typography variant='body2' sx={{paddingLeft: '10px',color:'primary.light'}}>{overview?.caption}</Typography>
             </div>}
             </Paper>
-            <Paper square elevation={0} sx={{padding:{md:'85px 30px 20px 30px',xs:'30px 30px 20px 30px'}, maxHeight:{xs:'450px',sm:'350px'},overflowY:'auto'}}>
+            <Paper square elevation={0} sx={{padding:{md:'85px 30px 20px 30px',xs:'30px 30px 20px 30px'}, maxHeight:{xs:'450px',sm:'350px'},overflowY:'auto',overflowX:'hidden'}}>
             { isOverviewLoading ? 
             <>
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
-            <Skeleton variant='text' height='300px' width='100%' animation='wave' sx={{borderRadius:'12px', margin:"0px 20px 0px 0px"}} />
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
+            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
+            <br/>
+            <Skeleton variant='rectangular' height='200px' width='100%' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
             </>
             :
             <Typography component='div' variant='body2' lineHeight='26px' sx={{color:'secondary.light'}}>
             <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px'}} 
-                options={
-                {wrapper : 'div'},
-                { overrides: {
+                options={{
+                wrapper : 'div',
+                overrides: {
                     p :{ component: Typography , props: {variant : 'body2', sx:{color:'secondary.light'}, lineHeight :'26px'}}, 
                     a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}},
                     img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
