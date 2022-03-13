@@ -42,14 +42,14 @@ const PostPage = ({viewPostType}) => {
         }
     }, [id, dispatch]);
 
-    const handleShare = () => {
-        try {
-            navigator.clipboard.writeText(window.location.href);
-            alert("Link copied to clipboard!");
-        } catch (error) {
-            alert("Coud'nt copy link to clipboard :(");
-        }
-    };
+    // const handleShare = () => {
+    //     try {
+    //         navigator.clipboard.writeText(window.location.href);
+    //         alert("Link copied to clipboard!");
+    //     } catch (error) {
+    //         alert("Coud'nt copy link to clipboard :(");
+    //     }
+    // };
 
     const handleDelete = ()=>{
         dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
