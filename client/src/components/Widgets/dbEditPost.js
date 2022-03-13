@@ -99,9 +99,9 @@ const DbEditPost = () => {
                 generateMarkdownPreview={markdown =>
                     Promise.resolve(
                     <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                    options={
-                    {wrapper : 'p'},
-                    { overrides: {
+                    options={{
+                    wrapper : 'div',
+                    overrides: {
                         p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                         a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
                         img : { props : {width : '100%',height:'150px',style:{objectFit:'cover'} }},

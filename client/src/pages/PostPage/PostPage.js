@@ -10,12 +10,13 @@ import { useParams, Link as Rlink } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
 import {getSearchFeed} from '../../actions/other.js';
-// import ShareIcon from '@mui/icons-material/Share';
-// import Upvote from '@mui/icons-material/AutoAwesome';
-// import CommentIcon from '@mui/icons-material/Comment';
+import ShareIcon from '@mui/icons-material/Share';
+import Upvote from '@mui/icons-material/AutoAwesome';
+import CommentIcon from '@mui/icons-material/Comment';
 import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
 import { Helmet } from "react-helmet";
+import {useQueryClient} from 'react-query'
 
 const PostPage = ({viewPostType}) => {
     const { viewPost, isViewLoading, isCreateLoading} = useSelector(state => state.dashboard);
@@ -25,7 +26,7 @@ const PostPage = ({viewPostType}) => {
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
     const [refreshCount, setRefreshCount] = useState(0);
-
+    const queryClient = useQueryClient();
     useEffect(() => {
             dispatch(getPost( viewPostType ,id, 'page'));
         return () => {
@@ -42,28 +43,28 @@ const PostPage = ({viewPostType}) => {
         }
     }, [id, dispatch, viewPost]);
 
-    // const handleShare = () => {
-    //     try {
-    //         navigator.clipboard.writeText(window.location.href);
-    //         alert("Link copied to clipboard!");
-    //     } catch (error) {
-    //         alert("Coud'nt copy link to clipboard :(");
-    //     }
-    // };
+    const handleShare = () => {
+        try {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied to clipboard!");
+        } catch (error) {
+            alert("Coud'nt copy link to clipboard :(");
+        }
+    };
 
     const handleDelete = ()=>{
         dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
     }
 
-    // const handleLike = ()=>{
-    //     if(viewPost?.liked==true){
-    //         // dislikePost(viewPostType, viewPost?._id);
+    const handleLike = ()=>{
+        if(viewPost?.liked==true){
+            // dislikePost(viewPostType, viewPost?._id);
             
-    //     }else{
-    //         // likePost(viewPostType, viewPost?._id);
-    //         viewPost.liked=true;viewPost.likeCount-=1;
-    //     }
-    // }
+        }else{
+            // likePost(viewPostType, viewPost?._id);
+            viewPost.liked=true;viewPost.likeCount-=1;
+        }
+    }
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -178,7 +179,7 @@ const PostPage = ({viewPostType}) => {
         </>
         }
         {/* bottom action bar  */}
-        {/* {viewPost?.slug && 
+        {viewPost?.slug && 
         <Box sx={{position:"sticky",bottom:'0',height:'35px', backgroundColor:'#181818',width:{xs:'100vw',lg:'100%'},maxWidth:'650px',boxSizing: "border-box",
         margin:{xs:'0px -20px 0px -20px',lg:'0px'},zIndex:'100',border:'2px solid #313131', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
             <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:`${viewPost?.liked==true ? 'primary.light':'#a1a1a1'}`,fontSize:'10px',cursor:'pointer',fontWeight:`${viewPost?.liked==true ? '600':'500'}`,'&:hover':{color:'primary.light', fontWeight:'600'}}}
@@ -187,7 +188,7 @@ const PostPage = ({viewPostType}) => {
             </Typography>
             <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><CommentIcon sx={{height:'16px'}} />&nbsp;COMMENTS</Typography>
             <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><ShareIcon sx={{height:'16px'}} />&nbsp;SHARE</Typography>
-        </Box>} */}
+        </Box>}
         {/*comments */}
         {/* <Comments level={0} parentPostId={viewPost?.slug}  /> */}
         {/* end of left part  */}
