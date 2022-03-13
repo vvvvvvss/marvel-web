@@ -30,7 +30,7 @@ const PostCard = ({type, post, variant, scope}) => {
         <Card variant='outlined' 
         sx={{margin:{xs:'0px 20px 0px 20px',sm:["dashboard","ins-dashboard"].includes(scope)?'0px 20px 0px 20px':'0px'},height:'max-content',position:'relative',justifySelf:'center',
         maxWidth:'400px', 
-        minWidth:{xs:`${(variant==="media"&&type==='blog')?'100%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
+        width:{xs:`${(variant==="media"&&type==='blog')?'100%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
         opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.5':'1'}`}}>
           {(type==='blog' && variant==='media') && <>
           <IconButton onClick={handleShare}
@@ -43,7 +43,7 @@ const PostCard = ({type, post, variant, scope}) => {
           /></>}
           <CardContent sx={{padding:'10px'}} >
             <Typography variant={["ins-dashboard","dashboard"].includes(scope) ? 'body1' : 'h6'} fontWeight={["ins-dashboard","dashboard"].includes(scope)?'500':''}
-            sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap'}}>
+            sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap',maxWidth:'100%',fontSize:{xs:'18px',md:'auto'},lineHeight:'32px'}}>
               {post?.title}
             </Typography>
             <Typography sx={{color:'#c4c4c4',marginTop:["ins-dashboard","dashboard"].includes(scope)?'8px':'0px',textOverflow:'ellipsis'}} variant='caption' component='div'>

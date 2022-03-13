@@ -10,9 +10,9 @@ import { useParams, Link as Rlink } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
 import {getSearchFeed} from '../../actions/other.js';
-import ShareIcon from '@mui/icons-material/Share';
-import Upvote from '@mui/icons-material/ArrowUpward';
-import CommentIcon from '@mui/icons-material/Comment';
+// import ShareIcon from '@mui/icons-material/Share';
+// import Upvote from '@mui/icons-material/AutoAwesome';
+// import CommentIcon from '@mui/icons-material/Comment';
 import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
 import { Helmet } from "react-helmet";
@@ -40,7 +40,7 @@ const PostPage = ({viewPostType}) => {
         return () => {
             dispatch({type:'CLEAR_FEED'});
         }
-    }, [id, dispatch, viewPost?.slug]);
+    }, [id, dispatch]);
 
     const handleShare = () => {
         try {
@@ -54,6 +54,16 @@ const PostPage = ({viewPostType}) => {
     const handleDelete = ()=>{
         dispatch(deletePost(viewPost?.slug, viewPostType ,'page'));
     }
+
+    // const handleLike = ()=>{
+    //     if(viewPost?.liked==true){
+    //         // dislikePost(viewPostType, viewPost?._id);
+            
+    //     }else{
+    //         // likePost(viewPostType, viewPost?._id);
+    //         viewPost.liked=true;viewPost.likeCount-=1;
+    //     }
+    // }
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -98,13 +108,13 @@ const PostPage = ({viewPostType}) => {
           
             <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
             background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
-            <Typography sx={{padding:{xs:'12px 12px 0px 12px',sm:'20px 30px 0px 30px'} ,fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'38px'}}} >
+            <Typography sx={{padding:{xs:'12px 12px 0px 12px',sm:'20px 30px 0px 30px'} ,fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'36px'}}} >
                 {viewPost?.title}
             </Typography><br/>
                 <Box sx={{display:'flex',alignItems:'center',padding:{xs:'0px 12px 12px 12px',sm:'0px 30px 20px 30px'},justifyContent:'space-between'}} >
-                    <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-start',maxWidth:{xs:'70%',md:'100%'}}}>
-                        <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px',marginRight:'10px'}} />
-                        <Typography variant='body2' color='#c4c4c4' fontWeight='500' > 
+                    <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-start'}}>
+                        <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:{xs:'18px',sm:'30px'},width:{xs:'18px',sm:'30px'},marginRight:'10px'}} />
+                        <Typography variant='body2' color='#c4c4c4' fontWeight='500' sx={{fontSize:{xs:'12px',sm:'14px'}}} > 
                         <Rlink style={{textDecoration:'none',color:'inherit'}} to={`/profile/${viewPost?.authorSlug}`}>
                             {viewPost?.authorName}&nbsp;&nbsp;
                         </Rlink>
@@ -168,14 +178,18 @@ const PostPage = ({viewPostType}) => {
         </>
         }
         {/* bottom action bar  */}
-        <Box sx={{position:"sticky",bottom:'0',height:'30px', backgroundColor:'#181818',width:{xs:'100vw',lg:'100%'},maxWidth:'650px',
-        margin:{xs:'0px -20px 0px -20px',lg:'0px'},zIndex:'100',border:'1px solid #313131', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
-            <div style={{display:'flex',alignItems:'center'}}>
-            <Upvote/>69<Upvote sx={{transform:"rotate(180deg)"}} />
-            </div>
-            <CommentIcon/>
-            <ShareIcon/>
-        </Box>
+        {/* {viewPost?.slug && 
+        <Box sx={{position:"sticky",bottom:'0',height:'35px', backgroundColor:'#181818',width:{xs:'100vw',lg:'100%'},maxWidth:'650px',boxSizing: "border-box",
+        margin:{xs:'0px -20px 0px -20px',lg:'0px'},zIndex:'100',border:'2px solid #313131', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
+            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:`${viewPost?.liked==true ? 'primary.light':'#a1a1a1'}`,fontSize:'10px',cursor:'pointer',fontWeight:`${viewPost?.liked==true ? '600':'500'}`,'&:hover':{color:'primary.light', fontWeight:'600'}}}
+            onClick={handleLike}>
+                <Upvote sx={{height:'16px'}} />&nbsp;{viewPost?.likeCount}{`${viewPost?.likeCount > 1 ? 'LIKES' : 'LIKE'}`}
+            </Typography>
+            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><CommentIcon sx={{height:'16px'}} />&nbsp;COMMENTS</Typography>
+            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><ShareIcon sx={{height:'16px'}} />&nbsp;SHARE</Typography>
+        </Box>} */}
+        {/*comments */}
+        {/* <Comments level={0} parentPostId={viewPost?.slug}  /> */}
         {/* end of left part  */}
         </Box>
         {/* right part  */}
