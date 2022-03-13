@@ -40,7 +40,7 @@ const PostPage = ({viewPostType}) => {
         return () => {
             dispatch({type:'CLEAR_FEED'});
         }
-    }, [id, dispatch]);
+    }, [id, dispatch, viewPost]);
 
     // const handleShare = () => {
     //     try {
@@ -194,7 +194,7 @@ const PostPage = ({viewPostType}) => {
         </Box>
         {/* right part  */}
         {viewPost?.status !=='404' && 
-        <Box>
+        <Box sx={{minWidth:{xs:'200px',lg:'300px'}}}>
            {isFeedLoading||isViewLoading ?
            <Skeleton variant="text" animation='wave' /> :
             <Typography variant="subtitle2" component='div' sx={{color:'#989898',letterSpacing:'0.23em',}}>
