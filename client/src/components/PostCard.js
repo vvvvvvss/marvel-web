@@ -17,8 +17,7 @@ const PostCard = ({type, post, variant, scope}) => {
     const handleOpen = () => {
       try {
         if(["ins-dashboard","dashboard"].includes(scope)){
-          dispatch({type:'SET_VIEW_ID',payload:{id: post?.slug, type: type?.toUpperCase(), scope: scope==='ins-dashboard'?'ins':'stu'}});
-          dispatch({type:'OPEN_VIEW'});
+          navigate({hash:`#mode=view&type=${type}&slug=${post?.slug}`});
         }else {
           navigate(`/${type}/${post?.slug}`);
         }

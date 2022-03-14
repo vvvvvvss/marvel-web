@@ -3,22 +3,14 @@ import DbProfile from '../../components/Widgets/dbProfile.js';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import Dial from '../../components/SpeedDial.js';
-import { useSelector } from 'react-redux';
 import DbToReview from '../../components/Widgets/dbToReview.js';
 import AcceptSwitch from '../../components/Widgets/dbAcceptSwitch';
 import {Box} from "@mui/system";
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import DbViewPost from '../../components/Widgets/dbViewPost.js';
+import useHashParams from '../../utils/hooks/useHashParams.js';
 
 const InsDashboard = () => {
-    const {formOpen} = useSelector(state => state.dashboard);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        return () => {
-            dispatch({type:'CLEAR_DASHBOARD'});
-        }
-    }, []);
-
+    const params = useHashParams();
     return (
         <>
         <Paper variant='window' sx={{padding: "85px 20px 75px 20px", display: "flex", justifyContent: "center"}}>
@@ -35,9 +27,8 @@ const InsDashboard = () => {
             <DbProfile/>
             </Box>
         </Paper>
-
-        {formOpen &&  <DbForm/> }
-
+        {params?.mode=='form'&&<DbForm/>}
+        {params?.mode=='view'&&<DbViewPost/>}
         <Dial/>
         </>
     )

@@ -18,36 +18,39 @@ import {useQuery, useQueryClient} from 'react-query'
 import {getPost, getSearchFeed} from "../../API/index.js";
 
 const PostPage = ({viewPostType:postType}) => {
-    // const { viewPost, isViewLoding, isCreateLoading} = useSelector(state => state.dashboard);
-    // const { feed, isFeedLoading} = useSelector(state => state.other);
-    // const dispatch = useDispatch();
     const authUser = useSelector(state => state.auth.authUser);
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const queryClient = useQueryClient();
+    //getting post
     const {data:postData, isLoading:isPostLoading, refetch:refetchPost} = useQuery([postType,id], 
         ()=>getPost(postType,id)
     );
     const post = postData?.post; const postStatus = postData?.status;
+    //getting similar posts feed
     const {data:feedData, isLoading:FeedLoading, isIdle:isFeedIdle} = useQuery(['similar',postType,id], 
         ()=>getSearchFeed(postType, null, null, null, null, post?.tags?.join(','), 1, 'rec'),
         {enabled:!!post}
     )
     const isFeedLoading = FeedLoading || isFeedIdle;
-    const feed = feedData?.data?.feed;
-    
-    // const handleShare = () => {
-    //     try {
-    //         navigator.clipboard.writeText(window.location.href);
-    //         alert("Link copied to clipboard!");
-    //     } catch (error) {
-    //         alert("Coud'nt copy link to clipboard :(");
-    //     }
-    // };
+    const feed = feedData?.feed;
+    //retry when user logs in for response 401(login required)
+    if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')){
+        queryClient.invalidateQueries([postType,id],{exact:true});
+    }
 
+    const handleShare = () => {
+        try {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied to clipboard!");
+        } catch (error) {
+            alert("Coud'nt copy link to clipboard :(");
+        }
+    };
+   
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
-    console.log('rendered')
     return (
         //entire screen
         <Paper variant="window" square sx={{width:'100vw',minHeight:'100vh',display:'flex',justifyContent:"center",backgroundColor:'#121212'}} >
@@ -58,14 +61,9 @@ const PostPage = ({viewPostType:postType}) => {
         </Helmet>
         <Navbar/>
         {/* entire page  */}
-        {["403", "BRUH", "404"].includes(postStatus) ? 
+        {["403", "BRUH", "404","401"].includes(postStatus) ? 
         <Box sx={{maxWidth:'min-content',alignItems:'center', display:'flex', flexDirection:'column',marginTop:'100px', alignSelf:'center'}} >
         <Typography variant="h1" fontWeight={600} color='#313131'>404</Typography>
-        {(["403", "BRUH"].includes(postStatus)&&authUser?.id) &&
-        <>
-        <Typography variant="caption" sx={{color:'#a1a1a1', textAlign:'center'}} >If you just logged in and think you have access to this article, Consider trying again.</Typography>
-        <br/><Button variant='outlined' onClick={()=>{queryClient.invalidateQueries([postType,id],{exact:true});}} >Try again</Button>
-        </>}
         </Box>
         :
         // entire page
@@ -139,10 +137,11 @@ const PostPage = ({viewPostType:postType}) => {
         ))}
         </Box>
         <br/>
+        {/* edit  */}
         { authUser?.id===post?.authorId &&
         <>
         <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
-        // onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:post?.slug, type: postType.toUpperCase()}});dispatch({type:'OPEN_EDIT'})}}
+        onClick={()=>setEditOpen(true)}
         >
             <Typography variant='button' fontWeight='600' >Edit</Typography>
             {authUser?.currentRole!=='INS' &&
@@ -202,7 +201,7 @@ const PostPage = ({viewPostType:postType}) => {
         </Box>}
 
         {/* editmodal */}
-        <DbEditPost/>
+        <DbEditPost open={editOpen} setOpen={setEditOpen} postType={postType} slug={post?.slug} />
 
         <Dialog
         open={delConfirm}

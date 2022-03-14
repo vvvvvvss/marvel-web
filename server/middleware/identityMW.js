@@ -8,28 +8,26 @@ try {
     const gClient = new OAuth2Client(process.env.CIENT_ID);
     let userData;
     try {
-        token = req.headers.authorization?.split(' ')?.[1];
+        const token = req.headers.authorization?.split(' ')?.[1];
         const ticket = await gClient.verifyIdToken({idToken : token, audience : process.env.CIENT_ID});
         userData = ticket.getPayload();
     } catch (error) {
-        if(error.message=='token is not defined'){
-            return res.json({status : '403', message : 'Access denied. No token'});
+        if(error.message=='The verifyIdToken method requires an ID Token'){
+            return res.json({status : '401', message : 'Access denied. No token'});
         }else{
             return res.json({status : 'BRUH', message : 'Verificaion failed'});
         }
     }
     const existingUser = await user.findOne({id : userData?.sub}, "-bio -website -linkedIn -gitHub").lean();
-    if(existingUser?.enrollmentStatus==='BANNED')return res.json({status : '404',message:'banned'})
 
-    if(!existingUser || existingUser?.enrollmentStatus==='UNKNOWN'){
-        return res.json({message : 'unrecognizable request', status:'403'});
+    if(!existingUser || ["BANNED","UNKNOWN"].includes(existingUser?.enrollmentStatus)){
+        return res.json({message : 'unrecognizable request', status:'404'});
     }else{
         req.user = existingUser;
         next();
     } 
     
 } catch (err) {
-    // console.log(err);
     return res.json({status : 'BRUH', message : 'Request failed. wdk why.'})
 }
 }

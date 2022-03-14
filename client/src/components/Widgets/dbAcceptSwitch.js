@@ -2,13 +2,14 @@ import { MenuItem, Paper, Typography, Select, Skeleton, Switch, Divider } from "
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCourseData, toggleSub } from "../../actions/dashboard";
+import { memo } from "react"; 
 
 const AcceptSwitch = () => {
+    console.log("renderd")
     const {authUser} = useSelector(state => state.auth);
     const {syllabus, isSyllabusLoading, isCreateLoading} = useSelector(state => state.dashboard);
     const [course, setCourse] = useState(authUser?.currentInsCourse?.[0]);
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(getCourseData(course, 'switch'));
     }, [course, dispatch]);
@@ -59,4 +60,4 @@ const AcceptSwitch = () => {
     )
 }
 
-export default AcceptSwitch;
+export default memo(AcceptSwitch);

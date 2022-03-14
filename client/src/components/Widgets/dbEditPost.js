@@ -1,5 +1,4 @@
 import { AppBar, CircularProgress, Dialog, IconButton, Toolbar, Typography, TextField, Paper, Link, Chip, Button } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ImageUploading from 'react-images-uploading';
@@ -9,26 +8,29 @@ import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import he from 'he';
-import { getPost, editPost } from "../../actions/dashboard.js";
+import { useQuery } from "react-query";
+import { getPost, editPost } from "../../API";
 
-const DbEditPost = () => {
-    const {viewPost, isViewLoading, editPostType, editPostOpen, editPostId,isCreateLoading} = useSelector(state => state.dashboard)
+const DbEditPost = ({postType, slug, open, setOpen}) => {
+    // const {viewPost, isViewLoading, postType, open, slug, isCreateLoading} = useSelector(state => state.dashboard)
     const [editorTab, setEditorTab] = useState('write');
     const [newTag, setNewTag] = useState('');
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : ''
     });
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        if( !viewPost?.slug || (viewPost?.slug !== editPostId)){
-            dispatch(getPost(editPostType, editPostId));
+    const {data:postData, isLoading:isPostLoading} = useQuery(
+        [postType,slug], 
+        ()=>getPost(postType,slug),
+        {
+            onSuccess : ()=>(setFormData({
+                title:postData?.post?.title,
+                content: postData?.post?.content,
+                tags: postData?.post?.tags,
+                coverPhoto : postData?.post?.coverPhoto
+            }))
         }
-    }, [editPostId, dispatch]);
-
-    useEffect(() => {
-        setFormData({title: viewPost?.title, content: he.decode(`${viewPost?.content}`), tags: viewPost?.tags, coverPhoto: viewPost?.coverPhoto});
-    }, [viewPost])
+    );
 
     const handleImageUpload = async (imageList) => {
         const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -37,31 +39,31 @@ const DbEditPost = () => {
           const reader = new FileReader(); reader.readAsDataURL(compressedImage);
           reader.onloadend = ()=>{ setFormData({...formData, coverPhoto : reader?.result}); }
         } catch (error) { console.log(error); }
-        };
+    };
   
     const handleSubmit = (e)=>{
     e.preventDefault();
-    if(editPostType==='PR' || editPostType==='RSA'){
+    if(postType==='PR' || postType==='RSA'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        else {dispatch(editPost(formData, editPostId, editPostType));};
-    }else if(editPostType==='BLOG'){
+        // else {dispatch(editPost(formData, slug, postType));};
+    }else if(postType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {dispatch(editPost(formData, editPostId, editPostType));};
+        // else {dispatch(editPost(formData, slug, postType));};
     }else {console.log('meh')} }
 
     return (
         <>
-        <Dialog fullScreen open={editPostOpen} onClose={()=>(dispatch({type:'CLOSE_EDIT'}))} >
+        <Dialog fullScreen open={open} onClose={()=>(setOpen(false))} >
             <AppBar>
                 <Toolbar>
-                    <IconButton onClick={()=>(dispatch({type:'CLOSE_EDIT'}))}><CloseIcon/></IconButton>
-                    <Typography variant='h6' >{`Edit ${editPostType==='RSA'?'Resource Article': editPostType}`}</Typography>
+                    <IconButton onClick={()=>(setOpen(false))}><CloseIcon/></IconButton>
+                    <Typography variant='h6' >{`Edit ${postType==='RSA'?'Resource Article': postType}`}</Typography>
                 </Toolbar>
             </AppBar>
             <div style={{display: 'flex', justifyContent: 'center',padding : '90px 10px 90px 10px'}}>
-                {isViewLoading ? <CircularProgress/> : 
+                {isPostLoading ? <CircularProgress/> : 
                 <div style={{width:'100%', maxWidth:'700px'}} >
                     
                 <TextField value={formData?.title} onChange={(e)=>(setFormData({...formData, title : e.target.value}))}
@@ -70,7 +72,7 @@ const DbEditPost = () => {
                 <br/><br/>
 
                 {/* IMAGE UPLOAD */}
-                {editPostType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
+                {postType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
                 {({ onImageUpload, dragProps, }) => (
                     <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
                     <Paper variant='widget'
@@ -149,8 +151,8 @@ const DbEditPost = () => {
                 <br/>
                 <div style={{display: 'flex',justifyContent: 'flex-end'}}>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button size='large' disabled={isCreateLoading} onClick={handleSubmit} variant='contained'>
-                    { isCreateLoading ? <CircularProgress/> : 'Submit'}
+                <Button size='large' disabled={true} onClick={handleSubmit} variant='contained'>
+                    { true ? <CircularProgress/> : 'Submit'}
                 </Button>
                 
                 </div>

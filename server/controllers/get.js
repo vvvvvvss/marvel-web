@@ -102,30 +102,22 @@ export const getSubmissionsRsa = async (req, res) => {
 export const getPR = async (req, res) => {
     try {
         const {id} = req.params;
-        if(req.query?.scope==='ins'&& !(req?.user?.currentRole==='INS'&& req?.user?.enrollmentStatus==='ACTIVE')){
-            return res.json({message:'Access denied.', status : '403'});
-        };
-        let returnedPr;
-        if(req.query?.scope==='ins'){
-            returnedPr = await prs.findOne({slug : id}).lean().exec();
-            returnedPr.totalLevels = (await course.findOne({courseCode : returnedPr?.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
-        } else {
-            returnedPr = await prs.findOne({slug : id}).lean().exec();
-        };
+        const returnedPr = await prs.findOne({slug : id}).lean().exec();
 
         if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedPr?.reviewStatus)){
-            if(!req?.user){ return res.json({status:'403'}); }
+            if(!req?.user){ return res.json({status:'401', message:'login required'});}
             if((req?.user?.id===returnedPr?.authorId) || 
             (req?.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
                 return res.json({post : returnedPr,status:'200'});
+            }else{
+                return res.json({status:'403',message:'Access denied'})
             }
         }else{
-            return res.json({post : {...returnedPr, feedback:null, reviewStatus:null}, status:'200'});
+            return res.json({post : returnedPr, status:'200'});
         }
     } catch (error) {
-        console.log(error);
-        return res.json({message:'Something went wrong:(',status:'404'});
+        return res.json({message:'Something went wrong:(',status:'BRUH'});
     }
 }
 
@@ -135,17 +127,18 @@ export const getBlog = async (req, res) => {
         const returnedBlog = await blogs.findOne({slug : id}).lean().exec();
         if(!returnedBlog) return res.json({message:'That does not exist',status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedBlog?.reviewStatus)){
-            if(!req.user)return res.json({status:'403'});
+            if(!req.user)return res.json({status:'401', message:'login required'});
             if((req.user?.id===returnedBlog?.authorId)||
              (req.user?.currentRole==='INS' && req.user?.currentInsCourse.includes(returnedBlog?.authorCourseCode))){
                  return res.json({post : returnedBlog, status:'200'});
+             }else{
+                 return res.json({status:'403',message:'Access denied'})
              }
         }else{
-            return res.json({post:{...returnedBlog, feedback:null, reviewStatus:null}, status:'200'});
+            return res.json({post:returnedBlog, status:'200'});
         }
     } catch (error) {
-        console.log(error);
-        return res.json({message:'Something went wrong:(',status:'404'});
+        return res.json({message:'Something went wrong:(',status:'BRUH'});
      }
 }
 

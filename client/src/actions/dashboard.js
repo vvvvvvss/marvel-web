@@ -64,22 +64,22 @@ export const getSubmissions = (tab, page) => async (dispatch) => {
     } catch (error) { }
 }
 
-export const getPost = (type, id, scope) => async (dispatch) => {
-    dispatch({type:'START_VIEW_LOADING'});
-    try {
-        const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
-        if(data?.status==='200'){
-            dispatch({type : 'GET_VIEW_POST', payload : {...data?.post, status:'200'}});
-        }else{
-            if(scope==='page'){dispatch({type:"GET_VIEW_POST", payload: {status: data?.status}})}
-            else{
-                alert("Something went wrong while retrieving post:(");
-                dispatch({type:"CLOSE_VIEW"});
-            }
-        };
-    } catch (error) {console.log(error)}
-    dispatch({type : 'END_VIEW_LOADING'});
-}
+// export const getPost = (type, id, scope) => async (dispatch) => {
+//     dispatch({type:'START_VIEW_LOADING'});
+//     try {
+//         const {data} = await API.getPost(type?.toLowerCase(), id, scope?.toLowerCase());
+//         if(data?.status==='200'){
+//             dispatch({type : 'GET_VIEW_POST', payload : {...data?.post, status:'200'}});
+//         }else{
+//             if(scope==='page'){dispatch({type:"GET_VIEW_POST", payload: {status: data?.status}})}
+//             else{
+//                 alert("Something went wrong while retrieving post:(");
+//                 dispatch({type:"CLOSE_VIEW"});
+//             }
+//         };
+//     } catch (error) {console.log(error)}
+//     dispatch({type : 'END_VIEW_LOADING'});
+// }
 
 export const editPost = (formData, id, type) => async (dispatch) => {
     try {
