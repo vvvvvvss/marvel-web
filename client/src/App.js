@@ -20,8 +20,12 @@ const queryClient = new QueryClient({
       refetchOnReconnect:false,
       refetchInterval:1000*60*60*48,
       cacheTime:1000*60*60*48,
-      retry:false
+      retry:false,
+      retryOnMount:false
     },
+    mutations:{
+      retry:false
+    }
   },
 });
 
