@@ -6,6 +6,7 @@ import course from '../models/course.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 import dotenv from 'dotenv';
 import certificate from "../models/certificate.js";
+import cloudinary from "cloudinary";
 
 export const submitFeedbackPr = async (req, res) => {
     try {
