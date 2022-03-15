@@ -34,9 +34,9 @@ export const updateProfile = async (req, res)=>{
 export const updateBlog = async (req, res) => {
     try {
         const {id} = req.params;
-        const existingBlog = await blogPost.findOne({slug : id});
+        const existingBlog = await blogPost.findById(id);
         if(!existingBlog) return res.json({status:'404', message:'that post does not exist'});
-        if(existingBlog?.authorId !== req.user.id) return res.json({message:'Access denied', status:'404'});
+        if(existingBlog?.authorId !== req.user.id) return res.json({message:'Access denied', status:'403'});
         
         let newImage = '';
         if(req.body.coverPhoto !== existingBlog?.coverPhoto){
@@ -60,7 +60,7 @@ export const updateBlog = async (req, res) => {
         const editedPost = await existingBlog.save();
         return res.json({status : '201', post: editedPost});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({status : 'BRUH', message:'Somthing went wrong :('})
     }
 }
@@ -68,9 +68,9 @@ export const updateBlog = async (req, res) => {
 export const updatePR = async (req, res) => {
     try {
         const {id} = req.params;
-        const existingPR = await projectReport.findOne({slug : id});
+        const existingPR = await projectReport.findById(id);
         if(!existingPR) return res.json({status:'404', message:'that post does not exist'});
-        if(existingPR?.authorId !== req.user.id) return res.json({message:'Access denied', status:'404'});
+        if(existingPR?.authorId !== req.user.id) return res.json({message:'Access denied', status:'403'});
         
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
@@ -85,7 +85,7 @@ export const updatePR = async (req, res) => {
         const editedPost = await existingPR.save();
         return res.json({status : '201', post: editedPost});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({status : 'BRUH', message:'Somthing went wrong :('})
     }
 }
@@ -93,9 +93,10 @@ export const updatePR = async (req, res) => {
 export const updateRSA = async (req, res) => {
     try {
         const {id} = req.params;
-        const returnedRsa = await rsa.findOne({slug : id});
+        const returnedRsa = await rsa.findById(id);
+        if(!returnedRsa) return res.json({message:'That doesn\'t exist.', status:'404'})
         const condition = ((req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') && req.user.id===returnedRsa?.authorId);
-        if(!condition) return res.json({message:'Access denied.', status:'404'});
+        if(!condition) return res.json({message:'Access denied.', status:'403'});
         
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
@@ -109,7 +110,7 @@ export const updateRSA = async (req, res) => {
         const newRsa = await returnedRsa.save();
         return res.json({post : newRsa, status : '201'});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({status : 'BRUH', message:'Something went wrong:('});
     }
 }

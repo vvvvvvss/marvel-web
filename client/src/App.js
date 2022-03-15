@@ -15,11 +15,11 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      staleTime:1000*60*60*48,
+      staleTime:Infinity,
       refetchOnMount:false,
       refetchOnReconnect:false,
-      refetchInterval:1000*60*60*48,
-      cacheTime:1000*60*60*48,
+      refetchInterval:Infinity,
+      cacheTime:Infinity,
       retry:false,
       retryOnMount:false
     },

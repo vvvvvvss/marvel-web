@@ -83,7 +83,7 @@ const PostPage = ({viewPostType:postType}) => {
         {/*top hero */}
         <Box sx={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative',
         background:`url(${postType==='blog'? post?.coverPhoto : postType==='pr' ? pr_legend :postType==='rsa'? rsa_legend:''})`,
-        maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF', aspectRatio:'16 / 9', backgroundSize:'100%'}}>
+        maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF', aspectRatio:'16 / 9', backgroundSize:'cover'}}>
           
             <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
             background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
@@ -154,6 +154,7 @@ const PostPage = ({viewPostType:postType}) => {
         onClick={()=>{setDelConfirm(true);}}>
             <Typography variant='button' fontWeight='600'>Delete</Typography>
         </Button>}
+        <br/>
         </>
         }
         </>

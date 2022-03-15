@@ -8,13 +8,13 @@ import course from '../models/course.js';
 export const createPR = async (req , res) => {
     try {
         const condition = (req.user.currentRole==='STU') && (req.user.enrollmentStatus==='ACTIVE');
-        if(!condition) return res.json({status : '404', message : 'you cannot do this.'});
+        if(!condition) return res.json({status : '403', message : 'you cannot do this.'});
         const courseData = await course.findOne({courseCode: req.user.currentStuCourse}).select('-_id submissionStatus');
-        if(!(courseData?.submissionStatus?.isAccepting)||courseData?.submissionStatus?.forLevel !== req.user.currentLevel) return res.json({message:'Access denied.', status: '404'});
+        if(!(courseData?.submissionStatus?.isAccepting)||courseData?.submissionStatus?.forLevel !== req.user.currentLevel) return res.json({message:'Access denied.', status: '403'});
        
         const existingPR = await projectReport.findOne({ $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}, {level : req.user.currentLevel}]}).select("_id").lean().exec();
                                                 
-        if(existingPR) return res.json({status : 'exists', message : 'PR for this level already exists.'});
+        if(existingPR) return res.json({status : '404', message : 'PR for this level already exists.'});
         
         const newPR = new projectReport({ ...req.body,
         authorId : req.user.id, authorName : req.user.name,
@@ -67,7 +67,7 @@ export const createBlog = async (req , res) => {
 export const createRSA = async (req, res) => {
     try {
         const condition = req.user.currentRole==='INS' && req.user.enrollmentStatus==='ACTIVE';
-        if(!condition) return res.json({message : 'Access denied.', status:'404'});
+        if(!condition) return res.json({message : 'Access denied.', status:'403'});
         
         const cleanContent = sanitizer(req.body.content, {
             allowedTags: ['iframe','br', 'blockquote','strong'], allowedAttributes: { 'iframe': ['src'] },

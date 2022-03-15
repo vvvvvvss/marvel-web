@@ -8,29 +8,49 @@ import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
 import he from 'he';
-import { useQuery } from "react-query";
-import { getPost, editPost } from "../../API";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getPost, editPost } from "../../API/index.js";
 
 const DbEditPost = ({postType, slug, open, setOpen}) => {
-    // const {viewPost, isViewLoading, postType, open, slug, isCreateLoading} = useSelector(state => state.dashboard)
+    const queryClient = useQueryClient()
     const [editorTab, setEditorTab] = useState('write');
     const [newTag, setNewTag] = useState('');
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : ''
     });
-
+    //getting post data
     const {data:postData, isLoading:isPostLoading} = useQuery(
         [postType,slug], 
         ()=>getPost(postType,slug),
-        {
-            onSuccess : ()=>(setFormData({
-                title:postData?.post?.title,
-                content: postData?.post?.content,
-                tags: postData?.post?.tags,
-                coverPhoto : postData?.post?.coverPhoto
-            }))
-        }
     );
+    useEffect(() => {
+        if(["403","404","BRUH"].includes(postData?.status)){
+            setOpen(false);
+        }else{
+            setFormData({
+                title : postData?.post?.title, content : postData?.post?.content, 
+                tags : postData?.post?.tags, coverPhoto : postData?.post?.coverPhoto
+            })
+        }
+    }, [postData])
+    //mutation
+    const {mutate:submitEdit, isLoading:isEditLoading, data:editResponse} = useMutation(
+        ()=>(editPost(formData, postData?.post?._id, postType)),
+        {
+            onSuccess: (response)=>{
+                if(["403","404","401","BRUH"].includes(response?.status)){
+                    return alert("Could'nt complete your request to edit. Reason: Bad request.");
+                }else{
+                    queryClient.setQueryData([postType,slug], (prev)=>({...prev, post:response?.post}));
+                    setOpen(false);
+                }
+            },
+            onError: (err)=>{
+                return alert("Something went wrong on our side. could'nt complete your edit.");
+            }
+            
+        })
+
 
     const handleImageUpload = async (imageList) => {
         const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -46,12 +66,12 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
     if(postType==='PR' || postType==='RSA'){
         if(!formData?.title) return alert('Title of your project report cannot be empty.')
         if(!formData?.content)return alert('The content of your Project Report cannot be empty!');
-        // else {dispatch(editPost(formData, slug, postType));};
     }else if(postType==='BLOG'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        // else {dispatch(editPost(formData, slug, postType));};
-    }else {console.log('meh')} }
+    }
+    submitEdit();
+    }
 
     return (
         <>
@@ -59,7 +79,7 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
             <AppBar>
                 <Toolbar>
                     <IconButton onClick={()=>(setOpen(false))}><CloseIcon/></IconButton>
-                    <Typography variant='h6' >{`Edit ${postType==='RSA'?'Resource Article': postType}`}</Typography>
+                    <Typography variant='h6' >{`Edit ${postType==='rsa'?'Resource Article': postType.toUpperCase()}`}</Typography>
                 </Toolbar>
             </AppBar>
             <div style={{display: 'flex', justifyContent: 'center',padding : '90px 10px 90px 10px'}}>
@@ -72,7 +92,7 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
                 <br/><br/>
 
                 {/* IMAGE UPLOAD */}
-                {postType==='BLOG' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
+                {postType==='blog' && <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
                 {({ onImageUpload, dragProps, }) => (
                     <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
                     <Paper variant='widget'
@@ -151,8 +171,8 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
                 <br/>
                 <div style={{display: 'flex',justifyContent: 'flex-end'}}>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button size='large' disabled={true} onClick={handleSubmit} variant='contained'>
-                    { true ? <CircularProgress/> : 'Submit'}
+                <Button size='large' disabled={isEditLoading} onClick={handleSubmit} variant='contained'>
+                    { isEditLoading ? <CircularProgress/> : 'Submit'}
                 </Button>
                 
                 </div>

@@ -13,12 +13,12 @@ export const auth = async (token) => API.post('/auth', {token : token});
 export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${courseCode}?scope=${scope}`);
 export const getProfileData = async (id, scope)=>API.get(`/get/profile/${id}?scope=${scope}`);
 export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/${id}`, newProfile);
-export const createPost = async (formData, formType) => API.post(`/create/${formType}`,formData);
-export const getSubmissions = async (tab,page) => API.get(`/get/submissions/${tab}?page=${page}`);
+export const createPost = async (formData, formType) => (await API.post(`/create/${formType}`,formData)).data;
+export const getSubmissions = async (type,page) => (await API.get(`/get/submissions/${type}?page=${page}`)).data;
 
 export const getPost = async (type, id) => (await (API.get(`/get/${type}/${id}`))).data;
 
-export const editPost = async (formData, id, type)=> API.post(`/update/${type}/${id}`, formData);
+export const editPost = async (formData, id, type)=> (await API.post(`/update/${type}/${id}`, formData)).data;
 export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/toreview/${tab}?page=${page}&crsfltr=${courseFilter || 'none'}`);
 export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
 export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);
@@ -34,4 +34,4 @@ export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/pro
 export const editCourse = async (courseCode, operation, tskIndex, lvIndex, taskId, levelId, content) => (
     API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex) || 'none'}&lvIndex=${String(lvIndex) || 'none'}&taskId=${taskId || 'none'}&levelId=${levelId || 'none'}`, {content : content || 'none'})
 );
-export const deletePost = async (slug, type)=> API.post(`/action/delete/${type.toLowerCase()}/${slug}`);
+export const deletePost = async (id, type)=> (await API.post(`/action/delete/${type.toLowerCase()}/${id}`)).data;

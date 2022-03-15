@@ -8,18 +8,48 @@ import ReactMde from 'react-mde';
 import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
 import sanitizer from 'sanitize-html';
-import { createPost } from "../../actions/dashboard.js";
+import { createPost } from "../../API/index.js";
 import he from 'he';
+import useHashParams from "../../utils/hooks/useHashParams.js"
+import { useNavigate } from "react-router-dom";
+import {useMutation, useQueryClient} from "react-query";
+const isCreateLoading=false;
+
 
 const DbForm = () => {
-    const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
+    const params = useHashParams();
+    const navigate = useNavigate(); 
+    const queryClient = useQueryClient();
     const authUser = useSelector(state => state.auth.authUser);
+    const formOpen = params?.mode=='form';
+    const formType = params?.type || 'none' ;
+    if(formType=='none'||
+      !["pr", "blog", "rsa"].includes(formType) ||
+      authUser?.currentRole=="STU"&&formType=='rsa'||
+      authUser?.currentRole=="INS"&&formType=='pr'){ navigate({hash:""}); }
+
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
-    const dispatch = useDispatch();
+
+    const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
+      onSuccess:(response)=>{
+        if(["404","403","BRUH","401"].includes(response?.status)){
+          alert("Something went wrong. Could'nt create. Reason: Bad request");
+        }else{
+          queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
+          //TODO: update subs feed
+          alert(`Successfully Posted!`);
+          navigate({hash:""});
+        }
+      },
+      onError:()=>{
+        alert("Could'nt post. Something went wrong on our side.");
+        navigate({hash:""});
+      }
+    })
 
     const handleImageUpload = async (imageList) => {
       const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -32,25 +62,24 @@ const DbForm = () => {
 
     const handleSubmit = (e)=>{
       e.preventDefault();
-      if(formType==='PR' || formType==='RSA'){
-        if(!formData?.title) return alert(`Title of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
-        if(!formData?.content)return alert(`The content of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
-        else {dispatch(createPost(formData, formType));}
-      }else if(formType==='BLOG'){
+      if(formType==='pr' || formType==='rsa'){
+        if(!formData?.title) return alert(`Title of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
+        if(!formData?.content)return alert(`The content of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
+      }else if(formType==='blog'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {dispatch(createPost(formData, formType));}
       }
+      sendCreate();
     }
 
     return (
         <>
-        <Dialog open={formOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_FORM'}))} >
+        <Dialog open={formOpen} fullScreen onClose={()=>navigate({hash:""})} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>navigate({hash:""})} ><CloseIcon/></IconButton>
             <Typography variant="h6" component="div">
-            {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='RSA' ? 'Resource Article' : 'Blog'}
+            {formType==='pr' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='rsa' ? 'Resource Article' : 'Blog'}
             </Typography>
         </Toolbar>
         </AppBar>
@@ -62,7 +91,7 @@ const DbForm = () => {
         InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary' disabled={isCreateLoading} />
         <br/><br/>
 
-        {(authUser?.currentRole==='INS' && formType==='RSA') && 
+        {(authUser?.currentRole==='INS' && formType==='rsa') && 
         <FormControl fullWidth disabled={isCreateLoading} >
         <InputLabel color='secondary' id='course-select' >Course code</InputLabel>
         <Select color='secondary'
@@ -77,7 +106,7 @@ const DbForm = () => {
       </Select><br/></FormControl>}
 
         {/* IMAGE UPLOAD */}
-        {formType==='BLOG' && 
+        {formType==='blog' && 
         <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
           {({ onImageUpload, dragProps, }) => (
             <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
@@ -107,9 +136,9 @@ const DbForm = () => {
           generateMarkdownPreview={markdown =>
             Promise.resolve(
               <Markdown style={{fontFamily: 'Montserrat',fontSize: '16px',lineHeight:'26px'}} 
-            options={
-              {wrapper : 'div'},
-              { overrides: {
+            options={{
+              wrapper : 'div',
+              overrides: {
                   p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                   img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},

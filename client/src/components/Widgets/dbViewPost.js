@@ -6,12 +6,14 @@ import moment from 'moment';
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
 import { Box } from "@mui/system";
-import { useQuery, useQueryClient } from "react-query";
-import { getPost } from "../../API/index.js";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getPost, deletePost, approve, submitFeedback } from "../../API/index.js";
 import useHashParams from "../../utils/hooks/useHashParams.js";
 import { useNavigate } from "react-router-dom";
 import colorDecide from "../../utils/functions/colorDecide.js";
-const isCreateLoading = false;
+import DbEditPost from './dbEditPost.js';
+const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
+const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
 const DbViewPost = () => {
     const hashParams = useHashParams();
@@ -20,34 +22,70 @@ const DbViewPost = () => {
     const postType = hashParams?.type
     const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
-    const [feedbackOpen, setFeedbackOpen] = useState(false);
+    const [feedbackOpen, setFeedbackOpen] = useState(false);//feedback textfield open and close
     const [feedback, setFeedback] = useState('');
-    const [confirm, setConfirm] = useState(false);
-    const [delConfirm, setDelConfirm] = useState(false);
+    const [approveConfirm, setApproveConfirm] = useState(false);//approve modal
+    const [delConfirm, setDelConfirm] = useState(false);//delete confirm modal
+    const [editOpen, setEditOpen] = useState(false);
     const queryClient = useQueryClient();
     //getting post
     const {data:postData, isLoading:isPostLoading} = useQuery([postType,slug], 
         ()=>getPost(postType,slug)
     );
     const post = postData?.post; const postStatus = postData?.status;
-    if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')){
-        queryClient.invalidateQueries([postType,slug],{exact:true});
+    
+
+    const {mutate:sendFeedback, isLoading:isFeedbackLoading} = useMutation(()=>(submitFeedback(feedback, post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt submit feedback. Reason: Bad request.");
+            }else{
+                //TODO: filter in toreview widget
+                navigate({hash:""});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt submit feedback.");
+        }
     }
+    );
 
-    const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
-    const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
-
-    const submitFeedback = () => {
-        // dispatch(submitFB(feedback, post?.slug, postType));
-    };
-
-    const handleApprove = ()=>{
-        // dispatch(approve(post?.slug, postType));
-    };
-
-    const handleDelete = ()=>{
-        // dispatch(deletePost(post?.slug, postType ,'db'));
+    const {mutate:sendApprove, isLoading:isApproveLoading} = useMutation(()=>(approve(post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt approve. Reason: Bad request.");
+            }else{
+                //filter in toreview widget
+                navigate({hash:""});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt approve.");
+            setApproveConfirm(false);
+        }
     }
+    );
+
+    const {mutate:sendDelete, isLoading:isDeleteLoading} = useMutation(()=>(deletePost(post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt delete. Reason: Bad request.");
+            }else{
+                queryClient.removeQueries([postType, slug], {exact:true});
+                //TODO: filter feed.
+                alert("Successfully deleted!");
+                navigate({hash:""});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt delete.");
+            setDelConfirm(false);
+        }
+    }
+    );
 
     return (
         <Dialog open={viewOpen} fullScreen onClose={()=>navigate({hash:""})} >
@@ -55,7 +93,7 @@ const DbViewPost = () => {
         <Toolbar>
             <IconButton edge="start" onClick={()=>navigate({hash:""})} ><CloseIcon/></IconButton>
             <Typography variant='h6' >
-                {`${postType==='PR'?'Project Report' : postType==='BLOG' ? 'Blog post' : 'Resource Article'}`}
+                {`${postType==='pr'?'Project Report' : postType==='blog' ? 'Blog post' : 'Resource Article'}`}
             </Typography>
         </Toolbar>
         </AppBar>
@@ -63,10 +101,14 @@ const DbViewPost = () => {
         <div style={{paddingTop:'90px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',maxWidth:'650px'}}>
         
         {isPostLoading ? <CircularProgress/> :
+        ["403","404","BRUH"].includes(postStatus)?
+        <Typography variant="h2" sx={{position:'relative',top:'50%',bottom:'50%',color:'#a1a1a1',fontWeight:'900'}} >
+            4😭4
+        </Typography> :
          <div>
-            <Box sx={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative',
+            <Box sx={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative', 
             background:`url(${postType==='blog'? post?.coverPhoto : postType==='pr' ? pr_legend :postType==='rsa'? rsa_legend:''})`,
-            maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF', aspectRatio:'16 / 9', backgroundSize:'100%'}}>
+            maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF', aspectRatio:'16 / 9', backgroundSize:'cover'}}>
           
             <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
             background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
@@ -130,15 +172,15 @@ const DbViewPost = () => {
             <Divider/>
             <br/>
             { authUser?.currentRole==='STU' && <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
-            <Chip label={postType==='RSA' ? 'PUBLIC' : post?.reviewStatus } color={postType==='RSA'?'success': colorDecide(post?.reviewStatus)} variant='filled'/> 
+            <Chip label={postType==='rsa' ? 'PUBLIC' : post?.reviewStatus } color={postType==='rsa'?'success': colorDecide(post?.reviewStatus)} variant='filled'/> 
             </Typography>}
             <br/>
             { (authUser?.currentRole==='INS' && post?.authorId !== authUser?.id) &&
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
-            onClick={()=>(setConfirm(true))}>
+            onClick={()=>(setApproveConfirm(true))}>
                 <Typography variant='button' fontWeight='600' >{`Approve ${(post?.totalLevels===post?.level&&postType==='pr') ? 'and Award Certificate':''}`}</Typography>
-                <Typography variant='caption'>{post?.totalLevels===post?.level&&postType==='PR' ? 'Certificate will be awarded for Course completion.' : postType==='PR'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
+                <Typography variant='caption'>{post?.totalLevels===post?.level&&postType==='pr' ? 'Certificate will be awarded for Course completion.' : postType==='pr'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
             <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
                 <Typography variant='button' fontWeight='600'>Flag and provide feedback</Typography>
@@ -151,11 +193,11 @@ const DbViewPost = () => {
                 variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 500}}/>
                 <br/>
                 <div>
-                <Button disabled={isCreateLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
+                <Button disabled={isFeedbackLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
                     cancel
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
-                <Button disabled={isCreateLoading} onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
-                    {isCreateLoading ? <CircularProgress/> :'submit feedback'}
+                <Button disabled={isFeedbackLoading || feedback?.length==0} onClick={sendFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
+                    {isFeedbackLoading ? <CircularProgress/> :'submit feedback'}
                 </Button>
                 </div>
             </div>
@@ -167,13 +209,13 @@ const DbViewPost = () => {
             { authUser?.id===post?.authorId &&
             <>
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
-            onClick={()=>{}}>
+            onClick={()=>setEditOpen(true)}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
                 {authUser?.currentRole!=='INS' &&
                 <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
                 }
             </Button><br/>
-            { postType!=='PR'&& 
+            { postType!=='pr'&& 
             <Button variant='contained' fullWidth sx={{textTransform:'none', display:'flex',flexDirection:'column',backgroundColor:'error.dark'}}
             onClick={()=>{setDelConfirm(true);}}>
                 <Typography variant='button' fontWeight='600'>Delete</Typography>
@@ -184,36 +226,39 @@ const DbViewPost = () => {
         }
         </div>
         <Dialog
-        open={confirm || delConfirm}
-        onClose={()=>{setConfirm(false);setDelConfirm(false);}}
-      >
-        <DialogTitle>
-          {confirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {confirm ? `By approving, the ${post?.level===post?.totalLevels&&postType==='PR' ? 
-            "Student will be awarded the certificate of course completion and their course session will be completed.":
-            postType==='PR' ? 
-            "Student will proceed to next level and this Project report will become public. ":
-            "Blog post will become public for others to see. "}
-            This action CANNOT be undone.` : 
-            delConfirm ? `You're about to DELETE this 
-            ${postType==='BLOG'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`:''}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>{setConfirm(false);setDelConfirm(false);}} color='secondary' 
-            variant='outlined' disabled={isCreateLoading}>Disagree
-          </Button>
-          <Button onClick={confirm ? handleApprove : delConfirm ? handleDelete : ()=>{}} 
-            variant='contained' color={delConfirm?'error':'secondary'}
-            disabled={isCreateLoading} >
-            {isCreateLoading ? <CircularProgress/> : 'agree'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            open={approveConfirm || delConfirm}
+            onClose={()=>{setApproveConfirm(false);setDelConfirm(false);}}
+        >
+            <DialogTitle>
+            {approveConfirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText>
+                {approveConfirm ? `By approving, the ${post?.level===post?.totalLevels&&postType==='pr' ? 
+                "Student will be awarded the certificate of course completion and their course session will be completed.":
+                postType==='pr' ? 
+                "Student will proceed to next level and this Project report will become public. ":
+                "Blog post will become public for others to see. "}
+                This action CANNOT be undone.` : 
+                delConfirm ? `You're about to DELETE this 
+                ${postType==='blog'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`:''}
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={()=>{setApproveConfirm(false);setDelConfirm(false);}} color='secondary' 
+                variant='outlined' disabled={isDeleteLoading || isApproveLoading}>Disagree
+            </Button>
+            <Button onClick={approveConfirm ? sendApprove : delConfirm ? sendDelete : ()=>{}} 
+                variant='contained' color={delConfirm?'error':'secondary'}
+                disabled={isDeleteLoading || isApproveLoading} >
+                {isDeleteLoading || isApproveLoading ? <CircularProgress/> : 'agree'}
+            </Button>
+            </DialogActions>
+        </Dialog>
         </div>
+
+        {editOpen&&<DbEditPost open={editOpen} setOpen={setEditOpen} postType={postType} slug={slug} />}
+
         </Dialog>
     )
 }
