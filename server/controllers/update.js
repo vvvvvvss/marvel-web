@@ -54,7 +54,9 @@ export const updateBlog = async (req, res) => {
         Object.assign(existingBlog,
             {
                 title : req.body.title, coverPhoto: newImage, 
-                content: cleanContent, tags : req.body.tags, reviewStatus : 'PENDING', feedback : ''
+                content: cleanContent, tags : req.body.tags, 
+                reviewStatus : req?.user?.currentRole=="INS"?"APPROVED":"PENDING", 
+                feedback : ''
             })
 
         const editedPost = await existingBlog.save();
