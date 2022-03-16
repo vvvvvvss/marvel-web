@@ -19,9 +19,13 @@ const DbViewPost = () => {
     const hashParams = useHashParams();
     const viewOpen = hashParams?.mode=='view';
     const slug = hashParams?.slug;
-    const postType = hashParams?.type
+    const postType = hashParams?.type;
     const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
+
+    if(!["pr", "blog", "rsa"].includes(postType)&&viewOpen ||
+      authUser?.currentRole=="STU"&&postType=='rsa'){ navigate({hash:""}); }
+
     const [feedbackOpen, setFeedbackOpen] = useState(false);//feedback textfield open and close
     const [feedback, setFeedback] = useState('');
     const [approveConfirm, setApproveConfirm] = useState(false);//approve modal

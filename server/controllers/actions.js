@@ -89,7 +89,7 @@ export const approveBlog = async (req, res) => {
         const condition = req.user?.enrollmentStatus==='ACTIVE'&&req.user?.currentRole==='INS';
         if(!condition) return res.json({message:'Access denied.', status:'403'});
         const post = await blogPost.findById(req.params?.id).exec();
-        if(!req.user?.currentInsCourse?.includes(post?.authorCourseCode)) return res.json({message: 'Access denied.', status:'403'});
+        if(![...req.user?.currentInsCourse, "NA"]?.includes(post?.authorCourseCode)) return res.json({message: 'Access denied.', status:'403'});
 
         Object.assign(post, {
             reviewStatus: 'APPROVED',

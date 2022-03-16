@@ -181,9 +181,9 @@ export const getToReviewPrs = async (req, res) => {
 export const getToReviewBlogs = async (req, res) => {
     try {
         const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS');
-        if(!condition) return res.json({message: 'Access denied.', status:'404'});
+        if(!condition) return res.json({message: 'Access denied.', status:'403'});
 
-        const returnedBlogs = await blogs.find({$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : req.user.currentInsCourse}}]})
+        const returnedBlogs = await blogs.find({$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : [...req.user.currentInsCourse, "NA"]}}]})
                                         .sort({_id:1}).skip((Number(req.query.page)-1)*5)
                                         .limit(5).select("-content -coverPhoto -tags -feedback").lean().exec();
         return res.json({status: '200', posts: returnedBlogs});

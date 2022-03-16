@@ -1,7 +1,8 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, 
+  CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar, Slide } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
@@ -13,8 +14,6 @@ import he from 'he';
 import useHashParams from "../../utils/hooks/useHashParams.js"
 import { useNavigate } from "react-router-dom";
 import {useMutation, useQueryClient} from "react-query";
-const isCreateLoading=false;
-
 
 const DbForm = () => {
     const params = useHashParams();
@@ -23,8 +22,7 @@ const DbForm = () => {
     const authUser = useSelector(state => state.auth.authUser);
     const formOpen = params?.mode=='form';
     const formType = params?.type || 'none' ;
-    if(formType=='none'||
-      !["pr", "blog", "rsa"].includes(formType) ||
+    if(!["pr", "blog", "rsa"].includes(formType)&&formOpen ||
       authUser?.currentRole=="STU"&&formType=='rsa'||
       authUser?.currentRole=="INS"&&formType=='pr'){ navigate({hash:""}); }
 
@@ -33,6 +31,12 @@ const DbForm = () => {
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
+    const [alertInfo, setAlertInfo] = useState({open:false, message:''})
+
+    useEffect(() => {
+      setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
+    }, [params])
+    
 
     const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
       onSuccess:(response)=>{
@@ -41,8 +45,8 @@ const DbForm = () => {
         }else{
           queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
           //TODO: update subs feed
-          alert(`Successfully Posted!`);
           navigate({hash:""});
+          setAlertInfo({open:true, message:"Successfully Posted!"});
         }
       },
       onError:()=>{
@@ -74,10 +78,19 @@ const DbForm = () => {
 
     return (
         <>
-        <Dialog open={formOpen} fullScreen onClose={()=>navigate({hash:""})} >
+        <Snackbar open={alertInfo?.open} autoHideDuration={6000} TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+        anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+        onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+          <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity="success" sx={{ width: '100%' }}>
+            {alertInfo?.message}
+          </Alert>
+        </Snackbar>
+        <Dialog open={formOpen} fullScreen onClose={()=>{setFormData({title:'',content:'',courseCode:'',coverPhoto:'',tags:[]});navigate({hash:""})}} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>navigate({hash:""})} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>{navigate({hash:""});setFormData({title:'',content:'',courseCode:'',coverPhoto:'',tags:[]})}} >
+              <CloseIcon/>
+            </IconButton>
             <Typography variant="h6" component="div">
             {formType==='pr' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='rsa' ? 'Resource Article' : 'Blog'}
             </Typography>
@@ -163,7 +176,7 @@ const DbForm = () => {
         <Paper variant='widget'>
           <TextField fullWidth color='secondary' value={newTag} disabled={isCreateLoading}
           onChange={(e)=>{
-            if(e.target.value.slice(-1) === ','){
+            if(e.target.value.slice(-1) === ','&& newTag!==''){
               if(formData?.tags?.length < 8){
                 if(formData?.tags?.includes(e.target?.value?.slice(0,-1))) return alert(`You've already added that tag`);
                 setFormData({...formData, tags : [...formData?.tags, e.target?.value?.slice(0,-1)]})

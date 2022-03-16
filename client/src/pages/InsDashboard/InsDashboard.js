@@ -27,8 +27,8 @@ const InsDashboard = () => {
             <DbProfile/>
             </Box>
         </Paper>
-        {params?.mode=='form'&&<DbForm/>}
-        {params?.mode=='view'&&<DbViewPost/>}
+        <DbForm/>
+        <DbViewPost/>
         <Dial/>
         </>
     )

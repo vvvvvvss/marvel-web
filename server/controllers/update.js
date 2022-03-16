@@ -36,7 +36,7 @@ export const updateBlog = async (req, res) => {
         const {id} = req.params;
         const existingBlog = await blogPost.findById(id);
         if(!existingBlog) return res.json({status:'404', message:'that post does not exist'});
-        if(existingBlog?.authorId !== req.user.id) return res.json({message:'Access denied', status:'403'});
+        if(existingBlog?.authorId !== req.user?.id) return res.json({message:'Access denied', status:'403'});
         
         let newImage = '';
         if(req.body.coverPhoto !== existingBlog?.coverPhoto){
@@ -54,7 +54,9 @@ export const updateBlog = async (req, res) => {
         Object.assign(existingBlog,
             {
                 title : req.body.title, coverPhoto: newImage, 
-                content: cleanContent, tags : req.body.tags, reviewStatus : 'PENDING', feedback : ''
+                content: cleanContent, tags : req.body.tags, 
+                reviewStatus : req?.user?.currentRole==='INS'?'APPROVED':'PENDING', 
+                feedback : ''
             })
 
         const editedPost = await existingBlog.save();
