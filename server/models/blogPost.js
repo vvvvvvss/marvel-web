@@ -7,10 +7,10 @@ const blogPostSchema = mongoose.Schema({
     // IDENTITY DATA
     authorId: { type : String, required : true },
     authorName : { type : String, required : true },
-    authorSlug : { type : String},
+    authorSlug : { type : String, required:true},
     authorImage : {type : String},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
-    authorCourseCode : { type : String},
+    authorCourseCode : { type : String, required:true},
 
     // EDITABLE DATA
     title : {type : String},

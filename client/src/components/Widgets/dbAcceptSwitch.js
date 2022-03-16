@@ -5,7 +5,6 @@ import { getCourseData, toggleSub } from "../../actions/dashboard";
 import { memo } from "react"; 
 
 const AcceptSwitch = () => {
-    console.log("renderd")
     const {authUser} = useSelector(state => state.auth);
     const {syllabus, isSyllabusLoading, isCreateLoading} = useSelector(state => state.dashboard);
     const [course, setCourse] = useState(authUser?.currentInsCourse?.[0]);

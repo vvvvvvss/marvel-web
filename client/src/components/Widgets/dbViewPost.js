@@ -1,4 +1,6 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle} from "@mui/material";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link,
+     Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle,
+    Alert, Snackbar, Slide} from "@mui/material";
 import { useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
@@ -17,24 +19,25 @@ const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504
 
 const DbViewPost = () => {
     const hashParams = useHashParams();
-    const viewOpen = hashParams?.mode=='view';
+    const viewOpen = hashParams?.mode==='view';
     const slug = hashParams?.slug;
     const postType = hashParams?.type;
     const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
-
-    if(!["pr", "blog", "rsa"].includes(postType)&&viewOpen ||
-      authUser?.currentRole=="STU"&&postType=='rsa'){ navigate({hash:""}); }
+    if((!["pr", "blog", "rsa"].includes(postType)&&viewOpen) ||
+      (authUser?.currentRole==="STU"&&postType==='rsa')){ navigate({hash:""}); }
 
     const [feedbackOpen, setFeedbackOpen] = useState(false);//feedback textfield open and close
     const [feedback, setFeedback] = useState('');
     const [approveConfirm, setApproveConfirm] = useState(false);//approve modal
     const [delConfirm, setDelConfirm] = useState(false);//delete confirm modal
     const [editOpen, setEditOpen] = useState(false);
+    const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
     const queryClient = useQueryClient();
     //getting post
     const {data:postData, isLoading:isPostLoading} = useQuery([postType,slug], 
-        ()=>getPost(postType,slug)
+        ()=>getPost(postType,slug),
+        {enabled:viewOpen}
     );
     const post = postData?.post; const postStatus = postData?.status;
     
@@ -79,9 +82,16 @@ const DbViewPost = () => {
                 alert("Something went wrong and we could'nt delete. Reason: Bad request.");
             }else{
                 queryClient.removeQueries([postType, slug], {exact:true});
-                //TODO: filter feed.
-                alert("Successfully deleted!");
+                queryClient.setQueriesData([{nature:'feed',postType:postType}], (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                });
                 navigate({hash:""});
+                setDelConfirm(false);
+                setAlertInfo({open:true, message:'Successfully Deleted!',severity:'success'});
             }
         },
         onError: () => {
@@ -92,6 +102,17 @@ const DbViewPost = () => {
     );
 
     return (
+    <>
+        {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={8000} 
+            TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+            anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+            onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+            <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} 
+            severity={alertInfo?.severity}>
+                {alertInfo?.message}
+            </Alert>
+        </Snackbar>}
+
         <Dialog open={viewOpen} fullScreen onClose={()=>navigate({hash:""})} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
@@ -200,7 +221,7 @@ const DbViewPost = () => {
                 <Button disabled={isFeedbackLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
                     cancel
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
-                <Button disabled={isFeedbackLoading || feedback?.length==0} onClick={sendFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
+                <Button disabled={isFeedbackLoading || feedback?.length===0} onClick={()=>sendFeedback()} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
                     {isFeedbackLoading ? <CircularProgress/> :'submit feedback'}
                 </Button>
                 </div>
@@ -221,17 +242,18 @@ const DbViewPost = () => {
             </Button><br/>
             { postType!=='pr'&& 
             <Button variant='contained' fullWidth sx={{textTransform:'none', display:'flex',flexDirection:'column',backgroundColor:'error.dark'}}
-            onClick={()=>{setDelConfirm(true);}}>
+            onClick={()=>setDelConfirm(true)}>
                 <Typography variant='button' fontWeight='600'>Delete</Typography>
             </Button>}
             </>}
             
         </div>
         }
+
         </div>
         <Dialog
             open={approveConfirm || delConfirm}
-            onClose={()=>{setApproveConfirm(false);setDelConfirm(false);}}
+            onClose={()=>{setApproveConfirm(false);setDelConfirm(false)}}
         >
             <DialogTitle>
             {approveConfirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
@@ -249,10 +271,11 @@ const DbViewPost = () => {
             </DialogContentText>
             </DialogContent>
             <DialogActions>
-            <Button onClick={()=>{setApproveConfirm(false);setDelConfirm(false);}} color='secondary' 
+            <Button onClick={()=>{setApproveConfirm(false);setDelConfirm(false)}} 
+            color='secondary' 
                 variant='outlined' disabled={isDeleteLoading || isApproveLoading}>Disagree
             </Button>
-            <Button onClick={approveConfirm ? sendApprove : delConfirm ? sendDelete : ()=>{}} 
+            <Button onClick={approveConfirm ? ()=>sendApprove() : delConfirm ? ()=>sendDelete() : ()=>{}} 
                 variant='contained' color={delConfirm?'error':'secondary'}
                 disabled={isDeleteLoading || isApproveLoading} >
                 {isDeleteLoading || isApproveLoading ? <CircularProgress/> : 'agree'}
@@ -264,6 +287,7 @@ const DbViewPost = () => {
         {editOpen&&<DbEditPost open={editOpen} setOpen={setEditOpen} postType={postType} slug={slug} />}
 
         </Dialog>
+    </>
     )
 }
 

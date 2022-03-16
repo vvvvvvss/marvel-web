@@ -51,14 +51,14 @@ export const getProfile = async(req, res)=>{
 
 export const getSubmissionsBlog = async (req, res)=>{
     try {
-        const returnedBlogPosts = await blogs.find({authorId:req.user.id})
+        const LIMIT = 3;
+        const returnedBlogPosts = await blogs.find({authorId:req?.user?.id})
                                 .sort({_id:-1})
-                                .skip((Number(req.query.page)-1)*3)
-                                .limit(3).select("-content -coverPhoto -tags -feedback")
+                                .skip((Number(req.query?.page)-1)*LIMIT)
+                                .limit(LIMIT).select("-content -coverPhoto -tags -feedback")
                                 .lean().exec();
         // console.log(await blogs.db.db.admin().command({getLastRequestStatistics : 1}));
-        const total = await blogs.countDocuments({ authorId : req.user.id}).lean();
-        return res.json({status : '200', total : (Math.ceil(total/3)), submissions : returnedBlogPosts});        
+        return res.json({status : '200', posts : returnedBlogPosts});        
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message : 'Something happened idk wat'});
@@ -67,16 +67,17 @@ export const getSubmissionsBlog = async (req, res)=>{
 
 export const getSubmissionsPr = async (req, res)=>{
     try {
-        const condition = (req.user.enrollmentStatus==='ACTIVE') &&
-                            ( req.user.currentRole === 'STU');
-        if(!condition) return res.json({message : 'you cannot be doing this', staus:'404'});
-        
-        const returnedPRs = await prs.find({ $and : [{authorId : req.user.id}, {courseCode : req.user.currentStuCourse}]})
-                                    .sort({_id:-1})
-                                    .select("-content -feedback -tags").lean().exec();
-        return res.json({status : '200', submissions : returnedPRs, total : 1});
+        const LIMIT = 3;
+        const returnedPRs = await prs.find({ 
+            $and : [{authorId : req?.user?.id}, 
+                    {courseCode : req?.user?.enrollmentStatus==='INACTIVE' ? {$exists: 1}: req?.user?.currentStuCourse}
+            ]})
+            .sort({_id:-1})
+            .limit(LIMIT)
+            .select("-content -feedback -tags").lean().exec();
+        return res.json({status : '200', posts : returnedPRs});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({message : 'Something happened idk wat', status : 'BRUH'});
     }
 }
@@ -84,17 +85,16 @@ export const getSubmissionsPr = async (req, res)=>{
 export const getSubmissionsRsa = async (req, res) => {
     try {
         const {page} = req.query;
-        const condition = req.user.currentRole==='INS'&&req.user.enrollmentStatus==='ACTIVE';
-        if(!condition) return res.json({message: 'Access denied.', status:'404'});
+        const LIMIT = 3;
+        const returnedRsa = await rsa.find({ 
+            $and : [{authorId: req.user.id}, 
+            {courseCode: {$in : req.user.enrollmentStatus==="INACTIVE"? {$exists:1}: req.user.currentInsCourse}}]})
+            .skip((Number(page)-1)*LIMIT).limit(LIMIT)
+            .select("-_id -content -tags -feedback").lean().exec();
 
-        const returnedRsa = await rsa.find({ $and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]})
-                                    .skip((Number(page)-1)*3).limit(3)
-                                    .select("-_id -content -tags -feedback").lean().exec();
-
-        const total = await rsa.countDocuments({$and : [{authorId: req.user.id}, {courseCode: {$in : req.user.currentInsCourse}}]});
-        return res.json({submissions : returnedRsa, total: (Math.ceil(total/3)), status:'200'});
+        return res.json({posts : returnedRsa, status:'200'});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({status:'404', message:'Something went wrong :('});
     }
 }

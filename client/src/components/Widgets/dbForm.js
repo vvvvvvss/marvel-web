@@ -20,11 +20,12 @@ const DbForm = () => {
     const navigate = useNavigate(); 
     const queryClient = useQueryClient();
     const authUser = useSelector(state => state.auth.authUser);
-    const formOpen = params?.mode=='form';
+    const formOpen = params?.mode==='form';
     const formType = params?.type || 'none' ;
-    if(!["pr", "blog", "rsa"].includes(formType)&&formOpen ||
-      authUser?.currentRole=="STU"&&formType=='rsa'||
-      authUser?.currentRole=="INS"&&formType=='pr'){ navigate({hash:""}); }
+    if((!["pr", "blog", "rsa"].includes(formType)&&formOpen) ||
+      (authUser?.currentRole==="STU"&&formType==='rsa')||
+      ((authUser?.currentRole==="INS"&&formType==='pr')&&formOpen)
+      ){ navigate({hash:""}); }
 
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''
@@ -33,27 +34,31 @@ const DbForm = () => {
     const [editorTab, setEditorTab] = useState("write");
     const [alertInfo, setAlertInfo] = useState({open:false, message:''})
 
-    useEffect(() => {
-      setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
-    }, [params])
+    // useEffect(() => {
+    //   setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
+    // }, [params])
     
-
     const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
       onSuccess:(response)=>{
         if(["404","403","BRUH","401"].includes(response?.status)){
           alert("Something went wrong. Could'nt create. Reason: Bad request");
         }else{
           queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
-          //TODO: update subs feed
+          queryClient.setQueriesData([{nature:'feed', place:'dashboard', widget:'subs', postType:formType}],
+            (prev)=>{
+              const ref = prev;
+              //TODO: sub in subs widget
+            }
+          );
           navigate({hash:""});
-          setAlertInfo({open:true, message:"Successfully Posted!"});
+          setAlertInfo({open:true, message:"Posted! 🚀🚀"});
         }
       },
       onError:()=>{
         alert("Could'nt post. Something went wrong on our side.");
         navigate({hash:""});
       }
-    })
+    });
 
     const handleImageUpload = async (imageList) => {
       const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -78,13 +83,14 @@ const DbForm = () => {
 
     return (
         <>
-        <Snackbar open={alertInfo?.open} autoHideDuration={6000} TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+        {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={8000} 
+        TransitionComponent={(props)=><Slide direction="up" {...props}/>}
         anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
         onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
-          <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity="success" sx={{ width: '100%' }}>
+          <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity="success">
             {alertInfo?.message}
           </Alert>
-        </Snackbar>
+        </Snackbar>}
         <Dialog open={formOpen} fullScreen onClose={()=>{setFormData({title:'',content:'',courseCode:'',coverPhoto:'',tags:[]});navigate({hash:""})}} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>

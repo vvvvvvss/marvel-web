@@ -1,26 +1,51 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { Typography, Paper, Tab, Tabs, Pagination, Skeleton} from "@mui/material";
-import {getSubmissions} from '../../actions/dashboard.js';
-import DbViewPost from "./dbViewPost.js";
-import DbEditPost from "./dbEditPost.js";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Typography, Paper, Tab, Tabs, Skeleton, Button, 
+    IconButton, Alert, Snackbar, Slide
+} from "@mui/material";
 import { Box } from "@mui/system";
 import PostCard from '../PostCard.js'
+import { useInfiniteQuery, useQueryClient } from "react-query";
+import { getSubmissions } from "../../API/index.js";
+import CachedIcon from '@mui/icons-material/Cached';
 
 const DbSubmissions = () => {
-    const {submissions, isSubLoading, viewPostOpen, editPostOpen} = useSelector(state => state.dashboard);
-    const {authUser} = useSelector(state => state.auth)
-    const dispatch = useDispatch();
+    const {authUser} = useSelector(state => state.auth);
     const [tab, setTab] = useState(authUser?.currentRole==='STU' ? 'pr' : 'rsa');
-    const [page , setPage] = useState(1);
+    const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
     
-    useEffect(() => {
-        dispatch(getSubmissions(tab, page));
-    }, [tab, page]);
-
+    const {data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching} = useInfiniteQuery(
+        [{nature:'feed',place:'dashboard',widget:'subs',postType:tab}],
+        ({pageParam=1})=>(getSubmissions(tab, pageParam)),
+    {
+        getNextPageParam : (lastResult, results) => {
+            if(lastResult?.posts?.length< 3){
+                return undefined;
+            }else{
+                return results?.length+1;
+            }
+        },
+    });
     return (
     <>
-        <Paper variant='widget'  >
+        {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={6000} 
+            TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+            anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+            onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+            <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity={alertInfo?.severity}>
+                {alertInfo?.message}
+            </Alert>
+        </Snackbar>}
+        <Paper variant='widget' sx={{position:'relative'}}>
+        <IconButton disabled={isRefetching}
+        sx={{position:'absolute', top:'5px',right:'5px', color:'secondary.main'}} 
+        onClick={async()=>{
+            setAlertInfo({open:true, message:'Refreshing Submission Widget.', severity:'info'});
+            await refetch();
+            setAlertInfo({open:true, message:'Submission widget has been Refreshed', severity:'success'});
+        }}>
+            <CachedIcon/>
+        </IconButton>
         <Typography variant='widget-heading'>submissions</Typography>
         <br/><br/>
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
@@ -33,31 +58,37 @@ const DbSubmissions = () => {
         <Tab label="Blog posts" value='blog'/>
         </Tabs>
         <br/>
-        { isSubLoading ? 
+        { isLoading ? 
         <>
-        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
-        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'12px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'8px', width:'100%', height:'90px',marginTop:'15px'}} /> 
+        <Skeleton animation='wave' variant='rectangular' sx={{borderRadius:'8px', width:'100%', height:'90px',marginTop:'15px'}} /> 
         </> 
          :
-        <div style={{display:'grid', gridTemplateColumns:'1fr',gap:'15px'}}>
+        <div style={{display:'grid', gridTemplateColumns:'1fr', gap:'15px'}}>
 
-        {!submissions?.[tab==='pr' ? 'prs' : 'others']?.length ? 
-        <Typography variant='caption'>
-        {`You have not submitted any ${tab==='pr' ? 'Project Reports' : tab==='blog' ? 'Blog Posts' : 'Resource Articles'}${((tab==='pr' || tab==='rsa')&&authUser?.enrollmentStatus==='ACTIVE') ? ' for this Course' : ''}.`}
+        {data?.pages?.[0]?.posts?.length===0 ? 
+        <Typography variant='caption' sx={{width:'100%',display:'flex',justifyContent:'center',color:'#a1a1a1',height:'100px', alignItems:'center'}} >
+            Crickets. Its empty here.
         </Typography> :
-        <Box sx={{display:'grid', gridTemplateColumns: '1fr', gap:'15px'}}  >
-        {submissions?.[tab==='pr' ? 'prs' : 'others']?.map((sub, i)=>(
-            <PostCard type={tab} post={sub} scope='dashboard' variant='smol' key={i} />
-        ))} </Box>}
+        <Box sx={{display:'grid', gridTemplateColumns: '1fr', gap:'15px'}}>
+        {data?.pages?.map((result, ia)=>(
+            <Box sx={{display:'grid', gridTemplateColumns: '1fr', gap:'15px'}} key={ia} >
+                {result?.posts?.map((post, ib)=>(
+                    <PostCard type={tab} post={post} scope='dashboard' variant='smol' key={ib} />
+                ))}
+            </Box>
+        ))
+        } 
+        </Box>}
          
-        {(tab==='blog'|| tab==='rsa') && 
-        <Pagination count={submissions?.total} variant="outlined" page={page} 
-        color="secondary" onChange={(e, page)=>(setPage(page))}
-        style={{justifySelf:'center'}}/>}
+       {isFetchingNextPage ?
+       <Skeleton variant="text" width={'100%'} animation='wave' /> :
+        <Button disabled={!hasNextPage} variant='text'
+        onClick={()=>{fetchNextPage()}} >
+            {hasNextPage ? 'Load more' : "that's it"}
+        </Button>}
         </div>} 
         </Paper>
-        {viewPostOpen && <DbViewPost/>}
-        {editPostOpen && <DbEditPost/>}
     </>
     )
 }

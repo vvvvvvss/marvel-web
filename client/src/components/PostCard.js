@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 
 const PostCard = ({type, post, variant, scope}) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const handleShare = () => {
         try {
           navigator.clipboard.writeText(`${window.location.origin}/${type}/${post?.slug}`);

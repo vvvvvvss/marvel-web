@@ -7,11 +7,11 @@ const projectReportSchema = mongoose.Schema({
     // IDENTITY DATA. CANNOT DIRECTLY EDIT
     authorId: { type : String, required : true },
     authorName : { type : String, required : true },
-    authorSlug : { type : String},
+    authorSlug : { type : String, required:true},
     authorImage : {type : String},
-    level : {type : Number},
-    courseCode : {type : String},
-    domain : {type : String},
+    level : {type : Number, required:true},
+    courseCode : {type : String, required:true},
+    domain : {type : String, required:true},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
 
     // EDITABLE DATA
