@@ -81,7 +81,7 @@ const DbViewPost = () => {
             if(["403","404","BRUH"].includes(response?.status)){
                 alert("Something went wrong and we could'nt delete. Reason: Bad request.");
             }else{
-                queryClient.removeQueries([postType, slug], {exact:true});
+                queryClient.setQueryData([postType, slug], ()=>({post:null, status:'404'}));
                 queryClient.setQueriesData([{nature:'feed',postType:postType}], (prev)=>{
                     const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
                     if(newData?.pages?.[0]?.posts?.length===0){

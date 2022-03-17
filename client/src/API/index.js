@@ -14,12 +14,12 @@ export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${
 export const getProfileData = async (id, scope)=>API.get(`/get/profile/${id}?scope=${scope}`);
 export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/${id}`, newProfile);
 export const createPost = async (formData, formType) => (await API.post(`/create/${formType}`,formData)).data;
-export const getSubmissions = async (type,page) => (await API.get(`/get/submissions/${type}?page=${page}`)).data;
+export const getSubmissions = async (type,page, filter) => (await API.get(`/get/submissions/${type}?page=${page}&title=${filter?.title}&courseCode=${filter?.courseCode}`)).data;
 
 export const getPost = async (type, id) => (await (API.get(`/get/${type}/${id}`))).data;
 
 export const editPost = async (formData, id, type)=> (await API.post(`/update/${type}/${id}`, formData)).data;
-export const getToReview = async (tab, page, courseFilter)=> API.get(`/get/toreview/${tab}?page=${page}&crsfltr=${courseFilter || 'none'}`);
+export const getToReview = async (tab, page, filter)=> (await API.get(`/get/toreview/${tab}?page=${page}&title=${filter?.title}&courseCode=${filter?.courseCode}`)).data;
 export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
 export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);
 export const toggleSub = async (course, level) => API.post(`/action/togglesub/${course}?level=${level}`);

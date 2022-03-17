@@ -52,13 +52,17 @@ export const getProfile = async(req, res)=>{
 export const getSubmissionsBlog = async (req, res)=>{
     try {
         const LIMIT = 3;
-        const returnedBlogPosts = await blogs.find({authorId:req?.user?.id})
-                                .sort({_id:-1})
-                                .skip((Number(req.query?.page)-1)*LIMIT)
-                                .limit(LIMIT).select("-content -coverPhoto -tags -feedback")
-                                .lean().exec();
+        const returnedBlogPosts = await blogs.find(
+            {$and:[{authorId:req?.user?.id}, 
+                {title:req?.query?.title ? new RegExp(req?.query?.title, 'i') : {$exists : 1}},
+            ]
+            })
+            .sort({_id:-1})
+            .skip((Number(req.query?.page)-1)*LIMIT)
+            .limit(LIMIT).select("-content -coverPhoto -tags -feedback")
+            .lean().exec();
         // console.log(await blogs.db.db.admin().command({getLastRequestStatistics : 1}));
-        return res.json({status : '200', posts : returnedBlogPosts});        
+        return res.json({status : '200', posts : returnedBlogPosts});
     } catch (error) {
         console.log(error);
         return res.json({status : 'BRUH', message : 'Something happened idk wat'});
@@ -70,7 +74,8 @@ export const getSubmissionsPr = async (req, res)=>{
         const LIMIT = 3;
         const returnedPRs = await prs.find({ 
             $and : [{authorId : req?.user?.id}, 
-                    {courseCode : req?.user?.enrollmentStatus==='INACTIVE' ? {$exists: 1}: req?.user?.currentStuCourse}
+                    {courseCode : req?.user?.enrollmentStatus==='INACTIVE' ? {$exists: 1}: req?.user?.currentStuCourse},
+                    {title: req?.query?.title ? new RegExp(req?.query?.title, "i") : {$exists: 1}}
             ]})
             .sort({_id:-1})
             .limit(LIMIT)
@@ -88,7 +93,11 @@ export const getSubmissionsRsa = async (req, res) => {
         const LIMIT = 3;
         const returnedRsa = await rsa.find({ 
             $and : [{authorId: req.user.id}, 
-            {courseCode: {$in : req.user.enrollmentStatus==="INACTIVE"? {$exists:1}: req.user.currentInsCourse}}]})
+            {courseCode: {$in : req.user.enrollmentStatus==="INACTIVE"? {$exists:1}: req.user.currentInsCourse}},
+            {title: req?.query?.title ? new RegExp(req?.query?.title, "i") : {$exists: 1}},
+            {courseCode: !["","All"].includes(req?.query?.courseCode) ? req?.query?.courseCode : {$exists: 1}}
+        ]})
+            .sort({_id:-1})
             .skip((Number(page)-1)*LIMIT).limit(LIMIT)
             .select("-_id -content -tags -feedback").lean().exec();
 
@@ -156,36 +165,43 @@ export const getRsa = async (req, res) => {
 
 export const getToReviewPrs = async (req, res) => {
     try {
-        const courseArray = (req.query?.crsfltr==='none' || req.query?.crsFltr==='') ? 
-                            req.user?.currentInsCourse : 
-                            req.query?.crsFiltr?.split(',');
+    const LIMIT = 6;
+    const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') 
+                    && ["All","",...req?.user?.currentInsCourse].includes(req?.query?.courseCode);
 
-        const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') 
-                        && courseArray.some((c)=>(req.user.currentInsCourse.includes(c)));
+    if(!condition) return  res.json({status:'403', message:'Access denied.'});
 
-        if(!condition) return  res.json({status:'403', message:'Access denied.'});
+    const returnedPrs = await prs.find(
+        {$and : [{reviewStatus : 'PENDING'},
+        {courseCode : ["All",""].includes(req?.query?.courseCode) ? {$in: req?.user?.currentInsCourse} : req?.query?.courseCode},
+        {title: req?.query?.title==="" ? {$exists:1} : new RegExp(req?.query?.title, "i")}
+        ]}
+        )
+        .sort({_id:-1}).skip((Number(req?.query?.page)-1)*LIMIT)
+        .limit(LIMIT).select("-content -tags -feedback").lean().exec();
 
-        const returnedPrs = await prs.find({$and : [{reviewStatus : 'PENDING'},{courseCode : {$in : courseArray}}]})
-                                    .sort({_id:-1}).skip((Number(req.query.page)-1)*5)
-                                    .limit(5).select("-content -tags -feedback").lean().exec();
+// console.log( await user.db.db.admin().command({getLastRequestStatistics : 1})); 
 
-    // console.log( await user.db.db.admin().command({getLastRequestStatistics : 1})); 
-
-        return res.json({status : '200', posts : returnedPrs});
+    return res.json({status : '200', posts : returnedPrs});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({message:'Something went wrong:('});
     }
 }
 
 export const getToReviewBlogs = async (req, res) => {
     try {
+        const LIMIT = 6;
         const condition = (req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS');
         if(!condition) return res.json({message: 'Access denied.', status:'403'});
 
-        const returnedBlogs = await blogs.find({$and: [{reviewStatus: 'PENDING'},{authorCourseCode: {$in : [...req.user.currentInsCourse, "NA"]}}]})
-                                        .sort({_id:1}).skip((Number(req.query.page)-1)*5)
-                                        .limit(5).select("-content -coverPhoto -tags -feedback").lean().exec();
+        const returnedBlogs = await blogs.find({$and: 
+            [{reviewStatus: 'PENDING'},
+            {authorCourseCode: {$in : [...req.user.currentInsCourse, "NA"]}},
+            {title: req?.query?.title==="" ? {$exists:1} : new RegExp(req?.query?.title, "i")}
+        ]})
+        .sort({_id:1}).skip((Number(req.query.page)-1)*LIMIT)
+        .limit(LIMIT).select("-content -coverPhoto -tags -feedback").lean().exec();
         return res.json({status: '200', posts: returnedBlogs});
     } catch (error) {
         console.log(error);

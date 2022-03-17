@@ -44,12 +44,11 @@ const DbForm = () => {
           alert("Something went wrong. Could'nt create. Reason: Bad request");
         }else{
           queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
-          queryClient.setQueriesData([{nature:'feed', place:'dashboard', widget:'subs', postType:formType}],
-            (prev)=>{
-              const ref = prev;
-              //TODO: sub in subs widget
-            }
-          );
+          queryClient.invalidateQueries([{nature:'feed', place:'dashboard', widget:'subs', postType:formType, authUser:authUser?.id }]);
+          queryClient.invalidateQueries([{nature:'feed',place:'profile', ProfileSlug:authUser?.slug, postType:formType}]);
+          if(formType==='rsa'){
+            queryClient.invalidateQueries([{nature:'feed', place:'course', courseCode:formData?.courseCode}]);
+          }
           navigate({hash:""});
           setAlertInfo({open:true, message:"Posted! 🚀🚀"});
         }
