@@ -2,6 +2,7 @@
 
 [postType, slug] for posts. no scope. 
 'auth' for auth
+['hasSubmittedPrFor', {authUser:<googleId>}]
 [{
     nature:'feed | null', //feed is required for matching all lists of posts with postType
     place:"dashboard | profile | course | search | explore", 

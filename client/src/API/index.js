@@ -15,6 +15,7 @@ export const getProfileData = async (slug, scope)=>(await API.get(`/get/profile/
 export const updateProfile = async (slug, newProfile)=>(await API.post(`/update/profile/${slug}`, newProfile)).data;
 export const createPost = async (formData, formType) => (await API.post(`/create/${formType}`,formData)).data;
 export const getSubmissions = async (type,page, filter) => (await API.get(`/get/submissions/${type}?page=${page}&title=${filter?.title}&courseCode=${filter?.courseCode}`)).data;
+export const hasSubmittedPr = async ()=>(await API.get("/meta/hasSubmittedPr")).data;
 
 export const getPost = async (type, id) => (await (API.get(`/get/${type}/${id}`))).data;
 

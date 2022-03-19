@@ -10,6 +10,7 @@ import searchRoutes from './routes/searchRoutes.js'
 import getRoutes from './routes/getRoutes.js';
 import updateRoutes from './routes/updateRoutes.js';
 import createRoutes from './routes/createRoutes.js';
+import metaRoutes from './routes/metaRoutes.js';
 import cloudinary from 'cloudinary';
 import actionRoutes from './routes/actionRoutes.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
@@ -45,6 +46,7 @@ app.use('/create', createRoutes);
 app.use('/action', actionRoutes);
 app.use('/feed', feedRoutes);
 app.use('/search', searchRoutes);
+app.use('/meta', metaRoutes)
 
 //connecting to cosmos
 const PORT = process.env.PORT || 3000;
