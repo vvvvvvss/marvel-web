@@ -44,8 +44,7 @@ export const updateBlog = async (req, res) => {
             newImage = (await cloudinary.v2.uploader.upload(req.body.coverPhoto , 
                 {resource_type: "image", public_id: `blog/${existingBlog._id}`,
                                     overwrite: true, secure : true})).secure_url;
-            //delete old photo
-            await cloudinary.uploader.destroy(`blog/${existingBlog?._id}`, function(result) { });
+         
         }else {newImage = existingBlog?.coverPhoto};
         const cleanContent = sanitize(req.body.content, {
             allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
