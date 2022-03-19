@@ -10,9 +10,9 @@ API.interceptors.request.use((req) => {
 })
 
 export const auth = async (token) => API.post('/auth', {token : token});
-export const getCourseData = async (courseCode, scope)=> API.get(`/get/course/${courseCode}?scope=${scope}`);
-export const getProfileData = async (id, scope)=>API.get(`/get/profile/${id}?scope=${scope}`);
-export const updateProfile = async (id, newProfile)=>API.post(`/update/profile/${id}`, newProfile);
+export const getCourseData = async (courseCode, scope)=> (await API.get(`/get/course/${courseCode}?scope=${scope}`)).data;
+export const getProfileData = async (slug, scope)=>(await API.get(`/get/profile/${slug}?scope=${scope}`)).data;
+export const updateProfile = async (slug, newProfile)=>(await API.post(`/update/profile/${slug}`, newProfile)).data;
 export const createPost = async (formData, formType) => (await API.post(`/create/${formType}`,formData)).data;
 export const getSubmissions = async (type,page, filter) => (await API.get(`/get/submissions/${type}?page=${page}&title=${filter?.title}&courseCode=${filter?.courseCode}`)).data;
 
@@ -20,9 +20,9 @@ export const getPost = async (type, id) => (await (API.get(`/get/${type}/${id}`)
 
 export const editPost = async (formData, id, type)=> (await API.post(`/update/${type}/${id}`, formData)).data;
 export const getToReview = async (tab, page, filter)=> (await API.get(`/get/toreview/${tab}?page=${page}&title=${filter?.title}&courseCode=${filter?.courseCode}`)).data;
-export const submitFeedback = async (fb, id, type)=> API.post(`/action/feedback/${type}/${id}`,{fb : fb});
-export const approve = async (id, type) => API.post(`/action/approve/${type}/${id}`);
-export const toggleSub = async (course, level) => API.post(`/action/togglesub/${course}?level=${level}`);
+export const submitFeedback = async (fb, id, type)=> (await API.post(`/action/feedback/${type}/${id}`,{fb : fb})).data;
+export const approve = async (id, type) => (await API.post(`/action/approve/${type}/${id}`)).data;
+export const toggleSub = async (course, level) => (await API.post(`/action/togglesub/${course}?level=${level}`)).data;
 
 export const getSearchFeed = async (type, domain, title, courseCode, authorName, tags, page, scope) => 
 (await (

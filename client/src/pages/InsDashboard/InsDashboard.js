@@ -10,7 +10,6 @@ import DbViewPost from '../../components/Widgets/dbViewPost.js';
 import useHashParams from '../../utils/hooks/useHashParams.js';
 
 const InsDashboard = () => {
-    const params = useHashParams();
     return (
         <>
         <Paper variant='window' sx={{padding: "85px 20px 75px 20px", display: "flex", justifyContent: "center"}}>

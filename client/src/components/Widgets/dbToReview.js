@@ -6,7 +6,6 @@ import {useInfiniteQuery} from "react-query";
 import { getToReview } from "../../API/index.js";
 import CachedIcon from '@mui/icons-material/Cached';
 
-
 const DbToReview = () => {
     const {authUser} = useSelector(state => state.auth);
     const [tab, setTab] = useState('pr');
@@ -76,7 +75,9 @@ const DbToReview = () => {
             <TextField sx={{width:'100%'}}
             size="small" value={temp} onChange={(e)=>setTemp(e?.target?.value)}
             placeholder={'Filter by Title'} />
-            <Button sx={{width:'100%'}} variant='outlined' onClick={()=>setFilter({...filter, title:temp})}>Set</Button>
+            <Button sx={{width:'100%'}} variant='outlined' onClick={()=>setFilter({...filter, title:temp})}>
+                GO
+            </Button>
             </span>
             <br/>
             {isLoading ? 

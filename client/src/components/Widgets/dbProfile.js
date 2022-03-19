@@ -1,37 +1,60 @@
-import { Avatar, Paper,Typography, Chip, TextField, Button, Skeleton } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import {useEffect, useState} from 'react';
-import {getProfileData, updateProfile} from '../../actions/dashboard.js';
+import { Avatar, Paper,Typography, Chip, TextField, Button, Skeleton, Slide, Alert, Snackbar } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useState} from 'react';
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {getProfileData, updateProfile} from "../../API/index.js"
 
 const DbProfile = () => {
     const {authUser} = useSelector(state => state.auth);
-    const dispatch = useDispatch();
-    const {profile, isProfileLoading} = useSelector(state => state.dashboard);
-
-    useEffect(() => {
-        dispatch(getProfileData(authUser?.slug, 'dashboard'));
-    }, [authUser])
-
     const [changed, setChanged] = useState(false);
-    const [profileCopy, setProfileCopy] = useState(profile);
+    const [profileCopy, setProfileCopy] = useState({});
+    const queryClient = useQueryClient();
+    const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
+    //updating
+    const {mutate:sendUpdate, isLoading:isUpdating} = useMutation(()=>(updateProfile(authUser?.slug, profileCopy)),
+    {
+        onSuccess:(response)=>{
+            setChanged(false);
+            queryClient.setQueryData([{profileSlug:authUser?.slug, scope:'display'}], {...response, status:'200'});
+            setProfileCopy(response?.profile);
+            setAlertInfo({open:true, message:'Profile updated successfully! 🚀', severity:'success'});
+        },
+        onError:()=>(setAlertInfo({open:true, message:"Something went wrong. couldn't wpdate profile.", severity:'error'})),
+    })
+    //feetching
+    const {data, isLoading} = useQuery([{profileSlug:authUser?.slug, scope:'display'}],
+        ()=>getProfileData(authUser?.slug, 'display'),
+        {
+            onSuccess:(response)=>{
+                if(["404","403","400","BRUH"].includes(response?.status)){
+                setAlertInfo({open:true, message:'Something went wrong', severity:'error'});
+                }else{
+                    setProfileCopy(response?.profile);
+                }
+            },
+            onError:()=>(setAlertInfo({open:true, message:"Something went wrong. couldn't fetch profile", severity:'error'}))
+        }
+    );
 
-    const handleSave=()=>{
-        dispatch(updateProfile(profile?.id, profileCopy));
-        setChanged(false);
-    }
-    useEffect(() => {
-        setProfileCopy(profile);
-    }, [profile])
     return (
         <>
+        {alertInfo?.open && 
+        <Snackbar open={alertInfo?.open} autoHideDuration={6000} 
+            TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+            anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+            onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+            <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity={alertInfo?.severity}>
+                {alertInfo?.message}
+            </Alert>
+        </Snackbar>}
         <Paper variant='widget' style={{height:'max-content',}}>
             <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center', minWidth:'100%'}}>
-            <Typography variant='widget-heading'>Public Profile</Typography>
+            <Typography variant='widget-heading'>Profile</Typography>
             <Chip size='small' variant='outlined' color='primary' label={authUser?.currentRole==='STU'?'STUDENT':'INSTRUCTOR'}></Chip>
             </div>
             <br/>
 
-            { isProfileLoading ? 
+            { isLoading ? 
             <div style={{display: 'grid',gridTemplateColumns:'1fr 5fr',columnGap:'20px'}}>
                 <Skeleton variant='circular' animation='wave' sx={{width:60,height:60}}/>
                 <div>
@@ -67,11 +90,11 @@ const DbProfile = () => {
                 fullWidth size='small' color='secondary'/><br/><br/>
                 
                 {/* BUTTONS  */}
-                {changed && <Button variant='contained' size='small' onClick={handleSave}
+                {changed && <Button variant='contained' size='small' onClick={()=>sendUpdate()}
                 color='secondary'>Save</Button>
                 }&nbsp;&nbsp;&nbsp;&nbsp;
                 { changed && 
-                <Button variant='contained' size='small' onClick={()=>{setChanged(false);setProfileCopy(profile)}}
+                <Button variant='contained' size='small' onClick={()=>{setChanged(false);setProfileCopy(data?.profile)}}
                 color='secondary'>Cancel</Button>
                 }
                 </div>  

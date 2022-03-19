@@ -48,7 +48,16 @@ const DbViewPost = () => {
             if(["403","404","BRUH"].includes(response?.status)){
                 alert("Something went wrong and we could'nt submit feedback. Reason: Bad request.");
             }else{
-                //TODO: filter in toreview widget
+                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                }
+                );
+                queryClient.invalidateQueries([{nature:'feed', place:'profile', profileSlug:post?.authorSlug, postType:postType}]);
                 navigate({hash:""});
             }
         },
@@ -64,7 +73,16 @@ const DbViewPost = () => {
             if(["403","404","BRUH"].includes(response?.status)){
                 alert("Something went wrong and we could'nt approve. Reason: Bad request.");
             }else{
-                //filter in toreview widget
+                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                }
+                );
+                queryClient.invalidateQueries([{nature:'feed', place:'profile', profileSlug:post?.authorSlug, postType:postType}]);
                 navigate({hash:""});
             }
         },
@@ -196,9 +214,9 @@ const DbViewPost = () => {
             <br/>
             <Divider/>
             <br/>
-            { authUser?.currentRole==='STU' && <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
+            { authUser?.currentRole==='STU' && 
             <Chip label={postType==='rsa' ? 'PUBLIC' : post?.reviewStatus } color={postType==='rsa'?'success': colorDecide(post?.reviewStatus)} variant='filled'/> 
-            </Typography>}
+           }
             <br/>
             { (authUser?.currentRole==='INS' && post?.authorId !== authUser?.id) &&
             <>

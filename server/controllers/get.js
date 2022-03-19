@@ -9,42 +9,36 @@ export const getCourse = async ( req, res) =>{
         const {id} = req.params;
         const {scope} = req.query;
         let returnedCourse = {};
-        if(scope==='dashboard'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -intro -caption -courseDuration').lean().exec();
-        }else if(scope==='switch'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id submissionStatus totalLevels').lean().exec();
+        if(scope==='subStatus'){
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('submissionStatus totalLevels courseCode').lean().exec();
         }else if(scope==='overview'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id -levels -submissionStatus').lean().exec();
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-levels -rankingScore -submissionStatus').lean().exec();
         }else if(scope==='levels'){
-            returnedCourse = await course.findOne({courseCode: id.trim()}).select('-_id levels');
-        } else{
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-_id').lean().exec();
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('levels courseCode').lean().exec();
+        }else{
+            return res.json({status: '400', message:'scope is required.'});
         }
         if(!returnedCourse) return res.json({status : '404'});
         return res.json({status : '200', course : returnedCourse});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
+        return res.json({status:'BRUH', message:'Something went wrong.'});
     }
 }
 
 export const getProfile = async(req, res)=>{
     try {
         const {id} = req.params;
-        const {scope} = req.query;
 
-        let returnedProfile;
-        if(scope==='dashboard'){
-            returnedProfile = await user.findOne({slug : id}).select('bio gitHub website linkedIn id slug -_id enrollmentStatus').exec();
-        }else if(scope==='page'){
-            returnedProfile = await user.findOne({slug: id})
-            .select("-_id slug name profilePic id currentRole currentStuCourse currentInsCourse currentLevel bio gitHub website linkedIn enrollmentStatus").exec();
-        }
+        const returnedProfile = await user.findOne({slug: id})
+            .select("-email -marvelId -roleHistory -rights").lean().exec();
+        
         if((!returnedProfile || returnedProfile?.enrollmentStatus==='UNKNOWN')|| 
         returnedProfile?.enrollmentStatus==='BANNED') return res.json({status : '404'});
         
         return res.json({profile : returnedProfile, status : '200'});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({message:'Something went wrong :(',status:'BRUH'})
     }
 }
@@ -99,7 +93,7 @@ export const getSubmissionsRsa = async (req, res) => {
         ]})
             .sort({_id:-1})
             .skip((Number(page)-1)*LIMIT).limit(LIMIT)
-            .select("-_id -content -tags -feedback").lean().exec();
+            .select("-content -tags -feedback").lean().exec();
 
         return res.json({posts : returnedRsa, status:'200'});
     } catch (error) {

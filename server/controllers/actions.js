@@ -229,21 +229,30 @@ export const toggleSub = async (req, res) => {
     try {
         const condition = (req.user.enrollmentStatus==='ACTIVE'&& req.user.currentRole==='INS')&&
                         (req.user.currentInsCourse.includes(req.params.id));
-        if(!condition) return res.json({message: 'Access denied.', status: '404'});
-        const courseData = await course.findOne({courseCode : req.params.id});
+        if(!condition) return res.json({message: 'Access denied.', status: '403'});
+
+        const courseData = await course.findOne({courseCode : req.params.id}).select("-_id totalLevels submissionStatus").lean().exec();
+        
         if(Number(req.query.level)>courseData?.totalLevels || Number(req.query.level)<=0){
-            return res.json({message: 'Access denied.', status: '404'});
+            return res.json({message: 'Bad request.', status: '400'});
         }
-        courseData.submissionStatus.forLevel = courseData?.submissionStatus?.isAccepting ? 0 : Number(req.query.level);
-        courseData.submissionStatus.isAccepting = !courseData?.submissionStatus?.isAccepting;
-        const newCourseData = await courseData.save();
+
+        const newCourseData = await course.findOneAndUpdate({courseCode:req.params.id},
+            {$set:{
+                "submissionStatus.forLevel" : courseData?.submissionStatus?.isAccepting ? 0 : Number(req.query.level),
+                "submissionStatus.isAccepting" : !courseData?.submissionStatus?.isAccepting   
+                }   
+            },
+            {new:true}
+            );
+        
         return res.json({status: '201', course : {
             totalLevels : newCourseData?.totalLevels,
             submissionStatus : newCourseData?.submissionStatus,
             courseCode : newCourseData?.courseCode
         }});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.json({status :'BRUH', message : 'Something went wrong:('})
     }
 }
