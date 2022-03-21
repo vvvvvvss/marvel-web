@@ -128,7 +128,7 @@ export const approvePR = async (req, res) => {
         const totalLevels = (await course.findOne({courseCode: post.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         const author = await user.findOne({id : post.authorId}).exec();
         //course completed.
-        if((post?.level===author?.currentLevel)&&( post?.level===totalLevels)){
+        if((post?.level===author?.currentLevel&&post?.level===totalLevels)&&author?.currentStuCourse===post?.courseCode){
             // award certificate. done
             const newCert = new certificate({
                 awardeeId : author?.id, awardeeName: author?.name, awardeeSlug: author?.slug,
@@ -164,7 +164,7 @@ export const approvePR = async (req, res) => {
             } catch (error) { console.log(error); }
             return res.json({status : '201', message:'successfully awarded certificate and approved.'});
         //level-up
-        }else if(post?.level==author?.currentLevel && post?.level < totalLevels){
+        }else if((post?.level==author?.currentLevel && post?.level < totalLevels)&&author?.currentStuCourse===post?.courseCode){
             //user proceeds next level done
             author.currentLevel +=1;
             await author.save();
@@ -192,7 +192,7 @@ export const approvePR = async (req, res) => {
 
             return res.json({message: 'Successfully approved. Student proceeded to next level', status:'201'});
         //just approve
-        } else if(post?.level < author?.currentLevel) {
+        } else if(post?.level < author?.currentLevel || author?.currentStuCourse!==post?.courseCode) {
             // post becomes public no change to author. done
             Object.assign(post, { reviewStatus: 'APPROVED', feedback : '' });
             await post.save();

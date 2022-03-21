@@ -6,12 +6,33 @@ import { useSelector } from 'react-redux';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import {useNavigate} from "react-router-dom";
+import { useQuery } from 'react-query';
+import { hasSubmittedPr, getCourseData } from '../../API/index.js';
 
 const Dial = () => {
     const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
     const [dial, setDial] = useState(false);
-    const {syllabus, submissions : {prs}, isSubLoading} = useSelector(state => state.dashboard);
+
+    const {data:courseData, isLoading} = useQuery([{courseCode:authUser?.currentStuCourse, scope:'subStatus'}],
+        ()=>(getCourseData(authUser?.currentStuCourse, 'subStatus')),
+        {
+            onerror : ()=>{
+                alert("Something went wrong");
+            }
+        }
+    );
+
+    const {data:metaDataOfSubmission, isLoading:hasSubmittedPrLoading} = useQuery(['hasSubmittedPr', {authUser:authUser?.id}],
+        ()=>(hasSubmittedPr()),
+        {
+            onerror : ()=>{
+                alert("Something went wrong");
+            }
+        }
+    );
+    const subStatus = courseData?.course.submissionStatus;
+    const hasSubmitted = metaDataOfSubmission?.meta;
 
     return (
         <div>
@@ -31,11 +52,11 @@ const Dial = () => {
                     icon={<NewspaperIcon/>}
                     onClick={()=>(navigate({hash:"#mode=form&type=blog"}))}
                 />
-                 {(authUser?.currentRole==='STU') && (authUser?.currentLevel===syllabus?.submissionStatus?.forLevel) &&
-                 ((syllabus?.submissionStatus?.isAccepting && !prs?.some((i)=>(i?.level === authUser?.currentLevel)))&&!isSubLoading) 
+                 {(authUser?.currentRole==='STU') && (authUser?.currentLevel===subStatus?.forLevel) &&
+                 ((subStatus?.isAccepting && !hasSubmitted?.[authUser?.currentLevel])&&(!isLoading || !hasSubmittedPrLoading)) 
                   &&
                   <SpeedDialAction
-                    tooltipTitle={`Project Report Lv ${syllabus?.submissionStatus?.forLevel}`}
+                    tooltipTitle={`Project Report Lv ${subStatus?.forLevel}`}
                     tooltipOpen  sx={{whiteSpace : 'nowrap'}}
                     icon={<AssignmentIcon/>} 
                     onClick={()=>(navigate({hash:"#mode=form&type=pr"}))}

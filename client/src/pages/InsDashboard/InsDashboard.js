@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import DbProfile from '../../components/Widgets/dbProfile.js';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import DbForm from '../../components/Widgets/dbForm.js';
-import Dial from '../../components/SpeedDial.js';
+import Dial from '../../components/Widgets/SpeedDial.js';
 import DbToReview from '../../components/Widgets/dbToReview.js';
 import AcceptSwitch from '../../components/Widgets/dbAcceptSwitch';
 import {Box} from "@mui/system";

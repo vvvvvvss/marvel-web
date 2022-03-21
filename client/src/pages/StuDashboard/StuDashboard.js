@@ -2,7 +2,7 @@ import { Paper} from '@mui/material'
 import Syllabus from '../../components/Widgets/dbLandT.js';
 import DbProfile from '../../components/Widgets/dbProfile.js';
 import DbProgress from '../../components/Widgets/dbProgress.js';
-import Dial from '../../components/SpeedDial.js';
+import Dial from '../../components/Widgets/SpeedDial.js';
 import DbForm from '../../components/Widgets/dbForm.js';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import { Box } from '@mui/system';

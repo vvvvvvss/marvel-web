@@ -34,9 +34,9 @@ const DbForm = () => {
     const [editorTab, setEditorTab] = useState("write");
     const [alertInfo, setAlertInfo] = useState({open:false, message:''})
 
-    // useEffect(() => {
-    //   setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
-    // }, [params])
+    useEffect(() => {
+      setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
+    }, [params])
     
     const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
       onSuccess:(response)=>{
@@ -48,6 +48,11 @@ const DbForm = () => {
           queryClient.invalidateQueries([{nature:'feed',place:'profile', ProfileSlug:authUser?.slug, postType:formType}]);
           if(formType==='rsa'){
             queryClient.invalidateQueries([{nature:'feed', place:'course', courseCode:formData?.courseCode}]);
+          }else if(formType==='pr'){
+            queryClient.setQueryData(['hasSubmittedPr', {authUser:authUser?.id}], (prev)=>{
+              prev.meta[authUser?.currentLevel] = true;
+              return prev;
+            });
           }
           navigate({hash:""});
           setAlertInfo({open:true, message:"Posted! 🚀🚀"});

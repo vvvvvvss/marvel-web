@@ -54,7 +54,7 @@ const DbSubmissions = () => {
         <br/><br/>
         <Tabs variant='fullWidth' textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
         {(authUser?.currentRole==='STU') && 
-        <Tab label="Project reports" value='pr'/>
+        <Tab label="PRs" value='pr'/>
         }
         {(authUser?.currentRole==='INS') && 
          <Tab label="Res Articles" value='rsa'/>
