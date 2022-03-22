@@ -1,28 +1,53 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 import { Typography, Divider, Chip, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import TaskCard from "./TaskCard.js";
-import {editCourse} from '../actions/other.js';
 import {useParams} from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, memo } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getCourseData, editCourse } from "../../API/index.js";
+//this handles adding task, adding level, deleting level. deleting task and editing level is in TaskCard component.
+//lvIndex and tskIndex start with 0. they are indexes in array.
+//since taskId doesn't matter in these, it is manually set to null in mutation function.
 const LandTPage = () => {
-    const {syllabus, isSyllabusLoading} = useSelector(state => state.dashboard);
     const {authUser} = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    const queryClient = useQueryClient();
     const {id} = useParams();
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectIndex, setSelectIndex] = useState({index:"",id:""});
 
-    const handleModify = (operation, tskIndex, lvIndex)=>{
-        dispatch(editCourse(id , operation, tskIndex,["addLevel","addTask"].includes(operation)?lvIndex: selectIndex.index,0,selectIndex.id));
-    };
-
     useEffect(() => {
         setConfirmOpen(false);
         setSelectIndex({index:"",id:""});     
-    }, [id])
+    }, [id]);
+
+    const {data, isLoading} = useQuery([{courseCode:id, scope:'levels'}],
+        ()=>(getCourseData(id, 'levels')),
+        {
+            onError:()=>(alert("Something went wrong."))
+        }
+    );
+
+    const {mutate:handleModify, isLoading:isMutating} = useMutation(
+        ({operation, tskIndex, lvIndex})=>
+        editCourse(id, operation, tskIndex, operation==='deleteLevel' ? selectIndex.index : lvIndex , null, selectIndex?.id, null),
+        {
+            onSuccess:(response)=>{
+                if(response?.status==='delete-mess'){
+                    alert("Students have submitted Project reports for that level. Deleting that level will render those Project reports meaningless.");
+                }else if(response?.status==='add-mess'){
+                    alert("Students have submitted Project reports for a level in that index. Inserting a level there will cause a shift in levels. Please find alternative ways to do what you are doing.");
+                }else if(response?.status==='500'){
+                    alert("Looks like somebody else is also editing this course right now. Because you both have different versions of data that didn't match, we rejected your request to prevent problems. we have updated your page with latest data.");
+                }else if(['BRUH',"404","403","401"].includes(response?.status)){
+                    alert("Something went wrong:(");
+                }
+                if(["201","500","add-mess","delete-mess"].includes(response?.status)){
+                    queryClient.setQueryData([{courseCode:id, scope:'levels'}], {...response, status:'200'});
+                }
+            }
+        });
 
     return (
         <div>
@@ -37,7 +62,7 @@ const LandTPage = () => {
             </DialogContent>
             <DialogActions>
             <Button onClick={()=>(setConfirmOpen(false))} variant="outlined" color='secondary'>Disagree</Button>
-            <Button onClick={()=>{handleModify('deleteLevel',0);setConfirmOpen(false)}} variant="contained" color="error" >
+            <Button onClick={()=>{handleModify({operation:'deleteLevel',tskIndex: null, lvIndex:selectIndex?.index});setConfirmOpen(false)}} variant="contained" color="error" >
                 Agree
             </Button>
             </DialogActions>
@@ -45,13 +70,13 @@ const LandTPage = () => {
         {/* ZEROTH INDEX LEVEL ADD */}
         {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse.includes(id))&&
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
-            <Chip variant="outlined" onClick={()=>(handleModify('addLevel',0, 0))}
-            clickable label="Add new Level here" color="primary" disabled={isSyllabusLoading} /> 
+            <Chip variant="outlined" onClick={()=>(handleModify({operation:'addLevel',tskIndex: null,lvIndex: 0}))}
+            clickable label="Add new Level here" color="primary" disabled={(isLoading || isMutating)} /> 
         </Divider>}
         <Box sx={{display:'grid',gridTemplateColumns: {xl:'1fr 1fr 1fr',lg:'1fr 1fr',md:'1fr'}, justifyItems:'center',width:{xs:'100%',md:"max-content"},minWidth:{md:'750px',xs:'100%'},gap:'20px', 
-        opacity:`${isSyllabusLoading?'0.4':'1'}`, pointerEvents:`${isSyllabusLoading? 'none':'auto'}`}} >
+        opacity:`${(isLoading || isMutating)?'0.4':'1'}`, pointerEvents:`${(isLoading || isMutating)? 'none':'auto'}`}} >
     
-        {syllabus?.levels?.map((lvl, lvIndex)=>(
+        {data?.course?.levels?.map((lvl, lvIndex)=>(
         <Box key={lvIndex} sx={{maxWidth:'500px',padding:{xs:'16px',sm:'0px'}}}>
         <br/>
         <Typography variant='heading' component='div' style={{justifyContent:'space-between',display:'flex'}} key={lvl.lvIndex}>&nbsp;&nbsp;
@@ -64,16 +89,16 @@ const LandTPage = () => {
         {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
         // zeroth index task add
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
-            <Chip variant="outlined" onClick={()=>(handleModify('addTask',0, lvIndex))}
+            <Chip variant="outlined" onClick={()=>(handleModify({operation:'addTask',tskIndex: 0,lvIndex: lvIndex}))}
             clickable label="Add new Task here"  /> 
         </Divider>}
-        { lvl.tasks.map((tsk, tskIndex)=>{
+        { lvl?.tasks?.map((tsk, tskIndex)=>{
             return(
                 <div key={tskIndex}>
                 <TaskCard tsk={tsk} tskIndex={tskIndex} lvIndex={lvIndex} key={tskIndex}/>
                 {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
                 <Divider  textAlign="center" sx={{marginTop:'15px'}}> 
-                    <Chip variant="outlined" onClick={()=>(handleModify("addTask",tskIndex+1, lvIndex))}
+                    <Chip variant="outlined" onClick={()=>(handleModify({operation:"addTask",tskIndex: tskIndex+1,lvIndex: lvIndex}))}
                     clickable label="Add new Task here"  /> 
                 </Divider>}
                 </div>
@@ -81,7 +106,7 @@ const LandTPage = () => {
         })}
         {(authUser?.currentRole==="INS"&&authUser?.currentInsCourse?.includes(id))&& 
         <Divider textAlign="center" sx={{marginTop:'15px'}}> 
-            <Chip variant="outlined" onClick={()=>(handleModify('addLevel',0, lvIndex+1))}
+            <Chip variant="outlined" onClick={()=>(handleModify({operation:'addLevel',tskIndex: null,lvIndex:lvIndex+1}))}
             clickable label="Add new Level here" color="primary" />
         </Divider>
         }
@@ -93,4 +118,4 @@ const LandTPage = () => {
     )
 }
 
-export default LandTPage;
+export default memo(LandTPage);

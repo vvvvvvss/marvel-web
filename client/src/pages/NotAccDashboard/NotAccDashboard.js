@@ -14,10 +14,10 @@ const NotAccDashboard = () => {
             alignItems: "flex-start"}}>
             <DbProfile/>
             </Box>
-            <DbForm/>
             <Dial/>
         </Paper>
         <DbViewPost/>
+        <DbForm/>
         </>
     )
 }

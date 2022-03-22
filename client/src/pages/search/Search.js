@@ -25,6 +25,16 @@ const Search = () => {
     const [searchCount, setSearchCount] = useState(0);
     const dispatch = useDispatch();
 
+    const [searchFields, setSearchFields] = useState({
+      type:["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
+      domain:["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
+      title: searchParams.get("title") || '',
+      courseCode:searchParams.get("courseCode") || '',
+      authorName:searchParams.get("name") || '',
+      tags:searchParams.get("tags") || '',
+      page:searchParams.get("page") || 1
+    });
+    
     useEffect(() => {
       dispatch({type:'CLEAR_FEED'});
       return () => {

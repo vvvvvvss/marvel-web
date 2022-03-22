@@ -31,7 +31,7 @@ const Dial = () => {
             }
         }
     );
-    const subStatus = courseData?.course.submissionStatus;
+    const subStatus = courseData?.course?.submissionStatus;
     const hasSubmitted = metaDataOfSubmission?.meta;
 
     return (

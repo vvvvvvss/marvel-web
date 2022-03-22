@@ -1,53 +1,64 @@
 import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, AppBar, Toolbar,Button,  TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getCourseData } from '../../actions/dashboard.js';
-import { useDispatch, useSelector } from 'react-redux';
-import {getRsaFeedByCourse} from '../../actions/other.js';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getRsaFeedByCourse, getCourseData } from '../../API/index.js';
 import ShareIcon from '@mui/icons-material/Share';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Markdown from 'markdown-to-jsx';
 import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import PostCard from '../../components/PostCard.js';
-import LandTPage from '../../components/LandTPage.js';
+import LandTPage from './LandTPage.js';
 import { Helmet } from 'react-helmet';
+import { useQuery, useInfiniteQuery } from 'react-query';
 
 const CoursePage = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const {authUser} = useSelector(state => state.auth);
-    const query = new URLSearchParams(useLocation().search);
     const hashParam = useLocation()?.hash;
-    const dispatch = useDispatch();
-    const {isFeedLoading, feed, isOverviewLoading, overview, totalFeedPages} = useSelector((state)=>(state.other));
-    const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&(authUser?.id&&authUser?.enrollmentStatus!=='UNKNOWN') ? 'rsa' : 'levels');
-    const [page, setPage] = useState(Number(query.get('page'))||1);
+    const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");
 
-    useEffect(()=>{
-        dispatch(getCourseData(id.trim(), 'overview', navigate));
-        return () => {
-            dispatch({type:'CLEAR_FEED'});
-            dispatch({type:'CLEAR_OVERVIEW'});
-            dispatch({type:"CLEAR_SYLLABUS"});
+    const {data, isLoading:isOverviewLoading} = useQuery([{courseCode:id, scope:'overview'}], 
+        ()=>(getCourseData(id, 'overview')),
+        {
+            onSuccess:(response)=>{
+                if(["404","403","401","BRUH"].includes(response?.status)){
+                    navigate({pathname:"/404"});
+                }
+            },
+            onError:()=>{
+                alert("Something went wrong while fetching syllabus.");
+            }
         }
-    },[id]);
-
-    useEffect(() => {
-        if(tab==='rsa'){
-            dispatch(getRsaFeedByCourse(id, page, searchTitle))
-        }else if(tab==='levels'){
-            dispatch(getCourseData(id?.trim(), 'levels', navigate));
+    );
+    const overview = data?.course;
+    const {data:feedData, isLoading:isFeedLoading, fetchNextPage, isFetchingNextPage, hasNextPage} = useInfiniteQuery(
+        [{nature:'feed',place:'course',postType:'rsa', courseCode:id, search:searchTitle}], 
+        ({pageParam=1})=>(getRsaFeedByCourse(id, pageParam, searchTitle)),
+        {
+            onError:()=>{
+                alert("Something went wrong while fetching syllabus.");
+            },
+            getNextPageParam:(lastPage, pages)=>{
+                if(lastPage?.feed?.length<6){
+                    return undefined;
+                }else{
+                    return pages?.length+1;
+                }
+            },
+            enabled:!!authUser?.enrollmentStatus!=='UNKNOWN'
         }
-    }, [tab, page, searchTitle, id]);
+    );
 
     const handleShare = () => {
         try {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard successfully.!");
+        alert("Link copied to clipboard!");
         } catch (error) {
             alert("Coud'nt copy link to clipboard :(");
         }
@@ -114,14 +125,15 @@ const CoursePage = () => {
                 }
             }}>
             {`${overview?.intro}`}
-            </Markdown></Typography>}
+            </Markdown>
+            </Typography>}
             </Paper>
         </Paper>
         <Divider/>
         { ((authUser?.id)&&(authUser?.enrollmentStatus!=='UNKNOWN'))&&
         <AppBar position='sticky' sx={{background:'#181818', overflowX:'auto'}}> 
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
-        <Tabs textColor='inherit' value={tab} onChange={(e, value)=>(setTab(value))}>
+        <Tabs textColor='inherit' value={tab} onChange={(e, value)=>{navigate({hash:value==='levels'?'#overview':"#rsa"});setTab(value)}}>
         <Tab label="Levels" value='levels'/>
         <Tab label="Res Articles" value='rsa'/> 
         </Tabs>  
@@ -139,17 +151,20 @@ const CoursePage = () => {
         </span><br/>
         {isFeedLoading ?
         <CircularProgress/>
-         : feed?.length===0 ? 
-        <Typography variant="h6" fontWeight='600' color='#808080'>There are no Resource Articles for this Course yet.</Typography> :
+         : feedData?.pages[0]?.feed?.length===0 ? 
+        <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
         <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px',justifyContent:'center', minWidth:{xs:'100%',sm:'max-content'}, maxWidth:{xs:'400px',sm:'max-content'}}}>
-        {feed?.map((p)=>(
-        <PostCard type='rsa' post={p} scope='else' variant='media' key={p?.slug}/>
+        {feedData?.pages?.map((page, i)=>(
+            page?.feed?.map((p, j)=>(
+                <PostCard type='rsa' post={p} scope='else' variant='media' key={`${i}${j}`}/>
+            ))
         ))}
         </Box>}
         <br/><br/>
-        <Pagination count={totalFeedPages} variant="outlined" page={page} 
-        color="secondary" onChange={(e, page)=>(setPage(page))}
-        style={{justifySelf:'center'}}/>
+        <Button disabled={(!hasNextPage || isFetchingNextPage)||isFeedLoading}
+         onClick={()=>(fetchNextPage())} >
+            {(!hasNextPage) ? "That's it" : "load more"}
+        </Button>
         </Box>}
         <br/><br/><br/>
         </div>

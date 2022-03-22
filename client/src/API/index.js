@@ -30,9 +30,9 @@ export const getSearchFeed = async (type, domain, title, courseCode, authorName,
     API.get(`/search/${type}?domain=${domain || 'none'}&title=${title || 'none'}&courseCode=${courseCode || 'none'}&authorName=${authorName || 'none'}&tags=${tags || 'none'}&page=${page || 1}&scope=${scope || 'none'}`)
 )).data;
 
-export const getRsaFeedByCourse = async (courseCode, page, title)=> API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title || 'none'}`);
-export const getProfileFeed = async (id, tab, page, title) => API.get(`/feed/profile/${tab}/${id}?page=${page}&title=${title || 'none'}`);
+export const getRsaFeedByCourse = async (courseCode, page, title)=> (await API.get(`/feed/rsa/${courseCode}?page=${page}&title=${title}`)).data;
+export const getProfileFeed = async (id, tab, page, title) => (await API.get(`/feed/profile/${tab}/${id}?page=${page}&title=${title}`)).data;
 export const editCourse = async (courseCode, operation, tskIndex, lvIndex, taskId, levelId, content) => (
-    API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex) || 'none'}&lvIndex=${String(lvIndex) || 'none'}&taskId=${taskId || 'none'}&levelId=${levelId || 'none'}`, {content : content || 'none'})
-);
+   await API.post(`/update/course/${operation}/${courseCode}?tskIndex=${String(tskIndex)}&lvIndex=${String(lvIndex)}&taskId=${taskId}&levelId=${levelId}`, {content : content})
+).data;
 export const deletePost = async (id, type)=> (await API.post(`/action/delete/${type.toLowerCase()}/${id}`)).data;
