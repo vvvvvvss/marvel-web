@@ -4,54 +4,53 @@ import Navbar from '../../components/Navbar/Navbar';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@mui/system';
-import {getSearchFeed} from '../../actions/other.js';
+import {getSearchFeed} from '../../API/index.js'
 import { useSearchParams } from 'react-router-dom';
 import PostCard from '../../components/PostCard';
 import UserCard from '../../components/UserCard';
 import CourseCard from '../../components/CourseCard';
 import {Helmet} from 'react-helmet';
+import { useInfiniteQuery } from 'react-query'
 
 const Search = () => {
     const authUser = useSelector(state => state.auth.authUser);
     const [searchParams, setSearchParams] = useSearchParams();
-    const {feed, isFeedLoading, totalFeedPages} = useSelector(state => state.other);
-    const [type, setType] = useState(["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'');
-    const [domain, setDomain] = useState(["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'');
-    const [title, setTitle] = useState(searchParams.get("title") || '');
-    const [courseCode, setCourseCode] = useState(searchParams.get("courseCode") || '');
-    const [authorName, setAuthorName] = useState(searchParams.get("name") || '');
-    const [tags, setTags] = useState(searchParams.get("tags") || '');
-    const [page, setPage] = useState(searchParams.get("page") || 1);
-    const [searchCount, setSearchCount] = useState(0);
-    const dispatch = useDispatch();
 
     const [searchFields, setSearchFields] = useState({
-      type:["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
-      domain:["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
+      type: ["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
+      domain: ["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
       title: searchParams.get("title") || '',
-      courseCode:searchParams.get("courseCode") || '',
-      authorName:searchParams.get("name") || '',
-      tags:searchParams.get("tags") || '',
-      page:searchParams.get("page") || 1
+      courseCode:  searchParams.get("courseCode") || '',
+      authorName: searchParams.get("name") || '',
+      tags: searchParams.get("tags") || '',
     });
     
-    useEffect(() => {
-      dispatch({type:'CLEAR_FEED'});
-      return () => {
-          dispatch({type:'CLEAR_FEED'});
-      }
-    }, [type]);
-
     const handleSearch = () =>{
-      setSearchParams({type, domain, title, courseCode, name: authorName, tags, page});
-      setSearchCount(c=>c+1);
+      setSearchParams({...searchFields});
     }
 
-    useEffect(() => {
-      if(type!==""){
-        dispatch(getSearchFeed(type, domain, title, courseCode, authorName, tags, page));
-      }
-    }, [searchCount])
+    const {data, isLoading:isFeedLoading, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery(
+      [{nature:'feed', place:'search',...searchFields}],
+    ({pageParam=1})=>getSearchFeed(
+      ["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
+      ["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
+      searchParams.get("title") || '',
+      searchParams.get("courseCode") || '',
+      searchParams.get("name") || '',
+      searchParams.get("tags") || '',
+      pageParam, 
+      'search'),
+    {
+      getNextPageParam:(lastPage, pages)=>{
+        if(lastPage?.feed?.length < 6){
+          return pages?.length+1;
+        }else{
+          return undefined;
+        }
+      },
+      enabled: ["course","rsa","pr","user","blog"].includes(searchParams.get("type"))
+    }
+    );
 
     return (
         //entire screen
@@ -75,9 +74,9 @@ const Search = () => {
         <InputLabel id="type">type</InputLabel>
         <Select
           labelId='type'
-          value={type}
+          value={searchFields?.type}
           label="type" sx={{width:'100%',maxWidth:'600px'}}
-          onChange={(e)=>(setType(e.target.value))}
+          onChange={e=>setSearchFields(prev=>({...prev, type: e.target.value}))}
         >
           <MenuItem value="">
             <em>None</em>
@@ -93,14 +92,14 @@ const Search = () => {
         <br/>
         <Box sx={{display:'flex',width: '100%', justifyContent: 'center',flexDirection:{xs:'column',sm:'row'}}}>
         {/* domain */}
-        {(["pr","course","rsa"].includes(type)) &&
+        {(["pr","course","rsa"].includes(searchFields?.type)) &&
         <FormControl sx={{margin:'10px'}}>
         <InputLabel id="domain">domain</InputLabel>
         <Select
-          labelId='domain' disabled={type===''}
-          value={domain}
+          labelId='domain' disabled={searchFields?.type===''}
+          value={searchFields?.domain}
           label="domain" sx={{width:'100%',maxWidth:'600px'}}
-          onChange={(e)=>(setDomain(e.target.value))}
+          onChange={(e)=>setSearchFields(prev=>({...prev, domain: e.target.value}))}
         >
             <MenuItem value="">
             <em>None</em>
@@ -115,59 +114,62 @@ const Search = () => {
         </FormControl>
         }
         {/* title */}
-        {(["pr","blog","rsa"].includes(type))&&
-        <TextField value={title} onChange={(e)=>(setTitle(e.target.value))} 
-        placeholder='Filter by Title' label='Title' sx={{margin:'10px'}} disabled={type===''}/>
+        {(["pr","blog","rsa"].includes(searchFields?.type))&&
+        <TextField value={searchFields?.title} onChange={(e)=>setSearchFields(prev=>({...prev, title: e.target.value}))} 
+        placeholder='Filter by Title' label='Title' sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
         }
         {/* course code  */}
-        {(["pr","rsa","course"].includes(type))&&
-        <TextField value={courseCode} onChange={(e)=>(setCourseCode(e.target.value))} 
-        placeholder='Filter by Course Code' label='Course code' sx={{margin:'10px'}} disabled={type===''}/>
+        {(["pr","rsa","course"].includes(searchFields?.type))&&
+        <TextField value={searchFields?.courseCode} onChange={(e)=>setSearchFields(prev=>({...prev, courseCode: e.target.value}))} 
+        placeholder='Filter by Course Code' label='Course code' sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
         }
         {/* author Name */}
-        {(["pr","rsa","blog","user"].includes(type))&&<>
-        <TextField value={authorName} onChange={(e)=>(setAuthorName(e.target.value))} 
-        placeholder={`${type==='user' ? 'Search by Name' : 'Filter by Author Name'}`} 
-        label={`${type==='user'?'Name' : 'Author name'}`} sx={{margin:'10px'}} disabled={type===''}/><br/></>
+        {(["pr","rsa","blog","user"].includes(searchFields?.type))&&<>
+        <TextField value={searchFields?.authorName} onChange={(e)=>setSearchFields(prev=>({...prev, authorName: e.target.value}))} 
+        placeholder={`${searchFields?.type==='user' ? 'Search by Name' : 'Filter by Author Name'}`} 
+        label={`${searchFields?.type==='user'?'Name' : 'Author name'}`} sx={{margin:'10px'}} disabled={searchFields?.type===''}/><br/></>
         }
         {/* tags */}
-        {(["pr","rsa","blog"].includes(type))&&
-        <TextField value={tags} onChange={(e)=>(setTags(e.target.value))}
+        {(["pr","rsa","blog"].includes(searchFields?.type))&&
+        <TextField value={searchFields?.tags} onChange={(e)=>setSearchFields(prev=>({...prev, tags: e.target.value}))}
         placeholder={`Use Comma (,) to separate tags.`}
-        label={`Tags`} sx={{margin:'10px'}} disabled={type===''}/>
+        label={`Tags`} sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
         }
         </Box>
-        <Button variant='rounded-outlined' disabled={type===''} onClick={handleSearch}>Search</Button>
+        <Button variant='rounded-outlined' disabled={searchFields?.type===''} onClick={handleSearch}>Search</Button>
         </Paper>
         <Divider/>
-        <AppBar position='sticky' sx={{background:'#181818'}}> 
-        <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-            <Pagination count={totalFeedPages} variant="outlined" page={page} 
-            color="secondary" onChange={(e, newPage)=>{setPage(newPage);handleSearch();}}
-            style={{justifySelf:'center'}}/>
-        </Toolbar>
-        </AppBar>
-        <Divider/>
         {/* rest of the page bottom of appbar */}
-        <Box sx={{display:'flex',width: '100%',justifyContent: 'center',margin:'20px 0px 30px 0px'}}>
+        <Box sx={{display:'flex',width: '100%',alignItems: 'center',margin:'20px 0px 30px 0px',flexDirection:'column'}}>
         {/* grid box */}
-        {isFeedLoading ? <CircularProgress/> : 
-        feed?.length===0&&type!=='' ? 
-        <Typography variant="h6" fontWeight='600' sx={{marginTop:'30px'}} color='#808080'>We found nothing.</Typography> : 
+        {isFeedLoading ? 
+        <CircularProgress/> 
+        : 
+        data?.pages?.[0]?.feed?.length===0 && searchFields?.type!=='' ? 
+        <Typography variant="h6" fontWeight='600' sx={{marginTop:'30px'}} color='#808080'>We found nothing.</Typography> 
+        : 
         <Box sx={{display:'grid',gridTemplateColumns: {xs:'1fr',md:'1fr 1fr',xl:'1fr 1fr 1fr',}, gap:'20px', justifyContent:'center'}} >
-        
-        {feed?.map((p,i)=>
-        { if(["pr","blog","rsa"].includes(type)){
-          return <PostCard post={p} type={type} variant='media' scope='else' key={i} />
-        }else if(type==='user'){
-          return <UserCard user={p} key={i} />
-        }else if(type==='course'){
-          return <CourseCard course={p} key={i} />
-        }else return <></>
+  
+        {data?.pages?.map(
+          (page,i)=>(
+            page?.feed?.map((item,j)=>{
+          if(["pr","blog","rsa"].includes(searchFields?.type)){
+            return <PostCard post={item} type={searchFields?.type} variant='media' scope='else' key={`${i}${j}`} />
+          }else if(searchFields?.type==='user'){
+            return <UserCard user={item} key={`${i}${j}`} />
+          }else if(searchFields?.type==='course'){
+            return <CourseCard course={item} key={`${i}${j}`} />
+          }else return <></>
         }
-        )}
+        )
+        ))}
         </Box>
         }
+        <br/>
+        <Button disabled={(!hasNextPage || isFetchingNextPage)||isFeedLoading}
+         onClick={()=>(fetchNextPage())} >
+            {(!hasNextPage) ? "That's it" : "load more"}
+        </Button>
         </Box>
         </div>
         </Paper>
