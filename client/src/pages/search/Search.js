@@ -1,8 +1,5 @@
-import {Paper, Typography,Toolbar, Select, MenuItem, InputLabel, FormHelperText, 
-  FormControl, TextField, Divider, AppBar, Pagination, Button, CircularProgress} from '@mui/material';
+import {Paper, Typography, Divider, Button, CircularProgress} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar';
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@mui/system';
 import {getSearchFeed} from '../../API/index.js'
 import { useSearchParams } from 'react-router-dom';
@@ -11,41 +8,28 @@ import UserCard from '../../components/UserCard';
 import CourseCard from '../../components/CourseCard';
 import {Helmet} from 'react-helmet';
 import { useInfiniteQuery } from 'react-query'
+import Fields from './Fields';
 
 const Search = () => {
-    const authUser = useSelector(state => state.auth.authUser);
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const [searchFields, setSearchFields] = useState({
-      type: ["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
-      domain: ["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
-      title: searchParams.get("title") || '',
-      courseCode:  searchParams.get("courseCode") || '',
-      authorName: searchParams.get("name") || '',
-      tags: searchParams.get("tags") || '',
-    });
-    
-    const handleSearch = () =>{
-      setSearchParams({...searchFields});
-    }
+    const [searchParams, _] = useSearchParams();
 
     const {data, isLoading:isFeedLoading, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery(
-      [{nature:'feed', place:'search',...searchFields}],
+      [{nature:'feed', place:'search'},searchParams?.get("type"),searchParams?.get("domain"),searchParams?.get("title"),searchParams?.get("courseCode"),searchParams?.get("authorName"),searchParams?.get("tags")],
     ({pageParam=1})=>getSearchFeed(
       ["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
       ["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',
       searchParams.get("title") || '',
       searchParams.get("courseCode") || '',
-      searchParams.get("name") || '',
+      searchParams.get("authorName") || '',
       searchParams.get("tags") || '',
       pageParam, 
       'search'),
     {
       getNextPageParam:(lastPage, pages)=>{
         if(lastPage?.feed?.length < 6){
-          return pages?.length+1;
-        }else{
           return undefined;
+        }else{
+          return pages?.length+1;
         }
       },
       enabled: ["course","rsa","pr","user","blog"].includes(searchParams.get("type"))
@@ -69,74 +53,8 @@ const Search = () => {
         <Typography variant='h5' sx={{color:'primary.light',letterSpacing:'0.23em'}}>
             <span style={{fontWeight:'400'}}>SEARCH</span>&nbsp;<span style={{fontWeight:'600',color:'#D3FFFF'}}>MARVEL</span> 
         </Typography>
-        <br/><br/>
-        <FormControl>
-        <InputLabel id="type">type</InputLabel>
-        <Select
-          labelId='type'
-          value={searchFields?.type}
-          label="type" sx={{width:'100%',maxWidth:'600px'}}
-          onChange={e=>setSearchFields(prev=>({...prev, type: e.target.value}))}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={"course"}>Courses</MenuItem>
-          <MenuItem value={"user"}>People</MenuItem>
-          <MenuItem value={"blog"}>Blog posts</MenuItem>
-          <MenuItem value={"pr"}>Project Reports</MenuItem>
-          {(authUser?.id && authUser?.enrollmentStatus!=='UNKNOWN') &&<MenuItem value={"rsa"}>Resource Articles</MenuItem>}
-        </Select>
-        <FormHelperText>What do you want to search for?</FormHelperText>
-        </FormControl>
         <br/>
-        <Box sx={{display:'flex',width: '100%', justifyContent: 'center',flexDirection:{xs:'column',sm:'row'}}}>
-        {/* domain */}
-        {(["pr","course","rsa"].includes(searchFields?.type)) &&
-        <FormControl sx={{margin:'10px'}}>
-        <InputLabel id="domain">domain</InputLabel>
-        <Select
-          labelId='domain' disabled={searchFields?.type===''}
-          value={searchFields?.domain}
-          label="domain" sx={{width:'100%',maxWidth:'600px'}}
-          onChange={(e)=>setSearchFields(prev=>({...prev, domain: e.target.value}))}
-        >
-            <MenuItem value="">
-            <em>None</em>
-            </MenuItem>
-            <MenuItem value={"AI-ML"}>AI-ML</MenuItem>
-            <MenuItem value={"IOT"}>IOT</MenuItem>
-            <MenuItem value={"D-P"}>D-P</MenuItem>
-            <MenuItem value={"CL-CY"}>CL-CY</MenuItem>
-            <MenuItem value={"EV-RE"}>EV-RE</MenuItem>
-        </Select>
-        <FormHelperText>Filter results by Domain.</FormHelperText>
-        </FormControl>
-        }
-        {/* title */}
-        {(["pr","blog","rsa"].includes(searchFields?.type))&&
-        <TextField value={searchFields?.title} onChange={(e)=>setSearchFields(prev=>({...prev, title: e.target.value}))} 
-        placeholder='Filter by Title' label='Title' sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
-        }
-        {/* course code  */}
-        {(["pr","rsa","course"].includes(searchFields?.type))&&
-        <TextField value={searchFields?.courseCode} onChange={(e)=>setSearchFields(prev=>({...prev, courseCode: e.target.value}))} 
-        placeholder='Filter by Course Code' label='Course code' sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
-        }
-        {/* author Name */}
-        {(["pr","rsa","blog","user"].includes(searchFields?.type))&&<>
-        <TextField value={searchFields?.authorName} onChange={(e)=>setSearchFields(prev=>({...prev, authorName: e.target.value}))} 
-        placeholder={`${searchFields?.type==='user' ? 'Search by Name' : 'Filter by Author Name'}`} 
-        label={`${searchFields?.type==='user'?'Name' : 'Author name'}`} sx={{margin:'10px'}} disabled={searchFields?.type===''}/><br/></>
-        }
-        {/* tags */}
-        {(["pr","rsa","blog"].includes(searchFields?.type))&&
-        <TextField value={searchFields?.tags} onChange={(e)=>setSearchFields(prev=>({...prev, tags: e.target.value}))}
-        placeholder={`Use Comma (,) to separate tags.`}
-        label={`Tags`} sx={{margin:'10px'}} disabled={searchFields?.type===''}/>
-        }
-        </Box>
-        <Button variant='rounded-outlined' disabled={searchFields?.type===''} onClick={handleSearch}>Search</Button>
+        <Fields/>
         </Paper>
         <Divider/>
         {/* rest of the page bottom of appbar */}
@@ -145,7 +63,7 @@ const Search = () => {
         {isFeedLoading ? 
         <CircularProgress/> 
         : 
-        data?.pages?.[0]?.feed?.length===0 && searchFields?.type!=='' ? 
+        data?.pages?.[0]?.feed?.length===0 && searchParams.get("type")!=='' ? 
         <Typography variant="h6" fontWeight='600' sx={{marginTop:'30px'}} color='#808080'>We found nothing.</Typography> 
         : 
         <Box sx={{display:'grid',gridTemplateColumns: {xs:'1fr',md:'1fr 1fr',xl:'1fr 1fr 1fr',}, gap:'20px', justifyContent:'center'}} >
@@ -153,11 +71,11 @@ const Search = () => {
         {data?.pages?.map(
           (page,i)=>(
             page?.feed?.map((item,j)=>{
-          if(["pr","blog","rsa"].includes(searchFields?.type)){
-            return <PostCard post={item} type={searchFields?.type} variant='media' scope='else' key={`${i}${j}`} />
-          }else if(searchFields?.type==='user'){
+          if(["pr","blog","rsa"].includes(searchParams.get("type"))){
+            return <PostCard post={item} type={searchParams.get("type")} variant='media' scope='else' key={`${i}${j}`} />
+          }else if(searchParams.get("type")==='user'){
             return <UserCard user={item} key={`${i}${j}`} />
-          }else if(searchFields?.type==='course'){
+          }else if(searchParams.get("type")==='course'){
             return <CourseCard course={item} key={`${i}${j}`} />
           }else return <></>
         }

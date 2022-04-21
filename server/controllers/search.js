@@ -13,8 +13,8 @@ const buildQuery = (queryParam, type)=>{
             ['pr','rsa'].includes(type)&&           {authorName : (!queryParam?.authorName) ? {$exists : 1}: new RegExp(queryParam?.authorName,'i')},
             ['pr','rsa','blog'].includes(type)&&    {tags : (!queryParam?.tags) ? {$exists : 1} : {$in : queryParam?.tags?.split(',').map((tag)=>(new RegExp(tag,'i')))}},
             ['pr','blog'].includes(type)&&          {reviewStatus: 'APPROVED'},
-            ['user'].includes(type)&&               ({name:!queryParam?.name ? {$exists:1} : new RegExp(queryParam?.name,'i')},{enrollmentStatus:{$in:['ACTIVE','INACTIVE','GUEST']}}) //guest is a future feature
-            ['course'].includes(type)&&             {domainName:!queryParam?.domain ? {$exists:1} : new RegExp(queryParam?.domain,'i')}
+            ... ['user'].includes(type)&&               [{name:!queryParam?.authorName ? {$exists:1} : new RegExp(queryParam?.authorName,'i')},{enrollmentStatus:{$in:['ACTIVE','INACTIVE','GUEST']}}], //guest is a future feature
+            ['course'].includes(type)&&             {domainName:!queryParam?.domain ? {$exists:1} : queryParam?.domain}
         ].filter(Boolean)
     };
     return query;
