@@ -8,8 +8,8 @@ API.interceptors.request.use((req) => {
     }
     return req;
 })
-
-export const auth = async (token) => API.post('/auth', {token : token});
+ 
+export const auth = async () => (await API.post('/auth', {token : sessionStorage.getItem('deez')})).data;
 export const getCourseData = async (courseCode, scope)=> (await API.get(`/get/course/${courseCode}?scope=${scope}`)).data;
 export const getProfileData = async (slug, scope)=>(await API.get(`/get/profile/${slug}?scope=${scope}`)).data;
 export const updateProfile = async (slug, newProfile)=>(await API.post(`/update/profile/${slug}`, newProfile)).data;

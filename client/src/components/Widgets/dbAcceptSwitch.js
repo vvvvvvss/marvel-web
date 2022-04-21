@@ -1,17 +1,16 @@
 import { MenuItem, Paper, Typography, Select, Skeleton, Switch, Divider, Snackbar, Slide, IconButton, Alert } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { memo } from "react"; 
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getCourseData, toggleSub } from "../../API/index.js";
 import CachedIcon from '@mui/icons-material/Cached';
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const AcceptSwitch = () => {
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const [course, setCourse] = useState(authUser?.currentInsCourse?.[0]);
     const queryClient = useQueryClient();
     const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
-
 
     const {data, isLoading, refetch, isRefetching, isStale} = useQuery([{courseCode:course, scope:'subStatus'}],
         ()=>(getCourseData(course, 'subStatus')), {staleTime:1000*60*5}

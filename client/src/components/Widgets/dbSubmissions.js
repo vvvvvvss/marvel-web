@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Typography, Paper, Tab, Tabs, Skeleton, Button, 
     IconButton, Alert, Snackbar, Slide, Select, TextField, MenuItem
@@ -8,9 +7,10 @@ import PostCard from '../PostCard.js'
 import { useInfiniteQuery } from "react-query";
 import { getSubmissions } from "../../API/index.js";
 import CachedIcon from '@mui/icons-material/Cached';
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const DbSubmissions = () => {
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const [tab, setTab] = useState(authUser?.currentRole==='STU' ? 'pr' : 'rsa');
     const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
     const [filter, setFilter] = useState({title:'',courseCode:'All'});

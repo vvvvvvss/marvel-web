@@ -2,16 +2,16 @@ import {useState} from 'react';
 import { Backdrop,SpeedDial,SpeedDialAction,} from '@mui/material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
-import { useSelector } from 'react-redux';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import {useNavigate} from "react-router-dom";
 import { useQuery } from 'react-query';
 import { hasSubmittedPr, getCourseData } from '../../API/index.js';
+import useAuth from '../../utils/hooks/useAuth.js';
 
 const Dial = () => {
     const navigate = useNavigate();
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const [dial, setDial] = useState(false);
 
     const {data:courseData, isLoading} = useQuery([{courseCode:authUser?.currentStuCourse, scope:'subStatus'}],
@@ -19,7 +19,8 @@ const Dial = () => {
         {
             onerror : ()=>{
                 alert("Something went wrong");
-            }
+            },
+            enabled: authUser?.currentRole==='STU'
         }
     );
 
@@ -28,7 +29,8 @@ const Dial = () => {
         {
             onerror : ()=>{
                 alert("Something went wrong");
-            }
+            },
+            enabled: authUser?.currentRole==='STU'
         }
     );
     const subStatus = courseData?.course?.submissionStatus;

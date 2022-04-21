@@ -1,13 +1,12 @@
 import {Paper, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Skeleton, Link} from '@mui/material';
-import {useSelector} from 'react-redux';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Markdown from 'markdown-to-jsx';
 import {useQuery} from 'react-query';
 import {getCourseData} from "../../API/index.js";
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from '../RenderMarkdown.js';
 
 const DbLandT = () => {
-    const {authUser} = useSelector(state => state.auth);
-
+    const {authUser} = useAuth();
     const {data, isLoading} = useQuery([{courseCode:authUser?.currentStuCourse, scope:'levels'}], 
         ()=>(getCourseData(authUser?.currentStuCourse, 'levels')),
         {
@@ -47,19 +46,7 @@ const DbLandT = () => {
                         <Typography variant='subtitle2'>{`Task  ${i+1}`}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                            options={{wrapper : 'div',
-                                overrides: {
-                                    p :{ component: Typography , props: {variant : 'body2'}}, 
-                                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}, sx:{color:'primary.light'}},
-                                    img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
-                                    iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
-                                    code : { component:Typography ,props : { variant:'code-small' }},
-                                    blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px', margin:"10px"} }}
-                                }
-                            }}>
-                            {tsk?.description}
-                            </Markdown>
+                            <RenderMarkdown content={tsk?.description} />
                         </AccordionDetails>
                     </Accordion>
                 )

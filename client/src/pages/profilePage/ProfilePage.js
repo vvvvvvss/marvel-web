@@ -2,7 +2,6 @@ import { Typography, Paper, Divider, Avatar, Chip, IconButton, AppBar, Toolbar, 
         Snackbar, Slide, Alert} from "@mui/material";
 import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import  {useSelector} from "react-redux";
 import { useState, useMemo } from "react";
 import { Box } from "@mui/system";
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -14,12 +13,13 @@ import PostCard from "../../components/PostCard";
 import { Helmet } from "react-helmet";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { getProfileFeed, getProfileData } from "../../API/index.js";
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const ProfilePage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const {id} = useParams();
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const [tab, setTab] = useState(['#pr','#blog','#cert','#rsa'].includes(location?.hash) ? location?.hash?.slice(1) : 'blog');
     const [searchTitle, setSearchTitle] = useState("");
     const [titleField, setTitleField] = useState("");

@@ -4,12 +4,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
-import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
-import sanitizer from 'sanitize-html';
-import he from 'he';
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getPost, editPost } from "../../API/index.js";
+import RenderMarkdown from "../RenderMarkdown.js";
+
 
 const DbEditPost = ({postType, slug, open, setOpen}) => {
     const queryClient = useQueryClient()
@@ -120,22 +119,7 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
                 onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
                 generateMarkdownPreview={markdown =>
                     Promise.resolve(
-                    <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                    options={{
-                    wrapper : 'div',
-                    overrides: {
-                        p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                        a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                        img : { props : {width : '100%',height:'150px',style:{objectFit:'cover'} }},
-                        iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
-                        code : { component:Typography ,props : { variant:'code-small' }}
-                    },
-                }}>
-                { he.decode(sanitizer(`${markdown}`, {
-                        allowedTags: ['iframe','br','strong'], allowedAttributes: { 'iframe': ['src'] },
-                        allowedIframeHostnames: ['www.youtube.com'], nestingLimit : 5
-                }))}
-                </Markdown>
+                        <RenderMarkdown content={markdown} />
                 ).catch(()=>(alert("could not parse your markdown")))
                 }
                 />

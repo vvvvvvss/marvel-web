@@ -1,15 +1,14 @@
 import { CircularProgress, Paper, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import InsDashboard from "./InsDashboard/InsDashboard";
 import NotAccDashboard from "./NotAccDashboard/NotAccDashboard";
 import StuDashboard from "./StuDashboard/StuDashboard";
 import { Helmet } from "react-helmet";
+import useAuth from "../utils/hooks/useAuth";
 
 const DbStage = () => {
-    const {authUser, isAuthLoading} = useSelector(state => state.auth);
-  
+    const {authUser, isLoading:isAuthLoading} = useAuth();
     return( 
     <>
     <Helmet>

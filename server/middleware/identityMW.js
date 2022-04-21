@@ -12,6 +12,7 @@ try {
         const ticket = await gClient.verifyIdToken({idToken : token, audience : process.env.CIENT_ID});
         userData = ticket.getPayload();
     } catch (error) {
+        console.log(error);
         if(error.message=='The verifyIdToken method requires an ID Token'){
             return res.json({status : '401', message : 'Access denied. No token'});
         }else{

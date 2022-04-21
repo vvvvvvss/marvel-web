@@ -1,10 +1,7 @@
 import { Paper, Typography, Chip, Avatar, Link, Divider, Button, Skeleton, 
     CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import moment from 'moment';
-import Markdown from 'markdown-to-jsx';
-import he from 'he';
 import { useParams, Link as Rlink } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
@@ -16,9 +13,11 @@ import DbEditPost from "../../components/Widgets/dbEditPost.js";
 import { Helmet } from "react-helmet";
 import {useQuery, useQueryClient} from 'react-query'
 import {getPost, getSearchFeed} from "../../API/index.js";
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../../components/RenderMarkdown.js";
 
 const PostPage = ({viewPostType:postType}) => {
-    const authUser = useSelector(state => state.auth.authUser);
+    const {authUser} = useAuth();
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -113,20 +112,7 @@ const PostPage = ({viewPostType:postType}) => {
         <Divider/>
         <br/>
         <Typography component={'div'} sx={{fontSize:'14px', lineHeight:'36px'}} >
-        <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start',maxWidth:'650px'}} 
-            options={{
-            wrapper : 'div',
-            overrides: {
-                p :{ component: Typography , props: {variant : 'body1'}}, 
-                a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'} },
-                img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'} }},
-                iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
-                code : { component:Typography ,props : { variant:'code-small' }},
-                blockquote : {props : { style:{backgroundColor:'#001C28',borderRadius:'16px', padding:'20px 20px 20px 20px',margin:'0px'}}}
-            },
-        }}>
-        { he.decode(`${post?.content}`) }
-        </Markdown>
+        <RenderMarkdown content={post?.content} />
         </Typography>
         <br/>
         <Divider/>

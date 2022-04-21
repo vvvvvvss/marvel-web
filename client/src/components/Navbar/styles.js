@@ -20,11 +20,6 @@ const useStyles = makeStyles((theme) => ({
            fontSize:'16px',
        }
     },
-    logout : {
-        [theme.breakpoints.down(480)]:{
-            display:"none"
-         },
-    },
 }));
 
 export default useStyles;

@@ -1,11 +1,11 @@
 import { Avatar, Paper,Typography, Chip, TextField, Button, Skeleton, Slide, Alert, Snackbar } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {getProfileData, updateProfile} from "../../API/index.js"
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const DbProfile = () => {
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const [changed, setChanged] = useState(false);
     const [profileCopy, setProfileCopy] = useState({});
     const queryClient = useQueryClient();

@@ -1,25 +1,23 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, 
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Chip, 
   CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar, Slide } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
-import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
-import sanitizer from 'sanitize-html';
 import { createPost } from "../../API/index.js";
-import he from 'he';
 import useHashParams from "../../utils/hooks/useHashParams.js"
 import { useNavigate } from "react-router-dom";
 import {useMutation, useQueryClient} from "react-query";
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../RenderMarkdown.js";
 
 const DbForm = () => {
     const params = useHashParams();
     const navigate = useNavigate(); 
     const queryClient = useQueryClient();
-    const authUser = useSelector(state => state.auth.authUser);
+    const {authUser} = useAuth();
     const formOpen = params?.mode==='form';
     const formType = params?.type || 'none' ;
     if((!["pr", "blog", "rsa"].includes(formType)&&formOpen) ||
@@ -158,24 +156,7 @@ const DbForm = () => {
           onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
           generateMarkdownPreview={markdown =>
             Promise.resolve(
-              <Markdown style={{fontFamily: 'Montserrat',fontSize: '16px',lineHeight:'26px'}} 
-            options={{
-              wrapper : 'div',
-              overrides: {
-                  p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                  a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
-                  img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                  iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
-                  code : { component:Typography ,props : { variant:'code-small' }},
-                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }}
-              },
-          }}>
-            {
-            he.decode( sanitizer(markdown, {
-                allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
-                allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-              }) ) }
-          </Markdown>
+              <RenderMarkdown content={markdown} />
           ).catch(()=>(alert("could'nt parse your markdown.")))
           }
         />

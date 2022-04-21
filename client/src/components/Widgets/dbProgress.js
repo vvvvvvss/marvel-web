@@ -1,11 +1,10 @@
 import { Paper, Typography, Stepper, Step, StepLabel, Skeleton, Alert } from "@mui/material";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
 import { getCourseData, hasSubmittedPr } from "../../API/index.js";
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const DbProgress = () => {
-    const {authUser} = useSelector(state => state.auth);
-
+    const {authUser} = useAuth();
     const {data:courseData, isLoading} = useQuery([{courseCode:authUser?.currentStuCourse, scope:'subStatus'}],
         ()=>(getCourseData(authUser?.currentStuCourse, 'subStatus')),
         {

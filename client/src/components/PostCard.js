@@ -2,7 +2,6 @@ import { Card, IconButton, CardMedia, CardContent, Typography, CardActions, Butt
 import ShareIcon from '@mui/icons-material/Share';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
 
 const PostCard = ({type, post, variant, scope}) => {
     const navigate = useNavigate();

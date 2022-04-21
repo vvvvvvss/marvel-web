@@ -1,12 +1,9 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link,
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar,
      Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle,
     Alert, Snackbar, Slide} from "@mui/material";
-import { useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import moment from 'moment';
-import Markdown from 'markdown-to-jsx';
-import he from 'he';
 import { Box } from "@mui/system";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getPost, deletePost, approve, submitFeedback } from "../../API/index.js";
@@ -14,6 +11,9 @@ import useHashParams from "../../utils/hooks/useHashParams.js";
 import { useNavigate } from "react-router-dom";
 import colorDecide from "../../utils/functions/colorDecide.js";
 import DbEditPost from './dbEditPost.js';
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../RenderMarkdown.js";
+
 const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
 const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
@@ -23,7 +23,8 @@ const DbViewPost = () => {
     const slug = hashParams?.slug;
     const postType = hashParams?.type;
     const navigate = useNavigate();
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
+
     if((!["pr", "blog", "rsa"].includes(postType)&&viewOpen) ||
       (authUser?.currentRole==="STU"&&postType==='rsa')){ navigate({hash:""}); }
 
@@ -186,22 +187,7 @@ const DbViewPost = () => {
             <Divider/>
             <br/>
             <Typography component={'div'} lineHeight={'26px'}>
-            <Markdown style={{fontSize: '14px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
-                options={{
-                wrapper : 'div',
-                overrides: {
-                    p :{ component: Typography , props: {variant : 'body1'}}, 
-                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}}},
-                    img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'}}},
-                    iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'}}},
-                    code : { component:Typography ,props : { variant:'code-small' }},
-                    blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}},
-                    table : {props:{style : {border : '1px solid #D3FFFF'}}},
-                    hr : {props : {style : {width:'100%'}}}
-                }
-                }}>
-            { he.decode(`${post?.content}`) }
-            </Markdown>
+            <RenderMarkdown content={post?.content} />
             </Typography>
             <br/>
             <Divider/>

@@ -7,7 +7,6 @@ import DbToReview from '../../components/Widgets/dbToReview.js';
 import AcceptSwitch from '../../components/Widgets/dbAcceptSwitch';
 import {Box} from "@mui/system";
 import DbViewPost from '../../components/Widgets/dbViewPost.js';
-import useHashParams from '../../utils/hooks/useHashParams.js';
 
 const InsDashboard = () => {
     return (

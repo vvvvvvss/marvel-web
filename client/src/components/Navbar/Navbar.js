@@ -2,9 +2,7 @@ import { Button, Chip, CircularProgress, Divider, Drawer, IconButton, List, List
 import { Slide, AppBar, Toolbar, Typography, Avatar, Box
       } from "@mui/material";
 import GoogleLogin, {GoogleLogout} from 'react-google-login';
-import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {auth} from '../../actions/auth.js'
 import useStyles from './styles.js';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
@@ -17,23 +15,29 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import tokenRefresher from "../../utils/functions/refresher.js";
+import useAuth from "../../utils/hooks/useAuth.js";
+import { useQueryClient } from "react-query";
 
 const Navbar = () => {
     const trigger = useScrollTrigger();
     const location = useLocation();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {authUser, isAuthLoading} = useSelector((state)=> state.auth);
+    const queryClient = useQueryClient();
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const styles = useStyles();
+    const styles = useStyles(); 
     const [crsListOpen, setCrsListOpen] = useState(false);
+    const {authUser, isLoading:isAuthLoading, fetchAuth} = useAuth();
 
     const googleSuccess = (res)=> {
-        dispatch(auth(res, navigate));
+        sessionStorage.setItem('deez', res.tokenId);
+        fetchAuth();
+        tokenRefresher(res);
     }
 
     const logout = ()=>{
-        dispatch({type : 'LOGOUT'});
+        sessionStorage.clear();
+        queryClient.removeQueries(['auth'], {exact:true})
     }
     
     const googleError = (err) => {
@@ -62,7 +66,7 @@ const Navbar = () => {
                         : <> </>
                     }
                     <div>
-                    { !authUser?.id ? 
+                    { !authUser?.id &&
                     <GoogleLogin
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
                     render={(renderProps) => (
@@ -72,18 +76,6 @@ const Navbar = () => {
                         </Button>)}
                     onSuccess={googleSuccess} onFailure={googleError} 
                     cookiePolicy="single_host_origin" isSignedIn={true}/>
-                    :
-                    <div className={styles.logout}>
-                    <GoogleLogout 
-                    clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
-                    render={(renderProps) => (
-                        <Button onClick={renderProps.onClick} disabled={renderProps.disabled} 
-                        variant='rounded-outlined' className={styles.logoutbutton}>
-                        Logout
-                        </Button>
-                    )}
-                    onLogoutSuccess={logout} onFailure={googleError}/>
-                    </div>
                     }
                     </div>
                 </div>}

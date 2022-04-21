@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 import { Typography, Divider, Chip, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import TaskCard from "./TaskCard.js";
@@ -7,11 +6,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState, memo } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getCourseData, editCourse } from "../../API/index.js";
+import useAuth from "../../utils/hooks/useAuth.js";
+
 //this handles adding task, adding level, deleting level. deleting task and editing level is in TaskCard component.
 //lvIndex and tskIndex start with 0. they are indexes in array.
 //since taskId doesn't matter in these, it is manually set to null in mutation function.
 const LandTPage = () => {
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const queryClient = useQueryClient();
     const {id} = useParams();
     const [confirmOpen, setConfirmOpen] = useState(false);

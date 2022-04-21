@@ -1,23 +1,23 @@
-import { IconButton, Paper, Typography, Divider, Link, Tabs, Tab, AppBar, Toolbar,Button,  TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
+import { IconButton, Paper, Typography, Divider, Tabs, Tab, AppBar, Toolbar,Button,  TextField, CircularProgress, Pagination, Skeleton } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { getRsaFeedByCourse, getCourseData } from '../../API/index.js';
 import ShareIcon from '@mui/icons-material/Share';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import Markdown from 'markdown-to-jsx';
 import { Box } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import PostCard from '../../components/PostCard.js';
 import LandTPage from './LandTPage.js';
 import { Helmet } from 'react-helmet';
 import { useQuery, useInfiniteQuery } from 'react-query';
+import useAuth from "../../utils/hooks/useAuth.js";
+import Intro from './Intro.js'
 
 const CoursePage = () => {
     const {id} = useParams();
     const navigate = useNavigate();
-    const {authUser} = useSelector(state => state.auth);
+    const {authUser} = useAuth();
     const hashParam = useLocation()?.hash;
     const [tab, setTab] = useState(hashParam==='#overview'? 'levels' : hashParam==='#rsa'&&authUser?.enrollmentStatus!=='UNKNOWN' ? 'rsa' : 'levels');
     const [searchTitle, setSearchTitle] = useState("");
@@ -76,7 +76,7 @@ const CoursePage = () => {
         <Paper square elevation={0} sx={{display:'flex',justifyContent:'center', minWidth:'100vw',backgroundColor:'#121212',minHeight:'100vh'}}>
         <div>
         {/* HERO STARTS HERE */}
-        <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100%',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
+        <Paper square elevation={0} sx={{maxWidth:'1580px', display:'grid', gridTemplateColumns: {md:'1fr 1fr',xs:'1fr'},width:'100vw',gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}}}>
             <Paper square elevation={0} sx={{backgroundColor: '#2B0F12', padding:'85px 20px 20px 30px', position:'relative', display:'flex', alignItems:'center',maxHeight:{xs:'450px',sm:'350px'}}}>
             { isOverviewLoading ? <>
                 <Skeleton variant='rectangular' height='350px' animation='wave' sx={{borderRadius:'12px', width:{xs:'100%'},minWidth:{md:'600px',xs:'300px'}}} />
@@ -102,32 +102,8 @@ const CoursePage = () => {
                 <Typography variant='body2' sx={{paddingLeft: '10px',color:'primary.light'}}>{overview?.caption}</Typography>
             </div>}
             </Paper>
-            <Paper square elevation={0} sx={{padding:{md:'85px 30px 20px 30px',xs:'30px 30px 20px 30px'}, maxHeight:{xs:'450px',sm:'350px'},overflowY:'auto',overflowX:'hidden'}}>
-            { isOverviewLoading ? 
-            <>
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
-            <Skeleton variant='text' width='100%' height='32px' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
-            <br/>
-            <Skeleton variant='rectangular' height='200px' width='100%' animation='wave' sx={{borderRadius:'6px', margin:"0px 20px 0px 0px"}} />
-            </>
-            :
-            <Typography component='div' variant='body2' lineHeight='26px' sx={{color:'secondary.light'}}>
-            <Markdown style={{display:'grid',gridTemplateColumns:'1fr',gap:'10px'}} 
-                options={{
-                wrapper : 'div',
-                overrides: {
-                    p :{ component: Typography , props: {variant : 'body2', sx:{color:'secondary.light'}, lineHeight :'26px'}}, 
-                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}},
-                    img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
-                    iframe : { props : {width : '100%', height : '300', frameborder : '0',style:{justifySelf:'center'} }},
-                    code : { component:Typography ,props : { variant:'code-small' }},
-                    blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px',margin:"10px 10px 10px 10px"} }}
-                }
-            }}>
-            {`${overview?.intro}`}
-            </Markdown>
-            </Typography>}
-            </Paper>
+            {/* intro content right side  */}
+            <Intro intro={overview?.intro} isOverviewLoading={isOverviewLoading} />
         </Paper>
         <Divider/>
         { ((authUser?.id)&&(authUser?.enrollmentStatus!=='UNKNOWN'))&&

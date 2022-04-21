@@ -1,10 +1,10 @@
 import { useSearchParams } from 'react-router-dom';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import useAuth from '../../utils/hooks/useAuth.js';
 
 const Fields = () => {
-    const authUser = useSelector(state => state.auth.authUser);
+    const {authUser} = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [searchFields, setSearchFields] = useState({
