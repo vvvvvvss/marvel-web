@@ -84,10 +84,11 @@ const Search = () => {
         </Box>
         }
         <br/>
+        {searchParams.get('type') &&
         <Button disabled={(!hasNextPage || isFetchingNextPage)||isFeedLoading}
          onClick={()=>(fetchNextPage())} >
             {(!hasNextPage) ? "That's it" : "load more"}
-        </Button>
+        </Button>}
         </Box>
         </div>
         </Paper>

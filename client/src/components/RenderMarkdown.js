@@ -15,7 +15,7 @@ const RenderMarkdown = ({content}) => {
                   img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
                   iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                   code : { component:Typography ,props : { variant:'code-small' }},
-                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'} }}
+                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }}
               },
           }}>
             {

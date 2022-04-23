@@ -1,52 +1,58 @@
-import { Paper, Typography, Chip, Avatar, Link, Divider, Button, Skeleton, 
+import { Paper, Typography, Chip, Avatar, Divider, Button, Skeleton, 
     CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import { useState } from "react";
 import moment from 'moment';
 import { useParams, Link as Rlink } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar.js";
 import { Box } from "@mui/system";
-import ShareIcon from '@mui/icons-material/Share';
-import Upvote from '@mui/icons-material/AutoAwesome';
-import CommentIcon from '@mui/icons-material/Comment';
-import PostCard from "../../components/PostCard.js";
 import DbEditPost from "../../components/Widgets/dbEditPost.js";
 import { Helmet } from "react-helmet";
-import {useQuery, useQueryClient} from 'react-query'
-import {getPost, getSearchFeed} from "../../API/index.js";
+import {useQuery, useMutation, useQueryClient} from 'react-query'
+import {getPost, deletePost} from "../../API/index.js";
 import useAuth from "../../utils/hooks/useAuth.js";
 import RenderMarkdown from "../../components/RenderMarkdown.js";
+import Similar from "./Similar.js";
 
 const PostPage = ({viewPostType:postType}) => {
+    const queryClient = useQueryClient();
     const {authUser} = useAuth();
     const {id} = useParams();
     const [delConfirm, setDelConfirm] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const queryClient = useQueryClient();
     //getting post
     const {data:postData, isLoading:isPostLoading, refetch:refetchPost} = useQuery([postType,id], 
         ()=>getPost(postType,id)
     );
     const post = postData?.post; const postStatus = postData?.status;
-    //getting similar posts feed
-    const {data:feedData, isLoading:FeedLoading, isIdle:isFeedIdle} = useQuery(['similar',postType,id], 
-        ()=>getSearchFeed(postType, null, null, null, null, post?.tags?.join(','), 1, 'rec'),
-        {enabled:!!post}
-    )
-    const isFeedLoading = FeedLoading || isFeedIdle;
-    const feed = feedData?.feed;
+
     //retry when user logs in for response 401(login required)
     if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')){
-        queryClient.invalidateQueries([postType,id],{exact:true});
+        refetchPost();
     }
 
-    const handleShare = () => {
-        try {
-            navigator.clipboard.writeText(window.location.href);
-            alert("Link copied to clipboard!");
-        } catch (error) {
-            alert("Coud'nt copy link to clipboard :(");
+    const {mutate:sendDelete, isLoading:isDeleteLoading} = useMutation(()=>(deletePost(post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt delete. Reason: Bad request.");
+            }else{
+                queryClient.setQueryData([postType, id], ()=>({post:null, status:'404'}));
+                queryClient.setQueriesData([{nature:'feed',postType:postType}], (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                });
+                setDelConfirm(false);
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt delete.");
+            setDelConfirm(false);
         }
-    };
+    }
+    );
    
     const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
     const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
@@ -145,47 +151,11 @@ const PostPage = ({viewPostType:postType}) => {
         }
         </>
         }
-        {/* bottom action bar  */}
-        {post?.slug && 
-        <Box sx={{position:"sticky",bottom:'0',height:'35px', backgroundColor:'#181818',width:{xs:'100vw',lg:'100%'},maxWidth:'650px',boxSizing: "border-box",
-        margin:{xs:'0px -20px 0px -20px',lg:'0px'},zIndex:'100',border:'2px solid #313131', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
-            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:`${post?.liked==true ? 'primary.light':'#a1a1a1'}`,fontSize:'10px',cursor:'pointer',fontWeight:`${post?.liked==true ? '600':'500'}`,'&:hover':{color:'primary.light', fontWeight:'600'}}}
-            >
-                <Upvote sx={{height:'16px'}} />&nbsp;{post?.likeCount}{`${post?.likeCount > 1 ? 'LIKES' : 'LIKE'}`}
-            </Typography>
-            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><CommentIcon sx={{height:'16px'}} />&nbsp;COMMENTS</Typography>
-            <Typography variant="caption" sx={{alignItems:'center',letterSpacing:'0.23em',display:'flex',color:'#a1a1a1',fontSize:'10px',cursor:'pointer','&:hover':{color:'secondary.light', fontWeight:'600'}}}><ShareIcon sx={{height:'16px'}} />&nbsp;SHARE</Typography>
-        </Box>}
-        {/*comments */}
-        {/* <Comments level={0} parentPostId={post?.slug}  /> */}
-        {/* end of left part  */}
-        </Box>
-        {/* right part  */}
-        {!['404','403','BRUH'].includes(postStatus)&& 
-        <Box sx={{minWidth:{xs:'200px',lg:'300px'}}}>
-           {isFeedLoading||isPostLoading ?
-           <Skeleton variant="text" animation='wave' /> :
-            <Typography variant="subtitle2" component='div' sx={{color:'#989898',letterSpacing:'0.23em',}}>
-                &nbsp;&nbsp;SIMILAR
-            </Typography>}
-        <br/>
-        <Box sx={{display:'grid', gridTemplateColumns:'1fr',gap:'20px'}}>
-            {isFeedLoading||isPostLoading ? 
-            <>
-            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
-            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
-            <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
-            </>
-            : 
-            feed?.length===1 ? 
-            <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
-            feed?.map((p, i)=>(p?.slug !== id &&
-                <PostCard post={p} variant='media' type={postType} scope='else' key={i} />
-            ))}
-        </Box>
-        </Box>}
-        {/* end of right part  */}
-        </Box>}
+        </Box>{/* end of left part  */}
+
+        <Similar tags={post?.tags} isPostLoading={isPostLoading} postType={postType} id={id} />
+        
+        </Box>}{/* end of right part  */}
 
         {/* editmodal */}
         <DbEditPost open={editOpen} setOpen={setEditOpen} postType={postType} slug={post?.slug} />
@@ -204,14 +174,14 @@ const PostPage = ({viewPostType:postType}) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{setDelConfirm(false);}} color='secondary' 
-            variant='outlined' disabled={true}>not done
+          <Button onClick={()=>setDelConfirm(false)} color='secondary' 
+            variant='outlined' disabled={isDeleteLoading}>Cancel
           </Button>
           <Button 
-        //   onClick={handleDelete} 
+          onClick={()=>sendDelete()} 
             variant='contained' sx={{backgroundColor:'error.dark'}}
-            disabled={true} >
-            {true ? <CircularProgress/> : 'agree'}
+            disabled={isDeleteLoading} >
+            {isDeleteLoading ? <CircularProgress/> : 'agree'}
           </Button>
         </DialogActions>
         </Dialog>
