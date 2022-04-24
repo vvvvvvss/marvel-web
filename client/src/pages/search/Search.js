@@ -14,7 +14,7 @@ const Search = () => {
     const [searchParams, _] = useSearchParams();
 
     const {data, isLoading:isFeedLoading, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery(
-      [{nature:'feed', place:'search'},searchParams?.get("type"),searchParams?.get("domain"),searchParams?.get("title"),searchParams?.get("courseCode"),searchParams?.get("authorName"),searchParams?.get("tags")],
+      [{nature:'feed', place:'search', postType:searchParams?.get("type")},searchParams?.get("domain"),searchParams?.get("title"),searchParams?.get("courseCode"),searchParams?.get("authorName"),searchParams?.get("tags")],
     ({pageParam=1})=>getSearchFeed(
       ["course","rsa","pr","user","blog"].includes(searchParams.get("type")) ? searchParams?.get("type"):'',
       ["AI-ML","D-P","IOT","CL-CY","EV-RE"].includes(searchParams.get("domain")) ? searchParams?.get("domain"):'',

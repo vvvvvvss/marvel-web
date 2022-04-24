@@ -6,7 +6,7 @@ import { Typography, Link } from "@mui/material";
 
 const RenderMarkdown = ({content}) => {
   return (
-    <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'26px'}} 
+    <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px', lineHeight: '1.5'}} 
             options={{
               wrapper : 'div',
               overrides: {

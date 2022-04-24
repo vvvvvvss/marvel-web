@@ -138,10 +138,6 @@ const Navbar = () => {
                     <ListItemIcon><AutoAwesomeIcon/></ListItemIcon>
                     <ListItemText>Explore (coming soon)</ListItemText>
                 </ListItemButton>
-                {/* <ListItemButton onClick={()=>(console.log('profile'))}>
-                    <ListItemIcon><NewspaperIcon/></ListItemIcon>
-                    <ListItemText>Blog</ListItemText>
-                </ListItemButton> */}
                 <ListItemButton onClick={()=>{}}>
                     <ListItemIcon><InfoIcon/></ListItemIcon>
                     <ListItemText>About (coming soon)</ListItemText>
@@ -149,7 +145,7 @@ const Navbar = () => {
                 </List>
             <footer>
                 <Divider/>
-                { authUser?.id && <GoogleLogout 
+                { authUser?.id && <GoogleLogout
                     clientId="458191598671-bhk0llnoseb7phles000g4mccnvepv20.apps.googleusercontent.com"
                     render={(renderProps) => (
                 <ListItemButton onClick={renderProps.onClick} disabled={renderProps.disabled}>

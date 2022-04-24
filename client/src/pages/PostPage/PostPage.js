@@ -12,6 +12,7 @@ import {getPost, deletePost} from "../../API/index.js";
 import useAuth from "../../utils/hooks/useAuth.js";
 import RenderMarkdown from "../../components/RenderMarkdown.js";
 import Similar from "./Similar.js";
+import ActionBar from "./ActionBar.js";
 
 const PostPage = ({viewPostType:postType}) => {
     const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ const PostPage = ({viewPostType:postType}) => {
     if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')){
         refetchPost();
     }
-
+    //delete post
     const {mutate:sendDelete, isLoading:isDeleteLoading} = useMutation(()=>(deletePost(post?._id, postType)),
     {
         onSuccess: (response) => {
@@ -151,6 +152,8 @@ const PostPage = ({viewPostType:postType}) => {
         }
         </>
         }
+        {!isPostLoading && <ActionBar _id={post?._id} title={post?.title} />}
+
         </Box>{/* end of left part  */}
 
         <Similar tags={post?.tags} isPostLoading={isPostLoading} postType={postType} id={id} />
