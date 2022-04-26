@@ -48,7 +48,8 @@ const DbForm = () => {
             queryClient.invalidateQueries([{nature:'feed', place:'course', courseCode:formData?.courseCode}]);
           }else if(formType==='pr'){
             queryClient.setQueryData(['hasSubmittedPr', {authUser:authUser?.id}], (prev)=>{
-              prev.meta[authUser?.currentLevel] = true;
+              prev.meta.hasSubmittedPr = true;
+              prev.meta.reviewStatus = 'PENDING';
               return prev;
             });
           }

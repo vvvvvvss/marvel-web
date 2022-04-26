@@ -49,7 +49,7 @@ const DbViewPost = () => {
             if(["403","404","BRUH"].includes(response?.status)){
                 alert("Something went wrong and we could'nt submit feedback. Reason: Bad request.");
             }else{
-                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                queryClient.setQueriesData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
                 (prev)=>{
                     const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
                     if(newData?.pages?.[0]?.posts?.length===0){
@@ -74,7 +74,7 @@ const DbViewPost = () => {
             if(["403","404","BRUH"].includes(response?.status)){
                 alert("Something went wrong and we could'nt approve. Reason: Bad request.");
             }else{
-                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                queryClient.setQueriesData([{nature:'feed',place:'dashboard', widget:'review', postType:postType, authUser:authUser}],
                 (prev)=>{
                     const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
                     if(newData?.pages?.[0]?.posts?.length===0){

@@ -23,12 +23,21 @@ const DbProgress = () => {
             }
         }
     );
-    const hasSubmitted = metaDataOfSubmission?.meta;
+    const meta = metaDataOfSubmission?.meta;
 
     const Message = ()=>{
-        if(hasSubmitted?.[authUser?.currentLevel]){
-            return <Alert variant="outlined" sx={{fontSize:'12px', borderRadius:'8px'}} severity="success" >You have submitted your project report for current level. Waiting for approval.</Alert>
-        }else if(!hasSubmitted?.[authUser?.currentLevel]){
+        if(meta?.hasSubmittedPr){
+            return( 
+            <Alert variant="outlined" sx={{fontSize:'12px', borderRadius:'8px'}} 
+            severity={meta?.reviewStatus==='PENDING'?'success':'error'} >
+                {meta?.reviewStatus==='PENDING'?
+                `You have submitted your project report for current level. Waiting for approval.`  
+                :
+                `You have recieved a feedback on your project report.`
+                }
+            </Alert>
+            )
+        }else{
             return <Alert variant="outlined" sx={{fontSize:'12px', borderRadius:'8px'}} severity="info" >{`You can submit project report for level ${authUser?.currentLevel}.`}</Alert>
         }
     };

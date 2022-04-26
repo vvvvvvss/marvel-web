@@ -33,7 +33,7 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
         }
     }, [postData])
     //mutation
-    const {mutate:submitEdit, isLoading:isEditLoading, data:editResponse} = useMutation(
+    const {mutate:submitEdit, isLoading:isEditLoading} = useMutation(
         ()=>(editPost(formData, postData?.post?._id, postType)),
         {
             onSuccess: (response)=>{
@@ -41,6 +41,11 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
                     return alert("Could'nt complete your request to edit. Reason: Bad request.");
                 }else{
                     queryClient.setQueryData([postType,slug], (prev)=>({...prev, post:response?.post}));
+                    queryClient.setQueriesData([{nature:'feed',postType:postType}],
+                    (prev)=>{
+                        const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.map((p)=>(p?._id==response?.post?._id ? response?.post : p))}))};
+                        return newData;
+                    });
                     setOpen(false);
                 }
             },

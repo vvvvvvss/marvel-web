@@ -1,24 +1,16 @@
-import course from "../models/course.js";
 import prs from "../models/projectReport.js";
 
 export const hasSubmittedPr = async (req, res)=>{
 try {
     const condition = req?.user?.enrollmentStatus==='ACTIVE'&&req.user.currentRole==='STU'; 
     if(!condition) return res.json({status:'403', message:'Access denied.'});
-    const totalLevels = (await course.findOne({courseCode: req.user?.currentStuCourse}).select("-_id totalLevels").lean().exec())?.totalLevels;
 
-    const meta = {};
 
-    for(let i=1; i<=totalLevels;i++){
-        const subbed = await prs.countDocuments({ $and:[{courseCode: req.user.currentStuCourse},{level:i}]});
-        if(subbed===1){
-            meta[`${i}`]=true;
-        }else{
-            meta[`${i}`]=false;
-        }   
-    }
-
-    return res.json({status:'200',meta:meta})
+    const pr = await prs.findOne({$and:[{authorId:req.user.id},
+                                        {courseCode:req.user.currentStuCourse},
+                                        {level:req.user.currentLevel}]}).select("reviewStatus").lean().exec();
+    
+    return res.json({status:'200',meta:{hasSubmittedPr:!!pr, reviewStatus: pr?.reviewStatus}})
 } catch (error) {
     console.log(error);
     return res.json({status:'BRUH', message:'Something went wrong:('});  

@@ -23,7 +23,7 @@ const Dial = () => {
             enabled: authUser?.currentRole==='STU'
         }
     );
-    const hasSubmitted = metaDataOfSubmission?.meta;
+    const meta = metaDataOfSubmission?.meta;
 
     return (
     <>
@@ -44,7 +44,7 @@ const Dial = () => {
             onClick={()=>(navigate({hash:"#mode=form&type=blog"}))}
         />
             {(authUser?.currentRole==='STU') &&
-            (!hasSubmitted?.[authUser?.currentLevel]&&!hasSubmittedPrLoading) 
+            (!meta?.hasSubmittedPr&&!hasSubmittedPrLoading) 
             &&
             <SpeedDialAction
             tooltipTitle={`Project Report Lv ${authUser?.currentLevel}`}
