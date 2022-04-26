@@ -119,7 +119,7 @@ const PostPage = ({viewPostType:postType}) => {
         <Divider/>
         <br/>
         <Typography component={'div'} sx={{fontSize:'14px', lineHeight:'36px'}} >
-        <RenderMarkdown content={post?.content} />
+        <RenderMarkdown content={post?.content} fontSize='16px' />
         </Typography>
         <br/>
         <Divider/>

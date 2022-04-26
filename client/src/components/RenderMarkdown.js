@@ -6,16 +6,17 @@ import { Typography, Link } from "@mui/material";
 
 const RenderMarkdown = ({content, fontSize}) => {
   return (
-    <Markdown style={{fontFamily: 'Montserrat',fontSize: fontSize || '15px', lineHeight: '1.5'}} 
+    <Markdown style={{fontFamily: 'Montserrat',fontSize: fontSize || '15px', lineHeight: '1.7'}} 
             options={{
               wrapper : 'div',
               overrides: {
-                  p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
+                  p :{ component: Typography , props: {variant : 'body2', lineHeight:'1.7'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                   img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
                   iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
                   code : { component:Typography ,props : { variant:'code-small' }},
-                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }}
+                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }},
+                  li:{ component: Typography , props: {variant : 'body2', lineHeight:'1.7', component:'li'} }
               },
           }}>
             {
