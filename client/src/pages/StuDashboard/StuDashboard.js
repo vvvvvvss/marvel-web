@@ -2,22 +2,13 @@ import { Paper} from '@mui/material'
 import Syllabus from '../../components/Widgets/dbLandT.js';
 import DbProfile from '../../components/Widgets/dbProfile.js';
 import DbProgress from '../../components/Widgets/dbProgress.js';
-import Dial from '../../components/SpeedDial.js';
+import Dial from '../../components/Widgets/SpeedDial.js';
 import DbForm from '../../components/Widgets/dbForm.js';
-import { useSelector} from 'react-redux';
 import DbSubmissions from '../../components/Widgets/dbSubmissions.js';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import DbViewPost from '../../components/Widgets/dbViewPost.js';
 
 const StuDashboard = () => {
-    const {formOpen} = useSelector(state => state.dashboard);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        return () => {
-            dispatch({type:'CLEAR_DASHBOARD'});
-        }
-    }, []);
 
     return (
         <>
@@ -35,8 +26,8 @@ const StuDashboard = () => {
             <DbProfile/>
             </Box>
 
-            { formOpen && <DbForm/>}
-
+            <DbForm/>
+            <DbViewPost/>
             <Dial/>
         </Paper>
         </>

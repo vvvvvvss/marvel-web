@@ -7,10 +7,10 @@ const RSASchema = mongoose.Schema({
     //IDENTITY DATA
     authorId: { type : String, required : true },
     authorName : { type : String, required : true },
-    authorSlug : { type : String},
+    authorSlug : { type : String, required: true},
     authorImage : {type : String},
-    courseCode : {type : String},
-    domain : {type : String},
+    courseCode : {type : String, required: true},
+    domain : {type : String, required: true},
     slug : {type : String, slug : ['title', 'authorName'], unique : true},
 
     // EDITABLE DATA

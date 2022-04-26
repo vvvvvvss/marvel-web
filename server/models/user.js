@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
         startTime : {type : Date},
         stuCourse : {type : String},
         insCourse: {type: [String]}
-    }], //role history should always be appended at the time of assigning roles only end time will be updated automatically
+    }], //role history should always be appended at the time of assigning roles
     rights: { type : String, enum : {values : ['MOD','USER']}, default:'USER'},
     enrollmentStatus : { type : String, enum : {values : ['ACTIVE', 'INACTIVE', 'UNKNOWN','BANNED']}, default : 'UNKNOWN'},
     

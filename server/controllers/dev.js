@@ -92,7 +92,8 @@ export const assignStu = async (req, res) => {
 
 export const play = async (req, res) => {
     try {
-        
+        // const count = await user.find({$and:[{currentRole:'INS'},{currentInsCourse:{$in:['AI-ML-001']}},{enrollmentStatus:'ACTIVE'}]});
+        // return res.json({count});
     
     } catch (error) {
         return res.json(error);

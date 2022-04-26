@@ -1,135 +1,215 @@
-import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar, Link, Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, Avatar,
+     Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle,
+    Alert, Snackbar, Slide} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { getPost, deletePost } from "../../actions/dashboard.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import moment from 'moment';
-import Markdown from 'markdown-to-jsx';
-import he from 'he';
-import { submitFB, approve } from "../../actions/dashboard.js";
 import { Box } from "@mui/system";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getPost, deletePost, approve, submitFeedback } from "../../API/index.js";
+import useHashParams from "../../utils/hooks/useHashParams.js";
+import { useNavigate } from "react-router-dom";
+import colorDecide from "../../utils/functions/colorDecide.js";
+import DbEditPost from './dbEditPost.js';
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../RenderMarkdown.js";
+
+const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
+const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
 
 const DbViewPost = () => {
-    const {viewPostOpen, viewPostId, viewPostType, viewPost, isViewLoading, viewPostScope, isCreateLoading} = useSelector(state => state.dashboard);
-    const dispatch = useDispatch();
-    const {authUser} = useSelector(state => state.auth);
-    const [feedbackOpen, setFeedbackOpen] = useState(false);
+    const hashParams = useHashParams();
+    const viewOpen = hashParams?.mode==='view';
+    const slug = hashParams?.slug;
+    const postType = hashParams?.type;
+    const navigate = useNavigate();
+    const {authUser} = useAuth();
+
+    if((!["pr", "blog", "rsa"].includes(postType)&&viewOpen) ||
+      (authUser?.currentRole==="STU"&&postType==='rsa')){ navigate({hash:""}); }
+
+    const [feedbackOpen, setFeedbackOpen] = useState(false);//feedback textfield open and close
     const [feedback, setFeedback] = useState('');
-    const [confirm, setConfirm] = useState(false);
-    const [delConfirm, setDelConfirm] = useState(false);
+    const [approveConfirm, setApproveConfirm] = useState(false);//approve modal
+    const [delConfirm, setDelConfirm] = useState(false);//delete confirm modal
+    const [editOpen, setEditOpen] = useState(false);
+    const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
+    const queryClient = useQueryClient();
+    //getting post
+    const {data:postData, isLoading:isPostLoading} = useQuery([postType,slug], 
+        ()=>getPost(postType,slug),
+        {enabled:viewOpen}
+    );
+    const post = postData?.post; const postStatus = postData?.status;
+    
 
-    useEffect(() => {
-        if(!viewPost || viewPost?.slug !== viewPostId){
-            dispatch(getPost(viewPostType,viewPostId, viewPostScope));
+    const {mutate:sendFeedback, isLoading:isFeedbackLoading} = useMutation(()=>(submitFeedback(feedback, post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt submit feedback. Reason: Bad request.");
+            }else{
+                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                }
+                );
+                queryClient.invalidateQueries([{nature:'feed', place:'profile', profileSlug:post?.authorSlug, postType:postType}]);
+                navigate({hash:""});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt submit feedback.");
         }
-    }, [ viewPostScope, viewPostType, dispatch]);
-
-    const colorDecide = (status) => {
-        if(status==='PENDING') return 'warning';
-        else if (status==='FLAGGED') return 'error';
-        else if (status==='APPROVED' || 'FEATURED') return 'success';
     }
-    const rsa_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/rsa_legend_g6tbkc.png';
-    const pr_legend = 'https://res.cloudinary.com/marvelweb/image/upload/v1637583504/pr_legend_xaoxm6.png';
+    );
 
-    const submitFeedback = () => {
-        dispatch(submitFB(feedback, viewPost?.slug, viewPostType));
-    };
-
-    const handleApprove = ()=>{
-        dispatch(approve(viewPost?.slug, viewPostType));
-    };
-
-    const handleDelete = ()=>{
-        dispatch(deletePost(viewPost?.slug, viewPostType ,'db'));
+    const {mutate:sendApprove, isLoading:isApproveLoading} = useMutation(()=>(approve(post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt approve. Reason: Bad request.");
+            }else{
+                queryClient.setQueryData([{nature:'feed',place:'dashboard',widget:'review', postType:postType,authUser:authUser}],
+                (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                }
+                );
+                queryClient.invalidateQueries([{nature:'feed', place:'profile', profileSlug:post?.authorSlug, postType:postType}]);
+                navigate({hash:""});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt approve.");
+            setApproveConfirm(false);
+        }
     }
+    );
 
-    console.log(viewPost);
+    const {mutate:sendDelete, isLoading:isDeleteLoading} = useMutation(()=>(deletePost(post?._id, postType)),
+    {
+        onSuccess: (response) => {
+            if(["403","404","BRUH"].includes(response?.status)){
+                alert("Something went wrong and we could'nt delete. Reason: Bad request.");
+            }else{
+                queryClient.setQueryData([postType, slug], ()=>({post:null, status:'404'}));
+                queryClient.setQueriesData([{nature:'feed',postType:postType}], (prev)=>{
+                    const newData = { ...prev, pages: prev?.pages?.map((page)=>({...page, posts: page?.posts?.filter((p)=>(p?._id!==post?._id))}))}
+                    if(newData?.pages?.[0]?.posts?.length===0){
+                        newData?.pages?.shift();
+                    }
+                    return newData;
+                });
+                navigate({hash:""});
+                setDelConfirm(false);
+                setAlertInfo({open:true, message:'Successfully Deleted!',severity:'success'});
+            }
+        },
+        onError: () => {
+            alert("Something went wrong on our side. Could'nt delete.");
+            setDelConfirm(false);
+        }
+    }
+    );
 
     return (
-        <Dialog open={viewPostOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_VIEW'}))} >
+    <>
+        {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={8000} 
+            TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+            anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+            onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+            <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} 
+            severity={alertInfo?.severity}>
+                {alertInfo?.message}
+            </Alert>
+        </Snackbar>}
+
+        <Dialog open={viewOpen} fullScreen onClose={()=>navigate({hash:""})} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_VIEW'});}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>navigate({hash:""})} ><CloseIcon/></IconButton>
             <Typography variant='h6' >
-                {`${viewPostType==='PR'?'Project Report' : viewPostType==='BLOG' ? 'Blog post' : 'Resource Article'}`}
+                {`${postType==='pr'?'Project Report' : postType==='blog' ? 'Blog post' : 'Resource Article'}`}
             </Typography>
         </Toolbar>
         </AppBar>
         <div style={{display:'flex',justifyContent:'center',padding: '0px 20px 30px 20px'}} >
         <div style={{paddingTop:'90px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',maxWidth:'650px'}}>
         
-        {isViewLoading ? <CircularProgress/> :
+        {isPostLoading ? <CircularProgress/> :
+        ["403","404","BRUH"].includes(postStatus)?
+        <Typography variant="h2" sx={{position:'relative',top:'50%',bottom:'50%',color:'#a1a1a1',fontWeight:'900'}} >
+            4😭4
+        </Typography> :
          <div>
-            <div style={{ minWidth: '100%',position:'relative',backgroundColor:'#000000', borderRadius:'12px'}}>
-                <img width='100%' style={{objectFit:'cover', borderRadius:'12px', minWidth:'100%', aspectRatio:'16 / 9',maxHeight:'350px'}} 
-                src={viewPostType==='BLOG'? viewPost?.coverPhoto : viewPostType==='PR' ? pr_legend : rsa_legend} />
-
-                <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%', background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',borderRadius:'12px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-                <Typography sx={{padding:{xs:'20px 12px 0px 12px',md:'20px 30px 0px 30px'},fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'45px'}}}>{viewPost?.title}</Typography><br/>
-                <Box sx={{display:'flex',alignItems:'center',padding:{xs:'0px 12px 12px 12px',md:'0px 30px 20px 30px'},justifyContent:'space-between'}} >
-                    <Box sx={{display:'flex',alignItems: 'center',justifyContent:'flex-start',maxWidth:{xs:'70%',md:'100%'}}}>
-                        <Avatar src={viewPost?.authorImage} alt={viewPost?.authorName} sx={{height:'30px',width:'30px'}} />
-                        <Typography variant='body2' color='#c4c4c4' fontWeight='500'> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;{viewPost?.authorName}&nbsp;&nbsp;{viewPostType==='PR' && <span>&#8226;&nbsp;&nbsp;{`Lv ${viewPost?.level}`}</span>}
-                        {viewPostType==='RSA' && <span>&#8226;&nbsp;&nbsp;{viewPost?.courseCode}</span>}
+            <Box sx={{height:{xs:'auto',lg:'350px'}, width: '100%',position:'relative', 
+            background:`url(${postType==='blog'? post?.coverPhoto : postType==='pr' ? pr_legend :postType==='rsa'? rsa_legend:''})`,
+            maxWidth:'650px',borderRadius:'12px',border:'1px solid #D3FFFF', aspectRatio:'16 / 9', backgroundSize:'cover'}}>
+          
+            <div style={{position:'absolute',left:'0px',bottom:'0px',width: '100%',height:'100%',
+            background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',borderRadius:'12px'}}>
+            <Typography sx={{padding:{xs:'12px 12px 0px 12px',sm:'20px 30px 0px 30px'} ,fontWeight:{xs:'500',lg:'600'},fontSize:{xs:'22px',sm:'36px'}}} >
+                {post?.title}
+            </Typography><br/>
+                <Box sx={{display:'flex',alignItems:'center',padding:{xs:'0px 12px 12px 12px',sm:'0px 30px 20px 30px'},justifyContent:'space-between'}} >
+                    <Box sx={{display:'flex',alignItems:'center',justifyContent:'flex-start'}}>
+                        <Avatar src={post?.authorImage} alt={post?.authorName} sx={{height:{xs:'18px',sm:'30px'},width:{xs:'18px',sm:'30px'},marginRight:'10px'}} />
+                        <Typography variant='body2' color='#c4c4c4' fontWeight='500' sx={{fontSize:{xs:'12px',sm:'14px'}}} > 
+                            {post?.authorName}&nbsp;&nbsp;
+                        {["rsa","pr"].includes(postType) && 
+                            <span>&#8226;&nbsp;&nbsp;{post?.courseCode}</span>
+                        }
+                        {postType==='pr'&&<span>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;{`Level ${post?.level}`}</span>}
                         </Typography>
                     </Box>
-                    <Typography variant='caption' color='#a1a1a1'> 
-                    &nbsp;&nbsp;{moment(viewPost?.createdAt).fromNow()}
+                    <Typography variant='caption' color='#a1a1a1' > 
+                    &nbsp;&nbsp;{moment(post?.createdAt).fromNow()}
                     </Typography>
                 </Box>
-                </div>
             </div>
+        </Box>
             <br/>
-            { (viewPost?.feedback && authUser?.currentRole==='STU') &&
+            { (post?.feedback && authUser?.currentRole==='STU') &&
             <Card>
                 <Typography variant='button' >Feedback :</Typography><br/>
-                <Typography variant='body2' >{viewPost?.feedback}</Typography>
+                <Typography variant='body2' >{post?.feedback}</Typography>
             </Card>
             }
             <br/>
             <Divider/>
             <br/>
             <Typography component={'div'} lineHeight={'26px'}>
-            <Markdown style={{fontSize: '14px',display:'grid',gridTemplateColumns:'1fr',gap:'10px',justifyContent:'start'}} 
-                options={{
-                wrapper : 'div',
-                overrides: {
-                    p :{ component: Typography , props: {variant : 'body1'}}, 
-                    a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}}},
-                    img : { props : {width : '100%',height:'300px',style:{justifySelf:'center',objectFit:'cover'}}},
-                    iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'}}},
-                    code : { component:Typography ,props : { variant:'code-small' }},
-                    blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}},
-                    table : {props:{style : {border : '1px solid #D3FFFF'}}},
-                    hr : {props : {style : {width:'100%'}}}
-                }
-                }}>
-            { he.decode(`${viewPost?.content}`) }
-            </Markdown>
+            <RenderMarkdown content={post?.content} />
             </Typography>
             <br/>
             <Divider/>
             <br/>
             <div style={{display:'flex',justifyContent:'flex-start'}}>
-                 { viewPost?.tags?.map((tag)=>(
+                 { post?.tags?.map((tag)=>(
                 <Chip label={tag} key={tag} variant='outlined' size='medium' color='primary' style={{margin : '4px 8px 4px 0px'}}/>
             ))}
             </div>
             <br/>
             <Divider/>
             <br/>
-            { authUser?.currentRole==='STU' && <Typography component='div' variant='body2' color='#c4c4c4'>Approval status :&nbsp;&nbsp;
-            <Chip label={viewPostType==='RSA' ? 'PUBLIC' : viewPost?.reviewStatus } color={viewPostType==='RSA'?'success': colorDecide(viewPost?.reviewStatus)} variant='filled'/> 
-            </Typography>}
+            { authUser?.currentRole==='STU' && 
+            <Chip label={postType==='rsa' ? 'PUBLIC' : post?.reviewStatus } color={postType==='rsa'?'success': colorDecide(post?.reviewStatus)} variant='filled'/> 
+           }
             <br/>
-            { (authUser?.currentRole==='INS' && viewPost?.authorId !== authUser?.id) &&
+            { (authUser?.currentRole==='INS' && post?.authorId !== authUser?.id) &&
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
-            onClick={()=>(setConfirm(true))}>
-                <Typography variant='button' fontWeight='600' >{`Approve ${(viewPost?.totalLevels===viewPost?.level&&viewPostType==='pr') ? 'and Award Certificate':''}`}</Typography>
-                <Typography variant='caption'>{viewPost?.totalLevels===viewPost?.level&&viewPostType==='PR' ? 'Certificate will be awarded for Course completion.' : viewPostType==='PR'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
+            onClick={()=>(setApproveConfirm(true))}>
+                <Typography variant='button' fontWeight='600' >{`Approve ${(post?.totalLevels===post?.level&&postType==='pr') ? 'and Award Certificate':''}`}</Typography>
+                <Typography variant='caption'>{post?.totalLevels===post?.level&&postType==='pr' ? 'Certificate will be awarded for Course completion.' : postType==='pr'? 'Student proceeds to next level and report becomes public.' : 'Blog becomes public'}</Typography>
             </Button> <br/>
             <Button variant='contained' disabled={feedbackOpen} color='warning' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}} onClick={()=>(setFeedbackOpen(true))} >
                 <Typography variant='button' fontWeight='600'>Flag and provide feedback</Typography>
@@ -142,11 +222,11 @@ const DbViewPost = () => {
                 variant='outlined' color='secondary' label='Feedback' placeholder='your feedback...' multiline maxRows={5} inputProps={{maxLength : 500}}/>
                 <br/>
                 <div>
-                <Button disabled={isCreateLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
+                <Button disabled={isFeedbackLoading} onClick={()=>(setFeedbackOpen(false))} style={{justifySelf:'flex-end'}} color='secondary' variant='outlined'>
                     cancel
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;    
-                <Button disabled={isCreateLoading} onClick={submitFeedback} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
-                    {isCreateLoading ? <CircularProgress/> :'submit feedback'}
+                <Button disabled={isFeedbackLoading || feedback?.length===0} onClick={()=>sendFeedback()} style={{justifySelf:'flex-end'}} color='secondary' variant='contained'>
+                    {isFeedbackLoading ? <CircularProgress/> :'submit feedback'}
                 </Button>
                 </div>
             </div>
@@ -155,57 +235,63 @@ const DbViewPost = () => {
             }
            
             <br/>
-            { authUser?.id===viewPost?.authorId &&
+            { authUser?.id===post?.authorId &&
             <>
             <Button variant='contained' color='secondary' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
-            onClick={()=>{dispatch({type:'SET_EDIT_ID',payload:{id:viewPost?.slug, type: viewPostType}});dispatch({type:'OPEN_EDIT'})}}>
+            onClick={()=>setEditOpen(true)}>
                 <Typography variant='button' fontWeight='600' >Edit</Typography>
                 {authUser?.currentRole!=='INS' &&
                 <Typography variant='caption' fontWeight='500'>Your post will be reviewed again after you edit.</Typography>
                 }
             </Button><br/>
-            { viewPostType!=='PR'&& 
+            { postType!=='pr'&& 
             <Button variant='contained' fullWidth sx={{textTransform:'none', display:'flex',flexDirection:'column',backgroundColor:'error.dark'}}
-            onClick={()=>{setDelConfirm(true);}}>
+            onClick={()=>setDelConfirm(true)}>
                 <Typography variant='button' fontWeight='600'>Delete</Typography>
             </Button>}
             </>}
             
         </div>
         }
+
         </div>
         <Dialog
-        open={confirm || delConfirm}
-        onClose={()=>{setConfirm(false);setDelConfirm(false);}}
-      >
-        <DialogTitle>
-          {confirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {confirm ? `By approving, the ${viewPost?.level===viewPost?.totalLevels&&viewPostType==='PR' ? 
-            "Student will be awarded the certificate of course completion and their course session will be completed.":
-            viewPostType==='PR' ? 
-            "Student will proceed to next level and this Project report will become public. ":
-            "Blog post will become public for others to see. "}
-            This action CANNOT be undone.` : 
-            delConfirm ? `You're about to DELETE this 
-            ${viewPostType==='BLOG'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`:''}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>{setConfirm(false);setDelConfirm(false);}} color='secondary' 
-            variant='outlined' disabled={isCreateLoading}>Disagree
-          </Button>
-          <Button onClick={confirm ? handleApprove : delConfirm ? handleDelete : ()=>{}} 
-            variant='contained' color={delConfirm?'error':'secondary'}
-            disabled={isCreateLoading} >
-            {isCreateLoading ? <CircularProgress/> : 'agree'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-        </div>
+            open={approveConfirm || delConfirm}
+            onClose={()=>{setApproveConfirm(false);setDelConfirm(false)}}
+        >
+            <DialogTitle>
+            {approveConfirm?"Are you sure you want to Approve?":delConfirm?'Are you sure?':''}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText>
+                {approveConfirm ? `By approving, the ${post?.level===post?.totalLevels&&postType==='pr' ? 
+                "Student will be awarded the certificate of course completion and their course session will be completed.":
+                postType==='pr' ? 
+                "Student will proceed to next level and this Project report will become public. ":
+                "Blog post will become public for others to see. "}
+                This action CANNOT be undone.` : 
+                delConfirm ? `You're about to DELETE this 
+                ${postType==='blog'?'Blog post' : 'Resource Article'}. This CANNOT be undone.`:''}
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={()=>{setApproveConfirm(false);setDelConfirm(false)}} 
+            color='secondary' 
+                variant='outlined' disabled={isDeleteLoading || isApproveLoading}>Disagree
+            </Button>
+            <Button onClick={approveConfirm ? ()=>sendApprove() : delConfirm ? ()=>sendDelete() : ()=>{}} 
+                variant='contained' color={delConfirm?'error':'secondary'}
+                disabled={isDeleteLoading || isApproveLoading} >
+                {isDeleteLoading || isApproveLoading ? <CircularProgress/> : 'agree'}
+            </Button>
+            </DialogActions>
         </Dialog>
+        </div>
+
+        {editOpen&&<DbEditPost open={editOpen} setOpen={setEditOpen} postType={postType} slug={slug} />}
+
+        </Dialog>
+    </>
     )
 }
 

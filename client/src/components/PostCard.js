@@ -1,29 +1,16 @@
 import { Card, IconButton, CardMedia, CardContent, Typography, CardActions, Button, Chip } from "@mui/material"
 import ShareIcon from '@mui/icons-material/Share';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom';
 
 const PostCard = ({type, post, variant, scope}) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const handleShare = () => {
         try {
           navigator.clipboard.writeText(`${window.location.origin}/${type}/${post?.slug}`);
           alert("Link Copied to clipboard!");
         } catch (error) { }
     };
-
-    const handleOpen = () => {
-      try {
-        if(["ins-dashboard","dashboard"].includes(scope)){
-          dispatch({type:'SET_VIEW_ID',payload:{id: post?.slug, type: type?.toUpperCase(), scope: scope==='ins-dashboard'?'ins':'stu'}});
-          dispatch({type:'OPEN_VIEW'});
-        }else {
-          navigate(`/${type}/${post?.slug}`);
-        }
-      } catch (error) { }
-    }
 
     return (
         <>
@@ -64,9 +51,18 @@ const PostCard = ({type, post, variant, scope}) => {
                <Button variant='text' color='secondary' size='small' onClick={handleShare}> 
                 Share
               </Button>}&nbsp;&nbsp;
-              <Button variant='text' color='secondary' size='small' onClick={handleOpen} >
+              {["ins-dashboard","dashboard"].includes(scope) ? 
+              <Button variant='text' color='secondary' size='small' 
+              onClick={()=>(navigate({hash:`#mode=view&type=${type}&slug=${post?.slug}`}))}>
                 READ
-              </Button>&nbsp;&nbsp;
+              </Button>
+              :
+              <Link style={{textDecoration:'none'}} to={`/${type}/${post?.slug}`} >
+              <Button variant='text' color='secondary' size='small' >
+                READ
+              </Button>
+              </Link>
+              }&nbsp;&nbsp;
               </CardActions>
           </Card>
         </>

@@ -1,37 +1,52 @@
-import Markdown from "markdown-to-jsx";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {CardHeader, Typography, Card, CardContent, Link, IconButton, Dialog,
 DialogActions, DialogContent, DialogTitle, DialogContentText, Button, CardActions} from "@mui/material";
-import { useState, useEffect } from "react";
-import sanitizer from "sanitize-html";
-import he from 'he';
+import { useState, useEffect, memo } from "react";
 import ReactMde from "react-mde";
-import "../components/Widgets/react-mde-all.css";
-import {useSelector, useDispatch} from 'react-redux';
-import { editCourse } from "../actions/other.js";
+import "../../components/Widgets/react-mde-all.css";
+import { editCourse } from "../../API";
 import { useParams } from "react-router-dom";
+import {useMutation, useQueryClient} from "react-query";
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../../components/RenderMarkdown.js";
 
+
+// this handles deleting task and editing task
 const TaskCard = ({tsk, tskIndex, lvIndex}) => {
-    const {authUser} = useSelector(state => state.auth)
+    const {authUser} = useAuth();
     const [mode, setMode] = useState("view");
     const [editorTab, setEditorTab] = useState("write");
     const [content, setContent] = useState(tsk?.description);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [changed, setChanged] = useState(false);
-    const dispatch = useDispatch();
+    const queryClient = useQueryClient();
     const {id} = useParams();
 
     useEffect(() => {
       setMode("view");setContent(tsk?.description);setChanged(false);
     }, [tsk?._id, authUser?.id])
 
-    const handleModify = (operation) =>{
-      dispatch(editCourse(id, operation, tskIndex, lvIndex, tsk?._id,0 ,content));
-      setChanged(false);
-      setMode("view");
-      setConfirmOpen(false);
-    };
+    const {mutate:handleModify, isLoading} = useMutation(
+      (operation)=>(editCourse(id, operation, tskIndex, lvIndex, tsk?._id, null, content)),
+      {
+        onSuccess:(response)=>{
+          if(response?.status==='500'){
+            alert("Looks like somebody else is also editing this course right now. Because you both have different versions of data that didn't match, we rejected your request to prevent problems. we have updated your page with latest data.");
+          }else if(['201','500'].includes(response?.status)){
+            queryClient.setQueryData([{courseCode:id, scope:'levels'}], {...response, status:'200'});
+          }else{
+            alert("Something went wrong.");
+          }
+          setChanged(false);
+          setMode("view");
+          setConfirmOpen(false);
+        },
+        onError:()=>{
+          alert("Something went wrong.");
+        }
+      }
+    );
     
     return (
         <>
@@ -55,7 +70,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
         </DialogActions>
       </Dialog>
         {/* TASK CARD  */}
-        <Card sx={{marginTop:'15px', minWidth:{xs:'290px',sm:'475px'}}} key={tskIndex}>
+        <Card sx={{marginTop:'15px', minWidth:{xs:'290px',sm:'475px'}, opacity:isLoading?'0.4':'1', pointerEvents:isLoading?'none':'auto'}} key={tskIndex}>
             <CardHeader
             action={(authUser?.currentRole==="INS"&&authUser?.currentInsCourse.includes(id))&& 
             <span>
@@ -72,19 +87,8 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
         />
             <CardContent>
                 {mode==='view'?
-                <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                options={{wrapper : 'div'},{
-                    overrides: {
-                        p :{ component: Typography , props: {variant : 'body2'}}, 
-                        a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer'}, sx:{color:'primary.light'}},
-                        img : { props : {width : '100%',height:'20px',style:{justifySelf:'center',objectFit:'cover'} }},
-                        iframe : { props : {width : '100%', height : '300', frameBorder : '0',style:{justifySelf:'center'} }},
-                        code : { component:Typography ,props : { variant:'code-small' }},
-                        blockquote : {props : { style:{backgroundColor:'#112020',borderRadius:'12px', padding:'20px 20px 20px 20px', margin:"10px"} }}
-                    }
-                }}>
-                {tsk?.description}
-                </Markdown >:
+                <RenderMarkdown content={tsk?.description} />
+                :
                 <>
                 {/* // editor */}
                 <ReactMde 
@@ -94,24 +98,7 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                     onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
                     generateMarkdownPreview={markdown =>
                         Promise.resolve(
-                        <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px',lineHeight:'24px'}} 
-                        options={
-                        {wrapper : 'div'},
-                        { overrides: {
-                            p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                            a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
-                            img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                            iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
-                            code : { component:Typography ,props : { variant:'code-small' }},
-                            blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'}}}
-                        },
-                    }}>
-                        {
-                        he.decode(sanitizer(markdown, {
-                            allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
-                            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-                        }) ) }
-                    </Markdown>
+                        <RenderMarkdown content={markdown} />
                     )
                     }
                     />
@@ -129,4 +116,4 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
     )
 }
 
-export default TaskCard;
+export default memo(TaskCard);

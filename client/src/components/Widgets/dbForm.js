@@ -1,25 +1,66 @@
-import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Link, Chip, CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { AppBar, Toolbar, IconButton,Typography,Button, TextField, Paper, Chip, 
+  CircularProgress, Dialog, Select, MenuItem, FormControl, InputLabel, Alert, Snackbar, Slide } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ReactMde from 'react-mde';
-import Markdown from 'markdown-to-jsx';
 import "./react-mde-all.css";
-import sanitizer from 'sanitize-html';
-import { createPost } from "../../actions/dashboard.js";
-import he from 'he';
+import { createPost } from "../../API/index.js";
+import useHashParams from "../../utils/hooks/useHashParams.js"
+import { useNavigate } from "react-router-dom";
+import {useMutation, useQueryClient} from "react-query";
+import useAuth from "../../utils/hooks/useAuth.js";
+import RenderMarkdown from "../RenderMarkdown.js";
 
 const DbForm = () => {
-    const {isCreateLoading, formType, formOpen} = useSelector(state => state.dashboard);
-    const authUser = useSelector(state => state.auth.authUser);
+    const params = useHashParams();
+    const navigate = useNavigate(); 
+    const queryClient = useQueryClient();
+    const {authUser} = useAuth();
+    const formOpen = params?.mode==='form';
+    const formType = params?.type || 'none' ;
+    if((!["pr", "blog", "rsa"].includes(formType)&&formOpen) ||
+      (authUser?.currentRole==="STU"&&formType==='rsa')||
+      ((authUser?.currentRole==="INS"&&formType==='pr')&&formOpen)
+      ){ navigate({hash:""}); }
+
     const [formData, setFormData] = useState({
         title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''
     });
     const [newTag, setNewTag] = useState('');
     const [editorTab, setEditorTab] = useState("write");
-    const dispatch = useDispatch();
+    const [alertInfo, setAlertInfo] = useState({open:false, message:''})
+
+    useEffect(() => {
+      setFormData({title : '', content : '', tags : [ ], coverPhoto : '', courseCode : ''});
+    }, [params])
+    
+    const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
+      onSuccess:(response)=>{
+        if(["404","403","BRUH","401"].includes(response?.status)){
+          alert("Something went wrong. Could'nt create. Reason: Bad request");
+        }else{
+          queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
+          queryClient.invalidateQueries([{nature:'feed', place:'dashboard', widget:'subs', postType:formType, authUser:authUser?.id }]);
+          queryClient.invalidateQueries([{nature:'feed',place:'profile', ProfileSlug:authUser?.slug, postType:formType}]);
+          if(formType==='rsa'){
+            queryClient.invalidateQueries([{nature:'feed', place:'course', courseCode:formData?.courseCode}]);
+          }else if(formType==='pr'){
+            queryClient.setQueryData(['hasSubmittedPr', {authUser:authUser?.id}], (prev)=>{
+              prev.meta[authUser?.currentLevel] = true;
+              return prev;
+            });
+          }
+          navigate({hash:""});
+          setAlertInfo({open:true, message:"Posted! 🚀🚀"});
+        }
+      },
+      onError:()=>{
+        alert("Could'nt post. Something went wrong on our side.");
+        navigate({hash:""});
+      }
+    });
 
     const handleImageUpload = async (imageList) => {
       const options = { maxSizeMB: 0.2, maxWidthOrHeight: 1080, useWebWorker: true };
@@ -32,25 +73,34 @@ const DbForm = () => {
 
     const handleSubmit = (e)=>{
       e.preventDefault();
-      if(formType==='PR' || formType==='RSA'){
-        if(!formData?.title) return alert(`Title of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
-        if(!formData?.content)return alert(`The content of your ${formType==='PR' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
-        else {dispatch(createPost(formData, formType));}
-      }else if(formType==='BLOG'){
+      if(formType==='pr' || formType==='rsa'){
+        if(!formData?.title) return alert(`Title of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
+        if(!formData?.content)return alert(`The content of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
+      }else if(formType==='blog'){
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
-        else {dispatch(createPost(formData, formType));}
       }
+      sendCreate();
     }
 
     return (
         <>
-        <Dialog open={formOpen} fullScreen onClose={()=>(dispatch({type:'CLOSE_FORM'}))} >
+        {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={8000} 
+        TransitionComponent={(props)=><Slide direction="up" {...props}/>}
+        anchorOrigin={{vertical:'bottom',horizontal:'center'}} 
+        onClose={()=>(setAlertInfo({...alertInfo, open:false}))}>
+          <Alert variant="filled" onClose={()=>(setAlertInfo({...alertInfo, open:false}))} severity="success">
+            {alertInfo?.message}
+          </Alert>
+        </Snackbar>}
+        <Dialog open={formOpen} fullScreen onClose={()=>{setFormData({title:'',content:'',courseCode:'',coverPhoto:'',tags:[]});navigate({hash:""})}} >
         <AppBar sx={{ position: 'fixed' }}>
         <Toolbar>
-            <IconButton edge="start" onClick={()=>{dispatch({type:'CLOSE_FORM'});}} ><CloseIcon/></IconButton>
+            <IconButton edge="start" onClick={()=>{navigate({hash:""});setFormData({title:'',content:'',courseCode:'',coverPhoto:'',tags:[]})}} >
+              <CloseIcon/>
+            </IconButton>
             <Typography variant="h6" component="div">
-            {formType==='PR' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='RSA' ? 'Resource Article' : 'Blog'}
+            {formType==='pr' ? `Project Report Lvl ${authUser?.currentLevel}` : formType==='rsa' ? 'Resource Article' : 'Blog'}
             </Typography>
         </Toolbar>
         </AppBar>
@@ -62,7 +112,7 @@ const DbForm = () => {
         InputProps={{style:{fontSize : '13px', lineHeight:'24px'}}} color='secondary' disabled={isCreateLoading} />
         <br/><br/>
 
-        {(authUser?.currentRole==='INS' && formType==='RSA') && 
+        {(authUser?.currentRole==='INS' && formType==='rsa') && 
         <FormControl fullWidth disabled={isCreateLoading} >
         <InputLabel color='secondary' id='course-select' >Course code</InputLabel>
         <Select color='secondary'
@@ -77,7 +127,7 @@ const DbForm = () => {
       </Select><br/></FormControl>}
 
         {/* IMAGE UPLOAD */}
-        {formType==='BLOG' && 
+        {formType==='blog' && 
         <ImageUploading onChange={handleImageUpload} dataURLKey="data_url" >
           {({ onImageUpload, dragProps, }) => (
             <div style={{display: 'grid',gridTemplateColumns:`${formData?.coverPhoto ? '1fr 1fr' : '1fr'}`,gridGap: '15px', height:'150px'}}>
@@ -106,24 +156,7 @@ const DbForm = () => {
           onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
           generateMarkdownPreview={markdown =>
             Promise.resolve(
-              <Markdown style={{fontFamily: 'Montserrat',fontSize: '16px',lineHeight:'26px'}} 
-            options={
-              {wrapper : 'div'},
-              { overrides: {
-                  p :{ component: Typography , props: {variant : 'body2', lineHeight:'24px'}}, 
-                  a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
-                  img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                  iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
-                  code : { component:Typography ,props : { variant:'code-small' }},
-                  blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'8px', padding:'20px 20px 20px 20px',color:'secondary.light'} }}
-              },
-          }}>
-            {
-            he.decode( sanitizer(markdown, {
-                allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
-                allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-              }) ) }
-          </Markdown>
+              <RenderMarkdown content={markdown} />
           ).catch(()=>(alert("could'nt parse your markdown.")))
           }
         />
@@ -134,7 +167,7 @@ const DbForm = () => {
         <Paper variant='widget'>
           <TextField fullWidth color='secondary' value={newTag} disabled={isCreateLoading}
           onChange={(e)=>{
-            if(e.target.value.slice(-1) === ','){
+            if(e.target.value.slice(-1) === ','&& newTag!==''){
               if(formData?.tags?.length < 8){
                 if(formData?.tags?.includes(e.target?.value?.slice(0,-1))) return alert(`You've already added that tag`);
                 setFormData({...formData, tags : [...formData?.tags, e.target?.value?.slice(0,-1)]})

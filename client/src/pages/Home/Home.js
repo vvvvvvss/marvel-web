@@ -1,11 +1,11 @@
 import { Paper, Alert, Typography, Grow} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
-import { useSelector } from 'react-redux';
 import {Box} from '@mui/system';
 import { Helmet } from 'react-helmet';
+import useAuth from "../../utils/hooks/useAuth.js";
 
 const Home = () => {
-    const authUser = useSelector(state => state.auth.authUser);
+    const {authUser} = useAuth();
 return (
     //entire screen
     <Paper square sx={{minHeight:'100vh', display:'flex',justifyContent:'center',maxWidth:'100vw',overflowX:'hidden',backgroundColor:'#031117'}}>
@@ -33,7 +33,7 @@ return (
         </Typography>
         </Box>
         <Grow in timeout={1500} >
-        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642955971/Subtract_ykjjg9.png"
+        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1650566761/home1_g8pqnt.png" loading='eager'
         style={{ alignSelf:'center', maxWidth:'400px',height:'400px', "&:hover":{}}} />
         </Grow>
     </Box>
