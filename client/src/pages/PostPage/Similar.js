@@ -20,7 +20,6 @@ const Similar = ({tags, isPostLoading, postType, id}) => {
         <Box sx={{minWidth:{xs:'200px',lg:'300px'}}}>
            {isFeedLoading||isPostLoading ?
            <Skeleton variant="text" animation='wave' /> :
-           feed?.length>1 &&
             <Typography variant="subtitle2" component='div' sx={{color:'#989898',letterSpacing:'0.23em'}}>
                 &nbsp;&nbsp;SIMILAR
             </Typography>}
