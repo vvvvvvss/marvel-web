@@ -4,9 +4,9 @@ import he from 'he';
 import sanitizer from "sanitize-html";
 import { Typography, Link } from "@mui/material";
 
-const RenderMarkdown = ({content}) => {
+const RenderMarkdown = ({content, fontSize}) => {
   return (
-    <Markdown style={{fontFamily: 'Montserrat',fontSize: '14px', lineHeight: '1.5'}} 
+    <Markdown style={{fontFamily: 'Montserrat',fontSize: fontSize || '15px', lineHeight: '1.5'}} 
             options={{
               wrapper : 'div',
               overrides: {

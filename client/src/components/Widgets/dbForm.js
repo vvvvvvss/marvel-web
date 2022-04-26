@@ -78,6 +78,7 @@ const DbForm = () => {
         if(!formData?.title) return alert(`Title of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty.`)
         if(!formData?.content)return alert(`The content of your ${formType==='pr' ? 'Project Report' : 'Resource Article'} cannot be empty!`);
       }else if(formType==='blog'){
+        if(!formData?.title) return alert(`Title of your blog post cannot be empty.`)
         if(!formData?.content) return alert('The content of your Blog Post cannot be empty!');
         if(!formData?.coverPhoto) return alert('Cover photo is required for blog posts.');
       }
