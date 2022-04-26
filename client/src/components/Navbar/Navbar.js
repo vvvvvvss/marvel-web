@@ -37,7 +37,8 @@ const Navbar = () => {
 
     const logout = ()=>{
         sessionStorage.clear();
-        queryClient.removeQueries(['auth'], {exact:true})
+        queryClient.setQueryData(['auth'], (prev)=>({...prev, authUser:null}));
+        setDrawerOpen(false);
     }
     
     const googleError = (err) => {

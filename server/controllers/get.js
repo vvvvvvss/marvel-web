@@ -9,12 +9,10 @@ export const getCourse = async ( req, res) =>{
         const {id} = req.params;
         const {scope} = req.query;
         let returnedCourse = {};
-        if(scope==='subStatus'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('submissionStatus totalLevels courseCode').lean().exec();
-        }else if(scope==='overview'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-levels -rankingScore -submissionStatus').lean().exec();
+        if(scope==='overview'){
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('-levels -rankingScore').lean().exec();
         }else if(scope==='levels'){
-            returnedCourse = await course.findOne({courseCode : id.trim()}).select('levels courseCode').lean().exec();
+            returnedCourse = await course.findOne({courseCode : id.trim()}).select('levels courseCode totalLevels').lean().exec();
         }else{
             return res.json({status: '400', message:'scope is required.'});
         }

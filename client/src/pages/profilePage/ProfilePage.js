@@ -25,7 +25,7 @@ const ProfilePage = () => {
     const [titleField, setTitleField] = useState("");
     const [alertInfo, setAlertInfo] = useState({open:false, message:'', severity:'success'});
 
-    const {data:profileData, isLoading:isProfileLoading} = useQuery([{profileSlug:authUser?.slug, scope:'display'}],
+    const {data:profileData, isLoading:isProfileLoading} = useQuery([{profileSlug:id, scope:'display'}],
     ()=>getProfileData(id, 'display'),
     {
         onSuccess:(response)=>{
@@ -50,7 +50,7 @@ const ProfilePage = () => {
             },
             onError:()=>(setAlertInfo({open:true, message:'Something went wrong while fetching feed.', severity:'error'}))
         }
-    )
+    );
     const bioo = useMemo(() => ["Zilch", "nada","N/A","nihil"][Math.floor(Math.random()*4)], []);
 
     const handleShare = () => {
@@ -145,7 +145,7 @@ const ProfilePage = () => {
         <Divider/>
         <AppBar position="sticky" sx={{background:'#1a1a1a',width:'100%'}}>
         <Toolbar sx={{display:'flex',justifyContent:'center',alignItems:'end'}}>
-            <Tabs textColor='inherit' value={tab} variant="scrollable" scrollButtons='auto' onChange={(e, value)=>setTab(value)}>
+            <Tabs textColor='inherit' value={tab} variant="scrollable" scrollButtons='auto' onChange={(e, value)=>{setTab(value);navigate({hash:`#${value}`})}}>
             <Tab label="Blog" value='blog' />
             <Tab label="PRs" value='pr'/>
             {(authUser?.enrollmentStatus!=='UNKNOWN'&&authUser?.id) && <Tab label="Res Articles" value='rsa'/>}

@@ -89,7 +89,7 @@ export const searchCourse = async(req, res) => {
  try {
     const LIMIT = 6;
     const query = buildQuery(req?.query, 'course');
-    const feed = await course.find(query).skip((Number(req.query?.page)-1)*LIMIT).limit(LIMIT).select(("-_id -submissionStatus -intro -levels -rankingScore")).lean().exec();
+    const feed = await course.find(query).skip((Number(req.query?.page)-1)*LIMIT).limit(LIMIT).select(("-_id -intro -levels -rankingScore")).lean().exec();
 
     return res.json({feed:feed, status:'200'});
  } catch (error) {

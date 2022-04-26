@@ -10,8 +10,8 @@
     postType: "pr | blog | rsa",
     courseCode: "<courseCode>", // courseCode in search belong in search
     profileSlug: "<userSlug>", // profilePage or profile widget in dashB
-    scope:"display | subStatus | overview | levels" //display for profile in dashB and page.
-                                                     controls, overview, levels for course data.
+    scope:"display | overview | levels" //display for profile in dashB and page.
+                                                      overview, levels for course data.
     authUser: "<<googleId from authUser>>" //don't use when data will be similar for 2 diff users
     search:{ ...filters }
 }]
