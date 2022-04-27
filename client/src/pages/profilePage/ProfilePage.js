@@ -37,6 +37,7 @@ const ProfilePage = () => {
     }
     );
     const profile = profileData?.profile;
+
     const {data:feedData, isLoading:isFeedLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
         [{nature:'feed',place:'profile',profileSlug:id,postType:tab,authUser:authUser,search:searchTitle}],
         ({pageParam=1})=>(getProfileFeed(id, tab,pageParam,searchTitle)),
@@ -48,9 +49,10 @@ const ProfilePage = () => {
                     return pages?.length+1;
                 }
             },
-            onError:()=>(setAlertInfo({open:true, message:'Something went wrong while fetching feed.', severity:'error'}))
+            onError:()=>(setAlertInfo({open:true, message:'Something went wrong while fetching feed.', severity:'error'})),
         }
     );
+
     const bioo = useMemo(() => ["Zilch", "nada","N/A","nihil"][Math.floor(Math.random()*4)], []);
 
     const handleShare = () => {

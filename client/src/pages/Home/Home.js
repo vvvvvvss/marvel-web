@@ -1,4 +1,4 @@
-import { Paper, Alert, Typography, Grow} from '@mui/material';
+import { Paper, Alert, Typography, Grow, Card} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import {Box} from '@mui/system';
 import { Helmet } from 'react-helmet';
@@ -24,7 +24,7 @@ return (
             </Alert>
         }
        <br/>
-    <Box sx={{display:'flex',flexDirection:{xs:'column-reverse',md:'row'},justifyContent:'center', alignItems:'center', height:'min-content'}} >
+    <Box sx={{display:'flex',flexDirection:{xs:'column-reverse',md:'row'},justifyContent:'center', alignItems:'center', height:'min-content', padding:'0px 25px'}} >
         <Box sx={{width: 'fit-content'}} >
         <Typography sx={{paddingLeft:{xs:'4px',sm:'29px'}, fontSize:'14px', letterSpacing:'0.23em', fontWeight:'500', margin:{xs:'20px 0px 10px 0px',sm:'0px'}}} >UVCE's</Typography>
         <Typography sx={{maxWidth:'700px',paddingLeft:{xs:'0px',sm:'25px'}, typography:{xs:'h4',sm:'h2'}}} >Makerspace for Advanced Research, Vital Education and Learning.</Typography>
@@ -34,13 +34,28 @@ return (
         </Box>
         <Grow in timeout={1500} >
         <img src="https://res.cloudinary.com/marvelweb/image/upload/v1650566761/home1_g8pqnt.png" loading='eager'
-        style={{ alignSelf:'center', maxWidth:'400px',height:'400px', "&:hover":{}}} />
+        style={{ alignSelf:'center', maxWidth:'400px',height:'400px',maxWidth:'80vw'}} />
         </Grow>
     </Box>
-    {/* <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',md:'1fr 1fr'}, gridTemplateRows:{xs:'1fr 1fr',md:'1fr'}, margin:'70px -20px 0px -20px', gap:'20px', maxHeight:'600px'}} >
-        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1642877223/Subtract2_r6bxco.png"
-        style={{objectFit:'cover',width:'90%', alignSelf:'center', justifySelf:'center' }} />
-        
+    {/* <Box sx={{display:'flex', justifyContent:{xs:'space-between',md:'center'},flexDirection:{xs:'column',md:'row'}, margin:'60px 25px'}} >
+        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1651089704/6ea9d0_460cc6be6f4642469c3d23c8baf0d7a3_mv2_gs9c0t.jpg"
+        style={{ aspectRatio:'1 / 1', padding:{xs:'30px',md:'30px 0px'},
+        maxWidth:'400px',objectFit:'cover'}} />
+        <Box sx={{padding:'30px',
+        maxWidth:'400px',maxHeight:'400px'}} >
+            
+            <Typography variant='body1' sx={{color:'secondary.light'}}>
+                MARVEL is poised to spur genuine passion in every learner and 
+            redefine conventional education. 
+            The goal is to set the ball rolling, perpetuate a sense of innovation in students. 
+            With support from the UVCE Graduates Association, 
+            we hope to turn UVCE into a hub of research and innovation through MARVEL, 
+            with encouragement from the college.
+            </Typography>
+        </Box>
+    </Box> */}
+    {/* <Box sx={{height:'200px'}} >
+
     </Box> */}
     </Box>
     </Paper>

@@ -1,8 +1,8 @@
 import {Routes, Route, useLocation} from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home/Home.js';
-import { useState, useEffect } from 'react';
-import { darkTheme, lightTheme } from './utils/themes.js';
+import { useEffect } from 'react';
+import { darkTheme } from './utils/themes.js';
 import CoursePage from './pages/coursePage/coursePage.js';
 import ProfilePage from './pages/profilePage/ProfilePage.js';
 import Search from './pages/search/Search.js';
@@ -32,7 +32,6 @@ const queryClient = new QueryClient({
 
 const App=()=> {
   const location = useLocation();
-  const mode = 'dark';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,7 +39,7 @@ const App=()=> {
 
   return (
     <>
-      <ThemeProvider theme={mode === 'dark' ? darkTheme : lightTheme}>
+      <ThemeProvider theme={darkTheme}>
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" exact element={<Home />} />

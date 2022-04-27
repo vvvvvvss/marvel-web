@@ -51,7 +51,7 @@ export const darkTheme = createTheme({
         },
         variants : [
           { props: {variant:"transparent"},
-          style : { background : 'rgba(0,0,0,0)',backdropFilter: 'blur(25px)', padding:'25px' }}
+          style : { background : 'rgba(0,0,0,0)',backdropFilter: 'blur(10px)', padding:'25px' }}
         ]
       },
       MuiTypography : {
@@ -85,14 +85,5 @@ export const darkTheme = createTheme({
         msWordBreak:"break-all"  
       }}
       }
-    }
-});
-
-export const lightTheme = createTheme({
-    palette : {
-      mode : 'light'
-    },
-    typography : {
-      fontFamily : 'Montserrat'
     }
 });
