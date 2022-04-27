@@ -54,7 +54,7 @@ const DbProgress = () => {
         <Stepper activeStep={Number(authUser?.currentLevel)-1}>
         {[...Array.from({length:courseData?.course?.totalLevels},(_,i)=>(i+1))].map((lvIndex, _) => (
             <Step key={lvIndex}>
-            <StepLabel>{`Lvl ${lvIndex+1}`}</StepLabel>
+            <StepLabel>{`Lvl ${lvIndex}`}</StepLabel>
             </Step>
         ))}
         </Stepper>
