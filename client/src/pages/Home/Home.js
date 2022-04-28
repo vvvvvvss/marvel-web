@@ -1,11 +1,28 @@
-import { Paper, Alert, Typography, Grow, Card} from '@mui/material';
+import { Paper, Alert, Typography, Grow, Link, Button} from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar.js';
 import {Box} from '@mui/system';
 import { Helmet } from 'react-helmet';
 import useAuth from "../../utils/hooks/useAuth.js";
+import { Link as Rlink}  from 'react-router-dom';
 
 const Home = () => {
     const {authUser} = useAuth();
+    const {data, isLoading:isFeedLoading} = useQuery(
+        [{nature:'feed', place:'home'}],
+      ()=>getSearchFeed(
+        "course",
+        "",
+        '',
+        '',
+        searchParams.get("authorName") || '',
+        searchParams.get("tags") || '',
+        pageParam, 
+        'search'),
+      {
+        
+      }
+      );
+
 return (
     //entire screen
     <Paper square sx={{minHeight:'100vh', display:'flex',justifyContent:'center',maxWidth:'100vw',overflowX:'hidden',backgroundColor:'#031117'}}>
@@ -37,26 +54,44 @@ return (
         style={{ alignSelf:'center', maxWidth:'400px',height:'400px',maxWidth:'80vw'}} />
         </Grow>
     </Box>
-    {/* <Box sx={{display:'flex', justifyContent:{xs:'space-between',md:'center'},flexDirection:{xs:'column',md:'row'}, margin:'60px 25px'}} >
-        <img src="https://res.cloudinary.com/marvelweb/image/upload/v1651089704/6ea9d0_460cc6be6f4642469c3d23c8baf0d7a3_mv2_gs9c0t.jpg"
-        style={{ aspectRatio:'1 / 1', padding:{xs:'30px',md:'30px 0px'},
-        maxWidth:'400px',objectFit:'cover'}} />
-        <Box sx={{padding:'30px',
-        maxWidth:'400px',maxHeight:'400px'}} >
+    <Box sx={{display:'flex', justifyContent:'center', margin:'90px 25px'}} >
+        <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',md:'2fr 3fr'}, transition:'300ms' ,
+        gridTemplateRows:{xs:'2fr 3fr',md:'1fr'},maxWidth:'800px',gap:'0px',overflow:'hidden',
+        justifyContent:'center',background:'linear-gradient(81.08deg, #2F2835 29.85%, #1E3236 99.51%)',
+        borderRadius:'12px',boxShadow:'0px 0px 50px 0px #000'}} >
+            
+            <img src="https://res.cloudinary.com/marvelweb/image/upload/v1651086776/image2mrvl-min_sh7yax.png"
+            style={{ objectFit:'cover',maxWidth:'100%' }} />
+
+            <Box sx={{padding:'30px',maxHeight:'min-content',position:'relative'}} >
             
             <Typography variant='body1' sx={{color:'secondary.light'}}>
-                MARVEL is poised to spur genuine passion in every learner and 
+                MARVEL at University Visvesvaraya College of Engineering is poised to spur genuine passion in every learner and 
             redefine conventional education. 
             The goal is to set the ball rolling, perpetuate a sense of innovation in students. 
-            With support from the UVCE Graduates Association, 
+            With support from the&nbsp;
+            <Link href='https://uvcega.org/' rel='noopener norefferer' target='_blank' >UVCE Graduates Association</Link>, 
             we hope to turn UVCE into a hub of research and innovation through MARVEL, 
             with encouragement from the college.
             </Typography>
+            <Rlink to='/about' >
+                <Button sx={{position:'absolute',bottom:'20px'}} variant='outlined'
+                color='secondary' >
+                    Read more
+                </Button>
+            </Rlink>
+            </Box>
         </Box>
-    </Box> */}
-    {/* <Box sx={{height:'200px'}} >
+    </Box>
 
-    </Box> */}
+    <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}} >
+        <Typography sx={{maxWidth:'650px',textAlign:'center',fontWeight:'300'}} variant='h4'>
+            Explore Courses across various Domains
+        </Typography>
+        <Box>
+
+        </Box>
+    </Box>
     </Box>
     </Paper>
 )
