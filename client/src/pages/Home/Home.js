@@ -103,7 +103,7 @@ return (
     maxHeight:{xs:'max-content',md:'500px'},backgroundColor:'#000',
     flexDirection:{xs:'column',md:'row'}, }} >
         <Box sx={{padding:'40px 40px 0px 40px'}} >
-            <Typography variant='h3' sx={{fontSize:{xs:'24px',md:'42px'},color:'#DDDDDD',fontWeight:'200'}} >
+            <Typography variant='h3' sx={{fontSize:{xs:'24px',md:'42px'},color:'#fafafa',fontWeight:'200'}} >
                 Signin with Registered account to 
                 access your Dashboard, Resource articles and much more.
             </Typography>

@@ -139,9 +139,9 @@ const Navbar = () => {
                     <ListItemIcon><AutoAwesomeIcon/></ListItemIcon>
                     <ListItemText>Explore (coming soon)</ListItemText>
                 </ListItemButton>
-                <ListItemButton onClick={()=>{}}>
+                <ListItemButton onClick={()=>{navigate("/about")}}>
                     <ListItemIcon><InfoIcon/></ListItemIcon>
-                    <ListItemText>About (coming soon)</ListItemText>
+                    <ListItemText>About</ListItemText>
                 </ListItemButton>
                 </List>
             <footer>
