@@ -120,13 +120,13 @@ return (
     <Box component={'footer'} sx={{backgroundColor:'#121212',padding:'30px',display:'grid',
     gridTemplateColumns:{xs:'1fr',md:'1fr 1fr 1fr'},justifyItems:'center'}} >
             <a href='https://uvce.ac.in/' target='_blank' rel="noopener norefferer" style={{margin:'30px'}} >
-            <img src='https://uvce.ac.in/img/logo_2x.png' width='180px' />
+            <img src='https://uvce.ac.in/img/logo_2x.png' width='180px' alt="UVCE" />
             </a>
             <a href='https://uvcega.org/' target='_blank' rel="noopener norefferer" style={{margin:'30px'}}>
-            <img src='https://uvcega.org/images/uvcega_logo.png' width='180px' />
+            <img src='https://uvcega.org/images/uvcega_logo.png' width='180px' alt="UVCE Graduates Association" />
             </a>
             <a href='http://www.visionuvce.in/' target='_blank' rel="noopener norefferer" style={{margin:'30px'}}>
-            <img src='http://www.visionuvce.in/wp-content/uploads/2016/01/vu_logo.png' width='180px' style={{backgroundColor:'#6b99d6'}} />
+            <img src='http://www.visionuvce.in/wp-content/uploads/2016/01/vu_logo.png' alt="Vision UVCE" width='180px' style={{backgroundColor:'#6b99d6'}} />
             </a>
     </Box>
     </Box>
