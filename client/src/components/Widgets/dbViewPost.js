@@ -119,7 +119,6 @@ const DbViewPost = () => {
         }
     }
     );
-
     return (
     <>
         {alertInfo?.open && <Snackbar open={alertInfo?.open} autoHideDuration={8000} 
@@ -264,7 +263,8 @@ const DbViewPost = () => {
             </DialogTitle>
             <DialogContent>
             <DialogContentText>
-                {approveConfirm ? `By approving, the ${post?.level===post?.totalLevels&&postType==='pr' ? 
+                {approveConfirm ? `By approving, the 
+                ${post?.level===post?.totalLevels&&postType==='pr' ? 
                 "Student will be awarded the certificate of course completion and their course session will be completed.":
                 postType==='pr' ? 
                 "Student will proceed to next level and this Project report will become public. ":

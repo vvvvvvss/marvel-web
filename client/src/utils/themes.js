@@ -36,7 +36,7 @@ export const darkTheme = createTheme({
       },
       MuiPaper : {
         styleOverrides : {
-          root : {backgroundColor : '#031117'}
+          root : {backgroundColor : '#031117',borderRadius:'0px',boxShadow:'none'}
         },
         variants : [
           { props : { variant : 'widget'},

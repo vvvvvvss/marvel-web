@@ -103,13 +103,22 @@ export const getSubmissionsRsa = async (req, res) => {
 export const getPR = async (req, res) => {
     try {
         const {id} = req.params;
+
         const returnedPr = await prs.findOne({slug : id}).lean().exec();
 
         if(!returnedPr) return res.json({message:'That doesnt exist.', status:'404'});
         if(['PENDING','FLAGGED'].includes(returnedPr?.reviewStatus)){
-            if(!req?.user){ return res.json({status:'401', message:'login required'});}
-            if((req?.user?.id===returnedPr?.authorId) || 
-            (req?.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))){
+            if(!req?.user) return res.json({status:'401', message:'login required'});
+
+            if( req?.user?.currentRole=='INS'&&
+                req.user?.currentInsCourse.includes(returnedPr?.courseCode) &&
+                returnedPr?.reviewStatus=='PENDING'){
+                    const totalLevels = (await course.findOne({courseCode:returnedPr?.courseCode}).select("-_id totalLevels").lean().exec())?.totalLevels;
+                    return res.json({post : {...returnedPr, totalLevels:totalLevels}, status:'200'});
+            }else if(
+                (req?.user?.id===returnedPr?.authorId) || 
+                (req?.user?.currentRole==='INS'&& req.user?.currentInsCourse.includes(returnedPr?.courseCode))
+                ){
                 return res.json({post : returnedPr,status:'200'});
             }else{
                 return res.json({status:'403',message:'Access denied'})

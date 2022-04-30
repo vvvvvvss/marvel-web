@@ -10,6 +10,7 @@ import PostPage from './pages/PostPage/PostPage.js';
 import Err from './pages/Err.js';
 import DbStage from './pages/DbStage.js';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import About from './pages/About/About.js';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +52,7 @@ const App=()=> {
             <Route path="/blog/:id" exact element={<PostPage viewPostType="blog" />} />
             <Route path="/rsa/:id" exact element={<PostPage viewPostType="rsa" />} />
             <Route path="/404" exact element={<Err />} />
+            <Route path="/about" exact element={<About/>} />
           </Routes>
         </QueryClientProvider>
       </ThemeProvider>

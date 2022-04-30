@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const API = axios.create({baseURL : 'https://marvel-web.azurewebsites.net/'});
+let serverUrl;
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    serverUrl = 'http://localhost:3000'
+} else {
+    serverUrl = 'https://marvel-web.azurewebsites.net/'    
+}
+const API = axios.create({baseURL : serverUrl});
 
 API.interceptors.request.use((req) => {
     if(sessionStorage.getItem('deez')){
