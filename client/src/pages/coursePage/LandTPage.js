@@ -46,6 +46,7 @@ const LandTPage = () => {
                 }
                 if(["201","500","add-mess","delete-mess"].includes(response?.status)){
                     queryClient.setQueryData([{courseCode:id, scope:'levels'}], {...response, status:'200'});
+                    alert("Done!");
                 }
             }
         });

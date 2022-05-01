@@ -1,5 +1,6 @@
 import course from "../../models/course.js";
 import sanitize from "sanitize-html";
+import prs from "../../models/projectReport.js";
 
 export const addTask = async (req, res) => {
     try {
@@ -84,7 +85,7 @@ export const addLevel = async (req, res) => {
                             req.user.currentInsCourse.includes(id);
         if(!condition)return res.json({status:'403', message:'Access denied.'});
 
-        const prCount = await projectReport.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
+        const prCount = await prs.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
         if(prCount>0) return res.json({status:'add-mess', message:'mess' });
         
         const existingCourse = await course.findOne({courseCode:id});
@@ -107,7 +108,7 @@ export const deleteLevel = async (req,res) => {
                             req.user.currentInsCourse.includes(id);
         if(!condition) return res.json({message:"Access denied.", status:'403'});
 
-        const prCount = await projectReport.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
+        const prCount = await prs.countDocuments({$and:[{courseCode:id}, {level:(Number(lvIndex)+1)}]}).lean().exec();
         if(prCount>0) return res.json({status:'delete-mess', message:'mess' });
 
         const existingCourse = await course.findOne({courseCode:id});
