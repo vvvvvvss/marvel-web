@@ -12,8 +12,8 @@ const RenderMarkdown = ({content, fontSize}) => {
               overrides: {
                   p :{ component: Typography , props: {variant : 'body2', lineHeight:'1.7'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
-                  img : { props : {width : '100%',height:'300px',style:{objectFit:'cover'} }},
-                  iframe : { props : {width : '100%', height : '315', frameBorder : '0'}},
+                  img : { props : {width : '100%' }},
+                  iframe : { props : {width : '100%', frameBorder : '0'}},
                   code : { component:Typography ,props : { variant:'code-small' }},
                   blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }},
                   li:{ component: Typography , props: {variant : 'body2', lineHeight:'1.7', component:'li'} }
