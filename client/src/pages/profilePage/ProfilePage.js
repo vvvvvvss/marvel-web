@@ -67,9 +67,9 @@ const ProfilePage = () => {
     return (
     <>
     <Helmet>
-        <title>{`${profile?.name || "Profile"} | UVCE MARVEL 🚀🌘`}</title>
-        <meta name='description' content={`Checkout ${profile?.name || 'Profile'} on Marvel 🚀🌘`} />
-        <meta property="og:title" content={`Checkout ${profile?.name || 'Profile'} on Marvel 🚀🌘`} />
+        <title>{`${profile?.name || "Profile"} | Marvel 🚀🌘`}</title>
+        <meta name='description' content={`${profile?.name || 'Profile'} on Marvel 🚀🌘`} />
+        <meta property="og:title" content={`${profile?.name || 'Profile'} on Marvel 🚀🌘`} />
     </Helmet>
     <Navbar/>
     {alertInfo?.open && 

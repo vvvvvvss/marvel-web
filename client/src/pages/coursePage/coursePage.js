@@ -67,7 +67,7 @@ const CoursePage = () => {
     return (
         <>
         <Helmet>
-          <title>{`${overview?.courseCode || 'Course'} | UVCE MARVEL 🚀🌘`}</title>
+          <title>{`${overview?.courseCode || 'Course'} | ${overview?.caption} | Marvel 🚀🌘`}</title>
           <meta name='description' content={overview?.caption || "..."} />
           <meta property="og:title" content={`${overview?.courseCode || 'Course'} | UVCE MARVEL 🚀🌘`} />
         </Helmet>
