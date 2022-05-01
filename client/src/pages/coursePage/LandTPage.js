@@ -44,9 +44,11 @@ const LandTPage = () => {
                 }else if(['BRUH',"404","403","401"].includes(response?.status)){
                     alert("Something went wrong:(");
                 }
-                if(["201","500","add-mess","delete-mess"].includes(response?.status)){
-                    queryClient.setQueryData([{courseCode:id, scope:'levels'}], {...response, status:'200'});
-                    alert("Done!");
+                if(["201","500"].includes(response?.status)){
+                    queryClient.setQueryData([{courseCode:id, scope:'levels'}], ()=>({...response, status:'200'}));
+                    if(response?.status=='201'){
+                        alert("Done!");
+                    }
                 }
             }
         });
