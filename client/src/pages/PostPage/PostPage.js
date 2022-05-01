@@ -27,7 +27,7 @@ const PostPage = ({viewPostType:postType}) => {
     const post = postData?.post; const postStatus = postData?.status;
 
     //retry when user logs in for response 401(login required)
-    if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')){
+    if((![undefined, "UNKNOWN"].includes(authUser?.enrollmentStatus)&&postStatus=='401')&&['rsa','pr'].includes(postType)){
         refetchPost();
     }
     //delete post

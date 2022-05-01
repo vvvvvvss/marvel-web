@@ -90,8 +90,8 @@ return (
             :
             <>
             {data?.feed?.map((c,i)=>(
-                <Box sx={{padding:'10px',minWidth:'300px'}} >
-                    <CourseCard course={c} key={i} />
+                <Box key={i} sx={{padding:'10px',minWidth:'300px'}} >
+                    <CourseCard course={c}  />
                 </Box>
             ))}
             </>
