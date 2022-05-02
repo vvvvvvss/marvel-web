@@ -35,7 +35,7 @@ return (
     <Box sx={{display:'flex',flexDirection:{xs:'column-reverse',md:'row'},justifyContent:'center', alignItems:'center', height:'min-content', padding:'0px 25px'}} >
         <Box sx={{width: 'fit-content'}} >
         <Typography sx={{paddingLeft:{xs:'4px',sm:'29px'}, fontSize:'14px', letterSpacing:'0.23em', fontWeight:'500', margin:{xs:'30px 0px 0px 0px',sm:'0px'}}} >UVCE's</Typography>
-        <Typography sx={{maxWidth:'700px',paddingLeft:{xs:'0px',sm:'25px'}, typography:{xs:'h5',sm:'h2'}}} >Makerspace for Advanced Research, Vital Education and Learning.</Typography>
+        <Typography sx={{maxWidth:'700px',paddingLeft:{xs:'0px',sm:'25px'}, typography:{xs:'h4',sm:'h2'}}} >Makerspace for Advanced Research, Vital Education and Learning.</Typography>
         <Typography sx={{paddingLeft:{xs:'4px',sm:'29px'}, fontSize:'14px', letterSpacing:'0.23em', fontWeight:'400', marginTop:{xs:'10px',sm:'8px'}, color:'secondary.light'}}>
             <span style={{color:'#a1a1a1'}} >AKA</span>&nbsp;MARVEL
         </Typography>
