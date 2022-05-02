@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default ()=>{
     const navigate = useNavigate();
     const {data, isLoading, refetch:fetchAuth} = useQuery(['auth'], ()=>(auth()), {
-        enabled:!!sessionStorage.getItem('deez'),
+        enabled:!["undefined",""].includes(sessionStorage.getItem('deez')),
         onSuccess:(data)=>{
             if(data?.status==='404'){
                 navigate('/404');

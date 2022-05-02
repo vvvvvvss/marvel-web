@@ -51,6 +51,10 @@ export const getBlogByProfile = async (req, res) => {
         if(req?.user?.slug===req.params?.id){
             feed = await blog.find({$and : [{authorSlug:req.params.id},{title:titleQuery}]}).sort({_id:-1})
                     .skip((Number(req.query.page)-1)*LIMIT).limit(LIMIT).select("-_id -content -tags -feedback -rankingScore").lean().exec();
+        }else if(req?.user?.currentRole==='INS'){
+            feed = await blog.find({$and : [{authorSlug:req.params.id},{title : titleQuery}, {$or:[{authorCourseCode: {$in:req?.user?.currentInsCourse}}, {reviewStatus:'APPROVED'}]}]})
+            .sort({_id:-1})
+            .skip((Number(req.query.page)-1)*LIMIT).limit(LIMIT).select("-_id -content -tags -feedback -rankingScore").lean().exec();
         }else{
             feed = await blog.find({$and : [{authorSlug:req.params.id},{reviewStatus:'APPROVED'},{title : titleQuery}]})
             .sort({_id:-1})

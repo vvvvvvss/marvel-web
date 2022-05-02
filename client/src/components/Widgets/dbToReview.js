@@ -19,7 +19,7 @@ const DbToReview = () => {
         ({pageParam=1})=>(getToReview(tab, pageParam, filter)),
         {
             getNextPageParam: (lastResult, results)=>{
-                if(lastResult?.posts?.length < 8){
+                if(lastResult?.posts?.length < 6){
                     return undefined;
                 }else{
                     return results?.length + 1;
