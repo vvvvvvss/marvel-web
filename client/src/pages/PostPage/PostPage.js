@@ -22,7 +22,10 @@ const PostPage = ({viewPostType:postType}) => {
     const [editOpen, setEditOpen] = useState(false);
     //getting post
     const {data:postData, isLoading:isPostLoading, refetch:refetchPost} = useQuery([postType,id], 
-        ()=>getPost(postType,id)
+        ()=>getPost(postType,id),
+        {
+            enabled: !!id
+        }
     );
     const post = postData?.post; const postStatus = postData?.status;
 

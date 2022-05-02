@@ -2,7 +2,7 @@ import { Dialog, Typography, IconButton,AppBar,Toolbar, CircularProgress, Chip, 
      Divider, Button, Card, TextField, DialogActions,DialogContent,DialogContentText, DialogTitle,
     Alert, Snackbar, Slide} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import moment from 'moment';
 import { Box } from "@mui/system";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -27,6 +27,15 @@ const DbViewPost = () => {
 
     if((!["pr", "blog", "rsa"].includes(postType)&&viewOpen) ||
       (authUser?.currentRole==="STU"&&postType==='rsa')){ navigate({hash:""}); }
+
+    useEffect(() => {
+        setApproveConfirm(false);
+        setDelConfirm(false);
+        setEditOpen(false);
+        setFeedbackOpen(false);
+        setFeedback("");
+    }, [hashParams])
+    
 
     const [feedbackOpen, setFeedbackOpen] = useState(false);//feedback textfield open and close
     const [feedback, setFeedback] = useState('');
@@ -203,7 +212,10 @@ const DbViewPost = () => {
             <Chip label={postType==='rsa' ? 'PUBLIC' : post?.reviewStatus } color={postType==='rsa'?'success': colorDecide(post?.reviewStatus)} variant='filled'/> 
            }
             <br/>
-            { (authUser?.currentRole==='INS' && post?.authorId !== authUser?.id) &&
+            { ((authUser?.currentRole==='INS' && 
+            post?.authorId !== authUser?.id) && 
+            (post?.reviewStatus=='PENDING' && 
+            ( postType=='pr' ? authUser?.currentInsCourse?.includes(post?.courseCode) : true))) &&
             <>
             <Button disabled={feedbackOpen} variant='contained' color='success' fullWidth style={{textTransform:'none', display:'flex',flexDirection:'column'}}
             onClick={()=>(setApproveConfirm(true))}>

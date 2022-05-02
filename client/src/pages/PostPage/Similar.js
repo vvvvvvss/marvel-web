@@ -7,13 +7,12 @@ import PostCard from "../../components/PostCard.js";
 
 const Similar = ({tags, isPostLoading, postType, id}) => {
 
-    const {data:feedData, isLoading:FeedLoading, isIdle:isFeedIdle} = useQuery(['similar',postType,id], 
+    const {data:feedData, isLoading:isFeedLoading, isIdle:isFeedIdle} = useQuery(['similar',postType,id], 
         ()=>getSearchFeed(postType, '', '', '', '', tags?.join(','), 1, 'rec'),
         {enabled: tags?.length>0 }
     )
-    const isFeedLoading = FeedLoading || isFeedIdle;
     const feed = feedData?.feed;
-
+    console.log(tags, isPostLoading, postType, id, isFeedLoading)
   return (
     <>
     {/* right part  */}
@@ -32,7 +31,7 @@ const Similar = ({tags, isPostLoading, postType, id}) => {
             <Skeleton sx={{width:'100%', height:'220px',borderRadius:'14px'}} variant="rectangular" animation="wave"/>
             </>
             : 
-            feed?.length===1 ? 
+            feed?.length===1||!feed?.length ? 
             <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing</Typography>: 
             feed?.map((p, i)=>(p?.slug !== id &&
                 <PostCard post={p} variant='media' type={postType} scope='else' key={i} />
