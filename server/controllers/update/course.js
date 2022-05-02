@@ -1,6 +1,7 @@
 import course from "../../models/course.js";
 import sanitize from "sanitize-html";
 import prs from "../../models/projectReport.js";
+import cleanOptions from "../../utils/cleanOptions.js";
 
 export const addTask = async (req, res) => {
     try {
@@ -62,10 +63,7 @@ export const editTask = async (req, res) => {
         return res.json({status:'500', course: {levels:existingCourse?.levels, courseCode:existingCourse?.courseCode}});
         }
 
-        const cleanContent = sanitize(req.body?.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitize(req.body?.content, cleanOptions);
 
         existingCourse.levels[Number(lvIndex)].tasks[Number(tskIndex)].description = cleanContent;
         
@@ -132,10 +130,7 @@ export const editCourseIntro = async (req, res) => {
                             req?.user?.currentInsCourse?.includes(req?.params?.id);
         if(!condition) return res.json({message:'Access denied.', status:'403'});
 
-        const cleanContent = sanitize(req.body?.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitize(req.body?.content, cleanOptions);
 
         const newCourseData = await course.findOneAndUpdate({courseCode:req?.params?.id}, {intro: cleanContent}, {new:true});
 

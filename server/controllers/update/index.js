@@ -1,10 +1,10 @@
 import blogPost from "../../models/blogPost.js";
 import user from "../../models/user.js";
-import course from "../../models/course.js";
 import cloudinary from "cloudinary";
 import sanitize from "sanitize-html";
 import projectReport from "../../models/projectReport.js";
 import rsa from "../../models/rsa.js";
+import cleanOptions from "../../utils/cleanOptions.js";
 
 export const updateProfile = async (req, res)=>{
     try {
@@ -46,10 +46,7 @@ export const updateBlog = async (req, res) => {
                                     overwrite: true, secure : true})).secure_url;
                                     
         }else {newImage = existingBlog?.coverPhoto};
-        const cleanContent = sanitize(req.body.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitize(req.body.content, cleanOptions);
         Object.assign(existingBlog,
             {
                 title : req.body.title, coverPhoto: newImage, 
@@ -73,10 +70,7 @@ export const updatePR = async (req, res) => {
         if(!existingPR) return res.json({status:'404', message:'that post does not exist'});
         if(existingPR?.authorId !== req.user.id) return res.json({message:'Access denied', status:'403'});
         
-        const cleanContent = sanitize(req.body.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitize(req.body.content, cleanOptions);
         Object.assign(existingPR,
             {
                 title : req.body.title, content: cleanContent,
@@ -99,10 +93,7 @@ export const updateRSA = async (req, res) => {
         const condition = ((req.user.enrollmentStatus==='ACTIVE' && req.user.currentRole==='INS') && req.user.id===returnedRsa?.authorId);
         if(!condition) return res.json({message:'Access denied.', status:'403'});
         
-        const cleanContent = sanitize(req.body.content, {
-            allowedTags: ['iframe','br'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitize(req.body.content, cleanOptions);
         
         Object.assign(returnedRsa, {
             title : req.body.title,

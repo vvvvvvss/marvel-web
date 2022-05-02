@@ -3,6 +3,7 @@ import projectReport from '../models/projectReport.js';
 import sanitizer from 'sanitize-html';
 import blogPost from '../models/blogPost.js';
 import rsa from '../models/rsa.js';
+import cleanOptions from '../utils/cleanOptions.js';
 
 export const createPR = async (req , res) => {
     try {
@@ -20,10 +21,7 @@ export const createPR = async (req , res) => {
         domain : req.user.currentStuCourse.slice(0,-4), reviewStatus : 'PENDING',
         feedback : ''});
 
-        newPR.content = sanitizer(req.body?.content, {
-            allowedTags: ['iframe','br','blockquote','strong'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-          });
+        newPR.content = sanitizer(req.body?.content, cleanOptions );
 
         const createdPR = await newPR.save();
         return res.json({post : createdPR, status : '201', message : 'successfully created pr'});
@@ -35,10 +33,8 @@ export const createPR = async (req , res) => {
 
 export const createBlog = async (req , res) => {
     try {
-        const cleanContent = sanitizer(req.body.content, {
-            allowedTags: ['iframe','br','strong','blockquote'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitizer(req.body.content, cleanOptions);
+        
         const newBlogPost = new blogPost({
         authorId : req.user.id, authorName:req.user?.name,
         authorCourseCode : `${req.user?.currentRole==='STU' ? req.user?.currentStuCourse : 'NA'}`,
@@ -66,10 +62,7 @@ export const createRSA = async (req, res) => {
         const condition = req.user.currentRole==='INS' && req.user.enrollmentStatus==='ACTIVE';
         if(!condition) return res.json({message : 'Access denied.', status:'403'});
         
-        const cleanContent = sanitizer(req.body.content, {
-            allowedTags: ['iframe','br', 'blockquote','strong'], allowedAttributes: { 'iframe': ['src'] },
-            allowedIframeHostnames: ['www.youtube.com','codesandbox.io','codepen.io','www.thiscodeworks.com'], nestingLimit : 5
-        });
+        const cleanContent = sanitizer(req.body.content, cleanOptions);
 
         const newRSA = new rsa({
             title : req.body.title, content : cleanContent, tags: req.body.tags, 
