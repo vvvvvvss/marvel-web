@@ -3,14 +3,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {CardHeader, Typography, Card, CardContent, Link, IconButton, Dialog,
 DialogActions, DialogContent, DialogTitle, DialogContentText, Button, CardActions} from "@mui/material";
 import { useState, useEffect, memo } from "react";
-import ReactMde from "react-mde";
-import "../../components/Widgets/react-mde-all.css";
 import { editCourse } from "../../API";
 import { useParams } from "react-router-dom";
 import {useMutation, useQueryClient} from "react-query";
 import useAuth from "../../utils/hooks/useAuth.js";
 import RenderMarkdown from "../../components/RenderMarkdown.js";
-
+import Editor from '../../components/Editor.js'
 
 // this handles deleting task and editing task
 const TaskCard = ({tsk, tskIndex, lvIndex}) => {
@@ -91,17 +89,12 @@ const TaskCard = ({tsk, tskIndex, lvIndex}) => {
                 :
                 <>
                 {/* // editor */}
-                <ReactMde 
-                    value={content}
-                    onChange={(e)=>{setChanged(true);setContent(e)}}
-                    selectedTab={editorTab}
-                    onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
-                    generateMarkdownPreview={markdown =>
-                        Promise.resolve(
-                        <RenderMarkdown content={markdown} />
-                    )
-                    }
-                    />
+                <Editor
+                value={content} 
+                onChange={(e)=>(setContent(e))}
+                selectedTab={editorTab}
+                onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
+                />
                 </>
             }
             </CardContent>

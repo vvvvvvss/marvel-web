@@ -3,12 +3,9 @@ import { useState, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
-import ReactMde from 'react-mde';
-import "./react-mde-all.css";
+import Editor from "../Editor.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getPost, editPost } from "../../API/index.js";
-import RenderMarkdown from "../RenderMarkdown.js";
-
 
 const DbEditPost = ({postType, slug, open, setOpen}) => {
     const queryClient = useQueryClient()
@@ -117,18 +114,12 @@ const DbEditPost = ({postType, slug, open, setOpen}) => {
 
                 <br/>
                 {/* DESCRIPTION MARKDOWN */}
-                <Paper className='container'><ReactMde 
-                value={formData?.content} label='content'
+                <Editor
+                value={formData?.content} 
                 onChange={(e)=>(setFormData({...formData, content : e}))}
                 selectedTab={editorTab}
                 onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
-                generateMarkdownPreview={markdown =>
-                    Promise.resolve(
-                        <RenderMarkdown content={markdown} />
-                ).catch(()=>(alert("could not parse your markdown")))
-                }
                 />
-                </Paper>
                 <br/>
                 
                 {/* CHIPS */}

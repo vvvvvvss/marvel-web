@@ -2,11 +2,11 @@ import { memo, useState, useEffect } from "react";
 import { Paper, Skeleton, Typography, Button, Chip } from "@mui/material";
 import RenderMarkdown from "../../components/RenderMarkdown.js";
 import useAuth from "../../utils/hooks/useAuth.js";
-import ReactMde from "react-mde";
 import { useMutation } from "react-query";
 import { editCourse } from "../../API";
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from "react-query";
+import Editor from "../../components/Editor.js";
 
 const Intro = ({intro, isOverviewLoading}) => {
     const [content, setContent] = useState();
@@ -62,16 +62,11 @@ const Intro = ({intro, isOverviewLoading}) => {
         </Typography>
         :
         <>
-        <ReactMde 
-        value={content}
-        onChange={(e)=>{setChanged(true);setContent(e)}}
+        <Editor
+        value={content} 
+        onChange={(e)=>(setContent(e))}
         selectedTab={editorTab}
         onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
-        generateMarkdownPreview={markdown =>
-            Promise.resolve(
-            <RenderMarkdown content={markdown} />
-        )
-        }
         />
         <>
             <Button sx={{margin:'10px'}} variant="contained" color='secondary' disabled={isMutating} onClick={()=>{setContent(intro);setChanged(false);setMode("view")}}>

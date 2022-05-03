@@ -4,14 +4,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react";
 import ImageUploading from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
-import ReactMde from 'react-mde';
-import "./react-mde-all.css";
+import Editor from "../Editor.js";
 import { createPost } from "../../API/index.js";
 import useHashParams from "../../utils/hooks/useHashParams.js"
 import { useNavigate } from "react-router-dom";
 import {useMutation, useQueryClient} from "react-query";
 import useAuth from "../../utils/hooks/useAuth.js";
-import RenderMarkdown from "../RenderMarkdown.js";
 
 const DbForm = () => {
     const params = useHashParams();
@@ -151,18 +149,12 @@ const DbForm = () => {
 
         <br/>
         {/* DESCRIPTION MARKDOWN */}
-        <Paper className='container'><ReactMde 
-          value={formData?.content} label='content'
-          onChange={(e)=>(setFormData({...formData, content : e}))}
-          selectedTab={editorTab}
-          onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
-          generateMarkdownPreview={markdown =>
-            Promise.resolve(
-              <RenderMarkdown content={markdown} />
-          ).catch(()=>(alert("could'nt parse your markdown.")))
-          }
+        <Editor
+        value={formData?.content} 
+        onChange={(e)=>(setFormData({...formData, content : e}))}
+        selectedTab={editorTab}
+        onTabChange={()=>(setEditorTab( editorTab==='write' ? 'preview' : 'write' ))}
         />
-        </Paper>
         <br/>
           
         {/* CHIPS */}

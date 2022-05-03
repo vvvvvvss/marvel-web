@@ -2,7 +2,7 @@ import { memo } from "react"
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
 import sanitizer from "sanitize-html";
-import { Typography, Link } from "@mui/material";
+import { Typography, Link, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
 import Gist from "react-gist";
 
 const RenderMarkdown = ({content, fontSize}) => {
@@ -27,7 +27,12 @@ const RenderMarkdown = ({content, fontSize}) => {
                   code : { component:Typography ,props : { variant:'code-small' }},
                   blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }},
                   li:{ component: Typography , props: {variant : 'body2', lineHeight:'1.7', component:'li'} },
-                  script:{component : Script}
+                  script:{component : Script},
+                  table:{component: Table},
+                  thead:{component:TableHead},
+                  tr:{component:TableRow},
+                  tbody:{component:TableBody},
+                  td:{component:TableCell}
               },
           }}>
             {
