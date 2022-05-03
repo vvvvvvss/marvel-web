@@ -63,7 +63,7 @@ export const darkTheme = createTheme({
           style : { fontFamily : 'Montserrat', fontWeight : '600', fontSize:'14px',letterSpacing:'0.23em',
           color:'#D3FFFF',backgroundColor:'#1E2629' ,lineHeight : '40px', textTransform:'uppercase'}},
           { props : { variant : 'code-small'},
-          style : { fontFamily : 'Source Code Pro', color:'#eeeeee',fontSize:'16px'}}
+          style : { fontFamily : 'Source Code Pro', color:'#eeeeee',fontSize:'15px'}}
         ]
       },
       MuiChip :{
