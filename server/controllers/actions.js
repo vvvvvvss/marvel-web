@@ -96,23 +96,6 @@ export const approveBlog = async (req, res) => {
             feedback: ''
         });
         await post.save();
-        //email
-        try {
-            const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-            var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-            sendSmtpEmail = {
-                sender : {email:"uvcemarvelweb@gmail.com"},
-                to: [{"name" : author?.name, "email": author?.email}],
-                templateId : 9,
-                params: {
-                    name : post?.authorName,
-                    title : post?.title,
-                    insName : req.user?.name,
-                    link : "https://uvcemarvel.in/"
-                }
-            }
-            await apiInstance.sendTransacEmail(sendSmtpEmail);
-        } catch (error) { console.log(error); }
         return res.json({message: 'Successfully approved blogpost.', status:'201'});
     } catch (error) {
         console.log(error);
