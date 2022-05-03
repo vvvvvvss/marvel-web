@@ -2,7 +2,7 @@ import { memo } from "react"
 import Markdown from 'markdown-to-jsx';
 import he from 'he';
 import sanitizer from "sanitize-html";
-import { Typography, Link, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
+import { Typography, Link } from "@mui/material";
 import Gist from "react-gist";
 
 const RenderMarkdown = ({content, fontSize}) => {
@@ -23,16 +23,12 @@ const RenderMarkdown = ({content, fontSize}) => {
                   p :{ component: Typography , props: {variant : 'body2', lineHeight:'1.7'}}, 
                   a :{ component : Link, props : {target : '_blank',rel:'noopener noreferrer', sx:{color:'primary.light'}} },
                   img : { props : {width : '100%' }},
-                  iframe : { props : {width : '100%', frameBorder : '0',style:{maxHeight:'400px'}}},
+                  iframe : { props : {width : '100%', frameBorder : '0',style:{maxHeight:'400px', minWidth:'0px'}}},
                   code : { component:Typography ,props : { variant:'code-small' }},
+                  pre : { component:'pre',props:{style:{whiteSpace:'pre-wrap',wordWrap:'break-word'}} },
                   blockquote : {component:Typography ,props : { sx:{backgroundColor:'#132222',borderRadius:'6px', padding:'14px',color:'secondary.light',margin:'12px'}, variant:'body2' }},
                   li:{ component: Typography , props: {variant : 'body2', lineHeight:'1.7', component:'li'} },
-                  script:{component : Script},
-                  table:{component: Table},
-                  thead:{component:TableHead},
-                  tr:{component:TableRow},
-                  tbody:{component:TableBody},
-                  td:{component:TableCell}
+                  script:{component : Script, props: {style:{maxHeight:'400px', minWidth:'0px'}}},
               },
           }}>
             {
