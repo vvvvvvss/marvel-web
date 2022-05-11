@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight : '700', fontSize: '18px',
         letterSpacing : '0.23em', marginLeft: '30px',
         [theme.breakpoints.down(480)]:{
-            fontSize:'16px',marginLeft:'12px',
+            fontSize:'14px',marginLeft:'12px',
         }
     },
     marvel : {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
        fontWeight : '400', fontSize: '18px',
        letterSpacing : '0.23em',
        [theme.breakpoints.down(480)]:{
-           fontSize:'16px',
+           fontSize:'14px',
        }
     },
 }));

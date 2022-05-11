@@ -10,12 +10,14 @@ const certificateSchema = mongoose.Schema({
     courseCode : {type : String},
     domainName : {type : String},
     slug : {type : String, slug : ["awardeeName","courseCode"], unique: true},
+    baked : {type : Boolean, default:false},
+    level: {type: Number},
 
     image : {type : String},
 
-    approvedByName : {type : String},
-    approvedBySlug : {type : String},
-    approvedById : {type : String}
+    approvedByName : {type : [String], default:[]},
+    approvedBySlug : {type : [String], default:[]},
+    approvedById : {type : [String], default:[]}
 }, {timestamps : true});
 
 export default mongoose.model("certificates", certificateSchema);

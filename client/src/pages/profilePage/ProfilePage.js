@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { getProfileFeed, getProfileData } from "../../API/index.js";
 import useAuth from "../../utils/hooks/useAuth.js";
+import CertificateCard from "../../components/CertificateCard";
 
 const ProfilePage = () => {
     const location = useLocation();
@@ -157,23 +158,23 @@ const ProfilePage = () => {
         </AppBar>
         <Box sx={{padding:'20px 0px 60px 0px', display:'flex', flexDirection:'column', alignItems:'center', maxWidth: '100%'}}>
         <span style={{display:'flex'}}>
-        <TextField placeholder='Search by Title' value={titleField} onChange={(e)=>(setTitleField(e.target.value))}/>&nbsp;&nbsp;&nbsp;&nbsp;
+        <TextField placeholder={`Search by ${ ["blog","pr","rsa"].includes(tab) ? 'Title': 'Course Code'}`} value={titleField} onChange={(e)=>(setTitleField(e.target.value))}/>&nbsp;&nbsp;&nbsp;&nbsp;
         <Button onClick={(e)=>(setSearchTitle(titleField))} variant='outlined'><SearchIcon/></Button>
         </span>
         <br/><br/>
         {isFeedLoading ? <CircularProgress/> : feedData?.pages?.[0]?.feed?.length===0 ? 
         <Typography variant="h6" fontWeight='600' color='#808080'>We found nothing.</Typography> :
         <Box sx={{display:'grid',gridTemplateColumns:{xs:'1fr',lg:'1fr 1fr',xl:'1fr 1fr 1fr'},gap:'20px'}}>
-        {["blog","pr","rsa"].includes(tab) &&
         <>
         {feedData?.pages?.map((page, i)=>(
             page?.feed?.map((p, j)=>(
+                ["blog","pr","rsa"].includes(tab) ?
                 <PostCard post={p} type={tab} variant='media' scope='else' key={`${i}${j}`}/>
+                : 
+                <CertificateCard certificate={p} key={`${i}${j}`} />
             )) 
         ))}
         </>  
-        // : Certificates map
-        }
         </Box>
         }
         <br/><br/>

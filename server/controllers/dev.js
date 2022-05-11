@@ -111,14 +111,15 @@ export const play2 = async (req, res) => {
 
 export const play3 = async(req, res) => {
     try {
-        // const data = await user.findOne({email:"vinuthakardakal@gmail.com"});
+        // const data = await user.findOne({email:"yogesh2747scif@gmail.com"});
+        // if(!data) return res.json({message:'Does not exist'});
         // Object.assign(data, {
         //     currentRole:'INS',
-        //     currentInsCourse: ['EV-RE-001','D-P-001'],
+        //     currentInsCourse: ['D-P-001'],
         //     enrollmentStatus: "ACTIVE",
         //     roleHistory: [...data.roleHistory, {
         //         role:'INS', 
-        //         insCourse: ['EV-RE-001','D-P-001'],
+        //         insCourse: ['D-P-001'],
         //         startTime: new Date()
         //     }]
         // });

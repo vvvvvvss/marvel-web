@@ -178,7 +178,7 @@ export const getToReviewPrs = async (req, res) => {
         {title: req?.query?.title==="" ? {$exists:1} : new RegExp(req?.query?.title, "i")}
         ]}
         )
-        .sort({_id:-1}).skip((Number(req?.query?.page)-1)*LIMIT)
+        .sort({_id:1}).skip((Number(req?.query?.page)-1)*LIMIT)
         .limit(LIMIT).select("-content -tags -feedback").lean().exec();
 
 // console.log( await user.db.db.admin().command({getLastRequestStatistics : 1})); 

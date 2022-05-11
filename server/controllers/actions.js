@@ -34,7 +34,7 @@ export const submitFeedbackPr = async (req, res) => {
                     level : returnedPost?.level,
                     name : returnedPost?.authorName,
                     insName : req.user?.name,
-                    link : "https://uvcemarvel.in/"
+                    link : "https://hub.uvcemarvel.in/"
                 }
             }
             await apiInstance.sendTransacEmail(sendSmtpEmail);
@@ -72,7 +72,7 @@ export const submitFeedbackBlog = async (req, res) => {
                     name : returnedPost?.authorName,
                     title : returnedPost?.title,
                     insName : req.user?.name,
-                    link : "https://uvcemarvel.in/"
+                    link : "https://hub.uvcemarvel.in/"
                 }
             }
             await apiInstance.sendTransacEmail(sendSmtpEmail);
@@ -110,15 +110,19 @@ export const approvePR = async (req, res) => {
         if(!req.user?.currentInsCourse?.includes(post.courseCode)) return res.json({message : 'Access denied.', status : '403'});
         const totalLevels = (await course.findOne({courseCode: post.courseCode}).select('totalLevels -_id').lean().exec()).totalLevels;
         const author = await user.findOne({id : post.authorId}).exec();
+        
         //course completed.
         if((post?.level===author?.currentLevel&&post?.level===totalLevels)&&author?.currentStuCourse===post?.courseCode){
             // award certificate. done
-            const newCert = new certificate({
-                awardeeId : author?.id, awardeeName: author?.name, awardeeSlug: author?.slug,
-                courseCode : post?.courseCode, domainName: post?.domainName,
-                approvedByName : req.user.name, approvedBySlug: req.user.slug, approvedById: req.user.id
-            });
-            await newCert.save();
+            const existingCertificate = await certificate.findOne({$and:[
+                { awardeeId: author?.id },
+                { courseCode: post?.courseCode }
+            ]});
+            existingCertificate.baked = true;
+            existingCertificate.approvedByName.push(req.user.name);
+            existingCertificate.approvedBySlug.push(req.user.slug);
+            existingCertificate.approvedById.push(req.user.id);
+            await existingCertificate.save();
             // make author inactive. role becomes na, currentStuCourse becomes na
             Object.assign(author, {
                 enrollmentStatus : 'INACTIVE', currentRole : 'NA',
@@ -140,14 +144,33 @@ export const approvePR = async (req, res) => {
                         name : post?.authorName,
                         courseCode : post?.courseCode,
                         insName : req.user?.name,
-                        link : "https://uvcemarvel.in/"
+                        link : "https://hub.uvcemarvel.in/"
                     }
                 }
                 await apiInstance.sendTransacEmail(sendSmtpEmail);
             } catch (error) { console.log(error); }
             return res.json({status : '201', message:'successfully awarded certificate and approved.'});
+        
         //level-up
         }else if((post?.level==author?.currentLevel && post?.level < totalLevels)&&author?.currentStuCourse===post?.courseCode){
+            //certificate
+            await certificate.findOneAndUpdate(
+                {$and:[
+                    {awardeeId: post?.authorId},
+                    {courseCode: post?.courseCode}
+                ]},
+                {
+                awardeeId: author?.id,
+                awardeeName: author?.name,
+                awardeeSlug: author?.slug,
+                courseCode: post?.courseCode,
+                domainName: post?.domainName,
+                level: post?.level,
+                $push: {approvedById : req.user.id, 
+                        approvedByName : req.user.name, 
+                        approvedBySlug : req.user.slug
+                    },
+                },{upsert:true});
             //user proceeds next level done
             author.currentLevel +=1;
             await author.save();
@@ -167,7 +190,7 @@ export const approvePR = async (req, res) => {
                         courseCode : post?.courseCode,
                         level: Number(post?.level)-1,
                         insName : req.user?.name,
-                        link : "https://uvcemarvel.in/"
+                        link : "https://hub.uvcemarvel.in/"
                     }
                 }
                 await apiInstance.sendTransacEmail(sendSmtpEmail);
@@ -192,7 +215,7 @@ export const approvePR = async (req, res) => {
                         courseCode : post?.courseCode,
                         level : post?.level,
                         insName : req.user?.name,
-                        link : "https://uvcemarvel.in/"
+                        link : "https://hub.uvcemarvel.in/"
                     }
                 }
                 await apiInstance.sendTransacEmail(sendSmtpEmail);

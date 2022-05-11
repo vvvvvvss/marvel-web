@@ -16,21 +16,19 @@ const PostCard = ({type, post, variant, scope}) => {
         <>
         <Card variant='outlined' 
         sx={{margin:{xs:'0px 20px 0px 20px',sm:["dashboard","ins-dashboard"].includes(scope)?'0px 20px 0px 20px':'0px'},height:'max-content',position:'relative',justifySelf:'center',
-        maxWidth:'400px', 
-        width:{xs:`${(variant==="media"&&type==='blog')?'100%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
-        opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.5':'1'}`}}>
-          {(type==='blog' && variant==='media') && <>
-          <IconButton onClick={handleShare}
-          sx={{position:'absolute',top:'10px',right:'10px',color:'primary.light',backgroundColor:'rgba(0,0,0,0.5)',":hover":{backgroundColor:'rgba(0,0,0,0.5)'}}}><ShareIcon/></IconButton>
-              <CardMedia
-              component="img"
-              width="100%" sx={{maxHeight:'150px',objectFit:'cover', borderRadius:'4px'}}
-              image={post?.coverPhoto}
-              alt={post?.title}
-          /></>}
+        width:{xs:`${(variant==="media"&&type==='blog')?'85%':'93%'}`,md:["dashboard","ins-dashboard"].includes(scope)?'93%':'400px'},
+        opacity:`${["PENDING","FLAGGED"].includes(post?.reviewStatus)&&!["ins-dashboard","dashboard"].includes(scope) ? '0.4':'1'}`}}>
+          {(type==='blog' && variant==='media') && 
+          <CardMedia
+           sx={{objectFit:'cover', borderRadius:'4px', aspectRatio:'2 / 1'}}
+          image={post?.coverPhoto}
+          alt={post?.title}
+      />
+         }
+          
           <CardContent sx={{padding:'10px'}} >
             <Typography variant={["ins-dashboard","dashboard"].includes(scope) ? 'body1' : 'h6'} fontWeight={["ins-dashboard","dashboard"].includes(scope)?'500':''}
-            sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap',maxWidth:'100%',fontSize:{xs:'18px',md:'auto'},lineHeight:'32px'}}>
+            sx={{overflow: 'hidden',textOverflow:'ellipsis',wordWrap:'break-word',whiteSpace:'nowrap',maxWidth:'95%',fontSize:{xs:'18px',md:'auto'},lineHeight:'32px'}}>
               {post?.title}
             </Typography>
             <Typography sx={{color:'#c4c4c4',marginTop:["ins-dashboard","dashboard"].includes(scope)?'8px':'0px',textOverflow:'ellipsis'}} variant='caption' component='div'>
@@ -47,7 +45,7 @@ const PostCard = ({type, post, variant, scope}) => {
               color={post?.reviewStatus==='PENDING'?'warning':post.reviewStatus==='FLAGGED'?'error':post.reviewStatus==='APPROVED'?'success':'default'}
                sx={{position:'absolute',left:'12px',bottom:'12px'}} size='small' variant='filled'/> 
               }
-              {(["pr","rsa"].includes(type)&&(!["dashboard","ins-dashboard"].includes(scope))) && 
+              {(["pr","rsa","blog"].includes(type)&&(!["dashboard","ins-dashboard"].includes(scope))) && 
                <Button variant='text' color='secondary' size='small' onClick={handleShare}> 
                 Share
               </Button>}&nbsp;&nbsp;

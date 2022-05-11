@@ -1,6 +1,7 @@
 import rsa from "../models/rsa.js";
 import prs from "../models/projectReport.js";
-import blog from "../models/blogPost.js"
+import blog from "../models/blogPost.js";
+import certificate from "../models/certificate.js";
 
 export const getRsaByCourse = async (req, res) => {
     try {
@@ -83,8 +84,13 @@ export const getRsaByProfile = async (req, res) => {
 
 export const getCertByProfile = async (req, res) => {
     try {
-        ///getting certificates
-        return res.json({status:'200',feed:[]})
+        //getting certificates
+        const LIMIT = 6;
+        const certificates = await certificate.find({$and:[
+            {awardeeSlug: req.params.id},
+            {courseCode: req.query?.title!=='' ? req.query?.title : {$exists: 1}}
+        ]}).sort({_id:-1}).skip((Number(req.query.page)-1)*LIMIT).lean().exec();
+        return res.json({status:'200',feed:certificates});
     } catch (error) {
         console.log(error);
         return res.json({status:'BRUH',message:'Something went wrong :('});
