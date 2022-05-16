@@ -15,7 +15,7 @@ const RSASchema = mongoose.Schema({
 
     // EDITABLE DATA
     title :{ type : String, maxLength : 120, required : true},
-    content : { type : String, required : true, maxLength : 10000},
+    content : { type : String, required : true, maxLength : 15000},
     tags : { type : [String], default : []},
     
     rankingScore:{type: Number, default:1}
