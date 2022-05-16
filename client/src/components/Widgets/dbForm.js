@@ -37,7 +37,7 @@ const DbForm = () => {
     const {mutate:sendCreate, isLoading:isCreateLoading} = useMutation(()=>(createPost(formData, formType)),{
       onSuccess:(response)=>{
         if(["404","403","BRUH","401"].includes(response?.status)){
-          alert("Something went wrong. Could'nt create. Reason: Bad request");
+          alert(`Something went wrong. Could'nt create. Reason: Bad request. CODE: ${response?.status}`);
         }else{
           queryClient.setQueryData([formType,response?.post?.slug],()=>({post: response?.post, status:'200'}));
           queryClient.invalidateQueries([{nature:'feed', place:'dashboard', widget:'subs', postType:formType, authUser:authUser?.id }]);
@@ -56,7 +56,7 @@ const DbForm = () => {
         }
       },
       onError:()=>{
-        alert("Could'nt post. Something went wrong on our side.");
+        alert("Could'nt post. Something went wrong.");
         navigate({hash:""});
       }
     });
