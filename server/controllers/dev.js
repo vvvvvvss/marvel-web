@@ -92,8 +92,28 @@ export const assignStu = async (req, res) => {
 
 export const play = async (req, res) => {
     try {
-        // const count = await user.find({$and:[{currentRole:'INS'},{currentInsCourse:{$in:['AI-ML-001']}},{enrollmentStatus:'ACTIVE'}]});
-        // return res.json({count});
+        // const updated = await user.updateMany(
+        //     {
+        //         email:{$in:[
+        //             'apisaac85@gmail.com',
+        //             'anish121201@gmail.com',
+        //             'anupamahegde2002@gmail.com'
+        //         ]}
+        //     },
+        //     {
+        //         enrollmentStatus: "ACTIVE",
+        //         currentRole: "INS",
+        //         currentInsCourse : ['AI-ML-001','IOT-001','D-P-001','CL-CY-001','EV-RE-001'],
+        //         roleHistory:[{
+        //             role: "INS",
+        //             insCourse: ['AI-ML-001','IOT-001','D-P-001','CL-CY-001','EV-RE-001'],
+        //             startTime : new Date()
+        //         }]
+        //     },
+        //     {new:true, timestamps:true}
+        // );
+
+        // return res.json(updated);
     
     } catch (error) {
         return res.json(error);
@@ -102,8 +122,14 @@ export const play = async (req, res) => {
 
 export const play2 = async (req, res) => {
     try {
-        // const data = await user.find({name : new RegExp("vishal", "i")}).lean().exec();
-        // return res.json({data});
+        // const find = await user.find({
+        //             email:{$in:[
+        //                 'apisaac85@gmail.com',
+        //                 'anish121201@gmail.com',
+        //                 'anupamahegde2002@gmail.com'
+        //             ]}
+        //         }).lean().exec();
+        // return res.json(find);
     } catch (error) {
         return res.json(error);
     }
