@@ -117,7 +117,7 @@ export const play = async (req, res) => {
 export const play2 = async (req, res) => {
     try {
         // const find = await user.find({
-        //             email:new RegExp("n",'i')
+        //             email:new RegExp("prath",'i')
         //         }).lean().exec();
         // return res.json(find);
     } catch (error) {
@@ -127,20 +127,19 @@ export const play2 = async (req, res) => {
 
 export const play3 = async(req, res) => {
     try {
-        // const data = await user.findOne({email:"yogesh2747scif@gmail.com"});
-        // if(!data) return res.json({message:'Does not exist'});
-        // Object.assign(data, {
-        //     currentRole:'INS',
-        //     currentInsCourse: ['D-P-001'],
-        //     enrollmentStatus: "ACTIVE",
-        //     roleHistory: [...data.roleHistory, {
-        //         role:'INS', 
-        //         insCourse: ['D-P-001'],
-        //         startTime: new Date()
-        //     }]
-        // });
-        // const saved = await data.save();
-        // return res.json({saved});
+        // const updated = await user.updateOne({'email':'pratheeth596@gmail.com'},
+        // {
+        //     enrollmentStatus:"ACTIVE",
+        //     currentRole:"INS",
+        //     // currentStuCourse:"",
+        //     currentInsCourse:["CL-CY-001","AI-ML-001"],
+        //     $push:{roleHistory:{
+        //         role: "INS",
+        //         insCourse: ['AI-ML-001','CL-CY-001'],
+        //         startTime : new Date()
+        //     }}
+        // }, {new:true, timestamps:true});
+        // return res.json({updated});
     } catch (error) { 
         return res.json({error});
     }
