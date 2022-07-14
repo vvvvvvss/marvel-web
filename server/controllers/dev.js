@@ -91,9 +91,7 @@ export const play = async (req, res) => {
         // const updated = await user.updateMany(
         //     {
         //         email:{$in:[
-        //             'apisaac85@gmail.com',
-        //             'anish121201@gmail.com',
-        //             'anupamahegde2002@gmail.com'
+        //             'uvcemarvel@gmail.com',
         //         ]}
         //     },
         //     {
