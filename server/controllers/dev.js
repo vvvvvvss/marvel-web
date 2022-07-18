@@ -127,15 +127,15 @@ export const play2 = async (req, res) => {
 
 export const play3 = async(req, res) => {
     try {
-        // const updated = await user.updateOne({'email':'pratheeth596@gmail.com'},
+        // const updated = await user.updateOne({'email':'anushalnayaka789@gmail.com'},
         // {
         //     enrollmentStatus:"ACTIVE",
-        //     currentRole:"INS",
-        //     // currentStuCourse:"",
-        //     currentInsCourse:["CL-CY-001","AI-ML-001"],
+        //     currentRole:"STU",
+        //     currentStuCourse:"EV-RE-001",
+        //     // currentInsCourse:["AI-ML-001"],
         //     $push:{roleHistory:{
-        //         role: "INS",
-        //         insCourse: ['AI-ML-001','CL-CY-001'],
+        //         role: "STU",
+        //         insCourse: ['CL-CY-001'],
         //         startTime : new Date()
         //     }}
         // }, {new:true, timestamps:true});
