@@ -63,7 +63,6 @@ export const assignStu = async (req, res) => {
     // const clcy = [
     //     "vishalvinayram5432@gmail.com"
     // ];
-    // // const count = await user.find({email : {$in : iot}}).select("email name").lean().exec();
     // const updated = await user.updateMany({email: {$in: clcy}}, {
     //     enrollmentStatus: "ACTIVE",
     //     currentRole: "STU",
