@@ -1,5 +1,11 @@
+import { WebUi } from '@marvel/web-ui';
+
 export function Index() {
-  return <div></div>;
+  return (
+    <div>
+      <WebUi />
+    </div>
+  );
 }
 
 export default Index;
