@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "web-ui": "libs/web-ui",
+    "web-utils": "libs/web-utils",
     "webapp": "apps/webapp"
   }
 }

@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@marvel/web-ui": ["libs/web-ui/src/index.ts"]
+      "@marvel/web-ui": ["libs/web-ui/src/index.ts"],
+      "@marvel/web-utils": ["libs/web-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

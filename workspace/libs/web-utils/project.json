@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web-utils/src",
+  "projectType": "library",
+  "tags": ["utils"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web-utils/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}
