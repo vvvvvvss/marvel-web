@@ -14,22 +14,6 @@ const userSchema = new mongoose.Schema(
     id: { type: String, required: true, unique: true },
 
     // META DATA ( changes. auto )
-    currentRole: {
-      type: String,
-      enum: { values: ['STU', 'INS', 'NA'] },
-      default: 'NA',
-    },
-    currentStuCourse: { type: String, default: 'NA' },
-    currentInsCourse: { type: [String], default: [] },
-    currentLevel: { type: Number },
-    roleHistory: [
-      {
-        role: { type: String, enum: { values: ['STU', 'INS', 'NA'] } },
-        startTime: { type: Date },
-        stuCourse: { type: String },
-        insCourse: { type: [String] },
-      },
-    ], //role history should always be appended at the time of assigning roles
     rights: {
       type: String,
       enum: { values: ['MOD', 'USER'] },
@@ -37,7 +21,7 @@ const userSchema = new mongoose.Schema(
     },
     enrollmentStatus: {
       type: String,
-      enum: { values: ['ACTIVE', 'INACTIVE', 'UNKNOWN', 'BANNED'] },
+      enum: { values: ['KNOWN', 'UNKNOWN', 'BANNED'] },
       default: 'UNKNOWN',
     },
 
