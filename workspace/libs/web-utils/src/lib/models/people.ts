@@ -3,7 +3,7 @@ import slug from 'mongoose-slug-generator';
 
 mongoose.plugin(slug);
 
-const userSchema = new mongoose.Schema(
+const peopleSchema = new mongoose.Schema(
   {
     // IDENTITY DATA ( does'nt change)
     slug: { type: String, slug: 'name', unique: true },
@@ -14,10 +14,15 @@ const userSchema = new mongoose.Schema(
     id: { type: String, required: true, unique: true },
 
     // META DATA ( changes. auto )
-    rights: {
-      type: String,
-      enum: { values: ['MOD', 'USER'] },
+    scope: {
+      type: [String],
+      enum: {
+        values: ['INS', 'STU_TRACK', 'PRO_TRACK', 'ROLES', 'ADMIN', 'DEV'],
+      },
       default: 'USER',
+    },
+    insCourses: {
+      type: [String],
     },
     enrollmentStatus: {
       type: String,
@@ -30,13 +35,8 @@ const userSchema = new mongoose.Schema(
     gitHub: { type: String, maxLength: 80 },
     linkedIn: { type: String, maxLength: 80 },
     website: { type: String, maxLength: 80 },
-
-    // META DATA IF BANNED
-    bannedAt: { type: String },
-    bannedByName: { type: String },
-    bannedById: { type: String },
   },
   { timestamps: true }
 );
 
-export default mongoose.model('users', userSchema);
+export default mongoose.model('people', peopleSchema, 'people');

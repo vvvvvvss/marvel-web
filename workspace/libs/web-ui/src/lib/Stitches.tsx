@@ -19,7 +19,7 @@ export const { createTheme, styled, config, keyframes } = createStitches({
       primary12: primary.crimson12,
     },
     fonts: {
-      primary: 'helvetica, sans-serif',
+      primary: 'IBM Plex Sans, sans-serif',
       secondary: 'times new roman, serif',
     },
     space: {
