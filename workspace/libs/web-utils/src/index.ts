@@ -1,1 +1,1 @@
-// export * from './lib/dbConnect';
+export * from './lib/models';

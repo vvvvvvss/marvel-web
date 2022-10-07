@@ -5,7 +5,7 @@ mongoose.plugin(slug);
 
 const peopleSchema = new mongoose.Schema(
   {
-    // IDENTITY DATA ( does'nt change)
+    // IDENTITY DATA ( doesn't change)
     slug: { type: String, slug: 'name', unique: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -17,14 +17,14 @@ const peopleSchema = new mongoose.Schema(
     scope: {
       type: [String],
       enum: {
-        values: ['INS', 'STU_TRACK', 'PRO_TRACK', 'ROLES', 'ADMIN', 'DEV'],
+        values: ['INS', 'STU_TRACK', 'PRO_TRACK', 'ADMIN', 'DEV'],
       },
       default: 'USER',
     },
     insCourses: {
       type: [String],
     },
-    enrollmentStatus: {
+    doIKnow: {
       type: String,
       enum: { values: ['KNOWN', 'UNKNOWN', 'BANNED'] },
       default: 'UNKNOWN',
@@ -36,7 +36,8 @@ const peopleSchema = new mongoose.Schema(
     linkedIn: { type: String, maxLength: 80 },
     website: { type: String, maxLength: 80 },
   },
-  { timestamps: true }
+  { timestamps: true, collection: 'people' }
 );
 
-export default mongoose.model('people', peopleSchema, 'people');
+const people = mongoose.model('people', peopleSchema);
+export default people;
