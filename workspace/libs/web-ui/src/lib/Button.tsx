@@ -16,16 +16,12 @@ export const Button = styled('button', {
   variants: {
     variant: {
       standard: {
-        backgroundColor: '$primary9',
-        borderColor: '$primary9',
-        color: '$primary1',
+        backgroundColor: '$primary30',
+        borderColor: '$primary30',
+        color: '$primary60',
         '&:hover': {
-          borderColor: '$primary10',
-          backgroundColor: '$primary10',
-        },
-        '&:active': {
-          backgroundColor: '$primary11',
-          borderColor: '$primary11',
+          borderColor: '$primary25',
+          backgroundColor: '$primary25',
         },
       },
       outlined: {

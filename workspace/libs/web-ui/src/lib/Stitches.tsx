@@ -1,26 +1,27 @@
 import { createStitches } from '@stitches/react';
-import { crimson as primary, sageDark as primaryDark } from '@radix-ui/colors';
 import type * as Stitches from '@stitches/react';
 
 export const { createTheme, styled, config, keyframes } = createStitches({
   theme: {
     colors: {
-      primary1: primary.crimson1,
-      primary2: primary.crimson2,
-      primary3: primary.crimson3,
-      primary4: primary.crimson4,
-      primary5: primary.crimson5,
-      primary6: primary.crimson6,
-      primary7: primary.crimson7,
-      primary8: primary.crimson8,
-      primary9: primary.crimson9,
-      primary10: primary.crimson10,
-      primary11: primary.crimson11,
-      primary12: primary.crimson12,
+      primaryHue: '0',
+      secondaryHue: '170',
+      primary10: 'hsla(0, 0%, 0%, 1)',
+      primary20: 'hsla(0, 8%, 0%, 1)',
+      primary25: 'hsla(0, 18%, 0%, 1)',
+      primary30: 'hsla(0, 24%, 0%, 1)',
+      primary40: 'hsla(0, 63%, 0%, 1)',
+      primary50: 'hsla(0, 79%, 0%, 1)',
+      primary60: 'hsla(0, 95%, 0%, 1)',
+      secondary10: 'hsla(170, 70%, 7%, 1)',
+      secondary20: 'hsla(170, 53%, 15%, 1)',
+      secondary30: 'hsla(170, 55%, 21%, 1)',
+      secondary40: 'hsla(170, 50%, 60%, 1)',
+      secondary50: 'hsla(170, 62%, 77%, 1)',
+      secondary60: 'hsla(170, 100%, 90%, 1)',
     },
     fonts: {
       primary: 'IBM Plex Sans, sans-serif',
-      secondary: 'times new roman, serif',
     },
     space: {
       1: '5px',
@@ -216,20 +217,6 @@ export const { createTheme, styled, config, keyframes } = createStitches({
 });
 export type CSS = Stitches.CSS<typeof config>;
 
-export const darkTheme = createTheme({
-  colors: {
-    primary1: primaryDark.sage1,
-    primary2: primaryDark.sage2,
-    primary3: primaryDark.sage3,
-    primary4: primaryDark.sage4,
-    primary5: primaryDark.sage5,
-    primary6: primaryDark.sage6,
-    primary7: primaryDark.sage7,
-    primary8: primaryDark.sage8,
-    primary9: primaryDark.sage9,
-    primary10: primaryDark.sage10,
-    primary11: primaryDark.sage11,
-    primary12: primaryDark.sage12,
-    accent: '#CC4E6C',
-  },
+export const lightTheme = createTheme({
+  colors: {},
 });
