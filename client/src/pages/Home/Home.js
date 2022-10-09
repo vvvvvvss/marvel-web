@@ -67,7 +67,7 @@ const Home = () => {
             fontSize="12px"
             sx={{ maxWidth: "650px", justifySelf: "center" }}
           >
-            MARVEL Annual Report 2022-2023 is out now!.{" "}
+            MARVEL Annual Report 2021-2022 is out now!.{" "}
             <Link
               href="https://www.playbook.com/s/marvel/uvce-marvel"
               rel="noopener norefferer"
