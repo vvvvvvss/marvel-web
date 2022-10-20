@@ -1,24 +1,39 @@
 import { createStitches } from '@stitches/react';
 import type * as Stitches from '@stitches/react';
 
+const primaryHue = 0;
+const secondaryHue = 170;
+
 export const { createTheme, styled, config, keyframes } = createStitches({
   theme: {
     colors: {
-      primaryHue: '0',
-      secondaryHue: '170',
-      primary10: 'hsla(0, 0%, 0%, 1)',
-      primary20: 'hsla(0, 8%, 0%, 1)',
-      primary25: 'hsla(0, 18%, 0%, 1)',
-      primary30: 'hsla(0, 24%, 0%, 1)',
-      primary40: 'hsla(0, 63%, 0%, 1)',
-      primary50: 'hsla(0, 79%, 0%, 1)',
-      primary60: 'hsla(0, 95%, 0%, 1)',
-      secondary10: 'hsla(170, 70%, 7%, 1)',
-      secondary20: 'hsla(170, 53%, 15%, 1)',
-      secondary30: 'hsla(170, 55%, 21%, 1)',
-      secondary40: 'hsla(170, 50%, 60%, 1)',
-      secondary50: 'hsla(170, 62%, 77%, 1)',
-      secondary60: 'hsla(170, 100%, 90%, 1)',
+      //primary
+      p0: `hsla(${primaryHue}, 0%, 0%, 1)`,
+      p1: `hsla(${primaryHue}, 0%, 9%, 1)`,
+      p2: `hsla(${primaryHue}, 0%, 18%, 1)`,
+      p3: `hsla(${primaryHue}, 0%, 27%, 1)`,
+      p4: `hsla(${primaryHue}, 0%, 36%, 1)`,
+
+      p5: `hsla(${primaryHue}, 0%, 57%, 1)`,
+      p6: `hsla(${primaryHue}, 0%, 66%, 1)`,
+      p7: `hsla(${primaryHue}, 0%, 73%, 1)`,
+      p8: `hsla(${primaryHue}, 0%, 82%, 1)`,
+      p9: `hsla(${primaryHue}, 0%, 91%, 1)`,
+      p10: `hsla(${primaryHue}, 0%, 100%, 1)`,
+
+      //secondary
+      s0: `hsla(${secondaryHue}, 60%, 5%, 1)`,
+      s1: `hsla(${secondaryHue}, 0%, 9%, 1)`,
+      s2: `hsla(${secondaryHue}, 0%, 18%, 1)`,
+      s3: `hsla(${secondaryHue}, 0%, 27%, 1)`,
+      s4: `hsla(${secondaryHue}, 0%, 36%, 1)`,
+
+      s5: `hsla(${secondaryHue}, 0%, 57%, 1)`,
+      s6: `hsla(${secondaryHue}, 0%, 66%, 1)`,
+      s7: `hsla(${secondaryHue}, 0%, 73%, 1)`,
+      s8: `hsla(${secondaryHue}, 0%, 82%, 1)`,
+      s9: `hsla(${secondaryHue}, 0%, 91%, 1)`,
+      s10: `hsla(${secondaryHue}, 0%, 100%, 1)`,
     },
     fonts: {
       primary: 'IBM Plex Sans, sans-serif',

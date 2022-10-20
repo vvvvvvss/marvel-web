@@ -14,7 +14,7 @@ export function Index() {
         jc: 'center',
       }}
     >
-      <Appbar css={{ backgroundColor: '$primary1' }}>
+      <Appbar css={{ backgroundColor: '$p10' }}>
         <Box css={{ maxWidth: '$lg' }}>
           <Box></Box>
         </Box>
