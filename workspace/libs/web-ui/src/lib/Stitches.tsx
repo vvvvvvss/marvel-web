@@ -23,17 +23,17 @@ export const { createTheme, styled, config, keyframes } = createStitches({
 
       //secondary
       s0: `hsla(${secondaryHue}, 60%, 5%, 1)`,
-      s1: `hsla(${secondaryHue}, 0%, 9%, 1)`,
-      s2: `hsla(${secondaryHue}, 0%, 18%, 1)`,
-      s3: `hsla(${secondaryHue}, 0%, 27%, 1)`,
-      s4: `hsla(${secondaryHue}, 0%, 36%, 1)`,
+      s1: `hsla(${secondaryHue}, 60%, 9%, 1)`,
+      s2: `hsla(${secondaryHue}, 60%, 18%, 1)`,
+      s3: `hsla(${secondaryHue}, 60%, 27%, 1)`,
+      s4: `hsla(${secondaryHue}, 60%, 36%, 1)`,
 
-      s5: `hsla(${secondaryHue}, 0%, 57%, 1)`,
-      s6: `hsla(${secondaryHue}, 0%, 66%, 1)`,
-      s7: `hsla(${secondaryHue}, 0%, 73%, 1)`,
-      s8: `hsla(${secondaryHue}, 0%, 82%, 1)`,
-      s9: `hsla(${secondaryHue}, 0%, 91%, 1)`,
-      s10: `hsla(${secondaryHue}, 0%, 100%, 1)`,
+      s5: `hsla(${secondaryHue}, 65%, 57%, 1)`,
+      s6: `hsla(${secondaryHue}, 65%, 66%, 1)`,
+      s7: `hsla(${secondaryHue}, 65%, 73%, 1)`,
+      s8: `hsla(${secondaryHue}, 70%, 82%, 1)`,
+      s9: `hsla(${secondaryHue}, 70%, 91%, 1)`,
+      s10: `hsla(${secondaryHue}, 100%, 95%, 1)`,
     },
     fonts: {
       primary: 'IBM Plex Sans, sans-serif',
@@ -62,9 +62,9 @@ export const { createTheme, styled, config, keyframes } = createStitches({
       7: '45px',
       8: '65px',
       9: '80px',
-      lg: '720px',
+      sm: '720px',
+      lg: '960px',
       xl: '1280px',
-      sm: '480px',
     },
     fontSizes: {
       1: '12px',
@@ -232,6 +232,6 @@ export const { createTheme, styled, config, keyframes } = createStitches({
 });
 export type CSS = Stitches.CSS<typeof config>;
 
-export const lightTheme = createTheme({
+export const lightTheme = createTheme('light', {
   colors: {},
 });

@@ -1,16 +1,12 @@
 import { styled } from './Stitches';
 
-export const Button = styled('button', {
+export const IconButton = styled('button', {
   position: 'relative',
   overflow: 'hidden',
-  display: 'inline-block',
-  textAlign: 'center',
   borderRadius: '$pill',
+  aspectRatio: '1 / 1',
   border: '1.2px solid',
-  px: '1.2em',
-  py: '0.5em',
-  fontSize: '$3',
-  fontWeight: '600',
+  padding: '$2',
   cursor: 'pointer',
   userSelect: 'none',
   transition: 'background-color 200ms, transform 200ms',

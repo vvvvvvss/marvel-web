@@ -1,6 +1,7 @@
 import { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import '../styles.css';
+import { ThemeProvider } from 'next-themes';
 
 function CustomApp({
   Component,
@@ -12,7 +13,14 @@ function CustomApp({
       refetchOnWindowFocus={false}
       refetchInterval={60 * 5}
     >
-      <Component {...pageProps} />
+      <ThemeProvider
+        attribute="class"
+        enableSystem={false}
+        defaultTheme={'dark'}
+        themes={['light', 'dark']}
+      >
+        <Component {...pageProps} />
+      </ThemeProvider>
     </SessionProvider>
   );
 }
