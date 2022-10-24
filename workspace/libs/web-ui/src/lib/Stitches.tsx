@@ -63,7 +63,7 @@ export const { createTheme, styled, config, keyframes } = createStitches({
       8: '65px',
       9: '80px',
       sm: '720px',
-      lg: '960px',
+      lg: '1000px',
       xl: '1280px',
     },
     fontSizes: {

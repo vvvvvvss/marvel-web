@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { models, Schema } from 'mongoose';
 
 //course level report
 const levelReportSchema = new Schema(
@@ -68,15 +68,14 @@ const reportSchema = new Schema(
     feedback: String,
     rankingScore: Number,
   },
-  { collection: 'reports', discriminatorKey: '_type' }
+  { collection: 'reports', discriminatorKey: '_type', timestamps: true }
 );
 
-export const report = mongoose.model('report', reportSchema);
-export const levelReport = report.discriminator(
-  'levelReport',
-  levelReportSchema
-);
-export const stageReport = report.discriminator(
-  'stageReport',
-  stageReportSchema
-);
+export const report =
+  models['report'] || mongoose.model('report', reportSchema);
+export const levelReport =
+  models['levelReport'] ||
+  report.discriminator('levelReport', levelReportSchema);
+export const stageReport =
+  models['stageReport'] ||
+  report.discriminator('stageReport', stageReportSchema);

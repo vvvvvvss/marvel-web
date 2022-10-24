@@ -1,9 +1,10 @@
 import { Appbar, Box, IconButton, Span, Button, Avatar } from '@marvel/web-ui';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Link from 'next/link';
 import { useState } from 'react';
 
-const Navbar = () => {
+const Navbar = ({ home = false }) => {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   console.log(session);
@@ -47,47 +48,60 @@ const Navbar = () => {
         >
           MARVEL.
         </Span>
-        <Box
-          css={{
-            display: 'none',
-            '@bp1': { display: 'flex', alignItems: 'center', jc: 'center' },
-          }}
-        >
-          <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
-            Dashboard
-          </Button>
-          <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
-            About
-          </Button>
-          <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
-            Tracks
-          </Button>
-          <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
-            Search
-          </Button>
-          <Button variant={'text'} css={{ fontSize: '$2' }}>
-            Explore
-          </Button>
-        </Box>
-        {session?.user ? (
-          <Avatar
-            src={session?.user?.image}
-            alt={session?.user?.name}
+        {!home && (
+          <Box
             css={{
-              fontSize: '$2',
-              position: 'absolute',
-              right: '$4',
-              cursor: 'pointer',
-              '@bp1': { position: 'static' },
+              display: 'none',
+              '@bp2': { display: 'flex', alignItems: 'center', jc: 'center' },
             }}
-          />
+          >
+            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+              Dashboard
+            </Button>
+            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+              About
+            </Button>
+            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+              Tracks
+            </Button>
+            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+              Search
+            </Button>
+            <Button variant={'text'} css={{ fontSize: '$2' }}>
+              Explore
+            </Button>
+          </Box>
+        )}
+        {session?.user ? (
+          <>
+            <Link href={`/profile/${session?.user?.slug}`}>
+              <Avatar
+                src={session?.user?.profilePic}
+                alt={session?.user?.name}
+                css={{
+                  position: 'absolute',
+                  right: '$4',
+                  cursor: 'pointer',
+                  '@bp1': { position: 'static' },
+                }}
+              />
+            </Link>
+            <Button
+              onClick={() => signOut()}
+              variant={'standard'}
+              css={{
+                fontSize: '$2',
+                position: 'absolute',
+                right: '$4',
+                '@bp1': { position: 'static' },
+              }}
+            >
+              Sign Out
+            </Button>
+          </>
         ) : (
           <Button
-            onClick={() =>
-              session?.user
-                ? signOut({ redirect: false })
-                : signIn('google', { redirect: false })
-            }
+            onClick={() => signIn('google', { redirect: false })}
             variant={'standard'}
             css={{
               fontSize: '$2',

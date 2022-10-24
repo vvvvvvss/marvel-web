@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { models, Schema } from 'mongoose';
 import slug from 'mongoose-slug-generator';
 mongoose.plugin(slug);
 
@@ -96,9 +96,11 @@ const workSchema = new Schema(
     slug: String,
     reviewStatus: String,
   },
-  { collection: 'works', discriminatorKey: '_type' }
+  { collection: 'works', discriminatorKey: '_type', timestamps: true }
 );
 
-export const work = mongoose.model('work', workSchema);
-export const courseWork = work.discriminator('courseWork', courseWorkSchema);
-export const projectWork = work.discriminator('projectWork', projectWorkSchema);
+export const work = models['work'] || mongoose.model('work', workSchema);
+export const courseWork =
+  models['courseWork'] || work.discriminator('courseWork', courseWorkSchema);
+export const projectWork =
+  models['projectWork'] || work.discriminator('projectWork', projectWorkSchema);

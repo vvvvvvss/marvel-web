@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import connectToDB from '../../../utils/dbConnector';
+import { people as person } from '@marvel/web-utils';
 
 async function refreshAccessToken(token) {
   console.log('refreshToken got called');
@@ -79,7 +81,49 @@ export const authOptions = {
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
-      session.user = token.user;
+      await connectToDB();
+      const existingUser = await person
+        //@ts-ignore //might fix this later
+        .findOne(
+          { id: token?.user?.id },
+          '-bio -website -linkedIn -gitHub -_id'
+        )
+        .lean()
+        .exec();
+      console.log('find one is called');
+      if (!existingUser) {
+        // if no user, create a new user with the available data.
+        const newUser = new person({
+          id: token?.user?.id,
+          name: token?.user?.name,
+          profilePic: token?.user?.image,
+          email: token?.user?.email,
+        });
+        const {
+          slug,
+          name,
+          email,
+          profilePic,
+          id,
+          doIKnow,
+          scope,
+          crdnCourses,
+        } = await newUser.save();
+
+        //populate session with our data
+        session.user = {
+          slug,
+          name,
+          email,
+          profilePic,
+          id,
+          doIKnow,
+          scope,
+          crdnCourses,
+        };
+      } else {
+        session.user = existingUser;
+      }
       session.accessToken = token.accessToken;
       session.error = token.error;
       return session;

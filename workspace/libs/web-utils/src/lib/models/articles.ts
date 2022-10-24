@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { models, Schema } from 'mongoose';
 import slug from 'mongoose-slug-generator';
 mongoose.plugin(slug);
 
@@ -81,12 +81,13 @@ const articleSchema = new Schema(
     feedback: String,
     rankingScore: Number,
   },
-  { collection: 'articles', discriminatorKey: '_type' }
+  { collection: 'articles', discriminatorKey: '_type', timestamps: true }
 );
 
-export const article = mongoose.model('article', articleSchema);
-export const blogPost = article.discriminator('blogPost', blogPostSchema);
-export const resourceArticle = article.discriminator(
-  'resourceArticle',
-  resourceArticleSchema
-);
+export const article =
+  models['article'] || mongoose.model('article', articleSchema);
+export const blogPost =
+  models['blogPost'] || article.discriminator('blogPost', blogPostSchema);
+export const resourceArticle =
+  models['resourceArticle'] ||
+  article.discriminator('resourceArticle', resourceArticleSchema);

@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { models, Schema } from 'mongoose';
 
 const courseSchema = new Schema(
   {
@@ -26,6 +26,6 @@ const courseSchema = new Schema(
   { collection: 'courses', timestamps: true }
 );
 
-const courses = mongoose.model('course', courseSchema);
+const courses = models['course'] || mongoose.model('course', courseSchema);
 
 export default courses;

@@ -6,7 +6,9 @@ export const Paper = styled('div', {
     variant: {
       window: {
         width: '100vw',
+        position: 'relative',
         minHeight: '100vh',
+        overflowX: 'hidden',
         display: 'flex',
         jc: 'center',
         backgroundColor: '$p0',
