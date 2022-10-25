@@ -18,6 +18,16 @@ export const IconButton = styled('button', {
   '&:active': {
     transform: 'scale(0.97, 0.97)',
   },
+  '&:disabled': {
+    cursor: 'not-allowed',
+    color: '$p5',
+    '&:hover': {
+      transform: 'none',
+    },
+    '&:active': {
+      color: '$p5',
+    },
+  },
   variants: {
     variant: {
       standard: {

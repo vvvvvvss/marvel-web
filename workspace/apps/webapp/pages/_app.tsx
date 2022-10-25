@@ -11,7 +11,7 @@ function CustomApp({
     <SessionProvider
       session={session}
       refetchOnWindowFocus={false}
-      refetchInterval={60 * 5}
+      refetchInterval={60 * 20}
     >
       <ThemeProvider
         attribute="class"

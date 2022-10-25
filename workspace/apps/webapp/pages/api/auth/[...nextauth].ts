@@ -90,7 +90,7 @@ export const authOptions = {
         )
         .lean()
         .exec();
-      console.log('find one is called');
+      console.log('findOne is called at auth');
       if (!existingUser) {
         // if no user, create a new user with the available data.
         const newUser = new person({

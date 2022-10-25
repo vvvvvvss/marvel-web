@@ -1,4 +1,4 @@
-import mongoose, { models, Model } from 'mongoose';
+import mongoose, { models } from 'mongoose';
 import slug from 'mongoose-slug-generator';
 
 mongoose.plugin(slug);

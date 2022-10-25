@@ -3,16 +3,13 @@ import { styled } from './Stitches';
 export const Button = styled('button', {
   position: 'relative',
   overflow: 'hidden',
-  display: 'inline-flex',
-  jc: 'center',
-  ai: 'center',
-  textAlign: 'center',
   borderRadius: '$pill',
   border: '1.2px solid',
   px: '1.2em',
   py: '0.5em',
   fontSize: '$3',
   whiteSpace: 'nowrap',
+  minWidth: 'max-content',
   cursor: 'pointer',
   userSelect: 'none',
   transition: 'background-color 200ms, transform 200ms',
@@ -38,9 +35,9 @@ export const Button = styled('button', {
         },
       },
       outlined: {
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: '$p1',
         color: '$p10',
-        borderColor: '$p10',
+        borderColor: '$p6',
         '@hover': {
           '&:hover': {
             backgroundColor: '$p2',

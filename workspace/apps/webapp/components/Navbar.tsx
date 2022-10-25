@@ -7,7 +7,6 @@ import { useState } from 'react';
 const Navbar = ({ home = false }) => {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
-  console.log(session);
 
   return (
     <Appbar>
@@ -32,22 +31,26 @@ const Navbar = ({ home = false }) => {
         >
           <HamburgerMenuIcon />
         </IconButton>
-        <Span
-          css={{
-            color: '$p8',
-            fontSize: '$3',
-            fontWeight: '600',
-            position: 'absolute',
-            width: '100%',
-            textAlign: 'center',
-            '@bp1': {
-              position: 'static',
-              width: 'auto',
-            },
-          }}
-        >
-          MARVEL.
-        </Span>
+        <Link href={'/'}>
+          <Span
+            css={{
+              color: '$p8',
+              fontSize: '$3',
+              fontWeight: '600',
+              position: 'absolute',
+              width: '100%',
+              textAlign: 'center',
+              cursor: 'pointer',
+              '@bp1': {
+                position: 'static',
+                width: 'auto',
+              },
+            }}
+          >
+            MARVEL.
+          </Span>
+        </Link>
+
         {!home && (
           <Box
             css={{
@@ -73,7 +76,7 @@ const Navbar = ({ home = false }) => {
           </Box>
         )}
         {session?.user ? (
-          <>
+          <Box css={{ display: 'flex', ai: 'center' }}>
             <Link href={`/profile/${session?.user?.slug}`}>
               <Avatar
                 src={session?.user?.profilePic}
@@ -82,7 +85,7 @@ const Navbar = ({ home = false }) => {
                   position: 'absolute',
                   right: '$4',
                   cursor: 'pointer',
-                  '@bp1': { position: 'static' },
+                  '@bp1': { position: 'static', marginRight: '$2' },
                 }}
               />
             </Link>
@@ -98,7 +101,7 @@ const Navbar = ({ home = false }) => {
             >
               Sign Out
             </Button>
-          </>
+          </Box>
         ) : (
           <Button
             onClick={() => signIn('google', { redirect: false })}

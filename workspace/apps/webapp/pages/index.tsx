@@ -36,6 +36,7 @@ export function Index() {
             <br />
             <Span
               css={{
+                color: '$p9',
                 fontSize: 'min(25vw, 120px)',
                 fontWeight: '400',
                 lineHeight: '0.5em',
