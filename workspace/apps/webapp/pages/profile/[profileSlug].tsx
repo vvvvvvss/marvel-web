@@ -8,6 +8,7 @@ import {
   Button,
   useMediaQuery,
   Paragraph,
+  Heading,
 } from '@marvel/web-ui';
 import { people } from '@marvel/web-utils';
 import {
@@ -37,6 +38,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     .select('-_id -email -id -createdAt -updatedAt')
     .lean()
     .exec();
+  console.log('getStaticProps is called in profile page');
   return {
     props: {
       person: JSON.parse(JSON.stringify(person)),
@@ -161,13 +163,18 @@ const ProfilePage: NextPage = ({
               <Divider />
               <Box css={{ width: '100%', display: 'flex', p: '$4', jc: 'end' }}>
                 {person?.doIKnow === 'UNKNOWN' && (
-                  <Button css={{ fontSize: '$2' }} variant="outlined">
+                  <Button
+                    css={{ fontSize: '$2', fontWeight: '600' }}
+                    variant="outlined"
+                  >
                     Apply for Access
                   </Button>
                 )}
 
                 {person?.doIKnow === 'KNOWN' && (
-                  <Button css={{ fontSize: '$2' }}>Edit Profile</Button>
+                  <Button css={{ fontSize: '$2', fontWeight: '600' }}>
+                    Edit Profile
+                  </Button>
                 )}
               </Box>
             </>
@@ -183,7 +190,17 @@ const ProfilePage: NextPage = ({
             height: '100%',
             '@bp2': { maxHeight: '600px' },
           }}
-        ></Box>
+        >
+          <Heading
+            css={{
+              fontSize: '$1',
+              lineHeight: '0',
+              color: '$p9',
+            }}
+          >
+            WORKS
+          </Heading>
+        </Box>
       </Box>
     </Paper>
   );

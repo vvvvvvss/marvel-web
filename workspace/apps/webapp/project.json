@@ -23,12 +23,14 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "webapp:build",
-        "dev": true
+        "dev": true,
+        "turbo": true
       },
       "configurations": {
         "development": {
           "buildTarget": "webapp:build:development",
-          "dev": true
+          "dev": true,
+          "turbo": true
         },
         "production": {
           "buildTarget": "webapp:build:production",
