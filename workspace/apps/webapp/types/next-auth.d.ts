@@ -6,7 +6,6 @@ declare module 'next-auth' {
    */
   interface Session {
     user: {
-      /** The user's postal address. */
       crdnCourses: [string];
       createdAt: string;
       doIKnow: string;
