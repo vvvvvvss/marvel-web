@@ -1,12 +1,12 @@
+'use client';
+
 import { Appbar, Box, IconButton, Span, Button, Avatar } from '@marvel/web-ui';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const Navbar = ({ home = false }) => {
   const { data: session } = useSession();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <Appbar>
