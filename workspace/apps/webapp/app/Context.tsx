@@ -4,12 +4,12 @@ import { SessionProvider } from 'next-auth/react'; //session context.
 import { ThemeProvider } from 'next-themes'; //provides theme context. not related to tailwind
 import { Session } from 'next-auth'; //type of session object
 
-function AuthContext({
+function Context({
   children,
-  pageProps: { session, ...pageProps },
+  session,
 }: {
   children: React.ReactNode;
-  pageProps: { session: Session };
+  session: Session;
 }) {
   return (
     <SessionProvider
@@ -29,4 +29,4 @@ function AuthContext({
   );
 }
 
-export default AuthContext;
+export default Context;
