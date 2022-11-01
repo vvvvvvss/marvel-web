@@ -1,21 +1,16 @@
-import { Session } from 'next-auth';
+'use client';
+
 import AuthContext from './Context';
 import './globals.css';
 
-function RootLayout({
-  children,
-  pageProps: { session, ...pageProps },
-}: {
-  children: React.ReactNode;
-  pageProps: { session: Session };
-}) {
+function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <title>marvel.</title>
       </head>
       <body>
-        <AuthContext session={session}>{children}</AuthContext>
+        <AuthContext>{children}</AuthContext>
       </body>
     </html>
   );
