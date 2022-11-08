@@ -81,12 +81,7 @@ const Navbar = ({ home = false }) => {
               <Avatar
                 src={session?.user?.profilePic}
                 alt={session?.user?.name}
-                css={{
-                  position: 'absolute',
-                  right: '$4',
-                  cursor: 'pointer',
-                  '@bp1': { position: 'static', marginRight: '$2' },
-                }}
+                className={'absolute md:static mr-4'}
               />
             </Link>
             <Button

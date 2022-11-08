@@ -13,6 +13,7 @@ module.exports = {
   theme: {
     colors: {
       //primary
+      transparent: 'hsla(0, 0%, 0%, 0)',
       p: {
         0: `hsla(${primaryHue}, 0%, 0%, 1)`,
         1: `hsla(${primaryHue}, 0%, 9%, 1)`,
@@ -49,7 +50,14 @@ module.exports = {
       serif: ['IBM Plex Serif', 'serif'],
       mono: ['IBM Plex Mono', 'mono'],
     },
-    extend: {},
+    extend: {
+      zIndex: {
+        max: '100',
+      },
+      transform: {
+        trans,
+      },
+    },
   },
   plugins: [],
 };

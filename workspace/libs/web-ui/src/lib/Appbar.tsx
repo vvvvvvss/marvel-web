@@ -1,16 +1,20 @@
-import { styled, lightTheme } from './Stitches';
-export const Appbar = styled('nav', {
-  position: 'fixed',
-  zIndex: '$max',
-  top: 0,
-  right: 0,
-  left: 0,
-  backgroundColor: 'hsla(0, 0%, 9%, 0.5)',
-  backdropFilter: 'blur(10px)',
-  border: '1px solid',
-  borderColor: '$p1',
-  display: 'flex',
-  jc: 'center',
-  py: '$2',
-  px: '$2',
-});
+import { ReactNode } from 'react';
+
+type AppbarProps = {
+  children?: ReactNode;
+  className?: String;
+};
+
+export const Appbar = ({ children, className, ...props }: AppbarProps) => {
+  return (
+    <nav
+      className={`${
+        className || ''
+      } fixed z-max top-0 inset-x-0 bg-[hsla(0, 0%, 9%[, 0.5])] backdrop-blur-md border border-p-1
+      flex justify-center p-2`}
+      {...props}
+    >
+      {children}
+    </nav>
+  );
+};
