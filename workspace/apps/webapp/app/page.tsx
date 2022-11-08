@@ -1,28 +1,12 @@
-import { Paper, Box, Span, Heading, Button, Paragraph } from '@marvel/web-ui';
+import { Paper, Span, Heading, Button, Paragraph } from '@marvel/web-ui';
 import Navbar from '../components/Navbar';
 
 export function Index() {
   return (
     <Paper variant="window">
       <Navbar home />
-      <Box
-        css={{
-          py: '$9',
-          px: '$4',
-          width: '100%',
-          maxWidth: '$lg',
-          '@bp2': { px: '0px' },
-        }}
-      >
-        <Box
-          css={{
-            display: 'flex',
-            fd: 'column',
-            ai: 'center',
-            width: '100%',
-            '@bp2': { mt: '$6' },
-          }}
-        >
+      <div>
+        <div>
           <Heading css={{ position: 'relative', zIndex: '1' }}>
             <Span
               css={{
@@ -46,48 +30,14 @@ export function Index() {
               marvel
             </Span>
           </Heading>
-          <Box
-            css={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              jc: 'center',
-              zIndex: '1',
-            }}
-          >
-            <Button
-              variant={'standard'}
-              css={{ mr: '$2', fontSize: '$2', mb: '$2' }}
-            >
-              Dashboard
-            </Button>
-            <Button
-              variant={'standard'}
-              css={{ mr: '$2', fontSize: '$2', mb: '$2' }}
-            >
-              About
-            </Button>
-            <Button
-              variant={'standard'}
-              css={{ mr: '$2', fontSize: '$2', mb: '$2' }}
-            >
-              Tracks
-            </Button>
-            <Button
-              variant={'standard'}
-              css={{ mr: '$2', fontSize: '$2', mb: '$2' }}
-            >
-              Courses
-            </Button>
-            <Button
-              variant={'standard'}
-              css={{ mr: '$2', fontSize: '$2', mb: '$2' }}
-            >
-              Search
-            </Button>
-            <Button variant={'standard'} css={{ fontSize: '$2', mb: '$2' }}>
-              Explore
-            </Button>
-          </Box>
+          <div>
+            <Button variant={'standard'}>Dashboard</Button>
+            <Button variant={'standard'}>About</Button>
+            <Button variant={'standard'}>Tracks</Button>
+            <Button variant={'standard'}>Courses</Button>
+            <Button variant={'standard'}>Search</Button>
+            <Button variant={'standard'}>Explore</Button>
+          </div>
           <Paragraph
             css={{
               color: '$p8',
@@ -101,8 +51,8 @@ export function Index() {
             Makerspace for Advanced Research, Vital Education and Learning AKA
             Marvel at University of Visvesvaraya College of Engineering.
           </Paragraph>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </Paper>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Appbar, Box, IconButton, Span, Button, Avatar } from '@marvel/web-ui';
+import { Appbar, IconButton, Span, Button, Avatar } from '@marvel/web-ui';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -10,15 +10,8 @@ const Navbar = ({ home = false }) => {
 
   return (
     <Appbar>
-      <Box
-        css={{
-          width: '100%',
-          maxWidth: '$lg',
-          display: 'flex',
-          jc: 'space-between',
-          alignItems: 'center',
-          position: 'relative',
-        }}
+      <div
+        className={`w-full max-w-screen-lg flex justify-between items-center relative `}
       >
         <IconButton
           variant={'text'}
@@ -52,12 +45,7 @@ const Navbar = ({ home = false }) => {
         </Link>
 
         {!home && (
-          <Box
-            css={{
-              display: 'none',
-              '@bp2': { display: 'flex', alignItems: 'center', jc: 'center' },
-            }}
-          >
+          <div>
             <Button variant={'text'} className={`mr-2`}>
               Dashboard
             </Button>
@@ -71,10 +59,10 @@ const Navbar = ({ home = false }) => {
               Search
             </Button>
             <Button variant={'text'}>Explore</Button>
-          </Box>
+          </div>
         )}
         {session?.user ? (
-          <Box css={{ display: 'flex', ai: 'center' }}>
+          <div className="flex items-center">
             <Link href={`/profile/${session?.user?.slug}`}>
               <Avatar
                 src={session?.user?.profilePic}
@@ -82,10 +70,10 @@ const Navbar = ({ home = false }) => {
                 className={'absolute md:static mr-4'}
               />
             </Link>
-            <Button onClick={() => signOut()} variant={'standard'}>
+            <Button onClick={() => signOut()} className="text-sm">
               Sign Out
             </Button>
-          </Box>
+          </div>
         ) : (
           <Button
             onClick={() => signIn('google', { redirect: false })}
@@ -94,7 +82,7 @@ const Navbar = ({ home = false }) => {
             Sign In
           </Button>
         )}
-      </Box>
+      </div>
     </Appbar>
   );
 };

@@ -12,6 +12,7 @@ module.exports = {
   ],
   theme: {
     colors: {
+      transparent: 'hsla(0,0%,0%,0)',
       //primary
       p: {
         0: `hsla(${primaryHue}, 0%, 0%, 1)`,
@@ -52,9 +53,6 @@ module.exports = {
     extend: {
       zIndex: {
         max: '100',
-      },
-      transform: {
-        trans,
       },
     },
   },
