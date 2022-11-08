@@ -58,21 +58,19 @@ const Navbar = ({ home = false }) => {
               '@bp2': { display: 'flex', alignItems: 'center', jc: 'center' },
             }}
           >
-            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+            <Button variant={'text'} className={`mr-2`}>
               Dashboard
             </Button>
-            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+            <Button variant={'text'} className={`mr-2`}>
               About
             </Button>
-            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+            <Button variant={'text'} className={`mr-2`}>
               Tracks
             </Button>
-            <Button variant={'text'} css={{ mr: '$2', fontSize: '$2' }}>
+            <Button variant={'text'} className={`mr-2`}>
               Search
             </Button>
-            <Button variant={'text'} css={{ fontSize: '$2' }}>
-              Explore
-            </Button>
+            <Button variant={'text'}>Explore</Button>
           </Box>
         )}
         {session?.user ? (
@@ -84,16 +82,7 @@ const Navbar = ({ home = false }) => {
                 className={'absolute md:static mr-4'}
               />
             </Link>
-            <Button
-              onClick={() => signOut()}
-              variant={'standard'}
-              css={{
-                fontSize: '$2',
-                position: 'absolute',
-                right: '$4',
-                '@bp1': { position: 'static' },
-              }}
-            >
+            <Button onClick={() => signOut()} variant={'standard'}>
               Sign Out
             </Button>
           </Box>
@@ -101,12 +90,6 @@ const Navbar = ({ home = false }) => {
           <Button
             onClick={() => signIn('google', { redirect: false })}
             variant={'standard'}
-            css={{
-              fontSize: '$2',
-              position: 'absolute',
-              right: '$4',
-              '@bp1': { position: 'static' },
-            }}
           >
             Sign In
           </Button>
