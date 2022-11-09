@@ -1,9 +1,9 @@
 'use client';
 
-import { Appbar, IconButton, Span, Button, Avatar } from '@marvel/web-ui';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { Appbar, Button, Avatar, IconButton } from '@marvel/web-ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import MenuIcon from '@heroicons/react/24/solid/Bars2Icon';
 
 const Navbar = ({ home = false }) => {
   const { data: session } = useSession();
@@ -13,37 +13,16 @@ const Navbar = ({ home = false }) => {
       <div
         className={`w-full max-w-screen-lg flex justify-between items-center relative `}
       >
-        <IconButton
-          variant={'text'}
-          css={{
-            display: 'absolute',
-            left: '$4',
-            zIndex: '$4',
-            '@bp2': { display: 'none' },
-          }}
-        >
-          <HamburgerMenuIcon />
-        </IconButton>
-        <Link href={'/'}>
-          <Span
-            css={{
-              color: '$p8',
-              fontSize: '$3',
-              fontWeight: '600',
-              position: 'absolute',
-              width: '100%',
-              textAlign: 'center',
-              cursor: 'pointer',
-              '@bp1': {
-                position: 'static',
-                width: 'auto',
-              },
-            }}
-          >
-            MARVEL.
-          </Span>
-        </Link>
-
+        <div className="flex items-center">
+          <IconButton variant={'text'} className="mr-2">
+            <MenuIcon className="h-6 w-6 text-p-10" />
+          </IconButton>
+          <Link href={'/'}>
+            <span className="text-p-8 font-semibold text-center cursor-pointer">
+              MARVEL.
+            </span>
+          </Link>
+        </div>
         {!home && (
           <div>
             <Button variant={'text'} className={`mr-2`}>
@@ -67,17 +46,19 @@ const Navbar = ({ home = false }) => {
               <Avatar
                 src={session?.user?.profilePic}
                 alt={session?.user?.name}
-                className={'absolute md:static mr-4'}
               />
             </Link>
-            <Button onClick={() => signOut()} className="text-sm">
+            <Button
+              onClick={() => signOut()}
+              className="text-sm ml-3 hidden md:block"
+            >
               Sign Out
             </Button>
           </div>
         ) : (
           <Button
             onClick={() => signIn('google', { redirect: false })}
-            variant={'standard'}
+            className={'text-sm'}
           >
             Sign In
           </Button>

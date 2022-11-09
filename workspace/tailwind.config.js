@@ -4,6 +4,9 @@ const primaryHue = 0;
 const secondaryHue = 170;
 
 module.exports = {
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   content: [
     './apps/webapp/app/**/*.{js,ts,jsx,tsx}',
     './apps/webapp/pages/**/*.{js,ts,jsx,tsx}',
