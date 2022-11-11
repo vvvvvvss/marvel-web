@@ -3,4 +3,6 @@ export * from './lib/Appbar';
 export * from './lib/Button';
 export * from './lib/Button';
 export * from './lib/Avatar';
+export * from './lib/Surfaces';
+
 // export * from './lib/useMediaQuery';

@@ -5,23 +5,21 @@ export function Index() {
   return (
     <Window>
       <Navbar home />
-      <div className="pt-24">
-        <h1 className="relative">
-          <span className={'text-base text-p-7 ml-[2.5%] font-semibold'}>
+      {/* hero box  */}
+      <div className="pt-40 md:pt-32 w-full max-w-5xl flex flex-col items-center px-4">
+        <h1 className="flex-col flex">
+          <div className={'text-base text-p-7 font-semibold ml-[2.5%]'}>
             UVCE's
-          </span>
-          <br />
-          <span className="text-[min(90vw,180px)] w-[100%] text-center leading-[0.6]">
-            marvel
-          </span>
+          </div>
+          <div className={'text-[min(28vw,180px)] leading-[0.5]'}>marvel</div>
         </h1>
-        <div className="py-5 w-[100%] flex justify-center ">
-          <Button className="mr-2 text-sm">Dashboard</Button>
-          <Button className="mr-2 text-sm">About</Button>
-          <Button className="mr-2 text-sm">Tracks</Button>
-          <Button className="mr-2 text-sm">Courses</Button>
-          <Button className="mr-2 text-sm">Search</Button>
-          <Button className="text-sm">Explore</Button>
+        <div className="py-5 flex justify-center mt-3 md:mt-4 flex-wrap">
+          <Button className="mr-2 mt-3 text-sm">Dashboard</Button>
+          <Button className="mr-2 mt-3 text-sm">About</Button>
+          <Button className="mr-2 mt-3 text-sm">Tracks</Button>
+          <Button className="mr-2 mt-3 text-sm">Courses</Button>
+          <Button className="mr-2 mt-3 text-sm">Search</Button>
+          <Button className="text-sm mt-3">Explore</Button>
         </div>
         <p className="text-p-8 max-w-xl text-base font-normal text-center">
           Makerspace for Advanced Research, Vital Education and Learning AKA

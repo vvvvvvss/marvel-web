@@ -7,7 +7,7 @@ export const Avatar = ({
       {...props}
       className={`${
         className || ''
-      } relative overflow-hidden rounded-full aspect-square w-8 object-cover `}
+      } relative overflow-hidden rounded-full aspect-square w-8 object-cover text-transparent`}
     />
   );
 };

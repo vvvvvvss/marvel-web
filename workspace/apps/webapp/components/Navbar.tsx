@@ -24,7 +24,7 @@ const Navbar = ({ home = false }) => {
           </Link>
         </div>
         {!home && (
-          <div>
+          <div className="hidden md:block">
             <Button variant={'text'} className={`mr-2`}>
               Dashboard
             </Button>
@@ -42,7 +42,7 @@ const Navbar = ({ home = false }) => {
         )}
         {session?.user ? (
           <div className="flex items-center">
-            <Link href={`/profile/${session?.user?.slug}`}>
+            <Link href={`/u/${session?.user?.slug}`} className="mr-3">
               <Avatar
                 src={session?.user?.profilePic}
                 alt={session?.user?.name}
@@ -50,7 +50,7 @@ const Navbar = ({ home = false }) => {
             </Link>
             <Button
               onClick={() => signOut()}
-              className="text-sm ml-3 hidden md:block"
+              className="text-sm hidden md:block"
             >
               Sign Out
             </Button>
