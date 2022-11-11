@@ -1,14 +1,29 @@
-import Navbar from 'apps/webapp/components/Navbar';
+import Navbar from '../../../components/Navbar';
 import { ReactNode } from 'react';
 import { Window, Paper, Avatar } from '@marvel/web-ui';
+import connectToDB from '../../../utils/dbConnector';
+import { people } from '@marvel/web-utils';
 
-const layout = ({
+const getUserBySlug = async (slug: String) => {
+  await connectToDB();
+  const person = await people
+    //@ts-ignore
+    .findOne({ slug: slug })
+    .select('-_id -email -id -createdAt -updatedAt -readMe')
+    .lean()
+    .exec();
+  console.log('getUserBySlug is called in profile page');
+  return person;
+};
+
+export default async function layout({
   children,
   params,
 }: {
   children: ReactNode;
-  params: Object;
-}) => {
+  params: { profileSlug?: String };
+}) {
+  const data = await getUserBySlug(params?.profileSlug);
   return (
     <>
       <Navbar />
@@ -21,8 +36,8 @@ const layout = ({
         >
           {/* left box  */}
           <Paper className="p-5 border-b border-p-7">
-            {/* <Avatar src="shite" /> */}
-            <h1>Abhishek Y</h1>
+            <Avatar src={data?.profilePic} />
+            <h1>{data?.name}</h1>
           </Paper>
           {/* right box  */}
           <Paper>{children}</Paper>
@@ -30,6 +45,4 @@ const layout = ({
       </Window>
     </>
   );
-};
-
-export default layout;
+}

@@ -23,7 +23,7 @@ const peopleSchema = new mongoose.Schema(
       type: [String],
       enum: {
         values: ['CRDN', 'STU_TRACK', 'PRO_TRACK', 'ADMIN', 'DEV'],
-        // coordinator can approve blog posts, level reports of their courses and stage reports of projects they are part of.
+        // coordinator can approve blog posts, level reports of courses they coordinate and stage reports of projects they are part of.
         // stu-track can assign courseworks, add people, remove people from a course work. basically, student track admin.
         // pro-track can assign projectworks, add people, remove people from project work. basically, project track admin.
         // admin can do all the above.
@@ -36,7 +36,7 @@ const peopleSchema = new mongoose.Schema(
     },
 
     // DIRECTLY EDITABLE
-    bio: { type: String, maxLength: 200 },
+    readMe: { type: String, maxLength: 2000 },
     gitHub: { type: String, maxLength: 80 },
     linkedIn: { type: String, maxLength: 80 },
     website: { type: String, maxLength: 80 },

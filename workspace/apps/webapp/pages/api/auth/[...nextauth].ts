@@ -84,10 +84,8 @@ export const authOptions = {
       await connectToDB();
       const existingUser = await person
         //@ts-ignore //might fix this later
-        .findOne(
-          { id: token?.user?.id },
-          '-bio -website -linkedIn -gitHub -_id'
-        )
+        .findOne({ id: token?.user?.id })
+        .select('-readMe -website -linkedIn -gitHub -_id')
         .lean()
         .exec();
       console.log('findOne is called at auth');
