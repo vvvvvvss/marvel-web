@@ -3,7 +3,7 @@
 import { Appbar, Button, Avatar, IconButton } from '@marvel/web-ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import MenuIcon from '@heroicons/react/24/solid/Bars2Icon';
+import { HiOutlineBars2 as MenuIcon } from 'react-icons/hi2';
 
 const Navbar = ({ home = false }) => {
   const { data: session } = useSession();

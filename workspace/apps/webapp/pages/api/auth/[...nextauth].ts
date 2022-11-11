@@ -88,7 +88,7 @@ export const authOptions = {
         .select('-readMe -website -linkedIn -gitHub -_id')
         .lean()
         .exec();
-      console.log('findOne is called at auth');
+      console.info('findOne is called at auth');
       if (!existingUser) {
         // if no user, create a new user with the available data.
         const newUser = new person({
