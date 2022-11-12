@@ -1,21 +1,18 @@
 import Navbar from '../../../components/Navbar';
 import { ReactNode } from 'react';
-import { Window, Paper, Avatar, IconButton } from '@marvel/web-ui';
+import { Window, Paper, Avatar, Button } from '@marvel/web-ui';
 import connectToDB from '../../../utils/dbConnector';
 import { people } from '@marvel/web-utils';
-import { AiFillGithub as GitHubIcon } from 'react-icons/ai';
-import { AiFillLinkedin as LinkedInIcon } from 'react-icons/ai';
-import { SlGlobe as GlobeIcon } from 'react-icons/sl';
 
 const getUserBySlug = async (slug: String) => {
   await connectToDB();
   const person = await people
     //@ts-ignore
     .findOne({ slug: slug })
-    .select('-_id -email -id -createdAt -updatedAt -readMe')
+    .select('-_id name profilePic scope crdnCourses')
     .lean()
     .exec();
-  console.info('getUserBySlug is called in profile page');
+  console.info({ info: 'getUserBySlug is called in profile page' });
   return person;
 };
 
@@ -26,50 +23,41 @@ export default async function layout({
   children: ReactNode;
   params: { profileSlug?: String };
 }) {
-  const data = await getUserBySlug(params?.profileSlug);
-
+  const dude = await getUserBySlug(params?.profileSlug);
   return (
     <>
       <Navbar />
       <Window className="pt-24">
         {/* whole box  */}
-        <Paper
-          shadow
-          border
-          className="w-full max-w-5xl mx-5 flex flex-col md:flex-row "
-        >
+        <Paper className="w-full max-w-5xl mx-5 flex flex-col">
           {/* left box  */}
-          <Paper className="p-5 border-b border-p-7">
+          <Paper shadow className="mb-6 max-h-min">
             {/* picture and name  */}
-            <div className="flex items-center border-b border-p-7">
-              <Avatar src={data?.profilePic} className="w-14" />
-              <h1 className="ml-5 text-lg">{data?.name}</h1>
+            <div className="flex items-center border-x border-t border-b border-p-7 p-5">
+              <Avatar src={dude?.profilePic} className="w-14" />
+              <h1 className="ml-5 text-lg">{dude?.name}</h1>
             </div>
-            {/* social icons  */}
-            <div className="flex items-center border-b p-5">
-              <a href={data?.gitHub} target="_blank" rel="noopener norefferer">
-                <IconButton>
-                  <GitHubIcon />
-                </IconButton>
-              </a>
-              <a
-                href={data?.linkedIn}
-                target="_blank"
-                rel="noopener norefferer"
-              >
-                <IconButton>
-                  <LinkedInIcon />
-                </IconButton>
-              </a>
-              <a href={data?.website} target="_blank" rel="noopener norefferer">
-                <IconButton>
-                  <GlobeIcon />
-                </IconButton>
-              </a>
-            </div>
+            {/* coordinating courses */}
+            {dude?.scope?.includes('CRDN') && (
+              <div className="flex items-center border-b border-x border-p-7 p-5 max-w-full overflow-x-auto">
+                {dude?.scope?.includes('CRDN') && (
+                  <Button
+                    variant="outlined"
+                    className="mr-5 text-sm pointer-events-none"
+                  >
+                    Coordinator
+                  </Button>
+                )}
+                {dude?.crdnCourses?.map((c, k) => (
+                  <Button key={k} className="mr-5 text-sm">
+                    {c}
+                  </Button>
+                ))}
+              </div>
+            )}
           </Paper>
           {/* right box  */}
-          <Paper>{children}</Paper>
+          {children}
         </Paper>
       </Window>
     </>

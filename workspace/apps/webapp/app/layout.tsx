@@ -1,5 +1,3 @@
-'use client';
-
 import AuthContext from './Context';
 import './globals.css';
 

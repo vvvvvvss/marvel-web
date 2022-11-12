@@ -37,9 +37,6 @@ const peopleSchema = new mongoose.Schema(
 
     // DIRECTLY EDITABLE
     readMe: { type: String, maxLength: 2000 },
-    gitHub: { type: String, maxLength: 80 },
-    linkedIn: { type: String, maxLength: 80 },
-    website: { type: String, maxLength: 80 },
   },
   { timestamps: true, collection: 'people' }
 );

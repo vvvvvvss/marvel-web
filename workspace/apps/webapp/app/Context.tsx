@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes'; //provides theme context. not relat
 
 function Context({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider refetchOnWindowFocus={false} refetchInterval={60 * 20}>
+    <SessionProvider refetchOnWindowFocus={false}>
       <ThemeProvider
         attribute="class"
         enableSystem={false}
