@@ -12,7 +12,7 @@ export const Paper = ({
   return (
     <div
       className={`${className || ''}
-    ${shadow ? 'shadow-2xl shadow-p-0 dark:shadow-p-3' : ''}
+    ${shadow ? 'shadow-2xl shadow-p-0 dark:shadow-p-2' : ''}
     ${border ? 'border border-p-2 dark:border-p-7' : ''}
     `}
     >

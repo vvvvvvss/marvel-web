@@ -2,7 +2,10 @@ type TabGroup = JSX.IntrinsicElements['div'];
 
 export const TabGroup = ({ children, className, ...props }: TabGroup) => {
   return (
-    <div className={`${className || ''} flex`} {...props}>
+    <div
+      className={`${className || ''} flex border rounded-full max-w-min p-2`}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -10,7 +13,7 @@ export const TabGroup = ({ children, className, ...props }: TabGroup) => {
 
 type TabProps = JSX.IntrinsicElements['button'] & { active?: boolean };
 
-export const Tabs = ({
+export const Tab = ({
   active = false,
   children,
   className,
@@ -18,11 +21,17 @@ export const Tabs = ({
 }: TabProps) => {
   return (
     <button
-      className={
-        className ||
-        '' +
-          'relative overflow-hidden rounded-full p-2 aspect-square min-w-max cursor-pointer select-none transition hover:translate-y-[-1px] active:scale-[97%] border'
+      className={`${
+        className || ''
+      } relative overflow-hidden rounded-full px-[1.2em] py-[0.5em] min-w-max whitespace-nowrap cursor-pointer select-none
+      transition active:scale-[97%] border border-transparent
+     hover:bg-p-1 text-p-10 hover:border-p-6 active:text-p-8
+      ${
+        active
+          ? 'text-p-10 bg-p-2 border-p-2 pointer-events-none cursor-not-allowed'
+          : ''
       }
+      `}
       {...props}
     >
       {children}
