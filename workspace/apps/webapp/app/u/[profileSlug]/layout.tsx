@@ -1,6 +1,6 @@
 import Navbar from '../../../components/Navbar';
 import { ReactNode } from 'react';
-import { Window, Paper, Avatar, Button } from '@marvel/web-ui';
+import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
 import connectToDB from '../../../utils/dbConnector';
 import { people } from '@marvel/web-utils';
 
@@ -29,15 +29,19 @@ export default async function layout({
       <Navbar />
       <Window className="pt-24">
         {/* whole thing  */}
-        <Paper className="w-full max-w-5xl mx-5 flex flex-col items-center md:flex-row md:items-start">
+        <Paper className="w-full max-w-5xl mx-5 flex flex-col items-center md:flex-row md:items-start gap-5">
           {/* left part  */}
           <Paper
             shadow
-            className="mb-6 max-h-min max-w-sm rounded-xl border p-5 md:mr-5"
+            className="w-full max-h-min max-w-xs rounded-lg border p-5"
           >
             {/* picture and name  */}
             <div className="flex items-center pb-5">
-              <Avatar src={dude?.profilePic} className="w-14" />
+              <Avatar
+                src={dude?.profilePic}
+                className="w-14"
+                alt={dude?.name}
+              />
               <h1 className="ml-5 text-lg">{dude?.name}</h1>
             </div>
             {/* coordinating courses */}

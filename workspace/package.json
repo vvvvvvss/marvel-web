@@ -9,13 +9,15 @@
   },
   "private": true,
   "dependencies": {
-    "@nrwl/next": "14.7.8",
-    "@radix-ui/react-avatar": "^1.0.1",
     "@swc/helpers": "~0.3.3",
+    "@types/he": "^1.1.2",
+    "@types/sanitize-html": "^2.6.2",
     "core-js": "^3.6.5",
+    "he": "^1.2.0",
+    "markdown-to-jsx": "^7.1.7",
     "mongoose": "^6.6.3",
     "mongoose-slug-generator": "^1.0.4",
-    "next": "^13.0.0",
+    "next": "^13.0.3",
     "next-auth": "^4.10.3",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
@@ -23,6 +25,7 @@
     "react-icons": "^4.6.0",
     "react-router-dom": "6.3.0",
     "regenerator-runtime": "0.13.7",
+    "sanitize-html": "^2.7.3",
     "server-only": "^0.0.1",
     "tslib": "^2.3.0"
   },
@@ -33,6 +36,7 @@
     "@nrwl/eslint-plugin-nx": "14.7.8",
     "@nrwl/jest": "14.7.8",
     "@nrwl/linter": "14.7.8",
+    "@nrwl/next": "^15.0.13",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/react": "14.7.8",
     "@nrwl/web": "14.7.8",
@@ -52,7 +56,7 @@
     "babel-jest": "28.1.1",
     "cypress": "^10.7.0",
     "eslint": "~8.15.0",
-    "eslint-config-next": "^13.0.0",
+    "eslint-config-next": "^13.0.3",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-import": "2.26.0",
@@ -69,6 +73,8 @@
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "tslint": "~6.1.0",
-    "typescript": "~4.8.2"
+    "typescript": "~4.8.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0"
   }
 }

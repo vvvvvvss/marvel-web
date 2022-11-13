@@ -2,7 +2,11 @@ type ButtonProps = JSX.IntrinsicElements['button'] & {
   variant?: 'text' | 'outlined' | 'standard';
 };
 
-export const Button = ({ variant = 'standard', ...props }: ButtonProps) => {
+export const Button = ({
+  variant = 'standard',
+  color = 'p',
+  ...props
+}: ButtonProps) => {
   return (
     <button
       id={props?.id || 'Button'}

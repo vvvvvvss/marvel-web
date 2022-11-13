@@ -1,6 +1,6 @@
 'use client';
 
-import { Appbar, Button, Avatar, IconButton } from '@marvel/web-ui';
+import { Appbar, Button, IconButton, Avatar } from '@marvel/web-ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { HiOutlineBars2 as MenuIcon } from 'react-icons/hi2';
