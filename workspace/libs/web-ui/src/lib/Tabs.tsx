@@ -3,7 +3,9 @@ type TabGroup = JSX.IntrinsicElements['div'];
 export const TabGroup = ({ children, className, ...props }: TabGroup) => {
   return (
     <div
-      className={`${className || ''} flex border rounded-full max-w-min p-2`}
+      className={`${
+        className || ''
+      } flex border rounded-full max-w-min p-2 border-p-6`}
       {...props}
     >
       {children}

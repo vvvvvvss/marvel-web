@@ -33,7 +33,7 @@ export default async function layout({
           {/* left part  */}
           <Paper
             shadow
-            className="w-full max-h-min max-w-xs rounded-lg border p-5"
+            className="w-full max-h-min max-w-xs rounded-lg border p-5 border-p-6"
           >
             {/* picture and name  */}
             <div className="flex items-center pb-5">
