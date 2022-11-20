@@ -61,11 +61,35 @@ const Home = () => {
           </>
         )}
         <br />
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
           <Alert
             severity="info"
             fontSize="12px"
-            sx={{ maxWidth: "650px", justifySelf: "center" }}
+            sx={{
+              maxWidth: "650px",
+              justifySelf: "center",
+            }}
+          >
+            Project track applicaions are now open.{" "}
+            <Link
+              href="https://docs.google.com/forms/d/1teayi8FPSj84GY9p35PBknzKc8ojhhW_nzsquVX8cCk/"
+              rel="noopener norefferer"
+              target={"_blank"}
+            >
+              Apply here.
+            </Link>
+          </Alert>
+          <Alert
+            severity="info"
+            fontSize="12px"
+            sx={{ maxWidth: "650px", justifySelf: "center", marginTop: "20px" }}
           >
             MARVEL Annual Report 2021-2022 is out now!.{" "}
             <Link
