@@ -16,6 +16,11 @@ const getUserBySlug = async (slug: String) => {
   return person;
 };
 
+export async function generateStaticParams() {
+  return [];
+}
+export const dynamicParams = true;
+
 export default async function layout({
   children,
   params,

@@ -1,4 +1,4 @@
-import AuthContext from './Context';
+import Context from './Context';
 import './globals.css';
 
 function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
@@ -12,7 +12,7 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         />
       </head>
       <body>
-        <AuthContext>{children}</AuthContext>
+        <Context>{children}</Context>
       </body>
     </html>
   );

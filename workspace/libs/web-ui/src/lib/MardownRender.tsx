@@ -14,22 +14,22 @@ export const MarkdownRender = memo(
           wrapper: 'div',
           overrides: {
             h1: {
-              props: { className: 'text-6xl' },
+              props: { className: 'text-6xl my-5' },
             },
             h2: {
-              props: { className: 'text-5xl' },
+              props: { className: 'text-5xl my-5' },
             },
             h3: {
-              props: { className: 'text-4xl' },
+              props: { className: 'text-4xl my-5' },
             },
             h4: {
-              props: { className: 'text-3xl' },
+              props: { className: 'text-3xl my-5' },
             },
             h5: {
-              props: { className: 'text-2xl' },
+              props: { className: 'text-2xl my-5' },
             },
             h6: {
-              props: { className: 'text-xl' },
+              props: { className: 'text-xl my-5' },
             },
             blockquote: {
               props: {

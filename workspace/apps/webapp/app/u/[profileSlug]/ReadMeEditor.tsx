@@ -11,14 +11,32 @@ import {
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
+import { useMutation } from 'react-query';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
+
+const sendEdit = async ({ slug, content }) => {
+  const data = (await axios.post(`/api/mutate/profile`, { slug, content }))
+    .data;
+  return data;
+};
 
 const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   const currentUser = useSession();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [editorMode, setEditorMode] = useState<'write' | 'preview'>('write');
   const [copy, setCopy] = useState(content);
+  const router = useRouter();
+
+  const { mutate: mutateReadMe } = useMutation(
+    () => sendEdit({ slug: profileSlug, content: copy }),
+    {
+      onError: () => alert("Couldn't edit readme. loss"),
+      onSuccess: () => router.refresh(),
+    }
+  );
 
   return (
     <>
@@ -26,7 +44,6 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
         <Button
           onClick={() => setMode(mode === 'view' ? 'edit' : 'view')}
           variant="outlined"
-          className="ml-5 mt-5"
         >
           {mode === 'view' ? 'Edit ReadMe' : 'Cancel'}
         </Button>
@@ -55,16 +72,20 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
               <textarea
                 className="p-5 pb-10 rounded-lg w-full min-h-[300px]"
                 onChange={(e) => setCopy(e.target?.value)}
-              >
-                {copy}
-              </textarea>
+                value={copy}
+              />
             ) : (
               <MarkdownRender content={copy} />
             )}
 
             {/* action area  */}
-            <div className="w-full my-5">
-              <Button className="float-right">Submit</Button>
+            <div className="w-full">
+              <Button
+                className="float-right m-5"
+                onClick={() => mutateReadMe()}
+              >
+                Submit
+              </Button>
             </div>
           </div>
         </FullScreenDialog>

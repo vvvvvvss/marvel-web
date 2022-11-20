@@ -10,7 +10,7 @@ const getUserReadmeBySlug = async (slug: string) => {
   const person = await people
     //@ts-ignore
     .findOne({ slug: slug })
-    .select('readMe slug name')
+    .select('-_id readMe slug name')
     .lean()
     .exec();
   console.log({ info: 'fetched readme of user in profile page' });
@@ -18,7 +18,7 @@ const getUserReadmeBySlug = async (slug: string) => {
 };
 
 export default async function page({ params, searchParams }) {
-  const readMeData = await getUserReadmeBySlug(params?.profilePage as string);
+  const readMeData = await getUserReadmeBySlug(params?.profileSlug as string);
   return (
     <div className="flex flex-col w-full rounded-lg">
       {/* toggle buttons  */}
@@ -33,7 +33,11 @@ export default async function page({ params, searchParams }) {
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
-      <Paper shadow border className="relative mt-5 w-full rounded-lg">
+      <Paper
+        shadow
+        border
+        className="relative mt-5 w-full rounded-lg flex flex-col p-5"
+      >
         <ReadMeEditor
           profileSlug={params?.profileSlug as string}
           content={readMeData?.readMe as string}
