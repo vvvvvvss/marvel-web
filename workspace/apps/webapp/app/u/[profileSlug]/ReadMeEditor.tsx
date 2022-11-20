@@ -33,11 +33,11 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
       )}
       {mode === 'edit' && (
         <FullScreenDialog open={mode == 'edit'}>
-          <div className="w-full max-w-2xl pt-24">
+          <div className="w-full max-w-2xl py-24">
             <IconButton onClick={() => setMode('view')}>
               <CloseIcon className="h-10 w-20" />
             </IconButton>
-            <TabGroup className="mt-5">
+            <TabGroup className="my-5">
               <Tab
                 active={editorMode === 'write'}
                 onClick={() => setEditorMode('write')}
@@ -53,14 +53,19 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
             </TabGroup>
             {editorMode == 'write' ? (
               <textarea
-                className="p-5 pb-10 my-5 rounded-lg w-full min-h-[300px]"
+                className="p-5 pb-10 rounded-lg w-full min-h-[300px]"
                 onChange={(e) => setCopy(e.target?.value)}
               >
                 {copy}
               </textarea>
             ) : (
-              <MarkdownRender className="my-5" content={copy} />
+              <MarkdownRender content={copy} />
             )}
+
+            {/* action area  */}
+            <div className="w-full my-5">
+              <Button className="float-right">Submit</Button>
+            </div>
           </div>
         </FullScreenDialog>
       )}

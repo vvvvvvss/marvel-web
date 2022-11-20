@@ -9,7 +9,6 @@ export const MarkdownRender = memo(
   ({ content, className, ...props }: MarkdownRenderType) => {
     return (
       <Markdown
-        className={className}
         options={{
           disableParsingRawHTML: false,
           wrapper: 'div',
