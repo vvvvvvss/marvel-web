@@ -6,7 +6,7 @@ export const Window = ({
   return (
     <div
       {...props}
-      className={`${className || ''} w-screen min-h-screen overflow-x-hidden 
+      className={`${className || ''} w-full min-h-screen overflow-x-hidden 
     flex justify-center bg-p-10 dark:bg-p-0`}
     >
       {children}

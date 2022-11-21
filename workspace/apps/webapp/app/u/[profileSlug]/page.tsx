@@ -4,6 +4,7 @@ import connectToDB from 'apps/webapp/utils/dbConnector';
 import { people } from '@marvel/web-utils';
 import { MarkdownRender } from '@marvel/web-ui';
 import ReadMeEditor from './ReadMeEditor';
+import Image from 'next/image';
 
 const getUserReadmeBySlug = async (slug: string) => {
   await connectToDB();
@@ -20,7 +21,7 @@ const getUserReadmeBySlug = async (slug: string) => {
 export default async function page({ params, searchParams }) {
   const readMeData = await getUserReadmeBySlug(params?.profileSlug as string);
   return (
-    <div className="flex flex-col w-full rounded-lg">
+    <div className="flex flex-col w-full rounded-lg gap-5">
       {/* toggle buttons  */}
       <TabGroup>
         <Link href={`/u/${params?.profileSlug}/`}>
@@ -36,17 +37,19 @@ export default async function page({ params, searchParams }) {
       <Paper
         shadow
         border
-        className="relative mt-5 w-full rounded-lg flex flex-col p-5"
+        className="relative w-full rounded-lg flex flex-col p-5"
       >
+        {['', undefined].includes(readMeData?.readMe) ? (
+          <div className="w-full">
+            <h1 className="text-3xl text-p-5">ReadMe is Empty</h1>
+          </div>
+        ) : (
+          <MarkdownRender content={readMeData?.readMe} className="my-5" />
+        )}
         <ReadMeEditor
           profileSlug={params?.profileSlug as string}
           content={readMeData?.readMe as string}
         />
-        {['', undefined].includes(readMeData?.readMe) ? (
-          <h1 className="text-4xl p-5">No readme</h1>
-        ) : (
-          <MarkdownRender content={readMeData?.readMe} />
-        )}
       </Paper>
     </div>
   );

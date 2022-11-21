@@ -9,3 +9,4 @@ export * from './lib/MardownRender';
 // export * from './lib/useMediaQuery';
 export * from './lib/Avatar';
 export * from './lib/FullScreenDialog';
+export * from './lib/Loading';

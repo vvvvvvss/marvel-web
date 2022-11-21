@@ -7,6 +7,7 @@ import {
   TabGroup,
   IconButton,
   MarkdownRender,
+  LoadingPulser,
 } from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -14,6 +15,7 @@ import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { IconBase } from 'react-icons';
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
 
@@ -28,13 +30,18 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [editorMode, setEditorMode] = useState<'write' | 'preview'>('write');
   const [copy, setCopy] = useState(content);
+  const [changed, setChanged] = useState<boolean>(false);
   const router = useRouter();
 
-  const { mutate: mutateReadMe } = useMutation(
+  const { mutate: mutateReadMe, isLoading } = useMutation(
     () => sendEdit({ slug: profileSlug, content: copy }),
     {
       onError: () => alert("Couldn't edit readme. loss"),
       onSuccess: () => router.refresh(),
+      onSettled: () => {
+        setChanged(false);
+        setMode('view');
+      },
     }
   );
 
@@ -44,8 +51,9 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
         <Button
           onClick={() => setMode(mode === 'view' ? 'edit' : 'view')}
           variant="outlined"
+          className="w-max mt-5 self-end"
         >
-          {mode === 'view' ? 'Edit ReadMe' : 'Cancel'}
+          Edit ReadMe
         </Button>
       )}
       {mode === 'edit' && (
@@ -71,7 +79,10 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
             {editorMode == 'write' ? (
               <textarea
                 className="p-5 pb-10 rounded-lg w-full min-h-[300px]"
-                onChange={(e) => setCopy(e.target?.value)}
+                onChange={(e) => {
+                  setCopy(e.target?.value);
+                  setChanged(true);
+                }}
                 value={copy}
               />
             ) : (
@@ -81,10 +92,16 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
             {/* action area  */}
             <div className="w-full">
               <Button
-                className="float-right m-5"
+                disabled={isLoading || !changed}
+                className={`float-right m-5 ${
+                  isLoading ? 'animate-pulse' : 'animate-none'
+                }`}
                 onClick={() => mutateReadMe()}
               >
-                Submit
+                <span className="flex">
+                  {isLoading && <LoadingPulser className="h-5" />}
+                  Submit
+                </span>
               </Button>
             </div>
           </div>

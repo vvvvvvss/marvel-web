@@ -2,14 +2,22 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { people, SANITIZE_OPTIONS } from '@marvel/web-utils';
 import sanitize from 'sanitize-html';
 import connectToDB from 'apps/webapp/utils/dbConnector';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
-export default async function personHandler(
-  req: NextApiRequest,
+export default async function handler(
+  req: NextApiRequest & { url: string },
   res: NextApiResponse
 ) {
   try {
     await connectToDB();
+    //@ts-ignore
+    const session = await unstable_getServerSession(req, res, authOptions);
     const slug = req.body?.slug;
+    const condition = req.body?.slug === session?.user?.slug;
+    if (!condition)
+      return res.json({ message: 'Access denied', status: '403' });
+
     const content = req.body?.content;
     const cleanContent = sanitize(content, SANITIZE_OPTIONS);
     //@ts-ignore

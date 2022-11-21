@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import connectToDB from '../../../utils/dbConnector';
 import { people as person } from '@marvel/web-utils';
@@ -85,7 +86,7 @@ export const authOptions = {
       const existingUser = await person
         //@ts-ignore //might fix this later
         .findOne({ id: token?.user?.id })
-        .select('-readMe -website -linkedIn -gitHub -_id')
+        .select('-readMe -_id -createdAt -updatedAt')
         .lean()
         .exec();
       console.info('findOne is called at auth');
