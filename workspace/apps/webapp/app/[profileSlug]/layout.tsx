@@ -1,7 +1,7 @@
-import Navbar from '../../../components/Navbar';
+import Navbar from '../../components/Navbar';
 import { ReactNode } from 'react';
 import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
-import connectToDB from '../../../utils/dbConnector';
+import connectToDB from '../../utils/dbConnector';
 import { people } from '@marvel/web-utils';
 
 const getUserBySlug = async (slug: String) => {

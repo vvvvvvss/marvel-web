@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { people, SANITIZE_OPTIONS } from '@marvel/web-utils';
 import sanitize from 'sanitize-html';
 import connectToDB from 'apps/webapp/utils/dbConnector';
-import { unstable_getServerSession } from 'next-auth';
+import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(
