@@ -32,8 +32,9 @@ const Manager = ({ dude }: { dude: Object }) => {
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
               <TabGroup className="my-5">
-                <Tab active>Assign Project</Tab>
+                <Tab active>General</Tab>
                 <Tab>Assign Course</Tab>
+                <Tab>Assign Project</Tab>
               </TabGroup>
             </div>
           </FullScreenDialog>

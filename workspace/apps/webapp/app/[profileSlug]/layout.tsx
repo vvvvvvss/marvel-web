@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
 import connectToDB from '../../utils/dbConnector';
 import { people } from '@marvel/web-utils';
-import Manager from './Manager';
+import Manager from './UserManager';
 
 const getUserBySlug = async (slug: String) => {
   await connectToDB();
