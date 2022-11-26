@@ -1,3 +1,4 @@
+import Navbar from '../components/Navbar';
 import Context from './Context';
 import './globals.css';
 
@@ -12,7 +13,10 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         />
       </head>
       <body>
-        <Context>{children}</Context>
+        <Context>
+          <Navbar />
+          {children}
+        </Context>
       </body>
     </html>
   );

@@ -1,40 +1,40 @@
-import { Window, Paper, Avatar, Button, Tab, TabGroup } from '@marvel/web-ui';
+import { Paper, Tab, TabGroup } from '@marvel/web-ui';
 import Link from 'next/link';
 import connectToDB from 'apps/webapp/utils/dbConnector';
-import { people } from '@marvel/web-utils';
+import { work } from '@marvel/web-utils';
 
-// const getUserReadmeBySlug = async (slug: String) => {
-//   await connectToDB();
-//   const person = await people
-//     //@ts-ignore
-//     .findOne({ slug: slug })
-//     .select('readMe slug name')
-//     .lean()
-//     .exec();
-//   console.log({ info: 'fetched readme of user in profile page' });
-//   return person;
-// };
+const getUserWorksBySlug = async (slug: String) => {
+  await connectToDB();
+  const works = await work
+    //@ts-ignore
+    .find({ $in: { 'authors.slug': slug } })
+    .lean()
+    .exec();
+  console.log({ info: 'fetched works of user in profile page' });
+  return works;
+};
 
 export default async function page({ params, searchParams }) {
-  //   const readMeData = await getUserReadmeBySlug(params?.profilePage);
-  console.log({ info: 'params at profile work segment' }, params);
+  const works = await getUserWorksBySlug(params?.profileSlug);
   return (
     <div className="flex flex-col">
       {/* toggle buttons  */}
       <TabGroup className="place-self-center">
-        <Link href={`/u/${params?.profileSlug}/`}>
+        <Link href={`/${params?.profileSlug}/`}>
           <Tab>ReadMe</Tab>
         </Link>
-        <Link href={`/u/${params?.profileSlug}/works`}>
+        <Link href={`/${params?.profileSlug}/works`}>
           <Tab active>Works</Tab>
         </Link>
-        <Link href={`/u/${params?.profileSlug}/writings`}>
+        <Link href={`/${params?.profileSlug}/writings`}>
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
       <Paper shadow border className="mt-5">
-        {['', undefined].includes(undefined) && (
+        {works.length == 0 ? (
           <h1 className="text-4xl p-5">No works</h1>
+        ) : (
+          works.map((w) => <h1>{w?._id}</h1>)
         )}
       </Paper>
     </div>

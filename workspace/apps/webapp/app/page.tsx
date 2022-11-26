@@ -1,10 +1,8 @@
 import { Window, Button } from '@marvel/web-ui';
-import Navbar from '../components/Navbar';
 
 export function Index() {
   return (
     <Window>
-      <Navbar home />
       {/* hero box  */}
       <div className="pt-40 md:pt-32 w-full max-w-5xl flex flex-col items-center px-4">
         <h1 className="flex-col flex">

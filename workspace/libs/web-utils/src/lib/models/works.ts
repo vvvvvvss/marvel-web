@@ -9,7 +9,7 @@ const personEntity = new Schema(
     slug: String,
     name: String,
     profileImage: String,
-    writeAccess: Boolean,
+    accessType: { type: [String], enum: { values: ['READ', 'WRITE'] } },
   },
   { _id: false }
 );
@@ -24,26 +24,11 @@ const courseWorkSchema = new Schema(
     domain: { type: String, required: true },
     slug: { type: String, slug: ['_id', 'courseCode'], unique: true },
     note: { type: String, maxLength: 6000 },
-    reports: [
-      new Schema(
-        {
-          id: mongoose.Schema.Types.ObjectId,
-          level: Number,
-          status: {
-            type: String,
-            enum: { values: ['PENDING', 'APPROVED', 'FLAGGED', 'FEATURED'] },
-          },
-        },
-        { _id: false }
-      ),
-    ],
+
     // META DATA
     searchTerms: [String],
-    reviewStatus: {
-      type: String,
-      enum: { values: ['APPROVED', 'PENDING', 'FLAGGED', 'FEATURED'] },
-      default: '',
-    },
+    pending: { type: [Number], default: [] },
+    flagged: { type: [Number], default: [] },
     rankingScore: { type: Number, default: 1 },
   },
   { collection: 'works', timestamps: true }
@@ -57,26 +42,11 @@ const projectWorkSchema = new Schema(
     slug: { type: String, slug: ['name'], unique: true },
     coverPhoto: { type: String },
     coordinators: [personEntity],
-    reports: [
-      new Schema(
-        {
-          id: mongoose.Schema.Types.ObjectId,
-          stage: Number,
-          status: {
-            type: String,
-            enum: { values: ['PENDING', 'APPROVED', 'FLAGGED', 'FEATURED'] },
-          },
-        },
-        { _id: false }
-      ),
-    ],
+
     // META DATA
+    pending: { type: [Number], default: [] },
+    flagged: { type: [Number], default: [] },
     searchTerms: [String],
-    reviewStatus: {
-      type: String,
-      enum: { values: ['PENDING', 'APPROVED', 'FLAGGED', 'FEATURED'] },
-      default: 'APPROVED',
-    },
     rankingScore: { type: Number, default: 1 },
   },
   { collection: 'works', timestamps: true }
@@ -94,7 +64,8 @@ const workSchema = new Schema(
     name: String,
     coverPhoto: String,
     slug: String,
-    reviewStatus: String,
+    pending: [Number],
+    flagged: [Number],
   },
   { collection: 'works', discriminatorKey: '_type', timestamps: true }
 );

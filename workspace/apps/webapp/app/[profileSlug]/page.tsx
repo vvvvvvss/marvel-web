@@ -21,16 +21,16 @@ const getUserReadmeBySlug = async (slug: string) => {
 export default async function page({ params, searchParams }) {
   const readMeData = await getUserReadmeBySlug(params?.profileSlug as string);
   return (
-    <div className="flex flex-col w-full rounded-lg gap-5">
+    <div className="flex flex-col w-full rounded-lg gap-5 justify-center">
       {/* toggle buttons  */}
       <TabGroup>
-        <Link href={`/u/${params?.profileSlug}/`}>
+        <Link href={`/${params?.profileSlug}/`}>
           <Tab active>ReadMe</Tab>
         </Link>
-        <Link href={`/u/${params?.profileSlug}/works`}>
+        <Link href={`/${params?.profileSlug}/works`}>
           <Tab>Works</Tab>
         </Link>
-        <Link href={`/u/${params?.profileSlug}/writings`}>
+        <Link href={`/${params?.profileSlug}/writings`}>
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
@@ -40,8 +40,15 @@ export default async function page({ params, searchParams }) {
         className="relative w-full rounded-lg flex flex-col p-5"
       >
         {['', undefined].includes(readMeData?.readMe) ? (
-          <div className="w-full">
-            <h1 className="text-3xl text-p-5">ReadMe is Empty</h1>
+          <div className="w-full flex flex-col md:flex-row gap-5 -m-5">
+            <Image
+              src={'/void.png'}
+              width={800}
+              height={800}
+              alt={'ReadMe is Empty'}
+              className="rounded-lg max-w-xs aspect-square object-cover"
+            />
+            <h1 className="text-3xl text-p-5 m-5">ReadMe is Empty</h1>
           </div>
         ) : (
           <MarkdownRender content={readMeData?.readMe} className="my-5" />

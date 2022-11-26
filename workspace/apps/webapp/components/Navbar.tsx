@@ -1,12 +1,18 @@
 'use client';
 
-import { Appbar, Button, IconButton, Avatar } from '@marvel/web-ui';
+import {
+  Appbar,
+  Button,
+  IconButton,
+  Avatar,
+  LoadingPulser,
+} from '@marvel/web-ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { HiOutlineBars2 as MenuIcon } from 'react-icons/hi2';
 
-const Navbar = ({ home = false }) => {
-  const { data: session } = useSession();
+const Navbar = () => {
+  const { data: session, status } = useSession();
 
   return (
     <Appbar>
@@ -23,23 +29,6 @@ const Navbar = ({ home = false }) => {
             </span>
           </Link>
         </div>
-        {!home && (
-          <div className="hidden md:block">
-            <Button variant={'text'} className={`mr-2`}>
-              Dashboard
-            </Button>
-            <Button variant={'text'} className={`mr-2`}>
-              About
-            </Button>
-            <Button variant={'text'} className={`mr-2`}>
-              Tracks
-            </Button>
-            <Button variant={'text'} className={`mr-2`}>
-              Search
-            </Button>
-            <Button variant={'text'}>Explore</Button>
-          </div>
-        )}
         {session?.user ? (
           <div className="flex items-center">
             <Link href={`/${session?.user?.slug}`} className="mr-3">
@@ -55,6 +44,8 @@ const Navbar = ({ home = false }) => {
               Sign Out
             </Button>
           </div>
+        ) : status === 'loading' ? (
+          <LoadingPulser />
         ) : (
           <Button
             onClick={() => signIn('google', { redirect: false })}

@@ -6,10 +6,10 @@ export const LoadingPulser = ({
   ...props
 }: JSX.IntrinsicElements['div']) => {
   return (
-    <BsDot
+    <div
       className={`${
         className || ''
-      } aspect-square animate-pulse text-p-4 dark:text-p-8`}
+      } aspect-square h-5 rounded-full animate-pulse bg-p-3 dark:text-p-8`}
     />
   );
 };

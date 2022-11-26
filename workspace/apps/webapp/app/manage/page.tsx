@@ -1,13 +1,16 @@
-import { unstable_getServerSession } from 'next-auth/next';
 import { Window } from '@marvel/web-ui';
 import Navbar from 'apps/webapp/components/Navbar';
+import { unstable_getServerSession } from 'next-auth';
+import Manager from './Manager';
 
-export default async function page({ params, searchParams }) {
+export default async function page() {
+  const session = await unstable_getServerSession();
   return (
     <Window>
       <div className="w-full max-w-5xl flex justify-center">
-        <Navbar />
-        <div className="pt-24"></div>
+        <div className="pt-24">
+          <Manager />
+        </div>
       </div>
     </Window>
   );
