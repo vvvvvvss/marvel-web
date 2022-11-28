@@ -5,11 +5,14 @@ mongoose.plugin(slug);
 //author entity
 const personEntity = new Schema(
   {
-    id: String,
+    id: String, // google id
     slug: String,
     name: String,
     profileImage: String,
-    accessType: { type: [String], enum: { values: ['READ', 'WRITE'] } },
+    roleType: {
+      type: [String],
+      enum: { values: ['WRITER', 'ACTIVE', 'INACTIVE'] },
+    },
   },
   { _id: false }
 );
@@ -21,7 +24,6 @@ const courseWorkSchema = new Schema(
     level: { type: Number, required: true, default: 1 },
     totalLevels: { type: Number, required: true },
     courseCode: { type: String, required: true },
-    domain: { type: String, required: true },
     slug: { type: String, slug: ['_id', 'courseCode'], unique: true },
     note: { type: String, maxLength: 6000 },
 
@@ -60,7 +62,6 @@ const workSchema = new Schema(
     level: Number,
     totalLevels: Number,
     courseCode: String,
-    domain: String,
     name: String,
     coverPhoto: String,
     slug: String,

@@ -1,17 +1,30 @@
 import mongoose, { models, Schema } from 'mongoose';
 
+const personEntity = new Schema(
+  {
+    id: String,
+    slug: String,
+    name: String,
+    profileImage: String,
+  },
+  { _id: false, timestamps: { createdAt: true, updatedAt: false } }
+);
+
 //course level report
 const levelReportSchema = new Schema(
   {
+    //identify the parent coursework
     parentId: { type: String, required: true },
+    parentSlug: { type: String, required: true },
+
     level: { type: Number, required: true },
     courseCode: { type: String, required: true },
-    domain: { type: String, required: true },
+    authors: { type: [personEntity], required: true },
 
     //content
     title: { type: String, maxLength: 200, required: true },
     content: { type: String, required: true, maxLength: 15000 },
-    tags: { type: [String], default: [] },
+    tags: { type: [String] },
 
     // META DATA
     searchTerms: [String],
@@ -29,8 +42,11 @@ const levelReportSchema = new Schema(
 //project stage report
 const stageReportSchema = new Schema(
   {
+    // identify the parent
     parentId: { type: String, required: true },
-    stage: { type: Number, required: true },
+    parentSlug: { type: String, required: true },
+
+    authors: { type: [personEntity], required: true },
 
     //content
     title: { type: String, maxLength: 200, required: true },
@@ -57,7 +73,6 @@ const reportSchema = new Schema(
     stage: Number,
     level: Number,
     courseCode: String,
-    domain: String,
 
     title: String,
     content: String,

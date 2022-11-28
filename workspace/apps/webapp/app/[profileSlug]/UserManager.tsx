@@ -13,12 +13,12 @@ import { VscClose as CloseIcon } from 'react-icons/vsc';
 
 const Manager = ({ dude }: { dude: Object }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const session = useSession();
+  const sessionUser = useSession()?.data?.user;
   if (
-    session.data?.user?.scope?.includes('STU_TRACK') ||
-    session.data?.user?.scope?.includes('PRO_TRACK') ||
-    session.data?.user?.scope?.includes('ADMIN') ||
-    session.data?.user?.scope?.includes('DEV')
+    sessionUser?.scope?.includes('STU_TRACK') ||
+    sessionUser?.scope?.includes('PRO_TRACK') ||
+    sessionUser?.scope?.includes('ADMIN') ||
+    sessionUser?.scope?.includes('DEV')
   ) {
     return (
       <>
@@ -33,7 +33,7 @@ const Manager = ({ dude }: { dude: Object }) => {
               </IconButton>
               <TabGroup className="my-5">
                 <Tab active>General</Tab>
-                <Tab>Assign Course</Tab>
+                {sessionUser&&<Tab>Assign Course</Tab>}
                 <Tab>Assign Project</Tab>
               </TabGroup>
             </div>

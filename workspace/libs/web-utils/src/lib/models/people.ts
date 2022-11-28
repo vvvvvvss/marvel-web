@@ -22,7 +22,7 @@ const peopleSchema = new mongoose.Schema(
     scope: {
       type: [String],
       enum: {
-        values: ['CRDN', 'STU_TRACK', 'PRO_TRACK', 'ADMIN', 'DEV'],
+        values: ['CRDN', 'ADMIN', 'DEV'],
         // coordinator can approve articles, level reports of courses they coordinate and stage reports of projects they are part of.
         // stu-track can assign courseworks, add people, remove people from a course work. basically, student track admin.
         // pro-track can assign projectworks, add people, remove people from project work. basically, project track admin.
