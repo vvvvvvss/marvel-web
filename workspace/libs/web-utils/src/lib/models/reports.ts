@@ -7,7 +7,7 @@ const personEntity = new Schema(
     name: String,
     profileImage: String,
   },
-  { _id: false, timestamps: { createdAt: true, updatedAt: false } }
+  { _id: false }
 );
 
 //course level report

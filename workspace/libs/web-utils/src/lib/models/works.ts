@@ -14,7 +14,7 @@ const personEntity = new Schema(
       enum: { values: ['WRITER', 'ACTIVE', 'INACTIVE'] },
     },
   },
-  { _id: false }
+  { _id: false, timestamps: { createdAt: true, updatedAt: false } }
 );
 
 //course workbook
@@ -45,6 +45,11 @@ const projectWorkSchema = new Schema(
     coverPhoto: { type: String },
     coordinators: [personEntity],
 
+    reports: [
+      {
+        id: { type: String, required: true },
+      },
+    ],
     // META DATA
     pending: { type: [Number], default: [] },
     flagged: { type: [Number], default: [] },
