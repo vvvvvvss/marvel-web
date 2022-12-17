@@ -24,13 +24,13 @@ export default async function page({ params, searchParams }) {
     <div className="flex flex-col w-full rounded-lg gap-5 justify-center">
       {/* toggle buttons  */}
       <TabGroup>
-        <Link href={`/${params?.profileSlug}/`}>
+        <Link href={`/u/${params?.profileSlug}/`}>
           <Tab active>ReadMe</Tab>
         </Link>
-        <Link href={`/${params?.profileSlug}/works`}>
+        <Link href={`/u/${params?.profileSlug}/works`}>
           <Tab>Works</Tab>
         </Link>
-        <Link href={`/${params?.profileSlug}/writings`}>
+        <Link href={`/u/${params?.profileSlug}/writings`}>
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>

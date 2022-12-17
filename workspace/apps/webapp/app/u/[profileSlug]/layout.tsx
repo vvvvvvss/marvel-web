@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
-import connectToDB from '../../utils/dbConnector';
+import connectToDB from '../../../utils/dbConnector';
 import { people } from '@marvel/web-utils';
 import Manager from './UserManager';
 
@@ -9,7 +9,7 @@ const getUserBySlug = async (slug: String) => {
   const person = await people
     //@ts-ignore
     .findOne({ slug: slug })
-    .select('-_id name profilePic scope crdnCourses')
+    .select('-_id name profilePic scope crdnCourses doIKnow')
     .lean()
     .exec();
   console.info({ info: 'getUserBySlug is called in profile page' });
@@ -72,7 +72,7 @@ export default async function layout({
           </div>
 
           {/* right box  */}
-          {children}
+          <div className="w-full">{children}</div>
         </Paper>
       </Window>
     </>

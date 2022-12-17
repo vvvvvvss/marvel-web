@@ -31,7 +31,7 @@ const Navbar = () => {
         </div>
         {session?.user ? (
           <div className="flex items-center">
-            <Link href={`/${session?.user?.slug}`} className="mr-3">
+            <Link href={`/u/${session?.user?.slug}`} className="mr-3">
               <Avatar
                 src={session?.user?.profilePic}
                 alt={session?.user?.name}

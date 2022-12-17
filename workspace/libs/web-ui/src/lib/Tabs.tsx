@@ -5,7 +5,7 @@ export const TabGroup = ({ children, className, ...props }: TabGroup) => {
     <div
       className={`${
         className || ''
-      } flex border rounded-full max-w-min p-2 border-p-6`}
+      } flex border rounded-full max-w-min p-2 border-p-6 w-min`}
       {...props}
     >
       {children}
