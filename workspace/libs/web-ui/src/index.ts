@@ -10,4 +10,4 @@ export * from './lib/MardownRender';
 export * from './lib/Avatar';
 export * from './lib/FullScreenDialog';
 export * from './lib/Loading';
-export * from './lib/Switch';
+// export * from './lib/Switch';
