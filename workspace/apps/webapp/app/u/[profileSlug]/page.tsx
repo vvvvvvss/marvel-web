@@ -23,7 +23,7 @@ export default async function page({ params, searchParams }) {
   return (
     <div className="flex flex-col w-full rounded-lg gap-5 justify-center">
       {/* toggle buttons  */}
-      <TabGroup>
+      <TabGroup className="self-center md:self-start">
         <Link href={`/u/${params?.profileSlug}/`}>
           <Tab active>ReadMe</Tab>
         </Link>

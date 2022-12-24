@@ -8,7 +8,7 @@ declare module 'next-auth' {
     user: {
       crdnCourses: [string];
       createdAt: string;
-      doIKnow: string;
+      doIKnow: 'KNOWN' | 'UNKNOWN' | 'BANNED';
       email: string;
       id: string;
       name: string;
