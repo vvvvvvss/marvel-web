@@ -14,20 +14,14 @@ const peopleSchema = new mongoose.Schema(
     id: { type: String, required: true, unique: true }, //unique id from google
 
     // META DATA
-    doIKnow: {
-      type: String,
-      enum: { values: ['KNOWN', 'UNKNOWN', 'BANNED'] },
-      default: 'UNKNOWN',
-    },
     scope: {
       type: [String],
       enum: {
-        values: ['CRDN', 'ADMIN', 'DEV'],
+        values: ['PROFILE', 'WRITER', 'R-WRITER', 'CRDN', 'ADMIN'],
         // coordinator can approve articles, level reports of courses they coordinate and stage reports of projects they are part of.
         // stu-track can assign courseworks, add people, remove people from a course work. basically, student track admin.
         // pro-track can assign projectworks, add people, remove people from project work. basically, project track admin.
         // admin can do all the above.
-        // dev can do all of the above.
       },
       default: [],
     },

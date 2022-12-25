@@ -37,7 +37,7 @@ export default async function page({ params, searchParams }) {
       <Paper
         shadow
         border
-        className="relative w-full rounded-lg flex flex-col p-5"
+        className="relative w-full rounded-lg flex flex-col p-5 mb-32"
       >
         {['', undefined].includes(readMeData?.readMe) ? (
           <div className="w-full flex flex-col md:flex-row gap-5 -m-5">

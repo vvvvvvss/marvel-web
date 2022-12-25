@@ -17,8 +17,7 @@ export default async function profile_readMe_editor(
 
     const condition =
       req.body?.slug === session?.user?.slug ||
-      session?.user?.scope?.includes('ADMIN') ||
-      session?.user?.scope?.includes('DEV');
+      session?.user?.scope?.includes('ADMIN');
 
     if (!condition)
       return res.json({ message: 'Access denied', status: '403' });
@@ -32,7 +31,7 @@ export default async function profile_readMe_editor(
         readMe: cleanContent,
       }
     );
-    res.revalidate(`/u/${slug}`);
+    await res.revalidate(`/u/${slug}`);
     return res.json({
       status: 201,
       message: 'profile readMe updated successfully',

@@ -2,7 +2,7 @@
 
 import { Button, FullScreenDialog, IconButton, Paper } from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
 import {
   AiOutlineMinusCircle as MinusIcon,
@@ -12,28 +12,32 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-const sendUserEdit = async (profile: any) => {
+const sendSpawnRequest = async (profile: any) => {
   const data = (await axios.post(`/api/mutate/profile-meta`, { profile })).data;
   return data;
 };
 
-const Manager = ({ dude }: { dude: any }) => {
+const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const session = useSession();
   const sessionUser = session?.data?.user;
-  const [dudeCopy, setDudeCopy] = useState(dude);
-  const [changed, setChanged] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [formType, setFormType] = useState<'COURSE' | 'PROJECT'>('PROJECT');
   const router = useRouter();
 
+  useEffect(() => {
+    setFormData({});
+  }, [formType]);
+
   const { mutate: sendMutation, isLoading } = useMutation(
-    () => sendUserEdit(dudeCopy),
+    () => sendSpawnRequest(formData),
     {
       onError: () => alert("Couldn't update user. loss"),
       onSuccess: () => {
         router.refresh();
         setDialogOpen(false);
       },
-      onSettled: () => setChanged(false),
+      //   onSettled: () => setChanged(false),
     }
   );
 
@@ -44,18 +48,32 @@ const Manager = ({ dude }: { dude: any }) => {
     return (
       <>
         <div className="w-full">
-          <Button onClick={() => setDialogOpen((p) => !p)}>Manage User</Button>
+          <Button>Manage User</Button>
+          <Paper border className="rounded-lg p-4 flex flex-col gap-3">
+            <Button
+              onClick={() => {
+                setFormType('COURSE');
+                setDialogOpen((p) => !p);
+              }}
+            >
+              New Course Work
+            </Button>
+            <Button
+              onClick={() => {
+                setFormType('PROJECT');
+                setDialogOpen((p) => !p);
+              }}
+            >
+              New Project Work
+            </Button>
+          </Paper>
         </div>
         {dialogOpen && (
           <FullScreenDialog open={dialogOpen} className="z-10">
             <div className="w-full max-w-2xl py-24">
               <IconButton
                 className="mb-5"
-                onClick={() => {
-                  setDialogOpen((p) => !p);
-                  setDudeCopy(dude);
-                  return;
-                }}
+                onClick={() => setDialogOpen((p) => !p)}
               >
                 <CloseIcon className="h-10 w-20" />
               </IconButton>

@@ -1,7 +1,8 @@
-import { Paper, Tab, TabGroup } from '@marvel/web-ui';
+import { Button, Paper, Tab, TabGroup } from '@marvel/web-ui';
 import Link from 'next/link';
 import connectToDB from 'apps/webapp/utils/dbConnector';
 import { work } from '@marvel/web-utils';
+import Spawner from './Spawner';
 
 const getUserWorksBySlug = async (slug: String) => {
   await connectToDB();
@@ -30,11 +31,16 @@ export default async function page({ params, searchParams }) {
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
-      <Paper shadow border className="mt-5">
+      <Paper shadow border className="mt-5 rounded-lg">
         {works.length == 0 ? (
           <h1 className="text-4xl p-5">No works</h1>
         ) : (
-          works.map((w) => <h1>{w?._id}</h1>)
+          <>
+            {works.map((w) => (
+              <h1>{w?._id}</h1>
+            ))}
+            <Spawner authorSlug={params?.profileSlug} />
+          </>
         )}
       </Paper>
     </div>

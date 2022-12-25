@@ -12,26 +12,31 @@ export default async function profile_meta_edit(
     await connectToDB();
     //@ts-ignore
     const session = await unstable_getServerSession(req, res, authOptions);
-
-    const condition =
-      session?.user?.doIKnow === 'KNOWN' &&
-      (session?.user?.scope?.includes('ADMIN') ||
-        session?.user?.scope?.includes('DEV'));
-
-    if (!condition)
-      return res.json({ message: 'Access denied', status: '403' });
-
     const incomingProfileData = req.body?.profile;
+
+    //if session user is *not* CRDN or ADMIN
+    const condition = !['CRDN', 'ADMIN'].some((e: any) =>
+      session?.user?.scope?.includes(e)
+    );
+
+    //if session user is not admin and tring to add CRDN or ADMIN
+    const condition2 =
+      !session?.user?.scope?.includes('ADMIN') &&
+      ['CRDN', 'ADMIN'].some((e: any) =>
+        incomingProfileData?.scope?.includes(e)
+      );
+
+    if (condition || condition2)
+      return res.json({ message: 'Access denied', status: '403' });
 
     //@ts-ignore
     await people.findOneAndUpdate(
       { slug: incomingProfileData?.slug },
       {
-        doIKnow: incomingProfileData?.doIKnow,
         scope: incomingProfileData?.scope,
       }
     );
-    res.revalidate(`/u/${incomingProfileData?.slug}`);
+    await res.revalidate(`/u/${incomingProfileData?.slug}`);
     return res.json({
       status: 201,
       message: 'profile meta-data updated successfully',

@@ -21,7 +21,7 @@ const Navbar = () => {
       >
         <div className="flex items-center">
           <IconButton variant={'text'} className="mr-2">
-            <MenuIcon className="h-6 w-6 text-p-10" />
+            <MenuIcon aria-hidden className="h-6 w-6 text-p-10" />
           </IconButton>
           <Link href={'/'}>
             <span className="text-p-8 font-semibold text-center cursor-pointer">

@@ -26,7 +26,8 @@ const sendEdit = async ({ slug, content }) => {
 };
 
 const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
-  const currentUser = useSession();
+  const session = useSession();
+  const sessionUser = session?.data?.user;
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [editorMode, setEditorMode] = useState<'write' | 'preview'>('write');
   const [copy, setCopy] = useState(content);
@@ -47,7 +48,8 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
 
   return (
     <>
-      {currentUser?.data?.user?.slug === profileSlug && (
+      {(sessionUser?.slug === profileSlug ||
+        sessionUser?.scope?.includes('ADMIN')) && (
         <Button
           onClick={() => setMode(mode === 'view' ? 'edit' : 'view')}
           variant="outlined"

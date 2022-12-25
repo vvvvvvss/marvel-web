@@ -1,13 +1,13 @@
-export * from './lib/Window';
-export * from './lib/Appbar';
-export * from './lib/Button';
-export * from './lib/Button';
-export * from './lib/Surfaces';
-export * from './lib/Tabs';
-export * from './lib/MardownRender';
+export * from './server-lib/Window';
+export * from './server-lib/Appbar';
+export * from './server-lib/Button';
+export * from './server-lib/Button';
+export * from './server-lib/Surfaces';
+export * from './server-lib/Tabs';
+export * from './server-lib/MardownRender';
 
 // export * from './lib/useMediaQuery';
-export * from './lib/Avatar';
-export * from './lib/FullScreenDialog';
-export * from './lib/Loading';
+export * from './server-lib/Avatar';
+export * from './server-lib/FullScreenDialog';
+export * from './server-lib/Loading';
 // export * from './lib/Switch';

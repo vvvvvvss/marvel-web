@@ -9,7 +9,7 @@ const getUserBySlug = async (slug: String) => {
   const person = await people
     //@ts-ignore
     .findOne({ slug: slug })
-    .select('-_id name profilePic scope crdnCourses doIKnow slug')
+    .select('-_id name profilePic scope crdnCourses slug')
     .lean()
     .exec();
   console.info({ info: 'getUserBySlug is called in profile page' });

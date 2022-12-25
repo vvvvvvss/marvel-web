@@ -8,12 +8,11 @@ declare module 'next-auth' {
     user: {
       crdnCourses: [string];
       createdAt: string;
-      doIKnow: 'KNOWN' | 'UNKNOWN' | 'BANNED';
       email: string;
       id: string;
       name: string;
       profilePic: string;
-      scope: [string];
+      scope: Array<'PROFILE' | 'WRITER' | 'R-WRITER' | 'CRDN' | 'ADMIN'>;
       slug: string;
       updatedAt: string;
     };
