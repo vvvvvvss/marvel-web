@@ -85,70 +85,22 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                       border
                       shadow
                       className="rounded-lg pl-5 pt-5 min-h-[60px] mt-5"
-                    >
-                      {dudeCopy?.scope?.map((s: string) => (
-                        <Button
-                          onClick={() => {
-                            setDudeCopy((p) => ({
-                              ...p,
-                              scope: dudeCopy?.scope?.filter(
-                                (scope) => scope != s
-                              ),
-                            }));
-                            setChanged(true);
-                          }}
-                          variant="outlined"
-                          className="mr-5 mb-5 inline-flex items-center gap-2"
-                        >
-                          <MinusIcon />
-                          {s}
-                        </Button>
-                      ))}
-                    </Paper>
-                    <div className="pl-5 pt-5">
-                      {[
-                        'PROFILE',
-                        'WRITER',
-                        'R-WRITER',
-                        ...(sessionUser?.scope?.includes('ADMIN')
-                          ? ['CRDN', 'ADMIN']
-                          : []),
-                      ].map(
-                        (s) =>
-                          !dudeCopy?.scope?.includes(s) && (
-                            <Button
-                              onClick={() => {
-                                setDudeCopy((p) => ({
-                                  ...p,
-                                  scope: [...dudeCopy?.scope, s],
-                                }));
-                                setChanged(true);
-                              }}
-                              variant="outlined"
-                              className="mr-5 mb-5 inline-flex items-center gap-2"
-                            >
-                              <PlusIcon />
-                              {s}
-                            </Button>
-                          )
-                      )}
-                    </div>
+                    ></Paper>
                   </div>
                 )}
                 <div className="w-full flex gap-5 justify-end">
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      setDudeCopy(dude);
-                      setChanged(false);
+                      setFormData({});
                     }}
-                    disabled={!changed || isLoading}
+                    disabled={isLoading}
                   >
-                    Reset
+                    Clear
                   </Button>
                   <Button
-                    onClick={() => sendMutation()}
-                    disabled={isLoading || !changed}
+                    onClick={() => console.log(formData)}
+                    disabled={isLoading}
                   >
                     Update User
                   </Button>
@@ -162,4 +114,4 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   }
 };
 
-export default Manager;
+export default Spawner;
