@@ -10,8 +10,9 @@ const personEntity = new Schema(
     name: String,
     profileImage: String,
     roleType: {
-      type: [String],
+      type: String,
       enum: { values: ['WRITER', 'ACTIVE', 'INACTIVE'] },
+      default: 'ACTIVE',
     },
   },
   { _id: false, timestamps: { createdAt: true, updatedAt: false } }

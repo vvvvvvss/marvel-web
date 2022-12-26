@@ -2,7 +2,7 @@ import mongoose, { models, Schema } from 'mongoose';
 
 const courseSchema = new Schema(
   {
-    domain: {
+    domainName: {
       type: String,
       enum: { values: ['AI-ML', 'IOT', 'D-P', 'EV-RE', 'CL-CY'] },
     },

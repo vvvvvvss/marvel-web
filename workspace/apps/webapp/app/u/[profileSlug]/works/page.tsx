@@ -31,17 +31,17 @@ export default async function page({ params, searchParams }) {
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
-      <Paper shadow border className="mt-5 rounded-lg">
+      <Paper shadow border className="flex mt-5 rounded-lg p-5 gap-5 flex-wrap">
         {works.length == 0 ? (
-          <h1 className="text-4xl p-5">No works</h1>
+          <h1 className="text-4xl">No works</h1>
         ) : (
           <>
             {works.map((w) => (
               <h1>{w?._id}</h1>
             ))}
-            <Spawner authorSlug={params?.profileSlug} />
           </>
         )}
+        <Spawner authorSlug={params?.profileSlug} />
       </Paper>
     </div>
   );

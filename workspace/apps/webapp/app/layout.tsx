@@ -4,7 +4,7 @@ import './globals.css';
 
 function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ scrollbarGutter: 'stable' }}>
       <head>
         <title>marvel.</title>
         <meta
