@@ -5,10 +5,10 @@ mongoose.plugin(slug);
 //author entity
 const personEntity = new Schema(
   {
-    id: String, // google id
-    slug: String,
-    name: String,
-    profileImage: String,
+    id: { type: String, required: true }, // google id
+    slug: { type: String, required: true },
+    name: { type: String, required: true },
+    profilePic: { type: String, required: true },
     roleType: {
       type: String,
       enum: { values: ['WRITER', 'ACTIVE', 'INACTIVE'] },
@@ -18,14 +18,15 @@ const personEntity = new Schema(
   { _id: false, timestamps: { createdAt: true, updatedAt: false } }
 );
 
+mongoose.plugin(slug);
 //course workbook
 const courseWorkSchema = new Schema(
   {
+    slug: { type: String, slug: ['_id', 'courseCode'], unique: true },
     authors: [personEntity],
     level: { type: Number, required: true, default: 1 },
     totalLevels: { type: Number, required: true },
     courseCode: { type: String, required: true },
-    slug: { type: String, slug: ['_id', 'courseCode'], unique: true },
     note: { type: String, maxLength: 6000 },
 
     // META DATA
@@ -37,12 +38,14 @@ const courseWorkSchema = new Schema(
   { collection: 'works', timestamps: true }
 );
 
+mongoose.plugin(slug);
 //project workbook
 const projectWorkSchema = new Schema(
   {
+    slug: { type: String, slug: 'name', unique: true },
     authors: [personEntity],
     name: { type: String, required: true },
-    slug: { type: String, slug: ['name'], unique: true },
+    displayName: { type: String, required: true },
     coverPhoto: { type: String },
     coordinators: [personEntity],
 
@@ -71,8 +74,14 @@ const workSchema = new Schema(
     name: String,
     coverPhoto: String,
     slug: String,
+    reports: [
+      {
+        id: String,
+      },
+    ],
     pending: [Number],
     flagged: [Number],
+    rankingScore: Number,
   },
   { collection: 'works', discriminatorKey: '_type', timestamps: true }
 );

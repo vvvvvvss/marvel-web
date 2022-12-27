@@ -4,13 +4,21 @@ import { Button, FullScreenDialog, IconButton, Paper } from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
-
+import { TextField } from '@marvel/web-ui';
 import { useMutation, useQuery } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-const sendSpawnRequest = async (profile: any) => {
-  const data = (await axios.post(`/api/spawn/profile`, { profile })).data;
+type FormData = {
+  selectedCourse?: string;
+  projectName?: string;
+  authorSlug?: string;
+};
+
+const sendSpawnRequest = async (type, formData: FormData) => {
+  const data = (
+    await axios.post(`/api/spawn/${type?.toLowerCase()}`, { formData })
+  ).data;
   return data;
 };
 
@@ -19,15 +27,11 @@ const getCourseList = async () => {
   return data;
 };
 
-type FormData = {
-  selectedCourse?: string;
-};
-
 const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const session = useSession();
   const sessionUser = session?.data?.user;
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>({ authorSlug });
   const [formType, setFormType] = useState<'COURSE' | 'PROJECT'>('PROJECT');
   const router = useRouter();
 
@@ -42,14 +46,13 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   );
 
   const { mutate: sendMutation, isLoading } = useMutation(
-    () => sendSpawnRequest(formData),
+    () => sendSpawnRequest(formType, { ...formData, authorSlug: authorSlug }),
     {
       onError: () => alert("Couldn't update user. loss"),
       onSuccess: () => {
         router.refresh();
         setDialogOpen(false);
       },
-      //   onSettled: () => setChanged(false),
     }
   );
 
@@ -59,7 +62,10 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   ) {
     return (
       <>
-        <Paper className="rounded-lg p-5 flex flex-col gap-5 bg-p-1">
+        <Paper
+          border
+          className="rounded-lg p-5 flex flex-col gap-5 bg-p-0 flex-1 max-w-fit"
+        >
           <Button
             variant="outlined"
             onClick={() => {
@@ -139,25 +145,47 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                         </div>
                       </>
                     ) : (
-                      <></>
+                      formType === 'PROJECT' && (
+                        <>
+                          <div className="flex flex-wrap mb-5">
+                            <label
+                              htmlFor="project-name"
+                              className="text-xl my-5"
+                            >
+                              Project Name
+                            </label>
+                            <TextField
+                              fullwidth
+                              id="project-name"
+                              placeholder="Enter Project Name"
+                              type={'text'}
+                              value={formData?.projectName}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  projectName: e.target.value,
+                                })
+                              }
+                            />
+                            <caption className="text-xs my-2">
+                              This name will be used to generate a unique
+                              identifier for the project URL and it cannot be
+                              changed later.
+                            </caption>
+                          </div>
+                        </>
+                      )
                     )}
                   </div>
                 )}
                 <div className="w-full flex gap-5 justify-end">
-                  {formType === 'PROJECT' && (
-                    <Button
-                      variant="outlined"
-                      onClick={() => {
-                        setFormData({});
-                      }}
-                      disabled={isLoading}
-                    >
-                      Clear
-                    </Button>
-                  )}
                   <Button
-                    onClick={() => console.log(formData)}
-                    disabled={isLoading}
+                    onClick={() => sendMutation()}
+                    disabled={
+                      isLoading ||
+                      (formType === 'COURSE' && !formData?.selectedCourse) ||
+                      (formType === 'PROJECT' && !formData?.projectName?.trim())
+                    }
                   >
                     {formType === 'COURSE'
                       ? 'Spawn Course Work'

@@ -36,10 +36,7 @@ export default async function layout({
         <Paper className="w-full max-w-5xl mx-5 flex flex-col items-center md:flex-row md:items-start gap-5">
           {/* left part  */}
           <div className="w-full flex flex-col gap-5 max-w-xs max-h-min">
-            <Paper
-              shadow
-              className="w-full max-h-min rounded-lg border p-5 border-p-6"
-            >
+            <Paper shadow border className="w-full max-h-min rounded-lg p-5">
               {/* picture and name  */}
               <div className="flex items-center pb-5">
                 <Avatar

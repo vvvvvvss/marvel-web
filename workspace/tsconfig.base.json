@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@marvel/web-ui": ["libs/web-ui/src/index.ts"],
+      "@marvel/web-ui/client": ["libs/web-ui/src/client-index.ts"],
       "@marvel/web-utils": ["libs/web-utils/src/index.ts"]
     }
   },
