@@ -18,7 +18,6 @@ const getUserWorksBySlug = async (slug: String) => {
 
 export default async function page({ params, searchParams }) {
   const works = await getUserWorksBySlug(params?.profileSlug);
-  console.log(works);
   return (
     <div className="flex flex-col">
       {/* toggle buttons  */}
