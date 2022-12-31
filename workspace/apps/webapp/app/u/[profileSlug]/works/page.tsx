@@ -9,11 +9,10 @@ const getUserWorksBySlug = async (slug: String) => {
   const works = await work
     //@ts-ignore
     .find({ $in: { 'authors.slug': slug } })
-    .select('-_id')
     .lean()
     .exec();
   console.log({ info: 'find() on works' });
-  return works;
+  return JSON.parse(JSON.stringify(works));
 };
 
 export default async function page({ params, searchParams }) {
@@ -32,20 +31,24 @@ export default async function page({ params, searchParams }) {
           <Tab>Writings</Tab>
         </Link>
       </TabGroup>
-      <div className="flex mt-5 gap-5 flex-wrap">
+      <Paper shadow border className="flex mt-5 p-5 rounded-lg gap-5 flex-wrap">
         {works.length == 0 ? (
           <h1 className="text-4xl">No works</h1>
         ) : (
           <>
             {works.map((w, i) => (
               <Link
+                className="flex-auto"
                 key={i}
-                href={`/${w?._type === 'courseWork' ? 'cw' : 'pw'}/${w?.slug}`}
+                href={`/${
+                  w?._type === 'courseWork' ? 'coursework' : 'project'
+                }/${w?._id}`}
               >
                 <Paper
                   border
-                  shadow
-                  className="p-5 rounded-lg flex-1 min-w-fit cursor-pointer"
+                  shadow={'hover'}
+                  elevateOnHover
+                  className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
                   {w?._type === 'courseWork' ? (
                     <>
@@ -64,7 +67,7 @@ export default async function page({ params, searchParams }) {
           </>
         )}
         <Spawner authorSlug={params?.profileSlug} />
-      </div>
+      </Paper>
     </div>
   );
 }

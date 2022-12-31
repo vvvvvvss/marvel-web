@@ -15,7 +15,6 @@ const levelReportSchema = new Schema(
   {
     //identify the parent coursework
     parentId: { type: String, required: true },
-    parentSlug: { type: String, required: true },
 
     level: { type: Number, required: true },
     courseCode: { type: String, required: true },
@@ -44,7 +43,6 @@ const stageReportSchema = new Schema(
   {
     // identify the parent
     parentId: { type: String, required: true },
-    parentSlug: { type: String, required: true },
 
     authors: { type: [personEntity], required: true },
 

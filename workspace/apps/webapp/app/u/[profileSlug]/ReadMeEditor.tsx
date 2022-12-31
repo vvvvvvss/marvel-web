@@ -16,6 +16,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { IconBase } from 'react-icons';
+import { MarkdownEditor } from '@marvel/web-ui/client';
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
 
@@ -64,32 +65,13 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
             <IconButton onClick={() => setMode('view')}>
               <CloseIcon className="h-10 w-20" />
             </IconButton>
-            <TabGroup className="my-5">
-              <Tab
-                active={editorMode === 'write'}
-                onClick={() => setEditorMode('write')}
-              >
-                write
-              </Tab>
-              <Tab
-                active={editorMode === 'preview'}
-                onClick={() => setEditorMode('preview')}
-              >
-                preview
-              </Tab>
-            </TabGroup>
-            {editorMode == 'write' ? (
-              <textarea
-                className="p-5 pb-10 rounded-lg w-full min-h-[300px]"
-                onChange={(e) => {
-                  setCopy(e.target?.value);
-                  setChanged(true);
-                }}
-                value={copy}
-              />
-            ) : (
-              <MarkdownRender content={copy} />
-            )}
+            <MarkdownEditor
+              value={copy}
+              onChange={(e) => {
+                setCopy(e?.target?.value);
+                setChanged(true);
+              }}
+            />
 
             {/* action area  */}
             <div className="w-full">

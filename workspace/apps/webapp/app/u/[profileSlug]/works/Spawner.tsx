@@ -48,7 +48,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const { mutate: sendMutation, isLoading } = useMutation(
     () => sendSpawnRequest(formType, { ...formData, authorSlug: authorSlug }),
     {
-      onError: () => alert("Couldn't update user. loss"),
+      onError: () => alert("Couldn't spawn work. loss"),
       onSuccess: () => {
         router.refresh();
         setDialogOpen(false);
@@ -62,11 +62,9 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   ) {
     return (
       <>
-        <Paper
-          border
-          className="rounded-lg p-5 flex flex-col gap-5 bg-p-0 flex-1 max-w-fit"
-        >
+        <div className="flex flex-wrap gap-5 flex-auto">
           <Button
+            className="flex-1"
             variant="outlined"
             onClick={() => {
               setFormType('COURSE');
@@ -76,6 +74,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
             New Course Work
           </Button>
           <Button
+            className="flex-1"
             variant="outlined"
             onClick={() => {
               setFormType('PROJECT');
@@ -84,7 +83,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
           >
             New Project Work
           </Button>
-        </Paper>
+        </div>
         {dialogOpen && (
           <FullScreenDialog open={dialogOpen} className="z-10">
             <div className="w-full max-w-2xl py-24">
@@ -167,11 +166,6 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                                 })
                               }
                             />
-                            <caption className="text-xs my-2">
-                              This name will be used to generate a unique
-                              identifier for the project URL and it cannot be
-                              changed later.
-                            </caption>
                           </div>
                         </>
                       )
@@ -184,7 +178,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                     disabled={
                       isLoading ||
                       (formType === 'COURSE' && !formData?.selectedCourse) ||
-                      (formType === 'PROJECT' && !formData?.projectName?.trim())
+                      (formType === 'PROJECT' &&
+                        formData?.projectName?.trim().length < 4)
                     }
                   >
                     {formType === 'COURSE'

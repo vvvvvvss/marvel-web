@@ -1,6 +1,4 @@
 import mongoose, { models, Schema } from 'mongoose';
-import slug from 'mongoose-slug-generator';
-mongoose.plugin(slug);
 
 //author entity
 const personEntity = new Schema(
@@ -18,11 +16,10 @@ const personEntity = new Schema(
   { _id: false, timestamps: { createdAt: true, updatedAt: false } }
 );
 
-mongoose.plugin(slug);
 //course workbook
 const courseWorkSchema = new Schema(
   {
-    slug: { type: String, slug: ['_id', 'courseCode'], unique: true },
+    //_id
     authors: [personEntity],
     level: { type: Number, required: true, default: 1 },
     totalLevels: { type: Number, required: true },
@@ -38,11 +35,10 @@ const courseWorkSchema = new Schema(
   { collection: 'works', timestamps: true }
 );
 
-mongoose.plugin(slug);
 //project workbook
 const projectWorkSchema = new Schema(
   {
-    slug: { type: String, slug: 'name', unique: true },
+    // _id
     authors: [personEntity],
     name: { type: String, required: true },
     displayName: { type: String, required: true },
@@ -73,7 +69,6 @@ const workSchema = new Schema(
     courseCode: String,
     name: String,
     coverPhoto: String,
-    slug: String,
     reports: [
       {
         id: String,

@@ -13,10 +13,10 @@ const blogPostSchema = new Schema(
     slug: { type: String, slug: ['title', 'authorName'], unique: true },
 
     // EDITABLE DATA
-    title: { type: String, maxLength: 200 },
+    title: { type: String, maxLength: 60, required: true },
     tags: { type: [String], default: [] },
     coverPhoto: { type: String },
-    content: { type: String, maxLength: 15000 },
+    content: { type: String, maxLength: 15000, required: true },
 
     // META DATA
     searchTerms: [String],
@@ -40,14 +40,13 @@ const resourceArticleSchema = new Schema(
     authorSlug: { type: String, required: true },
     authorImage: { type: String },
     slug: { type: String, slug: ['title', 'authorName'], unique: true },
-    domains: { type: [String], required: true },
-    courseCodes: [String],
 
     // EDITABLE DATA
-    title: { type: String, maxLength: 200 },
+    title: { type: String, maxLength: 60, required: true },
     tags: { type: [String], default: [] },
     coverPhoto: { type: String },
-    content: { type: String, maxLength: 15000 },
+    content: { type: String, maxLength: 15000, required: true },
+    courseCodes: { type: [String], required: true },
 
     // META DATA
     searchTerms: [String],
@@ -69,7 +68,7 @@ const articleSchema = new Schema(
     authorName: String,
     authorSlug: String,
     authorImage: String,
-    slug: String,
+    slug: { type: String, slug: ['title', 'authorName'], unique: true },
     domains: [String],
     courseCodes: [String],
     title: String,
