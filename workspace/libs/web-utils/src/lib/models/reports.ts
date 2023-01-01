@@ -45,6 +45,7 @@ const stageReportSchema = new Schema(
     parentId: { type: String, required: true },
 
     authors: { type: [personEntity], required: true },
+    isOverview: { type: Boolean, required: true, default: false },
 
     //content
     title: { type: String, maxLength: 200, required: true },

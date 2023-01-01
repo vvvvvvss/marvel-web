@@ -41,15 +41,10 @@ const projectWorkSchema = new Schema(
     // _id
     authors: [personEntity],
     name: { type: String, required: true },
-    displayName: { type: String, required: true },
     coverPhoto: { type: String },
     coordinators: [personEntity],
+    totalStages: { type: Number, required: true },
 
-    reports: [
-      {
-        id: { type: String, required: true },
-      },
-    ],
     // META DATA
     pending: { type: [Number], default: [] },
     flagged: { type: [Number], default: [] },

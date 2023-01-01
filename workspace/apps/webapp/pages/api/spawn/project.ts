@@ -41,7 +41,6 @@ export default async function spawn_new_course(
         },
       ],
       name: formData?.projectName,
-      displayName: formData?.projectName,
       coordinators: [
         {
           id: session?.user?.id,
