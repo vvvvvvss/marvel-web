@@ -172,7 +172,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                     )}
                   </div>
                 )}
-                <div className="w-full flex gap-5 justify-end">
+                <div className="w-full flex gap-5 justify-end pb-48">
                   <Button
                     onClick={() => sendMutation()}
                     disabled={

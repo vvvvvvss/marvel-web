@@ -29,15 +29,14 @@ export default async function layout({
 }) {
   const project = await getProject(params?.projectId);
   return (
-    <Window className="pt-24">
-      <Paper
-        border
-        shadow
-        className="w-full p-5 max-w-5xl mx-5 flex flex-col md:flex-row"
-      >
-        <h1 className="text-9xl">{project?.name}</h1>
-      </Paper>
-      <div className="w-full">{children}</div>
+    <Window className="pt-10">
+      {/* whole thing  */}
+      <div className="w-full max-w-5xl">
+        <Paper border shadow className="w-full p-5 rounded-lg">
+          <h1 className="text-2xl">{project?.name}</h1>
+        </Paper>
+        <div className="w-full">{children}</div>
+      </div>
     </Window>
   );
 }

@@ -31,7 +31,7 @@ export default async function layout({
   const dude = await getUserBySlug(params?.profileSlug);
   return (
     <>
-      <Window className="pt-24">
+      <Window className="pt-10">
         {/* whole thing  */}
         <Paper className="w-full max-w-5xl mx-5 flex flex-col items-center md:flex-row md:items-start gap-5">
           {/* left part  */}

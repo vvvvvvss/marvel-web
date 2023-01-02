@@ -117,7 +117,7 @@ const Manager = ({ dude }: { dude: any }) => {
                     </div>
                   </div>
                 )}
-                <div className="w-full flex gap-5 justify-end">
+                <div className="w-full flex gap-5 justify-end pb-48">
                   <Button
                     variant="outlined"
                     onClick={() => {

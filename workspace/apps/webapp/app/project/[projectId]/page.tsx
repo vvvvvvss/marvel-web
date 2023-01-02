@@ -19,7 +19,7 @@ export default async function page({ params, searchParams }) {
   return (
     <div className="flex flex-col w-full rounded-lg gap-5 justify-center">
       {/* toggle buttons  */}
-      <h1 className="text-4xl">{overview?.content}</h1>
+      <h1 className="text-4xl">{overview?.content || 'No overview'}</h1>
     </div>
   );
 }

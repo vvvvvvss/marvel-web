@@ -15,7 +15,6 @@ import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { IconBase } from 'react-icons';
 import { MarkdownEditor } from '@marvel/web-ui/client';
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
@@ -29,8 +28,7 @@ const sendEdit = async ({ slug, content }) => {
 const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   const session = useSession();
   const sessionUser = session?.data?.user;
-  const [mode, setMode] = useState<'view' | 'edit'>('view');
-  const [editorMode, setEditorMode] = useState<'write' | 'preview'>('write');
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const [copy, setCopy] = useState(content);
   const [changed, setChanged] = useState<boolean>(false);
   const router = useRouter();
@@ -42,7 +40,7 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
       onSuccess: () => router.refresh(),
       onSettled: () => {
         setChanged(false);
-        setMode('view');
+        setDialogOpen(false);
       },
     }
   );
@@ -52,17 +50,17 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
       {(sessionUser?.slug === profileSlug ||
         sessionUser?.scope?.includes('ADMIN')) && (
         <Button
-          onClick={() => setMode(mode === 'view' ? 'edit' : 'view')}
+          onClick={() => setDialogOpen((p) => !p)}
           variant="outlined"
           className="w-max mt-5 self-end"
         >
           Edit ReadMe
         </Button>
       )}
-      {mode === 'edit' && (
-        <FullScreenDialog open={mode == 'edit'}>
+      {isDialogOpen && (
+        <FullScreenDialog open={isDialogOpen}>
           <div className="w-full max-w-2xl py-24">
-            <IconButton onClick={() => setMode('view')}>
+            <IconButton onClick={() => setDialogOpen((p) => !p)}>
               <CloseIcon className="h-10 w-20" />
             </IconButton>
             <MarkdownEditor
@@ -74,7 +72,7 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
             />
 
             {/* action area  */}
-            <div className="w-full">
+            <div className="w-full pb-48">
               <Button
                 disabled={isLoading || !changed}
                 className={`float-right m-5 ${

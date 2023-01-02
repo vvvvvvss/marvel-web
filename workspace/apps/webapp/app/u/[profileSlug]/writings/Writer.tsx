@@ -323,7 +323,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   </>
                 )}
 
-                <div className="w-full flex gap-5 justify-end pb-10">
+                <div className="w-full flex gap-5 justify-end pb-48">
                   <Button
                     onClick={() => handleSubmit()}
                     disabled={isCreateLoading}

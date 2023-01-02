@@ -15,7 +15,7 @@ const Navbar = () => {
   const { data: session, status } = useSession();
 
   return (
-    <Appbar>
+    <Appbar className={'bottom-0'}>
       <div
         className={`w-full max-w-screen-lg flex justify-between items-center relative `}
       >
