@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/web-ui",
+        "declaration":true,
         "tsConfig": "libs/web-ui/tsconfig.lib.json",
         "project": "libs/web-ui/package.json",
         "entryFile": "libs/web-ui/src/index.ts",

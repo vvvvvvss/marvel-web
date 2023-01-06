@@ -4,11 +4,11 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "default": "./index.js"
+      "default": "./index.ts"
     },
     "./client": {
       "types": "./client-index.d.ts",
-      "default": "./client-index.js"
+      "default": "./client-index.ts"
     }
   }
 }
