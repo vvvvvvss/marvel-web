@@ -77,14 +77,22 @@ const Home = () => {
               justifySelf: "center",
             }}
           >
-            Project track applications are now open.{" "}
             <Link
-              href="https://docs.google.com/forms/d/1teayi8FPSj84GY9p35PBknzKc8ojhhW_nzsquVX8cCk/"
+              href="https://forms.gle/aiD3WWXUBngknHzX9"
               rel="noopener norefferer"
               target={"_blank"}
             >
-              Apply here.
+              Project Track Application
             </Link>
+            &nbsp;&&nbsp;
+            <Link
+              href="https://forms.gle/uxCLcBQfYo87wNF57"
+              rel="noopener norefferer"
+              target={"_blank"}
+            >
+              Competition Track Application
+            </Link>
+            &nbsp;are now open!.
           </Alert>
           <Alert
             severity="info"
