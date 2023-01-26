@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,150 @@ generator client {
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+enum Scope {
+  NONE
+  PROFILE
+  WRITER
+  R_WRITER
+  CRDN
+  ADMIN
+}
+
+type Level {
+  tasks Task[]
+}
+
+type Task {
+  description String
+}
+
+enum Role {
+  ACTIVE
+  WRITER
+  INACTIVE
+}
+
+enum TypeOfWork {
+  COURSE
+  PROJECT
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  FLAGGED
+  FEATURED
+}
+
+enum TypeOfArticle {
+  BLOG
+  RESOURCE
+}
+
+model People {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String   @unique
+  name         String
+  email        String   @unique
+  profilePic   String
+  googleId     String   @unique
+  scope        Scope[]  @default([NONE])
+  crdnCourses  String[] @default([])
+  readMe       String?
+  rankingScore Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  //their work. many-to-many
+  works   Work[]   @relation("peopleOfWork", fields: [worksId], references: [id])
+  worksId String[] @default([]) @db.ObjectId
+
+  //works for which they are the writer. one-to-many
+  writerFor Work[] @relation("writer")
+
+  //works they coordinate. many-to-many
+  coordinatingWorks   Work[]   @relation("coordinatorOfWork", fields: [coordinatingWorksId], references: [id])
+  coordinatingWorksId String[] @default([]) @db.ObjectId
+
+  //Articles they wrote
+  Article Article[]
+
+  @@map("people")
+}
+
+model Course {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  courseCode     String   @unique
+  courseDuration String
+  caption        String
+  totalLevels    Int
+  intro          String
+  levels         Level[]
+  rankingScore   Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model Work {
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  typeOfWork     TypeOfWork
+  //people part of this work
+  people         People[]   @relation("peopleOfWork", fields: [peopleId], references: [id])
+  peopleId       String[]   @db.ObjectId
+  //writer for this work
+  writer         People     @relation("writer", fields: [writerId], references: [id])
+  writerId       String     @db.ObjectId
+  //coordinators for this work
+  coordinators   People[]   @relation("coordinatorOfWork", fields: [coordinatorsId], references: [id])
+  coordinatorsId String[]   @default([]) @db.ObjectId //can have 0 coordinators in case of course work
+  //reports
+  Report         Report[]
+
+  coverPhoto   String?
+  level        Int      @default(1) //is also used as stage number
+  totalLevels  Int?
+  courseCode   String?
+  note         String?
+  searchTerms  String[] @default([])
+  rankingScore Int      @default(1)
+
+  @@map("works")
+}
+
+model Report {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  work   Work   @relation(fields: [workId], references: [id])
+  workId String @db.ObjectId
+  level  Int //is also used as stage number
+
+  title   String
+  content String
+
+  reviewStatus ReviewStatus @default(PENDING)
+  feedback     String?
+
+  @@map("reports")
+}
+
+model Article {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  typeOfArticle TypeOfArticle
+  author        People        @relation(fields: [authorId], references: [id])
+  authorId      String        @db.ObjectId
+
+  title        String
+  tags         String[]     @default([])
+  coverPhoto   String?
+  content      String
+  courseCodes  String[]
+  reviewStatus ReviewStatus
+  searchTerms  String[]     @default([])
+  feedback     String?
+  rankingScore Int          @default(1)
+
+  @@map("articles")
 }
