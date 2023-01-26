@@ -95,7 +95,7 @@ model Course {
 
 model Work {
   id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfWork     TypeOfWork
+  typeOfWork     TypeOfWork @map("_type")
   //people part of this work
   people         People[]   @relation("peopleOfWork", fields: [peopleId], references: [id])
   peopleId       String[]   @db.ObjectId
@@ -136,7 +136,7 @@ model Report {
 
 model Article {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfArticle TypeOfArticle
+  typeOfArticle TypeOfArticle @map("_type")
   author        People        @relation(fields: [authorId], references: [id])
   authorId      String        @db.ObjectId
 
