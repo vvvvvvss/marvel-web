@@ -1,18 +1,36 @@
 import { ReactNode } from 'react';
 import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
-import connectToDB from '../../../utils/dbConnector';
-import { projectWork } from '@marvel/web-utils';
+import dbClient from '../../../utils/dbConnector';
 
-const getProject = async (_id: String) => {
-  await connectToDB();
-  const person = await projectWork
-    //@ts-ignore
-    .findById(_id)
-    .select('-rankingScore -searchTerms')
-    .lean()
-    .exec();
+const getProject = async (_id: string) => {
+  const project = await dbClient.work.findUnique({
+    where: {
+      id: _id,
+    },
+    select: {
+      name: true,
+      coverPhoto: true,
+      level: true,
+      people: {
+        select: {
+          name: true,
+          profilePic: true,
+          slug: true,
+        },
+      },
+      coordinators: {
+        select: {
+          name: true,
+          profilePic: true,
+          slug: true,
+        },
+      },
+      writerId: true,
+      note: true,
+    },
+  });
   console.info({ info: 'findOne() on project.' });
-  return person;
+  return project;
 };
 
 export async function generateStaticParams() {
@@ -27,7 +45,7 @@ export default async function layout({
   children: ReactNode;
   params: { projectId?: String };
 }) {
-  const project = await getProject(params?.projectId);
+  const project = await getProject(params?.projectId as string);
   return (
     <Window className="pt-10">
       {/* whole thing  */}

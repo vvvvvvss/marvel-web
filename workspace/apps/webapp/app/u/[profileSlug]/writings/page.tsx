@@ -1,23 +1,29 @@
-import { Window, Paper, Avatar, Button, Tab, TabGroup } from '@marvel/web-ui';
+import { Paper, Tab, TabGroup } from '@marvel/web-ui';
 import Link from 'next/link';
-import connectToDB from 'apps/webapp/utils/dbConnector';
-import { article } from '@marvel/web-utils';
+import dbClient from 'apps/webapp/utils/dbConnector';
 import Writer from './Writer';
 
-const getUserWritingsBySlug = async (slug: String) => {
-  await connectToDB();
-  const writings = await article
-    //@ts-ignore
-    .find({ authorSlug: slug })
-    .select('-_id -content -searchTerms -rankingScore')
-    .lean()
-    .exec();
+const getUserWritingsBySlug = async (slug: string) => {
+  const writings = await dbClient.article.findMany({
+    where: {
+      author: {
+        slug: slug,
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      coverPhoto: true,
+      typeOfArticle: true,
+      reviewStatus: true,
+    },
+  });
   console.log({ info: 'find() on articles' });
   return writings;
 };
 
 export default async function page({ params, searchParams }) {
-  const writings = await getUserWritingsBySlug(params?.profileSlug);
+  const writings = await getUserWritingsBySlug(params?.profileSlug as string);
   return (
     <div className="flex flex-col">
       {/* toggle buttons  */}
@@ -38,14 +44,14 @@ export default async function page({ params, searchParams }) {
         ) : (
           <>
             {writings.map((w, i) => (
-              <Link className="flex-auto" key={i} href={`/article/${w?.slug}`}>
+              <Link className="flex-auto" key={i} href={`/article/${w?.id}`}>
                 <Paper
                   border
                   shadow={'hover'}
                   elevateOnHover
                   className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
-                  {w?._type === 'blogPost' ? (
+                  {w?.typeOfArticle === 'BLOG' ? (
                     <>
                       <h6 className="text-xs tracking-widest">BLOG POST</h6>
                       <h1 className="text-2xl">{w?.title}</h1>

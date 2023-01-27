@@ -1,22 +1,33 @@
 import { Paper, Tab, TabGroup } from '@marvel/web-ui';
 import Link from 'next/link';
-import connectToDB from 'apps/webapp/utils/dbConnector';
-import { work } from '@marvel/web-utils';
+import dbClient from 'apps/webapp/utils/dbConnector';
 import Spawner from './Spawner';
 
-const getUserWorksBySlug = async (slug: String) => {
-  await connectToDB();
-  const works = await work
-    //@ts-ignore
-    .find({ $in: { 'authors.slug': slug } })
-    .lean()
-    .exec();
+const getUserWorksBySlug = async (slug: string) => {
+  const works = await dbClient.work.findMany({
+    where: {
+      people: {
+        some: {
+          slug: slug,
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      courseCode: true,
+      coverPhoto: true,
+      level: true,
+      typeOfWork: true,
+    },
+  });
+
   console.log({ info: 'find() on works' });
-  return JSON.parse(JSON.stringify(works));
+  return works;
 };
 
 export default async function page({ params, searchParams }) {
-  const works = await getUserWorksBySlug(params?.profileSlug);
+  const works = await getUserWorksBySlug(params?.profileSlug as string);
   return (
     <div className="flex flex-col">
       {/* toggle buttons  */}
@@ -41,8 +52,8 @@ export default async function page({ params, searchParams }) {
                 className="flex-auto"
                 key={i}
                 href={`/${
-                  w?._type === 'courseWork' ? 'coursework' : 'project'
-                }/${w?._id}`}
+                  w?.typeOfWork === 'COURSE' ? 'coursework' : 'project'
+                }/${w?.id}`}
               >
                 <Paper
                   border
@@ -50,7 +61,7 @@ export default async function page({ params, searchParams }) {
                   elevateOnHover
                   className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
-                  {w?._type === 'courseWork' ? (
+                  {w?.typeOfWork === 'COURSE' ? (
                     <>
                       <h6 className="text-xs tracking-widest">COURSE WORK</h6>
                       <h1 className="text-2xl">{w?.courseCode} Course Work</h1>

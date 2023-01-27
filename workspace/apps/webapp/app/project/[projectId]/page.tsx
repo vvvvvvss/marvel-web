@@ -1,15 +1,24 @@
-import { Paper, TabGroup, Tab } from '@marvel/web-ui';
-import connectToDB from 'apps/webapp/utils/dbConnector';
-import { stageReport } from '@marvel/web-utils';
+import dbClient from 'apps/webapp/utils/dbConnector';
 
-const getOverview = async (_id: string) => {
-  await connectToDB();
-  const overview = await stageReport
-    //@ts-ignore
-    .findOne({ $and: [{ parentId: _id }, { isOverview: true }] })
-    .select('-_id')
-    .lean()
-    .exec();
+const getOverview = async (id: string) => {
+  const overview = await dbClient.report.findFirst({
+    where: {
+      workId: id,
+    },
+    orderBy: {
+      level: 'asc',
+    },
+    take: 1,
+    select: {
+      title: true,
+      content: true,
+      id: true,
+      feedback: true,
+      reviewStatus: true,
+      level: true,
+    },
+  });
+
   console.log({ info: 'findOne() on articles' });
   return overview;
 };

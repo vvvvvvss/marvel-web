@@ -1,19 +1,21 @@
 import { Paper, TabGroup, Tab } from '@marvel/web-ui';
 import Link from 'next/link';
-import connectToDB from 'apps/webapp/utils/dbConnector';
-import { people } from '@marvel/web-utils';
+import dbClient from 'apps/webapp/utils/dbConnector';
 import { MarkdownRender } from '@marvel/web-ui';
 import ReadMeEditor from './ReadMeEditor';
 import Image from 'next/image';
 
 const getUserReadmeBySlug = async (slug: string) => {
-  await connectToDB();
-  const person = await people
-    //@ts-ignore
-    .findOne({ slug: slug })
-    .select('-_id readMe slug name')
-    .lean()
-    .exec();
+  const person = await dbClient.people.findUnique({
+    where: {
+      slug: slug,
+    },
+    select: {
+      readMe: true,
+      slug: true,
+      name: true,
+    },
+  });
   console.log({ info: 'fetched readme of user in profile page' });
   return person;
 };

@@ -13,7 +13,6 @@ import ImageCompressor from 'browser-image-compression';
 import ImageUploading from 'react-images-uploading';
 import { ImageListType } from 'react-images-uploading/dist/typings';
 import { AiOutlineMinusCircle as MinusIcon } from 'react-icons/ai';
-import { title } from 'process';
 
 type FormData = {
   title?: string;

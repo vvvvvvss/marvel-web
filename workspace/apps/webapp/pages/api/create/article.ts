@@ -5,11 +5,19 @@ import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { v2 as cloudinary } from 'cloudinary';
+import { TypeOfArticle } from '@prisma/client';
 
-export default async function create_blogpost(
+export default async function create_article(
   req: NextApiRequest & { url: string },
   res: NextApiResponse
 ) {
+  const typeOfArticle: TypeOfArticle | undefined =
+    (req.query.type as string).toLowerCase() === 'resource'
+      ? 'RESOURCE'
+      : (req.query.type as string).toLowerCase() === 'blog'
+      ? 'BLOG'
+      : undefined;
+
   try {
     cloudinary.config({
       cloud_name: process.env.CLDNRY_CLOUD_NAME,

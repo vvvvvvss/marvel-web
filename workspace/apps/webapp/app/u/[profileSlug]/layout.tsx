@@ -1,17 +1,21 @@
 import { ReactNode } from 'react';
 import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
-import connectToDB from '../../../utils/dbConnector';
-import { people } from '@marvel/web-utils';
+import dbClient from '../../../utils/dbConnector';
 import Manager from './UserManager';
 
-const getUserBySlug = async (slug: String) => {
-  await connectToDB();
-  const person = await people
-    //@ts-ignore
-    .findOne({ slug: slug })
-    .select('-_id name profilePic scope crdnCourses slug')
-    .lean()
-    .exec();
+const getUserBySlug = async (slug: string) => {
+  const person = await dbClient.people.findFirst({
+    where: {
+      slug: slug,
+    },
+    select: {
+      slug: true,
+      name: true,
+      profilePic: true,
+      scope: true,
+      crdnCourses: true,
+    },
+  });
   console.info({ info: 'getUserBySlug is called in profile page' });
   return person;
 };
@@ -28,7 +32,7 @@ export default async function layout({
   children: ReactNode;
   params: { profileSlug?: String };
 }) {
-  const dude = await getUserBySlug(params?.profileSlug);
+  const dude = await getUserBySlug(params?.profileSlug as string);
   return (
     <>
       <Window className="pt-10">

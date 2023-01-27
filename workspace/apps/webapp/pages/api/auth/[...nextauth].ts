@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import connectToDB from '../../../utils/dbConnector';
+import dbClient from '../../../utils/dbConnector';
 import { people as person } from '@marvel/web-utils';
 
 async function refreshAccessToken(token) {
@@ -82,41 +82,39 @@ export const authOptions = {
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
-      await connectToDB();
-      const existingUser = await person
-        //@ts-ignore //might fix this later
-        .findOne({ id: token?.user?.id })
-        .select('-readMe -_id -createdAt -updatedAt')
-        .lean()
-        .exec();
+      const existingUser = await dbClient.people.findUnique({
+        where: {
+          googleId: token?.user?.id,
+        },
+        select: {
+          name: true,
+          slug: true,
+          crdnCourses: true,
+          scope: true,
+          id: true,
+          profilePic: true,
+        },
+      });
       console.info('findOne is called at auth');
       if (!existingUser) {
         // if no user, create a new user with the available data.
-        const newUser = new person({
-          id: token?.user?.id,
-          name: token?.user?.name,
-          profilePic: token?.user?.image,
-          email: token?.user?.email,
+        const newUser = await dbClient.people.create({
+          data: {
+            googleId: token?.user?.id,
+            name: token?.user?.name,
+            profilePic: token?.user?.image,
+            email: token?.user?.email,
+          },
         });
-        const {
-          slug,
-          name,
-          email,
-          profilePic,
-          id,
-          doIKnow,
-          scope,
-          crdnCourses,
-        } = await newUser.save();
+        const { slug, name, email, profilePic, id, scope, crdnCourses } =
+          newUser;
 
         //populate session with our data
         session.user = {
           slug,
           name,
-          email,
           profilePic,
           id,
-          doIKnow,
           scope,
           crdnCourses,
         };
