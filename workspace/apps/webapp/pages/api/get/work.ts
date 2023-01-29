@@ -7,16 +7,38 @@ export default async function (
   res: NextApiResponse
 ) {
   try {
-    const courseList = await dbClient.course.findMany({
+    const work = await dbClient.work.findFirst({
+      where: {
+        id: req.query?.id as string,
+      },
       select: {
+        authors: {
+          select: {
+            googleId: true,
+            name: true,
+            role: true,
+            slug: true,
+          },
+        },
+        coordinators: {
+          select: {
+            googleId: true,
+            name: true,
+            role: true,
+            slug: true,
+          },
+        },
         courseCode: true,
-        caption: true,
+        id: true,
+        level: true,
+        name: true,
         totalLevels: true,
+        typeOfWork: true,
       },
     });
 
     return res.json({
-      courseList: courseList,
+      work: work,
       status: 200,
     });
   } catch (error) {

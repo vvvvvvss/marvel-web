@@ -17,6 +17,9 @@ export default async function create_article(
       : (req.query.type as string).toLowerCase() === 'blog'
       ? 'BLOG'
       : undefined;
+  if (!typeOfArticle) {
+    return res.json({ status: '400', message: 'Specify article type.' });
+  }
 
   try {
     cloudinary.config({
@@ -29,7 +32,10 @@ export default async function create_article(
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData = req.body.formData;
 
-    const condition = session?.user?.scope?.includes('WRITER');
+    const condition =
+      typeOfArticle === 'BLOG'
+        ? session?.user?.scope?.includes('WRITER')
+        : session?.user?.scope?.includes('R_WRITER');
 
     if (!condition)
       return res.json({ message: 'Access denied', status: '403' });
@@ -60,7 +66,7 @@ export default async function create_article(
 
     await dbClient.article.create({
       data: {
-        typeOfArticle: 'BLOG',
+        typeOfArticle: typeOfArticle,
         title: formData?.title,
         coverPhoto: coverPhoto,
         tags: formData?.tags,
@@ -71,23 +77,28 @@ export default async function create_article(
             ? 'APPROVED'
             : 'PENDING',
         author: {
-          connect: {
-            id: session.user.id,
-          },
+          googleId: session.user.googleId,
+          name: session.user.name,
+          profilePic: session.user.profilePic,
+          slug: session.user.slug,
         },
+        ...(typeOfArticle === 'RESOURCE'
+          ? { courseCodes: formData?.courseCodes }
+          : null),
+        feedback: '',
       },
     });
 
     await res.revalidate(`/u/${session?.user?.slug}/writings`);
     return res.json({
       status: 201,
-      message: 'Blog post created successfully',
+      message: `${typeOfArticle} post created successfully`,
     });
   } catch (error) {
     console.log(error);
     return res.json({
       status: 500,
-      message: "Couldn't create blogpost",
+      message: `Couldn't create ${typeOfArticle}`,
       error: error?.message,
     });
   }

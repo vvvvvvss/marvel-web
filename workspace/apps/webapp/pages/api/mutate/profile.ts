@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { people, SANITIZE_OPTIONS } from '@marvel/web-utils';
 import sanitize from 'sanitize-html';
-import connectToDB from 'apps/webapp/utils/dbConnector';
+import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -10,8 +10,6 @@ export default async function profile_readMe_editor(
   res: NextApiResponse
 ) {
   try {
-    await connectToDB();
-    //@ts-ignore
     const session = await unstable_getServerSession(req, res, authOptions);
     const slug = req.body?.slug;
 
@@ -24,13 +22,16 @@ export default async function profile_readMe_editor(
 
     const content = req.body?.content;
     const cleanContent = sanitize(content, SANITIZE_OPTIONS);
-    //@ts-ignore
-    await people.findOneAndUpdate(
-      { slug: slug },
-      {
+
+    await dbClient.people.update({
+      where: {
+        slug: slug,
+      },
+      data: {
         readMe: cleanContent,
-      }
-    );
+      },
+    });
+
     await res.revalidate(`/u/${slug}`);
     return res.json({
       status: 201,

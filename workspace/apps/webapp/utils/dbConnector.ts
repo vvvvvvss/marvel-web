@@ -12,7 +12,7 @@ if (globalThis.prisma) {
 } else {
   client = new PrismaClient();
   //@ts-ignore
-  client.use(
+  client.$use(
     PrismaSlug({
       async slugify(source, params) {
         const method = camelCase(params.model);
@@ -27,7 +27,7 @@ if (globalThis.prisma) {
         console.log('slugify ran');
         return slug;
       },
-    })
+    }) as () => Promise<any>
   );
   if (process.env.NODE_ENV !== 'production') globalThis.prisma = client;
 }

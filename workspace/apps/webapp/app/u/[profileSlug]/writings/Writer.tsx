@@ -24,7 +24,9 @@ type FormData = {
 
 const sendCreateArticle = async (type, formData: FormData) => {
   const data = (
-    await axios.post(`/api/create/${type?.toLowerCase()}`, { formData })
+    await axios.post(`/api/create/article?type=${type?.toLowerCase()}`, {
+      formData,
+    })
   ).data;
   return data;
 };
@@ -46,7 +48,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     coverPhoto: '',
   });
   const [newTag, setNewTag] = useState<string>('');
-  const [formType, setFormType] = useState<'blog' | 'rsa'>('blog');
+  const [formType, setFormType] = useState<'blog' | 'resource'>('blog');
   const router = useRouter();
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
     ['course-list'],
     () => getCourseList(),
-    { enabled: formType === 'rsa' }
+    { enabled: formType === 'resource' }
   );
 
   const { mutate: sendMutation, isLoading: isCreateLoading } = useMutation(
@@ -95,7 +97,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     } else if (!formData?.content?.length) {
       alert('content cannot be empty');
       return;
-    } else if (formType === 'rsa' && !formData?.courseCodes?.length) {
+    } else if (formType === 'resource' && !formData?.courseCodes?.length) {
       alert('Resource articles must target atleast one course.');
       return;
     } else {
@@ -121,7 +123,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
             className="flex-1"
             variant="outlined"
             onClick={() => {
-              setFormType('rsa');
+              setFormType('resource');
               setDialogOpen((p) => !p);
             }}
           >
@@ -263,7 +265,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                     </Button>
                   ))}
                 </Paper>
-                {formType == 'rsa' && (
+                {formType == 'resource' && (
                   <>
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses

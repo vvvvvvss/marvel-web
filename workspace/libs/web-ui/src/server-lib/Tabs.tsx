@@ -27,6 +27,7 @@ export const Tab = ({
         className || ''
       } relative overflow-hidden rounded-full px-[1.2em] py-[0.5em] min-w-max whitespace-nowrap cursor-pointer select-none
       transition active:scale-[97%] border border-transparent
+      disabled:opacity-50 disabled:cursor-not-allowed
      hover:bg-p-1 text-p-10 hover:border-p-6 active:text-p-8
       ${
         active

@@ -82,12 +82,13 @@ export const authOptions = {
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
-      const existingUser = await dbClient.people.findUnique({
+      const existingUser = await dbClient.people.findFirst({
         where: {
           googleId: token?.user?.id,
         },
         select: {
           name: true,
+          googleId: true,
           slug: true,
           crdnCourses: true,
           scope: true,
@@ -106,7 +107,7 @@ export const authOptions = {
             email: token?.user?.email,
           },
         });
-        const { slug, name, email, profilePic, id, scope, crdnCourses } =
+        const { slug, name, profilePic, id, scope, crdnCourses, googleId } =
           newUser;
 
         //populate session with our data
@@ -117,6 +118,7 @@ export const authOptions = {
           id,
           scope,
           crdnCourses,
+          googleId,
         };
       } else {
         session.user = existingUser;

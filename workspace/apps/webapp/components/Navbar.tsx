@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  Appbar,
-  Button,
-  IconButton,
-  Avatar,
-  LoadingPulser,
-} from '@marvel/web-ui';
+import { Appbar, Button, IconButton, LoadingPulser } from '@marvel/web-ui';
+import { Avatar } from './Avatar';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { HiOutlineBars2 as MenuIcon } from 'react-icons/hi2';
@@ -31,8 +26,12 @@ const Navbar = () => {
         </div>
         {session?.user ? (
           <div className="flex items-center">
-            <Link href={`/u/${session?.user?.slug}`} className="mr-3">
+            <Link
+              href={`/u/${session?.user?.slug}`}
+              className="mr-3 flex items-center"
+            >
               <Avatar
+                className="w-10"
                 src={session?.user?.profilePic}
                 alt={session?.user?.name}
               />

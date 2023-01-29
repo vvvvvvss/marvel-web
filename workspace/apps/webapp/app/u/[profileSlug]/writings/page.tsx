@@ -7,7 +7,9 @@ const getUserWritingsBySlug = async (slug: string) => {
   const writings = await dbClient.article.findMany({
     where: {
       author: {
-        slug: slug,
+        is: {
+          slug: slug,
+        },
       },
     },
     select: {

@@ -32,7 +32,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const session = useSession();
   const sessionUser = session?.data?.user;
   const [formData, setFormData] = useState<FormData>({ authorSlug });
-  const [formType, setFormType] = useState<'COURSE' | 'PROJECT'>('PROJECT');
+  const [formType, setFormType] = useState<'COURSEWORK' | 'PROJECT'>('PROJECT');
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
     ['course-list'],
     () => getCourseList(),
-    { enabled: formType === 'COURSE' }
+    { enabled: formType === 'COURSEWORK' }
   );
 
   const { mutate: sendMutation, isLoading } = useMutation(
@@ -67,7 +67,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
             className="flex-1"
             variant="outlined"
             onClick={() => {
-              setFormType('COURSE');
+              setFormType('COURSEWORK');
               setDialogOpen((p) => !p);
             }}
           >
@@ -97,7 +97,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                 {(sessionUser?.scope?.includes('ADMIN') ||
                   sessionUser?.scope?.includes('CRDN')) && (
                   <div>
-                    {formType == 'COURSE' ? (
+                    {formType == 'COURSEWORK' ? (
                       <>
                         <div className="flex gap-5 flex-wrap my-5">
                           {isCourseListLoading ? (
@@ -177,12 +177,13 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                     onClick={() => sendMutation()}
                     disabled={
                       isLoading ||
-                      (formType === 'COURSE' && !formData?.selectedCourse) ||
+                      (formType === 'COURSEWORK' &&
+                        !formData?.selectedCourse) ||
                       (formType === 'PROJECT' &&
                         formData?.projectName?.trim().length < 4)
                     }
                   >
-                    {formType === 'COURSE'
+                    {formType === 'COURSEWORK'
                       ? 'Spawn Course Work'
                       : 'Spawn Project'}
                   </Button>

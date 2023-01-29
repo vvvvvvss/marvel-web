@@ -6,7 +6,7 @@ import ReadMeEditor from './ReadMeEditor';
 import Image from 'next/image';
 
 const getUserReadmeBySlug = async (slug: string) => {
-  const person = await dbClient.people.findUnique({
+  const person = await dbClient.people.findFirst({
     where: {
       slug: slug,
     },

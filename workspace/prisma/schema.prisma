@@ -24,12 +24,6 @@ type Task {
   description String
 }
 
-enum Role {
-  ACTIVE
-  WRITER
-  INACTIVE
-}
-
 enum TypeOfWork {
   COURSE
   PROJECT
@@ -61,20 +55,6 @@ model People {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  //their work. many-to-many
-  works   Work[]   @relation("peopleOfWork", fields: [worksId], references: [id])
-  worksId String[] @default([]) @db.ObjectId
-
-  //works for which they are the writer. one-to-many
-  writerFor Work[] @relation("writer")
-
-  //works they coordinate. many-to-many
-  coordinatingWorks   Work[]   @relation("coordinatorOfWork", fields: [coordinatingWorksId], references: [id])
-  coordinatingWorksId String[] @default([]) @db.ObjectId
-
-  //Articles they wrote
-  Article Article[]
-
   @@map("people")
 }
 
@@ -93,20 +73,29 @@ model Course {
   @@map("courses")
 }
 
+enum Role {
+  ACTIVE
+  INACTIVE
+  WRITER
+}
+
+type Person {
+  googleId   String
+  name       String
+  slug       String
+  profilePic String
+  role       Role?
+}
+
 model Work {
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfWork     TypeOfWork @map("_type")
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  typeOfWork   TypeOfWork @map("_type")
   //people part of this work
-  people         People[]   @relation("peopleOfWork", fields: [peopleId], references: [id])
-  peopleId       String[]   @db.ObjectId
-  //writer for this work
-  writer         People     @relation("writer", fields: [writerId], references: [id])
-  writerId       String     @db.ObjectId
+  authors      Person[]
   //coordinators for this work
-  coordinators   People[]   @relation("coordinatorOfWork", fields: [coordinatorsId], references: [id])
-  coordinatorsId String[]   @default([]) @db.ObjectId //can have 0 coordinators in case of course work
+  coordinators Person[]
   //reports
-  Report         Report[]
+  Report       Report[]
 
   name         String?
   coverPhoto   String?
@@ -138,8 +127,7 @@ model Report {
 model Article {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   typeOfArticle TypeOfArticle @map("_type")
-  author        People        @relation(fields: [authorId], references: [id])
-  authorId      String        @db.ObjectId
+  author        Person
 
   title        String
   tags         String[]     @default([])

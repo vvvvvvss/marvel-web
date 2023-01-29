@@ -6,7 +6,7 @@ import Spawner from './Spawner';
 const getUserWorksBySlug = async (slug: string) => {
   const works = await dbClient.work.findMany({
     where: {
-      people: {
+      authors: {
         some: {
           slug: slug,
         },
@@ -21,7 +21,6 @@ const getUserWorksBySlug = async (slug: string) => {
       typeOfWork: true,
     },
   });
-
   console.log({ info: 'find() on works' });
   return works;
 };

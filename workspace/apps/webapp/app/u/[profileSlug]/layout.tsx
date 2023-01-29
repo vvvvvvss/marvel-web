@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Window, Paper, Button, Avatar } from '@marvel/web-ui';
+import { Window, Paper, Button } from '@marvel/web-ui';
+import { Avatar } from 'apps/webapp/components/Avatar';
 import dbClient from '../../../utils/dbConnector';
 import Manager from './UserManager';
 

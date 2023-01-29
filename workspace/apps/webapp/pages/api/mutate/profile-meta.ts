@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { people } from '@marvel/web-utils';
-import connectToDB from 'apps/webapp/utils/dbConnector';
+import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -9,7 +9,6 @@ export default async function profile_meta_edit(
   res: NextApiResponse
 ) {
   try {
-    await connectToDB();
     //@ts-ignore
     const session = await unstable_getServerSession(req, res, authOptions);
     const incomingProfileData = req.body?.profile;
@@ -29,13 +28,15 @@ export default async function profile_meta_edit(
     if (condition || condition2)
       return res.json({ message: 'Access denied', status: '403' });
 
-    //@ts-ignore
-    await people.findOneAndUpdate(
-      { slug: incomingProfileData?.slug },
-      {
+    await dbClient.people.update({
+      where: {
+        slug: incomingProfileData?.slug,
+      },
+      data: {
         scope: incomingProfileData?.scope,
-      }
-    );
+      },
+    });
+
     await res.revalidate(`/u/${incomingProfileData?.slug}`);
     return res.json({
       status: 201,

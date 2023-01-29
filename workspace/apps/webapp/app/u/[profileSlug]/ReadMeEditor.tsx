@@ -3,10 +3,7 @@
 import {
   Button,
   FullScreenDialog,
-  Tab,
-  TabGroup,
   IconButton,
-  MarkdownRender,
   LoadingPulser,
 } from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
