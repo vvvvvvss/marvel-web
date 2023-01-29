@@ -17,7 +17,7 @@ export const Avatar = ({ className, src, alt, ...props }: AvatarProps) => {
         alt={alt}
       />
       <RadixAvatar.Fallback
-        className="text-base border border-p-6"
+        className="text-base border border-p-6 w-full h-full rounded-full flex justify-center items-center"
         delayMs={600}
       >
         {(alt || 'A')[0]}

@@ -21,6 +21,7 @@ export default async function create_level_report(
         id: true,
         workId: true,
         title: true,
+        level: true,
       },
     });
 
@@ -36,6 +37,8 @@ export default async function create_level_report(
         level: true,
         courseCode: true,
         id: true,
+        pending: true,
+        flagged: true,
       },
     });
     const senderIsWriter =
@@ -61,7 +64,6 @@ export default async function create_level_report(
       data: {
         title: formData?.title,
         content: formData?.content,
-        reviewStatus: 'PENDING',
       },
     });
 
@@ -74,6 +76,13 @@ export default async function create_level_report(
           searchTerms: {
             push: formData?.title,
           },
+          flagged: work?.flagged?.filter((r) => r?.id !== existingReport?.id),
+          pending: work?.pending?.some((r) => r?.id === existingReport?.id)
+            ? work?.pending
+            : [
+                ...work?.pending,
+                { id: existingReport?.id, level: existingReport?.level },
+              ],
         },
       });
     }

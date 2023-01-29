@@ -1,13 +1,13 @@
 import { MarkdownRender, Paper } from '@marvel/web-ui';
 import dbClient from 'apps/webapp/utils/dbConnector';
-import ReportWriter from './ReportWriter';
-import ReportEditor from './ReportEditor';
-import ReportReviewer from './ReportReviewer';
+import ReportWriter from '../ReportWriter';
+import ReportEditor from '../ReportEditor';
+import ReportReviewer from '../ReportReviewer';
 
-const getFirstLevelReport = async (id: string) => {
+const getLevelReport = async (id: string, levelNo: number) => {
   const report = await dbClient.report.findFirst({
     where: {
-      AND: [{ workId: id }, { level: 1 }],
+      AND: [{ workId: id }, { level: levelNo }],
     },
     select: {
       title: true,
@@ -29,7 +29,10 @@ const getFirstLevelReport = async (id: string) => {
 };
 
 export default async function page({ params, searchParams }) {
-  const report = await getFirstLevelReport(params?.courseworkId);
+  const report = await getLevelReport(
+    params?.courseworkId,
+    params?.levelNo as number
+  );
   return (
     <div className="flex flex-col w-full rounded-lg gap-5 items-center px-5">
       {/* toggle buttons  */}

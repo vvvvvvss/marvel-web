@@ -12,8 +12,10 @@ import { useMutation, useQuery } from 'react-query';
 import { IconButton } from '@marvel/web-ui';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { MarkdownEditor } from '@marvel/web-ui/client';
+import { useRouter } from 'next/navigation';
 
 const ReportWriter = ({ workId }) => {
+  const router = useRouter();
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -44,6 +46,7 @@ const ReportWriter = ({ workId }) => {
       onSuccess: () => {
         setFormData({ title: '', content: '' });
         setModalOpen((p) => !p);
+        router.refresh();
       },
     }
   );

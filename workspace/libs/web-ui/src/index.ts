@@ -7,7 +7,7 @@ export * from './server-lib/Tabs';
 export * from './server-lib/MardownRender';
 
 // export * from './lib/useMediaQuery';
-export * from './server-lib/FullScreenDialog';
+export * from './server-lib/Dialog';
 export * from './server-lib/Loading';
 // export * from './lib/Switch';
 

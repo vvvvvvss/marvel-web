@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//scope of user
 enum Scope {
   NONE
   PROFILE
@@ -24,11 +25,13 @@ type Task {
   description String
 }
 
+//in works
 enum TypeOfWork {
   COURSE
   PROJECT
 }
 
+//in articles only
 enum ReviewStatus {
   PENDING
   APPROVED
@@ -36,9 +39,17 @@ enum ReviewStatus {
   FEATURED
 }
 
+//in articles
 enum TypeOfArticle {
   BLOG
   RESOURCE
+}
+
+//in works. to keep track of reports.
+type ReportStatus {
+  level    Int?
+  id       String  @db.ObjectId
+  feedback String?
 }
 
 model People {
@@ -88,21 +99,24 @@ type Person {
 }
 
 model Work {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfWork   TypeOfWork @map("_type")
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  typeOfWork   TypeOfWork     @map("_type")
   //people part of this work
   authors      Person[]
   //coordinators for this work
   coordinators Person[]
   //reports
   Report       Report[]
+  //tracking status
+  pending      ReportStatus[]
+  flagged      ReportStatus[]
 
-  name         String?
+  name         String? //not used in case of coursework
   coverPhoto   String?
-  level        Int      @default(1) //is also used as stage number
-  totalLevels  Int?
-  courseCode   String?
-  note         String?
+  level        Int      @default(1) //is also used as stage number. its its +1 of totalLevels, that marks course completion
+  totalLevels  Int? //not used in case of project
+  courseCode   String? //not used in case of project
+  note         String? //not used in case of project
   searchTerms  String[] @default([])
   rankingScore Int      @default(1)
 
@@ -113,13 +127,10 @@ model Report {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   work   Work   @relation(fields: [workId], references: [id])
   workId String @db.ObjectId
-  level  Int //is also used as stage number
+  level  Int? //not used in case of project report
 
   title   String
   content String
-
-  reviewStatus ReviewStatus @default(PENDING)
-  feedback     String?
 
   @@map("reports")
 }
@@ -133,7 +144,7 @@ model Article {
   tags         String[]     @default([])
   coverPhoto   String?
   content      String
-  courseCodes  String[]
+  courseCodes  String[] //not used in case of blog post
   reviewStatus ReviewStatus
   searchTerms  String[]     @default([])
   feedback     String?

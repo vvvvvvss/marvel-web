@@ -16,13 +16,6 @@ const getProject = async (_id: string) => {
       authors: true,
       note: true,
       totalLevels: true,
-      Report: {
-        select: {
-          id: true,
-          level: true,
-          reviewStatus: true,
-        },
-      },
     },
   });
   console.info({ info: 'findOne() on coursework' });
@@ -88,13 +81,17 @@ export default async function layout({
         </Paper>
         <TabGroup className="mx-5 my-10 overflow-x-auto">
           {Array.from({ length: courseWork?.totalLevels }).map((_, k) => (
-            <Tab
-              key={k}
-              active={k + 1 == 1}
-              disabled={k + 1 > courseWork.level}
+            <Link
+              href={`coursework/${courseWork.id}/${k + 1 === 1 ? '' : k + 1}`}
             >
-              Level {k + 1}
-            </Tab>
+              <Tab
+                key={k}
+                active={k + 1 == 1}
+                disabled={k + 1 > courseWork.level}
+              >
+                Level {k + 1}
+              </Tab>
+            </Link>
           ))}
         </TabGroup>
         <div className="w-full">{children}</div>

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useMutation } from 'react-query';
 import axios from 'axios';
 import {
   Button,
@@ -13,8 +13,10 @@ import {
 } from '@marvel/web-ui';
 import { MarkdownEditor } from '@marvel/web-ui/client';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
+import { useRouter } from 'next/navigation';
 
 const ReportEditor = ({ report }) => {
+  const router = useRouter();
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,34 +24,22 @@ const ReportEditor = ({ report }) => {
     content: report?.content,
   });
 
-  const { data: work, isLoading: isWorkLoading } = useQuery(
-    ['work', report?.workId],
-    async () =>
-      (await axios.get('/api/get/work?id=' + report?.workId)).data?.work,
-    {
-      enabled: !!sessionUser?.id,
-    }
-  );
-
-  const {
-    data: submitResult,
-    isLoading: isUpdating,
-    mutate: updateReport,
-  } = useMutation(
+  const { isLoading: isUpdating, mutate: updateReport } = useMutation(
     async () =>
       (
-        await axios.post('/api/update/level-report?reportId=' + report?.id, {
+        await axios.post('/api/mutate/level-report?reportId=' + report?.id, {
           formData,
         })
       ).data,
     {
       onSuccess: () => {
+        router.refresh();
         setModalOpen((p) => !p);
       },
     }
   );
 
-  const workWriter = work?.authors?.find((a) => a?.role === 'WRITER');
+  const workWriter = report?.work?.authors?.find((a) => a?.role === 'WRITER');
   if (sessionUser && workWriter?.googleId === sessionUser?.googleId) {
     return (
       <>

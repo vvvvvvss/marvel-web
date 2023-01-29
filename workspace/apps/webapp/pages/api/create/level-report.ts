@@ -52,15 +52,19 @@ export default async function create_level_report(
       });
     }
 
-    await dbClient.report.create({
+    const createdReport = await dbClient.report.create({
       data: {
         title: formData?.title,
         content: formData?.content,
         level: work?.level,
-        reviewStatus: 'PENDING',
         workId: work.id,
       },
+      select: {
+        id: true,
+        level: true,
+      },
     });
+
     await dbClient.work.update({
       where: {
         id: work.id,
@@ -68,6 +72,12 @@ export default async function create_level_report(
       data: {
         searchTerms: {
           push: formData?.title,
+        },
+        pending: {
+          push: {
+            id: createdReport.id,
+            level: createdReport.level,
+          },
         },
       },
     });
