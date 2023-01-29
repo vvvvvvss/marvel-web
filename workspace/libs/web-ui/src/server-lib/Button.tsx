@@ -12,7 +12,7 @@ export const Button = ({
       id={props?.id || 'Button'}
       {...props}
       className={`${props?.className || ''}
-      relative overflow-hidden rounded-full px-[1.2em] py-[0.5em] min-w-max whitespace-nowrap cursor-pointer select-none
+      overflow-hidden rounded-full px-[1.2em] py-[0.5em] min-w-max whitespace-nowrap cursor-pointer select-none
       transition hover:translate-y-[-1px] active:scale-[97%] border
       disabled:opacity-50 disabled:cursor-not-allowed disabled:active:transform-none disabled:hover:transform-none
       ${

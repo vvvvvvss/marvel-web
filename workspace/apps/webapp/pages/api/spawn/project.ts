@@ -18,7 +18,7 @@ export default async function spawn_new_course(
 
     if (condition) return res.json({ message: 'Access denied', status: '403' });
 
-    const author = await dbClient.people.findUnique({
+    const author = await dbClient.people.findFirst({
       where: {
         slug: formData?.slug,
       },
@@ -32,8 +32,8 @@ export default async function spawn_new_course(
 
     if (!author || !formData?.projectName?.trim())
       return res.json({ status: '404', message: 'Something went wrong.' });
-
-    await dbClient.work.create({
+    console.log(formData);
+    const createdWork = await dbClient.work.create({
       data: {
         typeOfWork: 'PROJECT',
         name: formData?.projectName,

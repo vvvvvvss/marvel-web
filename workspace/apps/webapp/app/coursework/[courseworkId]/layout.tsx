@@ -1,25 +1,29 @@
-import { ReactNode } from 'react';
-import { Window, Paper, Button, TabGroup, Tab } from '@marvel/web-ui';
+import { Window, Paper, Button } from '@marvel/web-ui';
 import { Avatar } from '../../../components/Avatar';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import Link from 'next/link';
+import Tabs from './Tabs';
 
-const getProject = async (_id: string) => {
-  const courseWork = await dbClient.work.findFirst({
-    where: {
-      id: _id,
-    },
-    select: {
-      id: true,
-      courseCode: true,
-      level: true,
-      authors: true,
-      note: true,
-      totalLevels: true,
-    },
-  });
-  console.info({ info: 'findOne() on coursework' });
-  return courseWork;
+const getCoursework = async (_id: string) => {
+  try {
+    const courseWork = await dbClient.work.findFirst({
+      where: {
+        id: _id,
+      },
+      select: {
+        id: true,
+        courseCode: true,
+        level: true,
+        authors: true,
+        note: true,
+        totalLevels: true,
+      },
+    });
+    console.info({ info: 'findOne() on coursework' });
+    return courseWork;
+  } catch (error) {
+    throw new Error("Couldn't get data.");
+  }
 };
 
 export async function generateStaticParams() {
@@ -27,14 +31,9 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export default async function layout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { courseworkId?: String };
-}) {
-  const courseWork = await getProject(params?.courseworkId as string);
+export default async function layout({ children, params }) {
+  const courseWork = await getCoursework(params?.courseworkId);
+
   return (
     <Window className="pt-5 md:pt-12 pb-40">
       {/* whole thing  */}
@@ -43,7 +42,7 @@ export default async function layout({
         <Paper
           shadow
           border
-          className="flex flex-col md:flex-row mx-5 min-h-[250px] h-fit"
+          className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-fit"
         >
           <Paper className="bg-p-1 w-full md:w-1/2 md:h-full p-5 flex flex-col gap-5 justify-between">
             <h1 className="text-4xl">
@@ -54,7 +53,9 @@ export default async function layout({
               <span className="whitespace-nowrap">{courseWork.courseCode}</span>{' '}
               course work.{' '}
               <span className="text-sm bg-p-2 rounded-lg p-2">
-                Lv {courseWork?.level}
+                {courseWork?.level === courseWork?.totalLevels + 1
+                  ? 'Completed'
+                  : `Lv ${courseWork?.level}`}
               </span>
             </h1>
             <div className="flex flex-wrap gap-5">
@@ -79,21 +80,7 @@ export default async function layout({
             <p>{courseWork?.note}</p>
           </Paper>
         </Paper>
-        <TabGroup className="mx-5 my-10 overflow-x-auto">
-          {Array.from({ length: courseWork?.totalLevels }).map((_, k) => (
-            <Link
-              href={`coursework/${courseWork.id}/${k + 1 === 1 ? '' : k + 1}`}
-            >
-              <Tab
-                key={k}
-                active={k + 1 == 1}
-                disabled={k + 1 > courseWork.level}
-              >
-                Level {k + 1}
-              </Tab>
-            </Link>
-          ))}
-        </TabGroup>
+        <Tabs courseWork={courseWork} />
         <div className="w-full">{children}</div>
       </div>
     </Window>

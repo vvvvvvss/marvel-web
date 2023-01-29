@@ -14,7 +14,7 @@ import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { MarkdownEditor } from '@marvel/web-ui/client';
 import { useRouter } from 'next/navigation';
 
-const ReportWriter = ({ workId }) => {
+const ReportWriter = ({ work }) => {
   const router = useRouter();
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,14 +23,6 @@ const ReportWriter = ({ workId }) => {
     content: '',
   });
 
-  const { data: work, isLoading: isWorkLoading } = useQuery(
-    ['work', workId],
-    async () => (await axios.get('/api/get/work?id=' + workId)).data?.work,
-    {
-      enabled: !!sessionUser?.id,
-    }
-  );
-
   const {
     data: submitResult,
     isLoading: isCreating,
@@ -38,7 +30,7 @@ const ReportWriter = ({ workId }) => {
   } = useMutation(
     async () =>
       (
-        await axios.post('/api/create/level-report?workId=' + workId, {
+        await axios.post('/api/create/level-report?workId=' + work?.id, {
           formData,
         })
       ).data,

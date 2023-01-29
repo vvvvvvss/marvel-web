@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 
-const ReportReviewer = ({ report }) => {
+const ReportReviewer = ({ report, work }) => {
   const sessionUser = useSession().data?.user;
   const router = useRouter();
   const [feedback, setFeedback] = useState({ isOpen: false, content: '' });
@@ -28,10 +28,10 @@ const ReportReviewer = ({ report }) => {
   );
 
   if (
-    report?.work?.pending?.map((p) => p?.id).includes(report?.id) &&
+    work?.pending?.map((p) => p?.id).includes(report?.id) &&
     //coordinator and coordinator for the course.
     ((sessionUser?.scope?.includes('CRDN') &&
-      sessionUser?.crdnCourses?.includes(report.courseCode)) ||
+      sessionUser?.crdnCourses?.includes(work?.courseCode)) ||
       //admin
       sessionUser?.scope?.includes('ADMIN'))
   ) {
@@ -94,6 +94,15 @@ const ReportReviewer = ({ report }) => {
           </form>
         )}
       </>
+    );
+  } else if (
+    work?.flagged?.find((r) => r?.id == report?.id) &&
+    work?.authors?.find((a) => a?.googleId == sessionUser?.googleId)
+  ) {
+    return (
+      <div className="w-full p-5 rounded-lg border border-[#ff5959]">
+        {work?.flagged?.find((r) => r?.id == report?.id)?.feedback}
+      </div>
     );
   } else {
     return <div></div>;
