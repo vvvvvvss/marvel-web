@@ -28,7 +28,7 @@ const getUserWorksBySlug = async (slug: string) => {
 export default async function page({ params, searchParams }) {
   const works = await getUserWorksBySlug(params?.profileSlug as string);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pb-36">
       {/* toggle buttons  */}
       <TabGroup className="self-center md:self-start">
         <Link href={`/u/${params?.profileSlug}/`}>

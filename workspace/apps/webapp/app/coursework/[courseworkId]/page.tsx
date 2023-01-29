@@ -45,7 +45,7 @@ export default async function page({ params, searchParams }) {
     searchParams?.level || 1
   );
   return (
-    <div className="flex flex-col w-full rounded-lg gap-5 items-center px-5">
+    <div className="flex flex-col w-full rounded-lg gap-5 items-center">
       {/* toggle buttons  */}
       {!report ? (
         <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">

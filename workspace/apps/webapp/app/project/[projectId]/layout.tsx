@@ -43,7 +43,7 @@ export default async function layout({ children, params }) {
   return (
     <Window className="pt-5 md:pt-12 pb-40">
       {/* whole thing  */}
-      <div className="w-full max-w-5xl flex flex-col items-center">
+      <div className="w-full max-w-5xl flex flex-col items-center px-5">
         {/* hero box  */}
         <Paper
           shadow
