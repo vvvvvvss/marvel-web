@@ -39,7 +39,7 @@ export const IconButton = ({
       id={props?.id || 'Button'}
       {...props}
       className={`${props?.className || ''}
-      relative overflow-hidden rounded-full p-2 aspect-square min-w-max cursor-pointer select-none
+      overflow-hidden rounded-full p-2 aspect-square min-w-max cursor-pointer select-none
       transition hover:translate-y-[-1px] active:scale-[97%] border
       ${
         variant == 'outlined'

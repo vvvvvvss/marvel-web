@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth';
-import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import dbClient from '../../../utils/dbConnector';
-import { people as person } from '@marvel/web-utils';
+import slugify from 'slugify';
+import { ObjectID } from 'bson';
 
 async function refreshAccessToken(token) {
   console.log('refreshToken got called');
@@ -98,28 +98,40 @@ export const authOptions = {
       });
       console.info('findOne is called at auth');
       if (!existingUser) {
-        // if no user, create a new user with the available data.
-        const newUser = await dbClient.people.create({
+        // if no user, create slug and new user with the available data.
+        let newSlug = slugify(token?.user?.name, {
+          lower: true,
+          strict: true,
+          trim: true,
+        });
+        let attempt = 0;
+
+        while (
+          (await dbClient.people.count({ where: { slug: newSlug } })) > 0
+        ) {
+          attempt += 1;
+          newSlug = `${newSlug}-${attempt}`;
+        }
+
+        //populate session with our data
+        session.user = await dbClient.people.create({
           data: {
+            slug: newSlug,
             googleId: token?.user?.id,
             name: token?.user?.name,
             profilePic: token?.user?.image,
             email: token?.user?.email,
           },
+          select: {
+            name: true,
+            googleId: true,
+            slug: true,
+            crdnCourses: true,
+            scope: true,
+            id: true,
+            profilePic: true,
+          },
         });
-        const { slug, name, profilePic, id, scope, crdnCourses, googleId } =
-          newUser;
-
-        //populate session with our data
-        session.user = {
-          slug,
-          name,
-          profilePic,
-          id,
-          scope,
-          crdnCourses,
-          googleId,
-        };
       } else {
         session.user = existingUser;
       }

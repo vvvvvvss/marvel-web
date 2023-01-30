@@ -44,7 +44,8 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
 
   return (
     <>
-      {(sessionUser?.slug === profileSlug ||
+      {((sessionUser?.slug === profileSlug &&
+        sessionUser?.scope?.includes('PROFILE')) ||
         sessionUser?.scope?.includes('ADMIN')) && (
         <Button
           onClick={() => setDialogOpen((p) => !p)}

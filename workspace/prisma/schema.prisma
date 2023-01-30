@@ -54,7 +54,7 @@ type ReportStatus {
 
 model People {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug         String?  @unique
+  slug         String   @unique
   name         String
   email        String   @unique
   profilePic   String

@@ -24,7 +24,7 @@ export default async function profile_meta_edit(
       ['CRDN', 'ADMIN'].some((e: any) =>
         incomingProfileData?.scope?.includes(e)
       );
-
+    console.log(condition, condition2);
     if (condition || condition2)
       return res.json({ message: 'Access denied', status: '403' });
 

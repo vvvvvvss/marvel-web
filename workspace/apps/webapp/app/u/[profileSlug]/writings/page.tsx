@@ -42,7 +42,7 @@ export default async function page({ params, searchParams }) {
       </TabGroup>
       <Paper shadow border className="flex mt-5 p-5 rounded-lg gap-5 flex-wrap">
         {writings.length == 0 ? (
-          <h1 className="text-4xl">No writings</h1>
+          <h1 className="text-4xl text-p-6 ">No writings</h1>
         ) : (
           <>
             {writings.map((w, i) => (

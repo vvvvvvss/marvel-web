@@ -109,26 +109,30 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     return (
       <>
         <div className="flex flex-wrap gap-5 flex-auto">
-          <Button
-            className="flex-1"
-            variant="outlined"
-            onClick={() => {
-              setFormType('blog');
-              setDialogOpen((p) => !p);
-            }}
-          >
-            New Blog Post
-          </Button>
-          <Button
-            className="flex-1"
-            variant="outlined"
-            onClick={() => {
-              setFormType('resource');
-              setDialogOpen((p) => !p);
-            }}
-          >
-            New Resource Article
-          </Button>
+          {sessionUser?.scope?.includes('WRITER') && (
+            <Button
+              className="flex-1"
+              variant="outlined"
+              onClick={() => {
+                setFormType('blog');
+                setDialogOpen((p) => !p);
+              }}
+            >
+              New Blog Post
+            </Button>
+          )}
+          {sessionUser?.scope?.includes('R_WRITER') && (
+            <Button
+              className="flex-1"
+              variant="outlined"
+              onClick={() => {
+                setFormType('resource');
+                setDialogOpen((p) => !p);
+              }}
+            >
+              New Resource Article
+            </Button>
+          )}
         </div>
         {dialogOpen && (
           <FullScreenDialog open={dialogOpen} className="z-10">
@@ -338,6 +342,8 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
         )}
       </>
     );
+  } else {
+    return <div></div>;
   }
 };
 

@@ -3,6 +3,7 @@ import { Avatar } from '../../../components/Avatar';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import Link from 'next/link';
 import Tabs from './Tabs';
+import EditMeta from './EditMeta/EditMeta';
 
 const getProject = async (_id: string) => {
   try {
@@ -52,12 +53,7 @@ export default async function layout({ children, params }) {
         >
           {/* left box  */}
           <Paper className="relative bg-p-1 w-full md:w-1/2 md:h-full p-5 ">
-            <Button
-              variant="outlined"
-              className="absolute top-2 right-2 text-sm"
-            >
-              Edit
-            </Button>
+            <EditMeta projectWork={projectWork} />
             <div>
               <p className="text-p-6 tracking-widest">PROJECT</p>
               <h1 className="text-4xl my-2">{projectWork?.name}</h1>
@@ -103,7 +99,9 @@ export default async function layout({ children, params }) {
             </div>
           </Paper>
           <Paper className="p-5 w-full md:w-1/2 h-1/2 md:h-full flex-1">
-            <img src={projectWork?.coverPhoto} alt={projectWork?.name} />
+            {projectWork?.coverPhoto && (
+              <img src={projectWork?.coverPhoto} alt={projectWork?.name} />
+            )}
           </Paper>
         </Paper>
         <Tabs courseWork={projectWork} />
