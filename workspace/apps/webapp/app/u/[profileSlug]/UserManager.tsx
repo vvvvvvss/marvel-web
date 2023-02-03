@@ -11,6 +11,7 @@ import {
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { Scope } from '@prisma/client';
 
 const sendUserEdit = async (profile: any) => {
   const data = (await axios.post(`/api/mutate/profile-meta`, { profile })).data;
@@ -68,24 +69,27 @@ const Manager = ({ dude }: { dude: any }) => {
                       shadow
                       className="rounded-lg pl-5 pt-5 min-h-[60px] mt-5"
                     >
-                      {dudeCopy?.scope?.map((s: string) => (
-                        <Button
-                          onClick={() => {
-                            setDudeCopy((p) => ({
-                              ...p,
-                              scope: dudeCopy?.scope?.filter(
-                                (scope) => scope != s
-                              ),
-                            }));
-                            setChanged(true);
-                          }}
-                          variant="outlined"
-                          className="mr-5 mb-5 inline-flex items-center gap-2"
-                        >
-                          <MinusIcon />
-                          {s}
-                        </Button>
-                      ))}
+                      {dudeCopy?.scope?.map(
+                        (s: Scope) =>
+                          s != 'NONE' && (
+                            <Button
+                              onClick={() => {
+                                setDudeCopy((p) => ({
+                                  ...p,
+                                  scope: dudeCopy?.scope?.filter(
+                                    (scope: Scope) => scope != s
+                                  ),
+                                }));
+                                setChanged(true);
+                              }}
+                              variant="outlined"
+                              className="mr-5 mb-5 inline-flex items-center gap-2"
+                            >
+                              <MinusIcon />
+                              {s}
+                            </Button>
+                          )
+                      )}
                     </Paper>
                     <div className="pl-5 pt-5">
                       {[
