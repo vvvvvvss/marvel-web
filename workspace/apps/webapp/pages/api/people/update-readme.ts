@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { people, SANITIZE_OPTIONS } from '@marvel/web-utils';
+import { SANITIZE_OPTIONS } from '@marvel/web-utils';
 import sanitize from 'sanitize-html';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
@@ -11,21 +11,20 @@ export default async function profile_readMe_editor(
 ) {
   try {
     const session = await unstable_getServerSession(req, res, authOptions);
-    const slug = req.body?.slug;
+    const slug = req.query?.slug;
 
     const condition =
-      req.body?.slug === session?.user?.slug ||
-      session?.user?.scope?.includes('ADMIN');
+      slug === session?.user?.slug ||
+      session?.user?.scope?.map((s) => s.scope)?.includes('ADMIN');
 
-    if (!condition)
-      return res.json({ message: 'Access denied', status: '403' });
+    if (!condition) return res.status(403).json({ message: 'Access denied' });
 
     const content = req.body?.content;
     const cleanContent = sanitize(content, SANITIZE_OPTIONS);
 
     await dbClient.people.update({
       where: {
-        slug: slug,
+        slug: slug as string,
       },
       data: {
         readMe: cleanContent,
@@ -39,7 +38,7 @@ export default async function profile_readMe_editor(
     });
   } catch (error) {
     console.log(error);
-    return res.json({
+    return res.status(500).json({
       status: 500,
       message: "Couldn't update profile readMe.",
       error: error?.message,

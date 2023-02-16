@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { course } from '@marvel/web-utils';
 import dbClient from 'apps/webapp/utils/dbConnector';
 
 export default async function (
@@ -21,8 +20,7 @@ export default async function (
     });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
+    return res.status(500).json({
       message: "Couldn't fetch course list",
       error: error?.message,
     });

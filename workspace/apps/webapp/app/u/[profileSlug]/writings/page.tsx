@@ -6,9 +6,11 @@ import Writer from './Writer';
 const getUserWritingsBySlug = async (slug: string) => {
   const writings = await dbClient.article.findMany({
     where: {
-      author: {
-        is: {
-          slug: slug,
+      People: {
+        some: {
+          person: {
+            slug: slug,
+          },
         },
       },
     },

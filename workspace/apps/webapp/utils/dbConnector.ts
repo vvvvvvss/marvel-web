@@ -1,7 +1,4 @@
-import slugify from 'slugify';
 import { PrismaClient } from '@prisma/client';
-import { camelCase } from 'camel-case';
-import { PrismaSlug } from 'prisma-slug';
 
 declare global {
   var prisma: PrismaClient | undefined;

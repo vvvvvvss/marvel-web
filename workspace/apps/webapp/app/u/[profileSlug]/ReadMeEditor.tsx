@@ -16,12 +16,6 @@ import { MarkdownEditor } from '@marvel/web-ui/client';
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
 
-const sendEdit = async ({ slug, content }) => {
-  const data = (await axios.post(`/api/mutate/profile`, { slug, content }))
-    .data;
-  return data;
-};
-
 const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   const session = useSession();
   const sessionUser = session?.data?.user;
@@ -31,11 +25,16 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   const router = useRouter();
 
   const { mutate: mutateReadMe, isLoading } = useMutation(
-    () => sendEdit({ slug: profileSlug, content: copy }),
+    async () =>
+      (
+        await axios.post(`/api/people/update-readme?slug=${profileSlug}`, {
+          content: copy,
+        })
+      ).data,
     {
       onError: () => alert("Couldn't edit readme. loss"),
-      onSuccess: () => router.refresh(),
-      onSettled: () => {
+      onSuccess: () => {
+        router.refresh();
         setChanged(false);
         setDialogOpen(false);
       },
@@ -45,8 +44,8 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   return (
     <>
       {((sessionUser?.slug === profileSlug &&
-        sessionUser?.scope?.includes('PROFILE')) ||
-        sessionUser?.scope?.includes('ADMIN')) && (
+        sessionUser?.scope?.map((s) => s.scope)?.includes('PROFILE')) ||
+        sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) && (
         <Button
           onClick={() => setDialogOpen((p) => !p)}
           variant="outlined"
@@ -78,7 +77,7 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
                 }`}
                 onClick={() => mutateReadMe()}
               >
-                <span className="flex">
+                <span className="flex items-center gap-3">
                   {isLoading && <LoadingPulser className="h-5" />}
                   Submit
                 </span>

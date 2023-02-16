@@ -20,13 +20,13 @@ export default async function level_report_action(
         level: true,
         work: {
           select: {
-            coordinators: true,
+            People: {
+              select: {},
+            },
             courseCode: true,
             level: true,
             typeOfWork: true,
             totalLevels: true,
-            pending: true,
-            flagged: true,
           },
         },
       },

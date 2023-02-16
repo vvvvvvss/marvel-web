@@ -13,8 +13,11 @@ const getUserBySlug = async (slug: string) => {
       slug: true,
       name: true,
       profilePic: true,
-      scope: true,
-      crdnCourses: true,
+      scope: {
+        select: {
+          scope: true,
+        },
+      },
     },
   });
   console.info({ info: 'getUserBySlug is called in profile page' });
@@ -52,21 +55,14 @@ export default async function layout({
                 <h1 className="ml-5 text-lg">{dude?.name}</h1>
               </div>
               {/* coordinating courses */}
-              {dude?.scope?.includes('CRDN') && (
+              {dude?.scope?.map((s) => s.scope)?.includes('CRDN') && (
                 <div className="flex items-center border-t pt-5 max-w-full overflow-x-auto border-p-3">
-                  {dude?.scope?.includes('CRDN') && (
-                    <Button
-                      variant="outlined"
-                      className="mr-3 text-sm pointer-events-none"
-                    >
-                      Coordinator
-                    </Button>
-                  )}
-                  {dude?.crdnCourses?.map((c, k) => (
-                    <Button key={k} className="mr-3 text-sm">
-                      {c}
-                    </Button>
-                  ))}
+                  <Button
+                    variant="outlined"
+                    className="mr-3 text-sm pointer-events-none"
+                  >
+                    Coordinator
+                  </Button>
                 </div>
               )}
             </Paper>

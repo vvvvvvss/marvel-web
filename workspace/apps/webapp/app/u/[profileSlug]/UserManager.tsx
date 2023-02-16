@@ -11,36 +11,32 @@ import {
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { Scope } from '@prisma/client';
-
-const sendUserEdit = async (profile: any) => {
-  const data = (await axios.post(`/api/mutate/profile-meta`, { profile })).data;
-  return data;
-};
+import { Scope, ScopeEnum } from '@prisma/client';
 
 const Manager = ({ dude }: { dude: any }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const session = useSession();
   const sessionUser = session?.data?.user;
-  const [dudeCopy, setDudeCopy] = useState(dude);
-  const [changed, setChanged] = useState(false);
   const router = useRouter();
 
   const { mutate: sendMutation, isLoading } = useMutation(
-    () => sendUserEdit(dudeCopy),
+    async (args: { action: 'add' | 'remove'; scope: ScopeEnum }) =>
+      (
+        await axios.post(
+          `/api/people/manage-scope?slug=${dude?.slug}&scope=${args.scope}&action=${args.action}`
+        )
+      ).data,
     {
       onError: () => alert("Couldn't update user. loss"),
       onSuccess: () => {
         router.refresh();
-        setDialogOpen(false);
       },
-      onSettled: () => setChanged(false),
     }
   );
 
   if (
-    sessionUser?.scope?.includes('CRDN') ||
-    sessionUser?.scope?.includes('ADMIN')
+    sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
+    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
   ) {
     return (
       <>
@@ -54,62 +50,54 @@ const Manager = ({ dude }: { dude: any }) => {
                 className="mb-5"
                 onClick={() => {
                   setDialogOpen((p) => !p);
-                  setDudeCopy(dude);
                   return;
                 }}
               >
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
-              <div>
-                {(sessionUser?.scope?.includes('ADMIN') ||
-                  sessionUser?.scope?.includes('CRDN')) && (
+              <div
+                className={isLoading ? 'opacity-60 pointer-events-none' : ''}
+              >
+                {(sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN') ||
+                  sessionUser?.scope
+                    ?.map((s) => s.scope)
+                    ?.includes('CRDN')) && (
                   <div>
                     <Paper
                       border
                       shadow
                       className="rounded-lg pl-5 pt-5 min-h-[60px] mt-5"
                     >
-                      {dudeCopy?.scope?.map(
-                        (s: Scope) =>
-                          s != 'NONE' && (
-                            <Button
-                              onClick={() => {
-                                setDudeCopy((p) => ({
-                                  ...p,
-                                  scope: dudeCopy?.scope?.filter(
-                                    (scope: Scope) => scope != s
-                                  ),
-                                }));
-                                setChanged(true);
-                              }}
-                              variant="outlined"
-                              className="mr-5 mb-5 inline-flex items-center gap-2"
-                            >
-                              <MinusIcon />
-                              {s}
-                            </Button>
-                          )
-                      )}
+                      {dude?.scope?.map((s: Scope) => (
+                        <Button
+                          onClick={() =>
+                            sendMutation({ action: 'remove', scope: s?.scope })
+                          }
+                          variant="outlined"
+                          className="mr-5 mb-5 inline-flex items-center gap-2"
+                        >
+                          <MinusIcon />
+                          {s.scope}
+                        </Button>
+                      ))}
                     </Paper>
                     <div className="pl-5 pt-5">
                       {[
                         'PROFILE',
                         'WRITER',
-                        'R-WRITER',
-                        ...(sessionUser?.scope?.includes('ADMIN')
+                        'R_WRITER',
+                        ...(sessionUser?.scope
+                          ?.map((s) => s.scope)
+                          ?.includes('ADMIN')
                           ? ['CRDN', 'ADMIN']
                           : []),
                       ].map(
-                        (s) =>
-                          !dudeCopy?.scope?.includes(s) && (
+                        (s: ScopeEnum) =>
+                          !dude?.scope?.map((s) => s.scope)?.includes(s) && (
                             <Button
-                              onClick={() => {
-                                setDudeCopy((p) => ({
-                                  ...p,
-                                  scope: [...dudeCopy?.scope, s],
-                                }));
-                                setChanged(true);
-                              }}
+                              onClick={() =>
+                                sendMutation({ action: 'add', scope: s })
+                              }
                               variant="outlined"
                               className="mr-5 mb-5 inline-flex items-center gap-2"
                             >
@@ -121,24 +109,6 @@ const Manager = ({ dude }: { dude: any }) => {
                     </div>
                   </div>
                 )}
-                <div className="w-full flex gap-5 justify-end pb-48">
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setDudeCopy(dude);
-                      setChanged(false);
-                    }}
-                    disabled={!changed || isLoading}
-                  >
-                    Reset
-                  </Button>
-                  <Button
-                    onClick={() => sendMutation()}
-                    disabled={isLoading || !changed}
-                  >
-                    Update User
-                  </Button>
-                </div>
               </div>
             </div>
           </FullScreenDialog>

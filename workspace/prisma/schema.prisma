@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 //scope of user
-enum Scope {
-  NONE
+enum ScopeEnum {
   PROFILE
   WRITER
   R_WRITER
@@ -17,12 +17,48 @@ enum Scope {
   ADMIN
 }
 
-type Level {
-  tasks Task[]
+model People {
+  id           String            @id @default(uuid())
+  googleId     String            @unique
+  slug         String            @unique
+  email        String            @unique
+  name         String
+  profilePic   String
+  scope        Scope[]
+  readMe       String?           @db.Text
+  rankingScore Int               @default(1)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  Works        PeopleOnWork[]
+  Articles     ArticleToPeople[]
+
+  @@index([googleId, slug, email, name])
 }
 
-type Task {
-  description String
+// scope. many-to-one relation. between Scope and People
+model Scope {
+  person   People    @relation(fields: [personId], references: [id])
+  personId String
+  scope    ScopeEnum
+
+  @@id([personId, scope])
+  @@index([personId])
+  @@index([scope])
+}
+
+model Course {
+  id             String            @id @default(uuid())
+  courseCode     String            @unique
+  courseDuration String
+  caption        String
+  totalLevels    Int
+  rankingScore   Int               @default(1)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  Works          Work[]
+  Articles       ArticleToCourse[]
+
+  @@index([courseCode])
 }
 
 //in works
@@ -31,12 +67,72 @@ enum TypeOfWork {
   PROJECT
 }
 
-//in articles only
+model Work {
+  id         String         @id @default(uuid())
+  typeOfWork TypeOfWork
+  People     PeopleOnWork[]
+  Reports    Report[]
+
+  name         String? //not used in case of coursework
+  coverPhoto   String?
+  level        Int     @default(1) //is also used as stage number. if its +1 of totalLevels, that marks course completion
+  totalLevels  Int? //not used in case of project
+  course       Course? @relation(fields: [courseCode], references: [courseCode]) //not used in case of project
+  courseCode   String?
+  note         String? @db.TinyText //not used in case of project
+  searchTerms  String?
+  rankingScore Int     @default(1)
+
+  @@index([courseCode, name, searchTerms])
+}
+
+// role in work
+enum Role {
+  AUTHOR
+  COORDINATOR
+}
+
+// status in work
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+//explicit many-to-many relation between work and people
+model PeopleOnWork {
+  person   People @relation(fields: [personId], references: [id])
+  personId String
+  work     Work   @relation(fields: [workId], references: [id])
+  workId   String
+  role     Role
+  status   Status @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+
+  @@id([personId, workId])
+  @@index([personId])
+  @@index([workId])
+}
+
+//in articles and reports only
 enum ReviewStatus {
   PENDING
   APPROVED
   FLAGGED
   FEATURED
+}
+
+model Report {
+  id           String       @id @default(uuid())
+  work         Work         @relation(fields: [workId], references: [id])
+  workId       String
+  level        Int? //not used in case of project report
+  reviewStatus ReviewStatus
+
+  title   String
+  content String @db.Text
+
+  @@index([workId, title, reviewStatus])
 }
 
 //in articles
@@ -45,110 +141,50 @@ enum TypeOfArticle {
   RESOURCE
 }
 
-//in works. to keep track of reports.
-type ReportStatus {
-  level    Int?
-  id       String  @db.ObjectId
-  feedback String?
-}
-
-model People {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug         String   @unique
-  name         String
-  email        String   @unique
-  profilePic   String
-  googleId     String   @unique
-  scope        Scope[]  @default([NONE])
-  crdnCourses  String[] @default([])
-  readMe       String?
-  rankingScore Int      @default(1)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("people")
-}
-
-model Course {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  courseCode     String   @unique
-  courseDuration String
-  caption        String
-  totalLevels    Int
-  intro          String
-  levels         Level[]
-  rankingScore   Int      @default(1)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@map("courses")
-}
-
-enum Role {
-  ACTIVE
-  INACTIVE
-  WRITER
-}
-
-type Person {
-  googleId   String
-  name       String
-  slug       String
-  profilePic String
-  role       Role?
-}
-
-model Work {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfWork   TypeOfWork     @map("_type")
-  //people part of this work
-  authors      Person[]
-  //coordinators for this work
-  coordinators Person[]
-  //reports
-  Report       Report[]
-  //tracking status
-  pending      ReportStatus[]
-  flagged      ReportStatus[]
-
-  name         String? //not used in case of coursework
-  coverPhoto   String?
-  level        Int      @default(1) //is also used as stage number. its its +1 of totalLevels, that marks course completion
-  totalLevels  Int? //not used in case of project
-  courseCode   String? //not used in case of project
-  note         String? //not used in case of project
-  searchTerms  String[] @default([])
-  rankingScore Int      @default(1)
-
-  @@map("works")
-}
-
-model Report {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  work   Work   @relation(fields: [workId], references: [id])
-  workId String @db.ObjectId
-  level  Int? //not used in case of project report
-
-  title   String
-  content String
-
-  @@map("reports")
-}
-
 model Article {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  typeOfArticle TypeOfArticle @map("_type")
-  author        Person
+  id            String        @id @default(uuid())
+  typeOfArticle TypeOfArticle
 
   title        String
-  tags         String[]     @default([])
+  tags         String
   coverPhoto   String?
-  content      String
-  courseCodes  String[] //not used in case of blog post
+  content      String            @db.Text
   reviewStatus ReviewStatus
-  searchTerms  String[]     @default([])
-  feedback     String?
-  rankingScore Int          @default(1)
+  feedback     String?           @db.TinyText
+  rankingScore Int               @default(1)
+  People       ArticleToPeople[]
+  Courses      ArticleToCourse[]
 
+  @@index([title, tags, typeOfArticle, reviewStatus])
   @@map("articles")
+}
+
+enum ArticleAuthorRole {
+  OP
+  PENDING
+  GUEST
+}
+
+model ArticleToPeople {
+  article   Article           @relation(fields: [articleId], references: [id])
+  person    People            @relation(fields: [personId], references: [id])
+  role      ArticleAuthorRole @default(OP)
+  articleId String
+  personId  String
+
+  @@id([articleId, personId])
+  @@index([articleId])
+  @@index([personId])
+}
+
+model ArticleToCourse {
+  article Article @relation(fields: [articleId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+
+  articleId String
+  courseId  String
+
+  @@id([articleId, courseId])
+  @@index([articleId])
+  @@index([courseId])
 }

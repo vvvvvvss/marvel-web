@@ -8,6 +8,7 @@ import { TextField } from '@marvel/web-ui';
 import { useMutation, useQuery } from 'react-query';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { TypeOfWork } from '@prisma/client';
 
 type FormData = {
   selectedCourse?: string;
@@ -15,38 +16,33 @@ type FormData = {
   authorSlug?: string;
 };
 
-const sendSpawnRequest = async (type, formData: FormData) => {
-  const data = (
-    await axios.post(`/api/spawn/${type?.toLowerCase()}`, { formData })
-  ).data;
-  return data;
-};
-
-const getCourseList = async () => {
-  const data = (await axios.post(`/api/get/course-list`)).data?.courseList;
-  return data;
-};
-
 const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const session = useSession();
   const sessionUser = session?.data?.user;
-  const [formData, setFormData] = useState<FormData>({ authorSlug });
-  const [formType, setFormType] = useState<'COURSEWORK' | 'PROJECT'>('PROJECT');
+  const [formData, setFormData] = useState<FormData>({
+    authorSlug,
+  });
+  const [formType, setFormType] = useState<TypeOfWork>('PROJECT');
   const router = useRouter();
-
+  console.log(formData);
   useEffect(() => {
-    setFormData({});
+    setFormData({ authorSlug });
   }, [formType]);
 
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
     ['course-list'],
-    () => getCourseList(),
-    { enabled: formType === 'COURSEWORK' }
+    async () => (await axios.post(`/api/course/get-list`)).data?.courseList,
+    { enabled: formType === 'COURSE' }
   );
 
   const { mutate: sendMutation, isLoading } = useMutation(
-    () => sendSpawnRequest(formType, { ...formData, authorSlug: authorSlug }),
+    async () =>
+      (
+        await axios.post(`/api/work/spawn?type=${formType}`, {
+          formData,
+        })
+      ).data,
     {
       onError: () => alert("Couldn't spawn work. loss"),
       onSuccess: () => {
@@ -57,8 +53,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   );
 
   if (
-    sessionUser?.scope?.includes('CRDN') ||
-    sessionUser?.scope?.includes('ADMIN')
+    sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
+    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
   ) {
     return (
       <>
@@ -67,7 +63,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
             className="flex-1"
             variant="outlined"
             onClick={() => {
-              setFormType('COURSEWORK');
+              setFormType('COURSE');
               setDialogOpen((p) => !p);
             }}
           >
@@ -94,10 +90,12 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
               <div>
-                {(sessionUser?.scope?.includes('ADMIN') ||
-                  sessionUser?.scope?.includes('CRDN')) && (
+                {(sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN') ||
+                  sessionUser?.scope
+                    ?.map((s) => s.scope)
+                    ?.includes('CRDN')) && (
                   <div>
-                    {formType == 'COURSEWORK' ? (
+                    {formType == 'COURSE' ? (
                       <>
                         <div className="flex gap-5 flex-wrap my-5">
                           {isCourseListLoading ? (
@@ -177,13 +175,12 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                     onClick={() => sendMutation()}
                     disabled={
                       isLoading ||
-                      (formType === 'COURSEWORK' &&
-                        !formData?.selectedCourse) ||
+                      (formType === 'COURSE' && !formData?.selectedCourse) ||
                       (formType === 'PROJECT' &&
                         formData?.projectName?.trim().length < 4)
                     }
                   >
-                    {formType === 'COURSEWORK'
+                    {formType === 'COURSE'
                       ? 'Spawn Course Work'
                       : 'Spawn Project'}
                   </Button>
