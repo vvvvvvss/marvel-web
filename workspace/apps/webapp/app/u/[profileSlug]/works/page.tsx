@@ -49,13 +49,7 @@ export default async function page({ params, searchParams }) {
         ) : (
           <>
             {works.map((w, i) => (
-              <Link
-                className="flex-auto"
-                key={i}
-                href={`/${
-                  w?.typeOfWork === 'COURSE' ? 'coursework' : 'project'
-                }/${w?.id}`}
-              >
+              <Link className="flex-auto" key={i} href={`/work/${w?.id}`}>
                 <Paper
                   border
                   shadow={'hover'}

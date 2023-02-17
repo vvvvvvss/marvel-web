@@ -12,12 +12,13 @@ export default async function (
           {
             name: {
               contains: req?.query?.q as string,
-              mode: 'insensitive',
             },
           },
           {
             scope: {
-              has: 'PROFILE',
+              some: {
+                scope: 'PROFILE',
+              },
             },
           },
         ],
@@ -25,10 +26,10 @@ export default async function (
       select: {
         name: true,
         slug: true,
-        googleId: true,
         profilePic: true,
+        id: true,
       },
-      take: 10,
+      take: Number(req?.query?.limit) || 10,
     });
 
     return res.json({
@@ -37,8 +38,7 @@ export default async function (
     });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
+    return res.status(500).json({
       message: "Couldn't fetch people list",
       error: error?.message,
     });

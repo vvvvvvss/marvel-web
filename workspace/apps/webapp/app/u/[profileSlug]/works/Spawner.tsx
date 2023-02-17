@@ -25,7 +25,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   });
   const [formType, setFormType] = useState<TypeOfWork>('PROJECT');
   const router = useRouter();
-  console.log(formData);
+
   useEffect(() => {
     setFormData({ authorSlug });
   }, [formType]);
@@ -53,8 +53,9 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   );
 
   if (
-    sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
-    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
+    (sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
+      sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) &&
+    sessionUser?.slug !== authorSlug
   ) {
     return (
       <>

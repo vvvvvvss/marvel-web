@@ -75,7 +75,7 @@ model Work {
 
   name         String? //not used in case of coursework
   coverPhoto   String?
-  level        Int     @default(1) //is also used as stage number. if its +1 of totalLevels, that marks course completion
+  level        Int     @default(1) //not used in case of projectwork. if its +1 of totalLevels, that marks course completion
   totalLevels  Int? //not used in case of project
   course       Course? @relation(fields: [courseCode], references: [courseCode]) //not used in case of project
   courseCode   String?
@@ -127,10 +127,15 @@ model Report {
   work         Work         @relation(fields: [workId], references: [id])
   workId       String
   level        Int? //not used in case of project report
+  isOverview   Boolean?
   reviewStatus ReviewStatus
+  feedback     String?      @db.TinyText
 
   title   String
   content String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([workId, title, reviewStatus])
 }

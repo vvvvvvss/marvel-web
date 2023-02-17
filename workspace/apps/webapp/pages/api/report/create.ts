@@ -18,18 +18,23 @@ export default async function create_level_report(
         id: req.query?.workId as string,
       },
       select: {
-        authors: true,
+        People: {
+          where: {
+            AND: [{ role: 'AUTHOR' }, { status: 'ACTIVE' }],
+          },
+        },
         level: true,
         courseCode: true,
         id: true,
+        typeOfWork: true,
       },
     });
-    const senderIsWriter =
-      work.authors.find((a) => a.role === 'WRITER').googleId ===
-      session.user.googleId;
+    const senderIsActiveAuthor = work.People?.map((p) => p?.personId).includes(
+      session?.user?.id
+    );
 
-    if (!senderIsWriter)
-      return res.json({ message: 'Access denied', status: '403' });
+    if (!senderIsActiveAuthor)
+      return res.status(403).json({ message: 'Access denied' });
 
     const existingReport = await dbClient.report.findFirst({
       where: {
@@ -41,13 +46,12 @@ export default async function create_level_report(
     });
 
     if (existingReport?.id)
-      return res.json({ message: 'Report already exists', status: '400' });
+      return res.status(400).json({ message: 'Report already exists' });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
     if (formData?.title?.length > 60 || cleanContent?.length > 15_000) {
-      return res.json({
-        status: 403,
+      return res.status(400).json({
         message: 'Invalid form data. too big.',
       });
     }
@@ -56,8 +60,13 @@ export default async function create_level_report(
       data: {
         title: formData?.title,
         content: formData?.content,
-        level: work?.level,
-        workId: work.id,
+        ...(work?.typeOfWork == 'COURSE' && { level: work?.level }),
+        reviewStatus: 'PENDING',
+        work: {
+          connect: {
+            id: work.id,
+          },
+        },
       },
       select: {
         id: true,
@@ -65,29 +74,13 @@ export default async function create_level_report(
       },
     });
 
-    await dbClient.work.update({
-      where: {
-        id: work.id,
-      },
-      data: {
-        searchTerms: {
-          push: formData?.title,
-        },
-        pending: {
-          push: {
-            id: createdReport.id,
-            level: createdReport.level,
-          },
-        },
-      },
-    });
-
     await res.revalidate(
-      `/coursework/${work.id}${work?.level === 1 ? '' : `/${work.level}`}`
+      `/work/${work.id}/${createdReport?.level == 1 ? '' : createdReport?.id}`
     );
     return res.json({
       status: 201,
       message: `level report created successfully`,
+      report: createdReport,
     });
   } catch (error) {
     console.log(error);
