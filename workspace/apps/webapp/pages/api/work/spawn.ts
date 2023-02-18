@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
-import { TypeOfWork } from '@prisma/client';
+import { Role, TypeOfWork } from '@prisma/client';
 
 type FormData = {
   selectedCourse?: string;
@@ -77,20 +77,23 @@ export default async function spawn_new_work(
             {
               person: {
                 connect: {
-                  id: author.id,
+                  id: author?.id,
                 },
               },
               role: 'AUTHOR',
-              status: 'ACTIVE',
             },
-            {
-              person: {
-                connect: {
-                  id: sessionUser?.id,
-                },
-              },
-              role: 'COORDINATOR',
-            },
+            ...(type !== 'COURSE'
+              ? [
+                  {
+                    person: {
+                      connect: {
+                        id: sessionUser?.id,
+                      },
+                    },
+                    role: 'COORDINATOR' as Role,
+                  },
+                ]
+              : []),
           ],
         },
       },

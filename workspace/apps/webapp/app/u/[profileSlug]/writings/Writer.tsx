@@ -109,7 +109,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     return (
       <>
         <div className="flex flex-wrap gap-5 flex-auto">
-          {sessionUser?.scope?.includes('WRITER') && (
+          {sessionUser?.scope?.map((s) => s.scope)?.includes('WRITER') && (
             <Button
               className="flex-1"
               variant="outlined"
@@ -121,7 +121,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
               New Blog Post
             </Button>
           )}
-          {sessionUser?.scope?.includes('R_WRITER') && (
+          {sessionUser?.scope?.map((s) => s.scope)?.includes('R_WRITER') && (
             <Button
               className="flex-1"
               variant="outlined"

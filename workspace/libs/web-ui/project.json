@@ -1,4 +1,5 @@
 {
+  "name": "web-ui",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web-ui/src",
   "projectType": "library",
@@ -9,7 +10,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/web-ui",
-        "declaration":true,
+        "declaration": true,
         "tsConfig": "libs/web-ui/tsconfig.lib.json",
         "project": "libs/web-ui/package.json",
         "entryFile": "libs/web-ui/src/index.ts",

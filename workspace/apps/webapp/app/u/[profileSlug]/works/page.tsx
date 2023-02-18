@@ -18,8 +18,6 @@ const getUserWorksBySlug = async (slug: string) => {
       id: true,
       name: true,
       courseCode: true,
-      coverPhoto: true,
-      level: true,
       typeOfWork: true,
     },
   });

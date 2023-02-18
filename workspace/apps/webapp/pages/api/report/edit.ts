@@ -21,7 +21,6 @@ export default async function create_level_report(
         id: true,
         workId: true,
         title: true,
-        level: true,
         isOverview: true,
         work: {
           select: {
@@ -73,20 +72,11 @@ export default async function create_level_report(
       },
     });
 
-    if (existingReport?.work?.typeOfWork === 'COURSE') {
-      await res.revalidate(
-        `/work/${existingReport?.workId}/${
-          existingReport?.level === 1 ? '' : existingReport?.id
-        }`
-      );
-    } else if (existingReport?.work?.typeOfWork === 'PROJECT') {
-      //revalidate the page
-      await res.revalidate(
-        `/work/${existingReport?.workId}/${
-          existingReport?.isOverview ? '' : existingReport?.id
-        }`
-      );
-    }
+    await res.revalidate(
+      `/work/${existingReport?.workId}/${
+        existingReport?.isOverview ? '' : existingReport?.id
+      }`
+    );
 
     return res.json({
       status: 201,

@@ -4,6 +4,7 @@ import sanitize from 'sanitize-html';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+import { ReviewStatus } from '@prisma/client';
 
 export default async function create_level_report(
   req: NextApiRequest & { url: string },
@@ -23,10 +24,15 @@ export default async function create_level_report(
             AND: [{ role: 'AUTHOR' }, { status: 'ACTIVE' }],
           },
         },
-        level: true,
         courseCode: true,
         id: true,
         typeOfWork: true,
+        totalLevels: true,
+        Reports: {
+          select: {
+            reviewStatus: true,
+          },
+        },
       },
     });
     const senderIsActiveAuthor = work.People?.map((p) => p?.personId).includes(
@@ -36,18 +42,24 @@ export default async function create_level_report(
     if (!senderIsActiveAuthor)
       return res.status(403).json({ message: 'Access denied' });
 
-    const existingReport = await dbClient.report.findFirst({
-      where: {
-        AND: [{ level: work.level }, { workId: work.id }],
-      },
-      select: {
-        id: true,
-      },
-    });
+    if (
+      work?.typeOfWork === 'COURSE' &&
+      work?.Reports?.length + 1 > work?.totalLevels
+    ) {
+      return res.status(400).json({
+        message: 'All the reports are already written',
+      });
+    }
 
-    if (existingReport?.id)
-      return res.status(400).json({ message: 'Report already exists' });
-
+    if (
+      ['PENDING', 'FLAGGED'].some((e: ReviewStatus) =>
+        work?.Reports?.map((r) => r?.reviewStatus).includes(e)
+      )
+    ) {
+      return res.status(400).json({
+        message: 'Check if all the previous reports are approved already',
+      });
+    }
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
     if (formData?.title?.length > 60 || cleanContent?.length > 15_000) {
@@ -60,8 +72,8 @@ export default async function create_level_report(
       data: {
         title: formData?.title,
         content: formData?.content,
-        ...(work?.typeOfWork == 'COURSE' && { level: work?.level }),
         reviewStatus: 'PENDING',
+        isOverview: work?.Reports?.length === 0 ? true : false,
         work: {
           connect: {
             id: work.id,
@@ -70,21 +82,21 @@ export default async function create_level_report(
       },
       select: {
         id: true,
-        level: true,
+        isOverview: true,
       },
     });
 
     await res.revalidate(
-      `/work/${work.id}/${createdReport?.level == 1 ? '' : createdReport?.id}`
+      `/work/${work.id}/${createdReport?.isOverview ? '' : createdReport?.id}`
     );
     return res.json({
       status: 201,
       message: `level report created successfully`,
-      report: createdReport,
+      reportId: createdReport?.isOverview ? '' : createdReport?.id,
     });
   } catch (error) {
     console.log(error);
-    return res.json({
+    return res.status(500).json({
       status: 500,
       message: `Couldn't create level report`,
       error: error?.message,

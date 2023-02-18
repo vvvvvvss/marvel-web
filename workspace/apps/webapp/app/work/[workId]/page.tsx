@@ -13,7 +13,6 @@ const getReport = async (workId: string) => {
     select: {
       courseCode: true,
       id: true,
-      level: true,
       People: {
         select: {
           personId: true,
@@ -21,9 +20,9 @@ const getReport = async (workId: string) => {
           status: true,
         },
       },
-      Reports: {
+      _count: {
         select: {
-          id: true,
+          Reports: true,
         },
       },
       typeOfWork: true,
@@ -42,28 +41,24 @@ const getReport = async (workId: string) => {
       title: true,
       content: true,
       id: true,
-      level: true,
       reviewStatus: true,
       feedback: true,
       createdAt: true,
-      updatedAt: true,
     },
   });
-  return { report, work };
+  return JSON.parse(JSON.stringify({ report, work }));
 };
 
-export default async function page({ params, searchParams }) {
+export default async function page({ params }) {
   const { report, work } = await getReport(params?.workId);
   return (
     <div className="flex flex-col w-full gap-5 items-center">
-      <Tabs reportId="" work={work} />
-
       {!report ? (
         <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">
           <>
             <h1 className="text-2xl">
-              {work?.typeOfWork === 'PROJECT' ? 'Stage' : 'Level'} {work?.level}{' '}
-              report is yet to be written.
+              {work?.typeOfWork === 'PROJECT' ? 'Stage' : 'Level'} 1 report is
+              yet to be written.
             </h1>
 
             <img
@@ -96,7 +91,10 @@ export default async function page({ params, searchParams }) {
           )}
           <h2 className="text-4xl mb-5">{report?.title}</h2>
           <p className="text-p-6">
-            {report?.createdAt.toLocaleDateString().split('/').join(' / ')}
+            {new Date(report?.createdAt)
+              ?.toLocaleDateString()
+              .split('/')
+              .join(' / ')}
           </p>
           <hr className="my-5 border-p-3" />
           <MarkdownRender content={report?.content} />

@@ -2,6 +2,7 @@ import { Window, Paper } from '@marvel/web-ui';
 import { Avatar } from '../../../components/Avatar';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import EditMeta from './EditMeta/EditMeta';
+import Tabs from './Tabs';
 
 const getWork = async (id: string) => {
   try {
@@ -15,7 +16,6 @@ const getWork = async (id: string) => {
         coverPhoto: true,
         note: true,
         courseCode: true,
-        level: true,
         People: {
           select: {
             personId: true,
@@ -26,9 +26,14 @@ const getWork = async (id: string) => {
                 profilePic: true,
               },
             },
-            createdAt: true,
             role: true,
             status: true,
+          },
+        },
+        Reports: {
+          select: {
+            id: true,
+            reviewStatus: true,
           },
         },
         totalLevels: true,
@@ -75,9 +80,7 @@ export default async function layout({ children, params }) {
                     </span>{' '}
                     course work.{' '}
                     <span className="text-sm bg-p-2 rounded-lg p-2">
-                      {work?.level === work?.totalLevels + 1
-                        ? 'Completed'
-                        : `Lv ${work?.level}`}
+                      {`Lv ${work?.Reports?.length}`}
                     </span>
                   </>
                 ) : (
@@ -86,7 +89,7 @@ export default async function layout({ children, params }) {
               </h1>
               <p className="text-p-8">{work?.note}</p>
             </div>
-            <div className="overflow-x-auto pt-5 ">
+            <div className="overflow-x-auto pt-5 absolute bottom-0 inset-x-0">
               <table className="w-full text-sm text-left whitespace-nowrap">
                 <tbody>
                   {work?.People?.sort((p) =>
@@ -94,9 +97,9 @@ export default async function layout({ children, params }) {
                   )?.map((p, i) => (
                     <tr
                       key={i}
-                      className="border-y p-5 border-p-5 dark:border-p-3"
+                      className="border-t p-5 border-p-3 dark:border-p-6"
                     >
-                      <td className="flex gap-3 items-center py-3 text-base">
+                      <td className="flex gap-3 items-center py-3 px-5 text-base">
                         <Avatar
                           className="w-6"
                           alt={p?.person?.name}
@@ -106,7 +109,6 @@ export default async function layout({ children, params }) {
                       </td>
                       <td className="px-5 py-3 text-xs">{p?.role}</td>
                       <td className="px-5 py-3 text-xs">{p?.status}</td>
-                      <td>{p?.createdAt.toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -120,6 +122,8 @@ export default async function layout({ children, params }) {
             )}
           </Paper>
         </Paper>
+        <Tabs work={work} />
+
         <div className="w-full">{children}</div>
       </div>
     </Window>

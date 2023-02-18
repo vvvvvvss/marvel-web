@@ -38,7 +38,8 @@ const ReportWriter = ({ work }) => {
       onSuccess: (data) => {
         setFormData({ title: '', content: '' });
         setModalOpen((p) => !p);
-        router.replace(`/work/${work?.id}/${data?.report?.id}`);
+        console.log(data);
+        router.replace(`/work/${work?.id}/${data?.reportId}`);
       },
       onError: (data: any) => {
         alert(data?.response?.data?.message || 'Something went wrong');

@@ -32,13 +32,13 @@ export default async function create_article(
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData = req.body.formData;
 
-    const condition =
-      typeOfArticle === 'BLOG'
-        ? session?.user?.scope?.includes('WRITER')
-        : session?.user?.scope?.includes('R_WRITER');
+    // const condition =
+    //   typeOfArticle === 'BLOG'
+    //     ? session?.user?.scope?.includes('WRITER')
+    //     : session?.user?.scope?.includes('R_WRITER');
 
-    if (!condition)
-      return res.json({ message: 'Access denied', status: '403' });
+    // if (!condition)
+    //   return res.json({ message: 'Access denied', status: '403' });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
@@ -64,30 +64,30 @@ export default async function create_article(
       ).secure_url;
     }
 
-    await dbClient.article.create({
-      data: {
-        typeOfArticle: typeOfArticle,
-        title: formData?.title,
-        coverPhoto: coverPhoto,
-        tags: formData?.tags,
-        content: cleanContent,
-        reviewStatus:
-          session.user.scope?.includes('CRDN') ||
-          session.user.scope?.includes('ADMIN')
-            ? 'APPROVED'
-            : 'PENDING',
-        author: {
-          googleId: session.user.googleId,
-          name: session.user.name,
-          profilePic: session.user.profilePic,
-          slug: session.user.slug,
-        },
-        ...(typeOfArticle === 'RESOURCE'
-          ? { courseCodes: formData?.courseCodes }
-          : null),
-        feedback: '',
-      },
-    });
+    // await dbClient.article.create({
+    //   data: {
+    //     typeOfArticle: typeOfArticle,
+    //     title: formData?.title,
+    //     coverPhoto: coverPhoto,
+    //     tags: formData?.tags,
+    //     content: cleanContent,
+    //     reviewStatus:
+    //       session.user.scope?.includes('CRDN') ||
+    //       session.user.scope?.includes('ADMIN')
+    //         ? 'APPROVED'
+    //         : 'PENDING',
+    //     author: {
+    //       googleId: session.user.googleId,
+    //       name: session.user.name,
+    //       profilePic: session.user.profilePic,
+    //       slug: session.user.slug,
+    //     },
+    //     ...(typeOfArticle === 'RESOURCE'
+    //       ? { courseCodes: formData?.courseCodes }
+    //       : null),
+    //     feedback: '',
+    //   },
+    // });
 
     await res.revalidate(`/u/${session?.user?.slug}/writings`);
     return res.json({

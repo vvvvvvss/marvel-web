@@ -31,11 +31,19 @@ const ReportReviewer = ({ report, work }) => {
   );
 
   if (
-    (work?.People?.map(
-      (p) => p?.role === 'COORDINATOR' && p?.personId
-    ).includes(sessionUser?.id) ||
-      //admin
-      sessionUser?.scope?.map((s) => s.scope).includes('ADMIN')) &&
+    //work is project and session user is one of the coordinators
+    ((work?.typeOfWork === 'PROJECT' &&
+      work?.People?.filter(
+        (p) => p?.role == 'COORDINATOR' && p?.status == 'ACTIVE'
+      )
+        ?.map((p) => p?.personId)
+        .includes(sessionUser.id)) ||
+      //work is coursework and session user is a coordinator
+      (work?.typeOfWork === 'COURSE' &&
+        sessionUser?.scope?.map((s) => s.scope).includes('CRDN')) ||
+      //session user is an admin
+      sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) &&
+    //with report status being PENDING
     report?.reviewStatus === 'PENDING'
   ) {
     return (
@@ -102,7 +110,6 @@ const ReportReviewer = ({ report, work }) => {
     report?.reviewStatus === 'FLAGGED' &&
     work?.People?.map((p) => p?.personId).includes(sessionUser?.id)
   ) {
-    console.log(report);
     return (
       <div className="w-full p-5 rounded-lg border border-[#ff5959]">
         {report?.feedback}

@@ -18,19 +18,20 @@ enum ScopeEnum {
 }
 
 model People {
-  id           String            @id @default(uuid())
-  googleId     String            @unique
-  slug         String            @unique
-  email        String            @unique
-  name         String
-  profilePic   String
-  scope        Scope[]
-  readMe       String?           @db.Text
-  rankingScore Int               @default(1)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  Works        PeopleOnWork[]
-  Articles     ArticleToPeople[]
+  id                  String                 @id @default(uuid())
+  googleId            String                 @unique
+  slug                String                 @unique
+  email               String                 @unique
+  name                String
+  profilePic          String
+  scope               Scope[]
+  readMe              String?                @db.Text
+  rankingScore        Int                    @default(1)
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  Works               PeopleOnWork[]
+  Articles            ArticleToPeople[]
+  CoordinatingCourses CoordinatorsToCourse[]
 
   @@index([googleId, slug, email, name])
 }
@@ -46,17 +47,29 @@ model Scope {
   @@index([scope])
 }
 
+model CoordinatorsToCourse {
+  course   Course @relation(fields: [courseId], references: [id])
+  person   People @relation(fields: [peopleId], references: [id])
+  courseId String
+  peopleId String
+
+  @@id([courseId, peopleId])
+  @@index([courseId])
+  @@index([peopleId])
+}
+
 model Course {
-  id             String            @id @default(uuid())
-  courseCode     String            @unique
+  id             String                 @id @default(uuid())
+  courseCode     String                 @unique
   courseDuration String
   caption        String
   totalLevels    Int
-  rankingScore   Int               @default(1)
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  rankingScore   Int                    @default(1)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
   Works          Work[]
   Articles       ArticleToCourse[]
+  Coordinators   CoordinatorsToCourse[]
 
   @@index([courseCode])
 }
@@ -68,18 +81,17 @@ enum TypeOfWork {
 }
 
 model Work {
-  id         String         @id @default(uuid())
-  typeOfWork TypeOfWork
-  People     PeopleOnWork[]
-  Reports    Report[]
+  id          String         @id @default(uuid())
+  typeOfWork  TypeOfWork
+  People      PeopleOnWork[]
+  Reports     Report[]
+  totalLevels Int? //not used in case of project
 
   name         String? //not used in case of coursework
   coverPhoto   String?
-  level        Int     @default(1) //not used in case of projectwork. if its +1 of totalLevels, that marks course completion
-  totalLevels  Int? //not used in case of project
-  course       Course? @relation(fields: [courseCode], references: [courseCode]) //not used in case of project
-  courseCode   String?
-  note         String? @db.TinyText //not used in case of project
+  course       Course? @relation(fields: [courseCode], references: [courseCode])
+  courseCode   String? //not used in case of project
+  note         String? @db.TinyText
   searchTerms  String?
   rankingScore Int     @default(1)
 
@@ -126,7 +138,6 @@ model Report {
   id           String       @id @default(uuid())
   work         Work         @relation(fields: [workId], references: [id])
   workId       String
-  level        Int? //not used in case of project report
   isOverview   Boolean?
   reviewStatus ReviewStatus
   feedback     String?      @db.TinyText
