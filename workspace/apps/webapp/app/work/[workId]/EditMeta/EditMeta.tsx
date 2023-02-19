@@ -37,7 +37,7 @@ const EditMeta = ({ work }) => {
   if (
     work?.People?.filter((p) => p?.status == 'ACTIVE')
       ?.map((p) => p?.personId)
-      .includes(sessionUser.id) ||
+      .includes(sessionUser?.id) ||
     //work is coursework and session user is a coordinator
     (work?.typeOfWork === 'COURSE' &&
       sessionUser?.scope?.map((s) => s.scope).includes('CRDN')) ||
