@@ -1,5 +1,11 @@
 'use client';
-import { FullScreenDialog, IconButton, Paper, TextField } from '@marvel/web-ui';
+import {
+  Button,
+  FullScreenDialog,
+  IconButton,
+  Paper,
+  TextField,
+} from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import { VscSettings as ManageIcon } from 'react-icons/vsc';
@@ -7,15 +13,26 @@ import { VscClose as CloseIcon } from 'react-icons/vsc';
 import ReactImageUploading, { ImageListType } from 'react-images-uploading';
 import ImageCompressor from 'browser-image-compression';
 import ManagePeople from './ManagePeople';
+import { useMutation } from 'react-query';
+import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
+
+type Formdata = {
+  name: string;
+  note?: string;
+  coverPhoto?: string | ArrayBuffer;
+};
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
   const [modalOpen, setModalOpen] = useState(false);
-  const [copy, setCopy] = useState({
+  const router = useRouter();
+  const [copy, setCopy] = useState<Formdata>({
     name: work?.name,
     note: work?.note,
     coverPhoto: work?.coverPhoto,
   });
+  const [changed, setChanged] = useState(false);
 
   const handleImageUpload = async (imageList) => {
     const options = {
@@ -30,6 +47,20 @@ const EditMeta = ({ work }) => {
       setCopy({ ...copy, coverPhoto: reader?.result });
     };
   };
+
+  const { data, isLoading, mutate } = useMutation(
+    async () =>
+      (await axios.post('/api/work/edit-meta?workId=' + work?.id, { ...copy }))
+        .data,
+    {
+      onError: (e: AxiosError) => alert(e.response?.data?.['message']),
+      onSuccess: (data: any) => {
+        router.refresh();
+        setModalOpen(false);
+      },
+    }
+  );
+
   //button will be visible to:
   //those who are active members of the work.
   //if its a coursework, then to regular coordinators
@@ -55,11 +86,11 @@ const EditMeta = ({ work }) => {
         </IconButton>
         {modalOpen && (
           <FullScreenDialog
-            className="pb-36 z-10"
+            className="z-10"
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl py-24 gap-5">
+            <div className="w-full max-w-2xl pt-24 gap-5 ">
               <IconButton
                 onClick={() => {
                   setModalOpen(false);
@@ -69,7 +100,7 @@ const EditMeta = ({ work }) => {
               </IconButton>
 
               <form
-                className="my-5 flex flex-col pb-36"
+                className="my-5 flex flex-col pb-56"
                 onSubmit={(e) => e.preventDefault()}
               >
                 {work?.typeOfWork === 'PROJECT' && (
@@ -80,9 +111,10 @@ const EditMeta = ({ work }) => {
                     <TextField
                       id="name"
                       value={copy?.name}
-                      onChange={(e) =>
-                        setCopy({ ...copy, name: e.target?.value })
-                      }
+                      onChange={(e) => {
+                        setCopy({ ...copy, name: e.target?.value });
+                        setChanged(true);
+                      }}
                       placeholder="Project name"
                       maxLength={60}
                     />
@@ -94,12 +126,15 @@ const EditMeta = ({ work }) => {
                 <TextField
                   id="caption"
                   value={copy?.note}
-                  onChange={(e) => setCopy({ ...copy, note: e.target?.value })}
+                  onChange={(e) => {
+                    setCopy({ ...copy, note: e.target?.value });
+                    setChanged(true);
+                  }}
                   placeholder="(Optional). A short caption..."
                   maxLength={200}
                 />
                 <ReactImageUploading
-                  value={copy?.coverPhoto as ImageListType}
+                  value={copy?.coverPhoto as unknown as ImageListType}
                   onChange={handleImageUpload}
                   dataURLKey="data_url"
                 >
@@ -110,6 +145,7 @@ const EditMeta = ({ work }) => {
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
                         onClick={() => {
                           setCopy((p) => ({ ...p, coverPhoto: '' }));
+                          setChanged(true);
                           onImageUpload();
                         }}
                         {...dragProps}
@@ -130,7 +166,14 @@ const EditMeta = ({ work }) => {
                     </div>
                   )}
                 </ReactImageUploading>
-
+                <Button
+                  className="max-w-max self-end"
+                  disabled={isLoading || !changed}
+                  onClick={() => mutate()}
+                >
+                  Update
+                </Button>
+                <hr className="my-5 border-r-p-4 dark:border-p-4" />
                 {/* amoung the conditions valid till here, exclude work authors. 
                 and include admins
                 */}

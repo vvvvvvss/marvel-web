@@ -3,6 +3,7 @@ import { Avatar } from '../../../components/Avatar';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import EditMeta from './EditMeta/EditMeta';
 import Tabs from './Tabs';
+import Image from 'next/image';
 
 const getWork = async (id: string) => {
   try {
@@ -55,9 +56,9 @@ export const dynamicParams = true;
 export default async function layout({ children, params }) {
   const work = await getWork(params?.workId);
   return (
-    <Window className="pt-5 md:pt-12 pb-40">
+    <Window className={'pt-5 md:pt-12 pb-40'}>
       {/* whole thing  */}
-      <div className="w-full max-w-5xl flex flex-col items-center px-5">
+      <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
         {/* hero box  */}
         <Paper
           shadow
@@ -65,7 +66,7 @@ export default async function layout({ children, params }) {
           className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-fit"
         >
           {/* left box  */}
-          <Paper className="relative bg-p-1 w-full md:w-1/2 md:h-full p-5 ">
+          <Paper className="relative flex flex-col justify-between bg-p-1 w-full md:w-1/2 md:h-full p-5 ">
             <div>
               <p className="text-p-6 tracking-widest">{work?.typeOfWork}WORK</p>
               <h1 className="text-4xl my-2">
@@ -87,9 +88,9 @@ export default async function layout({ children, params }) {
                   work?.name
                 )}
               </h1>
-              <p className="text-p-8">{work?.note}</p>
+              <p className="text-p-8 my-5">{work?.note}</p>
             </div>
-            <div className="overflow-x-auto pt-5 absolute bottom-0 inset-x-0">
+            <div className="overflow-x-auto pt-5 -mx-5 flex-grow-0 -mb-5">
               <table className="w-full text-sm text-left whitespace-nowrap">
                 <tbody>
                   {work?.People?.sort((p) =>
@@ -116,7 +117,7 @@ export default async function layout({ children, params }) {
             </div>
             <EditMeta work={work} />
           </Paper>
-          <Paper className="p-5 w-full md:w-1/2 h-1/2 md:h-full flex-1">
+          <Paper className="w-full md:w-1/2 md:h-full flex-1">
             {work?.coverPhoto && (
               <img src={work?.coverPhoto} alt={work?.name} />
             )}
