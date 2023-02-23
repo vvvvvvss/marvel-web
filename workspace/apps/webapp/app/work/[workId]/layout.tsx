@@ -4,6 +4,7 @@ import dbClient from 'apps/webapp/utils/dbConnector';
 import EditMeta from './EditMeta/EditMeta';
 import Tabs from './Tabs';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const getWork = async (id: string) => {
   try {
@@ -36,6 +37,9 @@ const getWork = async (id: string) => {
             id: true,
             reviewStatus: true,
           },
+          orderBy: {
+            createdAt: 'asc',
+          },
         },
         totalLevels: true,
         typeOfWork: true,
@@ -55,40 +59,50 @@ export const dynamicParams = true;
 
 export default async function layout({ children, params }) {
   const work = await getWork(params?.workId);
+
+  const title =
+    work?.typeOfWork === 'COURSE' ? (
+      <>
+        {work.People.filter((p) => p?.role === 'AUTHOR')
+          .map((a) => a?.person?.name?.split(' ')[0])
+          .join(' and ')}
+        's <span className="whitespace-nowrap">{work?.courseCode}</span> course
+        work.{' '}
+        <span className="text-sm bg-p-2 rounded-lg p-2">
+          {`Lv ${work?.Reports?.length}`}
+        </span>
+      </>
+    ) : (
+      work?.name
+    );
+
   return (
     <Window className={'pt-5 md:pt-12 pb-40'}>
       {/* whole thing  */}
       <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
         {/* hero box  */}
+        <Image
+          className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
+          width={1000}
+          height={200}
+          alt={'cover photo'}
+          src={work?.coverPhoto || ''}
+        />
+
         <Paper
           shadow
           border
-          className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-fit"
+          className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-min"
         >
           {/* left box  */}
-          <Paper className="relative flex flex-col justify-between bg-p-1 w-full md:w-1/2 md:h-full p-5 ">
+          <Paper className="relative flex flex-col justify-between dark:bg-p-1 w-full md:w-1/2 max-h-min p-5 ">
             <div>
-              <p className="text-p-6 tracking-widest">{work?.typeOfWork}WORK</p>
-              <h1 className="text-4xl my-2">
-                {work?.typeOfWork == 'COURSE' ? (
-                  <>
-                    {work.People.filter((p) => p?.role === 'AUTHOR')
-                      .map((a) => a?.person?.name?.split(' ')[0])
-                      .join(' and ')}
-                    's{' '}
-                    <span className="whitespace-nowrap">
-                      {work?.courseCode}
-                    </span>{' '}
-                    course work.{' '}
-                    <span className="text-sm bg-p-2 rounded-lg p-2">
-                      {`Lv ${work?.Reports?.length}`}
-                    </span>
-                  </>
-                ) : (
-                  work?.name
-                )}
-              </h1>
-              <p className="text-p-8 my-5">{work?.note}</p>
+              <p className="text-p-6 tracking-widest">
+                {work?.typeOfWork}
+                {work?.typeOfWork === 'COURSE' ? 'WORK' : ''}
+              </p>
+              <h1 className="text-4xl my-2">{title}</h1>
+              <p className="text-p-8 mt-5">{work?.note}</p>
             </div>
             <div className="overflow-x-auto pt-5 -mx-5 flex-grow-0 -mb-5">
               <table className="w-full text-sm text-left whitespace-nowrap">
@@ -100,14 +114,16 @@ export default async function layout({ children, params }) {
                       key={i}
                       className="border-t p-5 border-p-3 dark:border-p-6"
                     >
-                      <td className="flex gap-3 items-center py-3 px-5 text-base">
-                        <Avatar
-                          className="w-6"
-                          alt={p?.person?.name}
-                          src={p?.person?.profilePic}
-                        />
-                        {p?.person?.name}
-                      </td>
+                      <Link key={i} href={`/u/${p?.person?.slug}`}>
+                        <td className="flex gap-3 items-center py-3 px-5 text-base">
+                          <Avatar
+                            className="w-6"
+                            alt={p?.person?.name}
+                            src={p?.person?.profilePic}
+                          />
+                          {p?.person?.name}
+                        </td>
+                      </Link>
                       <td className="px-5 py-3 text-xs">{p?.role}</td>
                       <td className="px-5 py-3 text-xs">{p?.status}</td>
                     </tr>
@@ -119,7 +135,13 @@ export default async function layout({ children, params }) {
           </Paper>
           <Paper className="w-full md:w-1/2 md:h-full flex-1">
             {work?.coverPhoto && (
-              <img src={work?.coverPhoto} alt={work?.name} />
+              <Image
+                width={1000}
+                height={1000}
+                className="max-h-min object-cover w-full h-full"
+                src={work?.coverPhoto || ''}
+                alt={work?.name}
+              />
             )}
           </Paper>
         </Paper>

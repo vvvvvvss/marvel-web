@@ -44,6 +44,7 @@ const getReport = async (workId: string) => {
       reviewStatus: true,
       feedback: true,
       createdAt: true,
+      isOverview: true,
     },
   });
   return JSON.parse(JSON.stringify({ report, work }));
@@ -57,8 +58,8 @@ export default async function page({ params }) {
         <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">
           <>
             <h1 className="text-2xl">
-              {work?.typeOfWork === 'PROJECT' ? 'Stage' : 'Level'} 1 report is
-              yet to be written.
+              {work?.typeOfWork === 'PROJECT' ? 'Overview' : 'Level 1 report'}{' '}
+              is yet to be written.
             </h1>
 
             <img
@@ -89,14 +90,18 @@ export default async function page({ params }) {
               </Paper>
             )
           )}
-          <h2 className="text-4xl mb-5">{report?.title}</h2>
-          <p className="text-p-6">
-            {new Date(report?.createdAt)
-              ?.toLocaleDateString()
-              .split('/')
-              .join(' / ')}
-          </p>
-          <hr className="my-5 border-p-3" />
+          {!(work?.typeOfWork === 'PROJECT' && report?.isOverview) && (
+            <>
+              <h2 className="text-4xl mb-5">{report?.title}</h2>
+              <p className="text-p-6">
+                {new Date(report?.createdAt)
+                  ?.toLocaleDateString()
+                  .split('/')
+                  .join(' / ')}
+              </p>
+              <hr className="my-5 border-p-3" />
+            </>
+          )}
           <MarkdownRender content={report?.content} />
           <div className="w-full flex justify-end gap-5 flex-wrap my-5">
             <ReportReviewer report={report} work={work} />

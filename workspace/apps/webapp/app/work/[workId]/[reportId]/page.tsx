@@ -44,6 +44,7 @@ const getReport = async (workId: string, stageId: string) => {
       reviewStatus: true,
       feedback: true,
       createdAt: true,
+      isOverview: true,
     },
   });
   return JSON.parse(JSON.stringify({ report, work }));
@@ -66,7 +67,10 @@ export default async function page({ params, searchParams }) {
             <>
               <h1 className="text-2xl">
                 {work?.typeOfWork === 'PROJECT' ? 'Stage' : 'Level'}{' '}
-                {work?.Reports?.length + 1} report is yet to be written.
+                {work?.typeOfWork === 'PROJECT'
+                  ? work?.Reports?.length
+                  : work?.Reports?.length + 1}{' '}
+                report is yet to be written.
               </h1>
               <img
                 className="rounded-lg max-w-full"

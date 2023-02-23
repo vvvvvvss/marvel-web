@@ -53,9 +53,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
   );
 
   if (
-    (sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
-      sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) &&
-    sessionUser?.slug !== authorSlug
+    sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
+    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
   ) {
     return (
       <>
@@ -70,16 +69,18 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
           >
             New Course Work
           </Button>
-          <Button
-            className="flex-1"
-            variant="outlined"
-            onClick={() => {
-              setFormType('PROJECT');
-              setDialogOpen((p) => !p);
-            }}
-          >
-            New Project Work
-          </Button>
+          {sessionUser?.slug !== authorSlug && (
+            <Button
+              className="flex-1"
+              variant="outlined"
+              onClick={() => {
+                setFormType('PROJECT');
+                setDialogOpen((p) => !p);
+              }}
+            >
+              New Project Work
+            </Button>
+          )}
         </div>
         {dialogOpen && (
           <FullScreenDialog open={dialogOpen} className="z-10">

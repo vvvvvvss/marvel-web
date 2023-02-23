@@ -23,11 +23,7 @@ const ReportWriter = ({ work }) => {
     content: '',
   });
 
-  const {
-    data: submitResult,
-    isLoading: isCreating,
-    mutate: createReport,
-  } = useMutation(
+  const { isLoading: isCreating, mutate: createReport } = useMutation(
     async () =>
       (
         await axios.post('/api/report/create?workId=' + work?.id, {
@@ -66,16 +62,20 @@ const ReportWriter = ({ work }) => {
               </IconButton>
 
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
-                <TextField
-                  id="title"
-                  required
-                  fullwidth
-                  placeholder="Title of the Report..."
-                  value={formData?.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                />
+                {!(
+                  work?.typeOfWork === 'PROJECT' && work?._count?.Reports === 0
+                ) && (
+                  <TextField
+                    id="title"
+                    required
+                    fullwidth
+                    placeholder="Title of the Report..."
+                    value={formData?.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                  />
+                )}
                 <MarkdownEditor
                   maxLength={15_000}
                   required

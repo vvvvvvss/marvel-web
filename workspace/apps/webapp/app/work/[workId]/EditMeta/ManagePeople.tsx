@@ -149,20 +149,21 @@ const ManagePeople = ({ work }) => {
                     {p?.name}
                   </td>
                   <td className="px-5 py-3 text-xs">
-                    {work?.typeOfWork === 'PROJECT' && (
-                      <Button
-                        onClick={() =>
-                          mutate({
-                            action: 'add-person',
-                            personId: p?.id,
-                            role: 'COORDINATOR',
-                            status: 'ACTIVE',
-                          })
-                        }
-                      >
-                        Add as Coordinator
-                      </Button>
-                    )}
+                    {work?.typeOfWork === 'PROJECT' &&
+                      ['CRDN', 'ADMIN'].includes(p?.scope) && (
+                        <Button
+                          onClick={() =>
+                            mutate({
+                              action: 'add-person',
+                              personId: p?.id,
+                              role: 'COORDINATOR',
+                              status: 'ACTIVE',
+                            })
+                          }
+                        >
+                          Add as Coordinator
+                        </Button>
+                      )}
                   </td>
                   <td className="px-5 py-3 text-xs">
                     <Button

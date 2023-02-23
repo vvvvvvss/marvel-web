@@ -21,7 +21,6 @@ export default async function create_article(
       api_secret: process.env.CLDNRY_API_SECRET,
       secure: true,
     });
-
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData: Formdata = req.body;
 
@@ -71,6 +70,12 @@ export default async function create_article(
           secure: true,
         })
       ).secure_url;
+    } else if (
+      (!formData?.coverPhoto || formData?.coverPhoto == '') &&
+      (!work?.coverPhoto || work?.coverPhoto !== '')
+    ) {
+      await cloudinary.uploader.destroy(`work_covers/${work?.id}`);
+      coverPhoto = null;
     } else {
       coverPhoto = work?.coverPhoto;
     }

@@ -72,17 +72,19 @@ const ReportEditor = ({ report, work }) => {
               </IconButton>
 
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
-                <TextField
-                  required
-                  id="title"
-                  fullwidth
-                  placeholder="Title of the Report..."
-                  value={formData?.title}
-                  onChange={(e) => {
-                    setFormData({ ...formData, title: e.target.value });
-                    setChanged(true);
-                  }}
-                />
+                {!(work?.typeOfWork === 'PROJECT' && report?.isOverview) && (
+                  <TextField
+                    required
+                    id="title"
+                    fullwidth
+                    placeholder="Title of the Report..."
+                    value={formData?.title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, title: e.target.value });
+                      setChanged(true);
+                    }}
+                  />
+                )}
                 <MarkdownEditor
                   required
                   maxLength={15_000}

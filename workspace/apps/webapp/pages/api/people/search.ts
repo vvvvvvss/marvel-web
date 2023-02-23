@@ -28,6 +28,11 @@ export default async function (
         slug: true,
         profilePic: true,
         id: true,
+        scope: {
+          where: {
+            OR: [{ scope: 'CRDN' }, { scope: 'ADMIN' }],
+          },
+        },
       },
       take: Number(req?.query?.limit) || 10,
     });
