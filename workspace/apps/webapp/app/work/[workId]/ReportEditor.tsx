@@ -14,7 +14,7 @@ import {
 } from '@marvel/web-ui';
 import { MarkdownEditor } from '@marvel/web-ui/client';
 import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const ReportEditor = ({ report, work }) => {
   const router = useRouter();
@@ -25,11 +25,6 @@ const ReportEditor = ({ report, work }) => {
     title: report?.title,
     content: report?.content,
   });
-  const stageId = useSearchParams().get('stage');
-
-  useEffect(() => {
-    setFormData({ title: report?.title, content: report?.content });
-  }, [stageId]);
 
   const { isLoading: isUpdating, mutate: updateReport } = useMutation(
     async () =>

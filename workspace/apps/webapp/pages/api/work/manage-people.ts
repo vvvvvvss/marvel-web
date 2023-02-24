@@ -39,6 +39,15 @@ export default async function level_report_action(
       },
     });
 
+    const person = await dbClient.people.findUnique({
+      where: {
+        id: args?.personId,
+      },
+      select: {
+        slug: true,
+      },
+    });
+
     const condition =
       //work is project and session user is one of the coordinators
       (work?.typeOfWork === 'PROJECT' &&
@@ -107,6 +116,9 @@ export default async function level_report_action(
     }
     //revalidate the page
     await res.revalidate(`/work/${work?.id}`);
+    if (args?.action === 'add-person' || args?.action === 'remove-person') {
+      await res.revalidate(`/u/${person?.slug}/works`);
+    }
 
     return res.status(201).json({
       message: `level report updated successfully`,

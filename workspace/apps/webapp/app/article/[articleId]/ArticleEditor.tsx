@@ -1,60 +1,62 @@
 'use client';
 
-import { Button, FullScreenDialog, IconButton, Paper } from '@marvel/web-ui';
-import { MarkdownEditor } from '@marvel/web-ui/client';
+import React from 'react';
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { TextField } from '@marvel/web-ui';
+import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import axios from 'axios';
+import {
+  Button,
+  TextField,
+  FullScreenDialog,
+  IconButton,
+  LoadingPulser,
+  Paper,
+} from '@marvel/web-ui';
+import { MarkdownEditor } from '@marvel/web-ui/client';
+import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { useRouter } from 'next/navigation';
-import axios, { AxiosError } from 'axios';
-import ImageCompressor from 'browser-image-compression';
-import ImageUploading from 'react-images-uploading';
-import { ImageListType } from 'react-images-uploading/dist/typings';
-import { AiOutlineMinusCircle as MinusIcon } from 'react-icons/ai';
 import { ArticleFormData } from 'apps/webapp/types';
-import { TypeOfArticle } from '@prisma/client';
+import ReactImageUploading, { ImageListType } from 'react-images-uploading';
+import ImageCompressor from 'browser-image-compression';
+import { AiOutlineMinusCircle as MinusIcon } from 'react-icons/ai';
 
-const Writer = ({ authorSlug }: { authorSlug: string }) => {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const session = useSession();
-  const sessionUser = session?.data?.user;
-  const [formData, setFormData] = useState<ArticleFormData>({
-    title: '',
-    caption: '',
-    tags: [],
-    content: '',
-    courseIds: [],
-    coverPhoto: '',
-  });
-  const [newTag, setNewTag] = useState<string>('');
-  const [formType, setFormType] = useState<TypeOfArticle>('BLOG');
+const ArticleEditor = ({ article }) => {
   const router = useRouter();
-
-  useEffect(() => {
-    setFormData({});
-  }, [formType]);
+  const sessionUser = useSession().data?.user;
+  const [modalOpen, setModalOpen] = useState(false);
+  const [changed, setChanged] = useState<boolean>(false);
+  const [newTag, setNewTag] = useState<string>('');
+  const [formData, setFormData] = useState<ArticleFormData>({
+    title: article?.title,
+    caption: article?.caption,
+    content: article?.content,
+    courseIds: article?.Courses?.map((c) => c?.courseId),
+    coverPhoto: article?.coverPhoto,
+    tags: article?.tags?.split(','),
+  });
 
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
     ['course-list'],
     async () => (await axios.post(`/api/course/get-list`)).data?.courseList,
-    { enabled: formType === 'RESOURCE' }
+    { enabled: article?.typeOfArticle === 'RESOURCE' }
   );
 
-  const { mutate: sendMutation, isLoading: isCreateLoading } = useMutation(
+  const { isLoading: isUpdating, mutate: updateArticle } = useMutation(
     async () =>
       (
-        await axios.post(`/api/article/create?type=${formType}`, {
+        await axios.post('/api/article/edit?id=' + article?.id, {
           ...formData,
         })
       ).data,
     {
-      onError: (e: AxiosError) =>
-        alert(e?.response?.data?.['message'] || 'Something went wrong.'),
       onSuccess: () => {
         router.refresh();
-        setDialogOpen(false);
+        setChanged(false);
+        setModalOpen((p) => !p);
+      },
+      onError: (data: any) => {
+        alert(data?.response?.data?.message);
       },
     }
   );
@@ -74,6 +76,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
       reader.readAsDataURL(compressedImage);
       reader.onloadend = () => {
         setFormData({ ...formData, coverPhoto: reader?.result });
+        setChanged(true);
       };
     } catch (error) {
       console.log(error);
@@ -87,83 +90,70 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     } else if (!formData?.content?.length) {
       alert('content cannot be empty');
       return;
-    } else if (formType === 'RESOURCE' && !formData?.courseIds?.length) {
+    } else if (
+      article?.typeOfArticle === 'RESOURCE' &&
+      !formData?.courseIds?.length
+    ) {
       alert('Resource articles must target atleast one course.');
       return;
     } else {
-      sendMutation();
+      updateArticle();
     }
   };
 
-  if (sessionUser?.slug === authorSlug) {
+  if (
+    article?.People?.filter((p) => p?.status !== 'PENDING')
+      .map((p) => p?.personId)
+      .includes(sessionUser?.id)
+  ) {
     return (
       <>
-        <div className="flex flex-wrap gap-5 flex-auto">
-          {sessionUser?.scope?.map((s) => s.scope)?.includes('WRITER') && (
-            <Button
-              className="flex-1"
-              variant="outlined"
-              onClick={() => {
-                setFormType('BLOG');
-                setDialogOpen((p) => !p);
-              }}
-            >
-              New Blog Post
-            </Button>
-          )}
-          {sessionUser?.scope?.map((s) => s.scope)?.includes('R_WRITER') && (
-            <Button
-              className="flex-1"
-              variant="outlined"
-              onClick={() => {
-                setFormType('RESOURCE');
-                setDialogOpen((p) => !p);
-              }}
-            >
-              New Resource Article
-            </Button>
-          )}
-        </div>
-        {dialogOpen && (
-          <FullScreenDialog open={dialogOpen} className="z-10">
-            <div className="w-full max-w-2xl py-24">
+        <Button variant="standard" onClick={() => setModalOpen(true)}>
+          Edit Article
+        </Button>
+        {modalOpen && (
+          <FullScreenDialog open={modalOpen}>
+            <div className="w-full max-w-2xl py-24 gap-5">
               <IconButton
-                className="mb-5"
-                onClick={() => setDialogOpen((p) => !p)}
+                onClick={() => {
+                  setModalOpen((p) => !p);
+                }}
               >
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
 
-              <form onSubmit={(e) => e.preventDefault()}>
+              <form className="my-5" onSubmit={(e) => e.preventDefault()}>
                 <TextField
                   fullwidth
                   id="title"
                   placeholder="Title of the Article"
                   type={'text'}
                   value={formData?.title}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData((p) => ({
                       ...p,
                       title: e.target.value,
-                    }))
-                  }
+                    }));
+                    setChanged(true);
+                  }}
                   maxLength={50}
                   required
                   minLength={3}
                 />
                 <TextField
-                  className="mt-5"
                   fullwidth
+                  className="mt-5"
                   id="caption"
                   placeholder="A short aption for your article..."
                   type={'text'}
                   value={formData?.caption}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData((p) => ({
                       ...p,
                       caption: e.target.value,
-                    }))
-                  }
+                    }));
+                    setChanged(true);
+                  }}
                   maxLength={200}
                   required
                   minLength={3}
@@ -173,12 +163,13 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   required
                   placeholder="Start writing..."
                   value={formData?.content}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, content: e?.target?.value }))
-                  }
+                  onChange={(e) => {
+                    setFormData((p) => ({ ...p, content: e?.target?.value }));
+                    setChanged(true);
+                  }}
                 />
                 <hr className="w-full my-5" />
-                <ImageUploading
+                <ReactImageUploading
                   value={formData?.coverPhoto as ImageListType}
                   onChange={handleImageUpload}
                   dataURLKey="data_url"
@@ -190,6 +181,8 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
                         onClick={() => {
                           setFormData((p) => ({ ...p, coverPhoto: '' }));
+                          setChanged(true);
+
                           onImageUpload();
                         }}
                         {...dragProps}
@@ -209,14 +202,14 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                       )}
                     </div>
                   )}
-                </ImageUploading>
+                </ReactImageUploading>
                 {/* tags  */}
-                <Paper className="mb-5 flex flex-wrap gap-5 mt-5">
+                <Paper className="my-5 flex flex-wrap gap-5">
                   <TextField
                     id="tags"
                     className="w-full flex-initial"
                     value={newTag}
-                    disabled={isCreateLoading}
+                    disabled={isUpdating}
                     onChange={(e) => {
                       if (e.target.value.slice(-1) === ',' && newTag !== '') {
                         if (
@@ -236,6 +229,8 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                               e.target?.value?.slice(0, -1).toString(),
                             ],
                           });
+                          setChanged(true);
+
                           setNewTag('');
                         } else {
                           alert('Maximum number of tags is 8');
@@ -251,20 +246,21 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                       className="flex flex-nowrap items-center gap-2"
                       key={i}
                       variant="outlined"
-                      disabled={isCreateLoading}
-                      onClick={() =>
+                      disabled={isUpdating}
+                      onClick={() => {
                         setFormData({
                           ...formData,
                           tags: formData?.tags.filter((i) => i !== tag),
-                        })
-                      }
+                        });
+                        setChanged(true);
+                      }}
                     >
                       <MinusIcon />
                       {tag}
                     </Button>
                   ))}
                 </Paper>
-                {formType == 'RESOURCE' && (
+                {article?.typeOfArticle == 'RESOURCE' && (
                   <>
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses
@@ -299,6 +295,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                                         course?.id,
                                       ],
                                 }));
+                                setChanged(true);
                               }}
                               border={formData?.courseIds?.includes(course?.id)}
                               className={`rounded-lg ${
@@ -323,13 +320,15 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   <Button
                     onClick={() => handleSubmit()}
                     disabled={
-                      isCreateLoading ||
+                      !changed ||
+                      isUpdating ||
                       !formData?.content ||
                       !formData?.title ||
-                      (formType === 'RESOURCE' && !formData?.courseIds)
+                      (article?.typeOfArticle === 'RESOURCE' &&
+                        !formData?.courseIds)
                     }
                   >
-                    Create Article
+                    Update Article
                   </Button>
                 </div>
               </form>
@@ -343,4 +342,4 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
   }
 };
 
-export default Writer;
+export default ArticleEditor;

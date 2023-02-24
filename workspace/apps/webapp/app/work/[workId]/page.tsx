@@ -71,7 +71,7 @@ export default async function page({ params }) {
           </>
         </div>
       ) : (
-        <article className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl">
           {report?.reviewStatus === 'PENDING' ? (
             <Paper
               border
@@ -107,7 +107,7 @@ export default async function page({ params }) {
             <ReportReviewer report={report} work={work} />
             <ReportEditor report={report} work={work} />
           </div>
-        </article>
+        </div>
       )}
     </div>
   );

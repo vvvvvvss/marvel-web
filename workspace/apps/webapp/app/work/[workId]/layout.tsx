@@ -76,6 +76,12 @@ export default async function layout({ children, params }) {
       work?.name
     );
 
+  const coverPhotoSrc = work?.coverPhoto
+    ? work?.coverPhoto?.slice(0, work?.coverPhoto?.search('upload') + 6) +
+      '/ar_1.77,c_crop' +
+      work?.coverPhoto?.slice(work?.coverPhoto?.search('upload') + 6)
+    : '';
+
   return (
     <Window className={'pt-5 md:pt-12 pb-40'}>
       {/* whole thing  */}
@@ -86,7 +92,7 @@ export default async function layout({ children, params }) {
           width={1000}
           height={200}
           alt={'cover photo'}
-          src={work?.coverPhoto || ''}
+          src={coverPhotoSrc}
         />
 
         <Paper
@@ -139,7 +145,7 @@ export default async function layout({ children, params }) {
                 width={1000}
                 height={1000}
                 className="max-h-min object-cover w-full h-full"
-                src={work?.coverPhoto || ''}
+                src={coverPhotoSrc}
                 alt={work?.name}
               />
             )}

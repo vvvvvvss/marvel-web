@@ -162,7 +162,8 @@ model Article {
   typeOfArticle TypeOfArticle
 
   title        String
-  tags         String
+  caption      String?           @db.TinyText
+  tags         String?           @db.VarChar(200)
   coverPhoto   String?
   content      String            @db.Text
   reviewStatus ReviewStatus

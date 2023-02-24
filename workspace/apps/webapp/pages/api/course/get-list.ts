@@ -8,6 +8,7 @@ export default async function (
   try {
     const courseList = await dbClient.course.findMany({
       select: {
+        id: true,
         courseCode: true,
         caption: true,
         totalLevels: true,
