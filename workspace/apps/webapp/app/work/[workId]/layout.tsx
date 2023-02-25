@@ -47,9 +47,7 @@ const getWork = async (id: string) => {
     });
     console.info({ info: 'got work' });
     return work;
-  } catch (error) {
-    throw new Error("Couldn't get data.");
-  }
+  } catch (error) {}
 };
 
 export async function generateStaticParams() {
