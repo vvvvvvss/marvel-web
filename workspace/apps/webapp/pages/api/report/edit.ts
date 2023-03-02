@@ -24,7 +24,6 @@ export default async function create_level_report(
         isOverview: true,
         work: {
           select: {
-            typeOfWork: true,
             People: {
               where: {
                 status: 'ACTIVE',
@@ -73,19 +72,17 @@ export default async function create_level_report(
     });
 
     await res.revalidate(
-      `/work/${existingReport?.workId}/${
-        existingReport?.isOverview ? '' : existingReport?.id
+      `/work/${existingReport?.workId}${
+        existingReport?.isOverview ? '' : `/${existingReport?.id}`
       }`
     );
 
-    return res.json({
-      status: 201,
+    return res.status(201).json({
       message: `level report updated successfully`,
     });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
+    return res.status(500).json({
       message: `Couldn't updated level report`,
       error: error?.message,
     });

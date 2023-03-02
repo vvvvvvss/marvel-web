@@ -36,7 +36,7 @@ export default async function create_level_report(
       },
     });
     const senderIsActiveAuthor = work.People?.map((p) => p?.personId).includes(
-      session?.user?.id
+      session?.user?.id as string
     );
 
     if (!senderIsActiveAuthor)

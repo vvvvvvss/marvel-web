@@ -11,15 +11,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "types": [
-      "jest",
-      "node"
-    ],
+    "types": ["jest", "node"],
     "plugins": [
       {
         "name": "next"
       }
     ]
+    // "strictNullChecks": true
   },
   "include": [
     "**/*.ts",
@@ -31,8 +29,5 @@
     "../../dist/apps/webapp/.next/types/**/*.ts",
     "../../apps/webapp/.next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "jest.config.ts"
-  ]
+  "exclude": ["node_modules", "jest.config.ts"]
 }
