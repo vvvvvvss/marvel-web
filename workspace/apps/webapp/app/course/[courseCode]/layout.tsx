@@ -3,6 +3,7 @@ import { Avatar } from '../../../components/Avatar';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import Image from 'next/image';
 import Link from 'next/link';
+import EditMeta from './EditMeta/EditMeta';
 
 const getCourse = async (id: string) => {
   try {
@@ -104,6 +105,7 @@ export default async function layout({ children, params }) {
               />
             )}
           </Paper>
+          {/* <EditMeta /> */}
         </Paper>
         <div className="w-full">{children}</div>
       </div>

@@ -2,6 +2,7 @@ import { MarkdownRender, Paper } from '@marvel/web-ui';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import axios from 'axios';
 import ContentsIndex from './ContentsIndex';
+import { Octokit } from '@octokit/core';
 
 const getSyllabus = async (courseCode: string) => {
   const course = await dbClient.course.findUnique({
@@ -14,20 +15,19 @@ const getSyllabus = async (courseCode: string) => {
     },
   });
   const repoName = course?.repoURL?.slice(
-    course?.repoURL.search('github.com') + 10
+    course?.repoURL.search('github.com') + 11 //number of chars in github.com + 1
   );
-
-  const filesMetaData = (
-    await axios.get(
-      'https://api.github.com/repos' + repoName + '/git/trees/main?recursive=1',
-      {
-        headers: {
-          Authorization: `Basic ${process.env?.GITHUB_CLIENT_ID}:${process.env?.GITHUB_CLIENT_SECRET}`,
-        },
-      }
-    )
+  const owner = repoName?.split('/')?.[0];
+  const repo = repoName?.split('/')?.[1];
+  const octokt = new Octokit({ auth: process.env?.GITHUB_PAT });
+  const filesMetaData: any = (
+    await octokt.request('GET /repos/{owner}/{repo}/contents/{path}', {
+      owner: owner as string,
+      repo: repo as string,
+      path: '',
+    })
   ).data;
-  const levels = filesMetaData?.['tree']?.filter((e) =>
+  const levels = filesMetaData?.filter((e) =>
     /^LEVEL\d+\.md$/.test(e?.['path'])
   );
   if (course?.totalLevels !== levels?.length) {
@@ -42,15 +42,8 @@ const getSyllabus = async (courseCode: string) => {
   }
 
   const content = (
-    await Promise.all(
-      levels?.map((l) =>
-        axios.get(
-          'https://raw.githubusercontent.com' + repoName + '/main/' + l?.path
-        )
-      )
-    )
+    await Promise.all(levels?.map((l) => axios.get(l?.download_url)))
   ).map((response) => Buffer.from(response?.data).toString());
-
   return { content, course };
 };
 
@@ -61,11 +54,9 @@ export default async function page({ params }) {
       <div className="w-full max-w-2xl mt-5">
         <ContentsIndex course={course} />
         {content?.map((c, i) => (
-          <div key={i} className="w-full">
+          <div id={`${i + 1}`} key={i} className="w-full">
             <hr className="border-p-4 my-5" />
-            <h1 id={'#' + i} className="text-xl font-mono text-p-6">
-              Level {i + 1}
-            </h1>
+            <h1 className="text-xl font-mono text-p-6">Level {i + 1}</h1>
             <hr className="border-p-4 my-5" />
             <MarkdownRender content={c} />
           </div>

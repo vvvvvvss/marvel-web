@@ -144,7 +144,7 @@ export default async function layout({ children, params }) {
                 height={1000}
                 className="max-h-min object-cover w-full h-full"
                 src={coverPhotoSrc}
-                alt={work?.name}
+                alt={work?.name as string}
               />
             )}
           </Paper>
