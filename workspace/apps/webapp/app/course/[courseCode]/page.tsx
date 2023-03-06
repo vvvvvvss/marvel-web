@@ -1,106 +1,76 @@
 import { MarkdownRender, Paper } from '@marvel/web-ui';
 import dbClient from 'apps/webapp/utils/dbConnector';
+import axios from 'axios';
+import ContentsIndex from './ContentsIndex';
 
-const getReport = async (workId: string) => {
-  const work = await dbClient.work.findUnique({
+const getSyllabus = async (courseCode: string) => {
+  const course = await dbClient.course.findUnique({
     where: {
-      id: workId,
+      courseCode: courseCode,
     },
     select: {
-      courseCode: true,
-      id: true,
-      People: {
-        select: {
-          personId: true,
-          role: true,
-          status: true,
-        },
-      },
-      _count: {
-        select: {
-          Reports: true,
-        },
-      },
-      typeOfWork: true,
+      repoURL: true,
       totalLevels: true,
     },
   });
-  const report = await dbClient.report.findFirst({
-    where: {
-      workId: workId,
-    },
-    take: 1,
-    orderBy: {
-      createdAt: 'asc',
-    },
-    select: {
-      title: true,
-      content: true,
-      id: true,
-      reviewStatus: true,
-      feedback: true,
-      createdAt: true,
-      isOverview: true,
-    },
-  });
-  return JSON.parse(JSON.stringify({ report, work }));
+  const repoName = course?.repoURL?.slice(
+    course?.repoURL.search('github.com') + 10
+  );
+
+  const filesMetaData = (
+    await axios.get(
+      'https://api.github.com/repos' + repoName + '/git/trees/main?recursive=1',
+      {
+        headers: {
+          Authorization: `Basic ${process.env?.GITHUB_CLIENT_ID}:${process.env?.GITHUB_CLIENT_SECRET}`,
+        },
+      }
+    )
+  ).data;
+  const levels = filesMetaData?.['tree']?.filter((e) =>
+    /^LEVEL\d+\.md$/.test(e?.['path'])
+  );
+  if (course?.totalLevels !== levels?.length) {
+    await dbClient.course.update({
+      where: {
+        courseCode: courseCode,
+      },
+      data: {
+        totalLevels: levels?.length,
+      },
+    });
+  }
+
+  const content = (
+    await Promise.all(
+      levels?.map((l) =>
+        axios.get(
+          'https://raw.githubusercontent.com' + repoName + '/main/' + l?.path
+        )
+      )
+    )
+  ).map((response) => Buffer.from(response?.data).toString());
+
+  return { content, course };
 };
 
 export default async function page({ params }) {
-  const { report, work } = await getReport(params?.workId);
+  const { content, course } = await getSyllabus(params?.courseCode);
   return (
     <div className="flex flex-col w-full gap-5 items-center">
-      {!report ? (
-        <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">
-          <>
-            <h1 className="text-2xl">
-              {work?.typeOfWork === 'PROJECT' ? 'Overview' : 'Level 1 report'}{' '}
-              is yet to be written.
+      <div className="w-full max-w-2xl mt-5">
+        <ContentsIndex course={course} />
+        {content?.map((c, i) => (
+          <div key={i} className="w-full">
+            <hr className="border-p-4 my-5" />
+            <h1 id={'#' + i} className="text-xl font-mono text-p-6">
+              Level {i + 1}
             </h1>
-
-            <img
-              className="rounded-lg max-w-full"
-              src="https://media.tenor.com/w-L80nXWEjoAAAAd/pen-in-flames-umineko.gif"
-              alt="Level report is yet to be written"
-            />
-          </>
-        </div>
-      ) : (
-        <div className="w-full max-w-2xl">
-          {report?.reviewStatus === 'PENDING' ? (
-            <Paper
-              border
-              className="rounded-lg p-5 mb-5 bg-[#ffdf7f] text-[#4b4b00] dark:bg-[#3a3a00] dark:text-[#ffd262]"
-            >
-              This Report is yet to be approved by a Coordinator.
-            </Paper>
-          ) : (
-            report?.reviewStatus == 'FLAGGED' && (
-              <Paper
-                border
-                className="rounded-lg p-5 mb-5 bg-[#ff7f7f] text-[#4b0000] dark:bg-[#3a0000] dark:text-[#ff6a6a]"
-              >
-                This Report is flagged by a Coordinator and it probably requires
-                some changes to be approved.
-              </Paper>
-            )
-          )}
-          {!(work?.typeOfWork === 'PROJECT' && report?.isOverview) && (
-            <>
-              <h2 className="text-4xl mb-5">{report?.title}</h2>
-              <p className="text-p-6">
-                {new Date(report?.createdAt)
-                  ?.toLocaleDateString()
-                  .split('/')
-                  .join(' / ')}
-              </p>
-              <hr className="my-5 border-p-3" />
-            </>
-          )}
-          <MarkdownRender content={report?.content} />
-          <div className="w-full flex justify-end gap-5 flex-wrap my-5"></div>
-        </div>
-      )}
+            <hr className="border-p-4 my-5" />
+            <MarkdownRender content={c} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

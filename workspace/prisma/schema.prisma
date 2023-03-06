@@ -63,7 +63,9 @@ model Course {
   courseCode     String                 @unique
   courseDuration String
   caption        String
+  coverPhoto     String?
   totalLevels    Int
+  repoURL        String                 @default("")
   rankingScore   Int                    @default(1)
   createdAt      DateTime               @default(now())
   updatedAt      DateTime               @updatedAt

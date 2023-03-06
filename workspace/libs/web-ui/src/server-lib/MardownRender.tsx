@@ -62,7 +62,7 @@ export const MarkdownRender = memo(
               props: {
                 target: '_blank',
                 rel: 'noopener noreferrer',
-                className: 'text-base text-s-7 underline hover:text-s-10',
+                className: 'text-base text-s-6 hover:underline',
               },
             },
             img: { props: { className: 'my-5 rounded-lg w-full ' } },
