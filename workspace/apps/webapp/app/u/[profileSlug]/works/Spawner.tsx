@@ -179,7 +179,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                       isLoading ||
                       (formType === 'COURSE' && !formData?.selectedCourse) ||
                       (formType === 'PROJECT' &&
-                        formData?.projectName?.trim().length < 4)
+                        (formData?.projectName || '')?.trim()?.length < 4)
                     }
                   >
                     {formType === 'COURSE'
@@ -193,6 +193,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
         )}
       </>
     );
+  } else {
+    return <></>;
   }
 };
 

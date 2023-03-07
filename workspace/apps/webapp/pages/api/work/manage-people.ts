@@ -51,7 +51,9 @@ export default async function level_report_action(
     const condition =
       //work is project and session user is one of the coordinators
       (work?.typeOfWork === 'PROJECT' &&
-        work?.People.map((p) => p?.personId).includes(session?.user?.id)) ||
+        work?.People.map((p) => p?.personId).includes(
+          session?.user?.id as string
+        )) ||
       //work is coursework and session user is a coordinator
       (work?.typeOfWork === 'COURSE' &&
         session?.user?.scope?.map((s) => s.scope).includes('CRDN')) ||
@@ -87,7 +89,10 @@ export default async function level_report_action(
         data: {
           People: {
             delete: {
-              personId_workId: { personId: args?.personId, workId: work?.id },
+              personId_workId: {
+                personId: args?.personId,
+                workId: work?.id as string,
+              },
             },
           },
         },
@@ -103,7 +108,7 @@ export default async function level_report_action(
               where: {
                 personId_workId: {
                   personId: args?.personId,
-                  workId: work?.id,
+                  workId: work?.id as string,
                 },
               },
               data: {
@@ -121,12 +126,12 @@ export default async function level_report_action(
     }
 
     return res.status(201).json({
-      message: `level report updated successfully`,
+      message: `updated successfully`,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: `Couldn't review level report`,
+      message: `Couldn't update`,
       error: error?.message,
     });
   }

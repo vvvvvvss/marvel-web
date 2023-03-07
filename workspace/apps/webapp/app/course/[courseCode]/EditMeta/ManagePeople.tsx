@@ -3,11 +3,9 @@ import { Avatar } from 'apps/webapp/components/Avatar';
 import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { HiUserAdd as PlusIcon } from 'react-icons/hi';
-import { Role, Status } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
-const ManagePeople = ({ work }) => {
+const ManagePeople = ({ course }) => {
   const router = useRouter();
   const [search, setSearch] = useState('');
 
@@ -19,22 +17,20 @@ const ManagePeople = ({ work }) => {
     ['people', search],
     async () =>
       (await axios.get('/api/people/search?q=' + search + '&limit=5')).data
-        ?.people,
+        ?.data,
     {
       enabled: false,
     }
   );
   const peopleList = peopleFromSearch?.filter(
-    (p) => !work?.People?.map((p) => p?.personId)?.includes(p?.id)
+    (p) => !course?.Coordinators?.map((p) => p?.personId)?.includes(p?.id)
   );
   const { data, isLoading, mutate } = useMutation(
     async (args: {
-      action: 'add-person' | 'remove-person' | 'change-status';
+      action: 'add-person' | 'remove-person';
       personId: string;
-      status: Status;
-      role: Role;
     }) =>
-      await axios.post(`/api/work/manage-people?workId=${work?.id}`, {
+      await axios.post(`/api/course/manage-people?courseId=${course?.id}`, {
         ...args,
       }),
     {
@@ -42,7 +38,6 @@ const ManagePeople = ({ work }) => {
       onError: (data: AxiosError) => alert(data?.response?.data?.['message']),
     }
   );
-
   return (
     <Paper
       border
@@ -55,67 +50,32 @@ const ManagePeople = ({ work }) => {
       <div className="overflow-x-auto w-full">
         <table className="w-full whitespace-nowrap">
           <tbody>
-            {work?.People?.sort((p) => (p?.role === 'AUTHOR' ? -1 : 1))?.map(
-              (p, i) => (
-                <tr key={i} className="border-y p-5 border-p-5 dark:border-p-3">
-                  <td className="flex gap-3 items-center py-3 px-5 text-base">
-                    <Avatar
-                      className="w-6"
-                      alt={p?.person?.name}
-                      src={p?.person?.profilePic}
-                    />
-                    {p?.person?.name}
-                  </td>
-                  <td className="px-5 py-3 text-xs">{p?.role}</td>
-                  <td className="px-5 py-3 text-xs">
-                    <select
-                      className="block bg-transparent py-1 border-0 border-b"
-                      defaultValue={p?.status}
-                      onChange={(e) =>
-                        mutate({
-                          action: 'change-status',
-                          personId: p?.personId,
-                          role: p?.role,
-                          status: e?.target?.value as Status,
-                        })
-                      }
-                    >
-                      <option className="bg-p-0" value={'ACTIVE'}>
-                        ACTIVE
-                      </option>
-                      <option className="bg-p-0" value={'INACTIVE'}>
-                        INACTIVE
-                      </option>
-                    </select>
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() =>
-                        mutate({
-                          action: 'remove-person',
-                          personId: p?.personId,
-                          role: p?.role,
-                          status: p?.status,
-                        })
-                      }
-                      disabled={
-                        (p?.role === 'AUTHOR' &&
-                          work?.People?.filter(
-                            (p) => p?.role == 'AUTHOR' && p?.status == 'ACTIVE'
-                          ).length <= 1) ||
-                        (p?.role === 'COORDINATOR' &&
-                          work?.People?.filter(
-                            (p) =>
-                              p?.role == 'COORDINATOR' && p?.status == 'ACTIVE'
-                          ).length <= 1)
-                      }
-                    >
-                      Remove
-                    </Button>
-                  </td>
-                </tr>
-              )
-            )}
+            {course?.Coordinators?.map((p, i) => (
+              <tr key={i} className="border-y p-5 border-p-5 dark:border-p-3">
+                <td className="flex gap-3 items-center py-3 px-5 text-base">
+                  <Avatar
+                    className="w-6"
+                    alt={p?.person?.name}
+                    src={p?.person?.profilePic}
+                  />
+                  {p?.person?.name}
+                </td>
+                <td className="px-5 py-3 text-xs">{p?.role}</td>
+                <td>
+                  <Button
+                    onClick={() =>
+                      mutate({
+                        action: 'remove-person',
+                        personId: p?.personId,
+                      })
+                    }
+                    disabled={course?.Coordinators?.length <= 1}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -149,35 +109,20 @@ const ManagePeople = ({ work }) => {
                     {p?.name}
                   </td>
                   <td className="px-5 py-3 text-xs">
-                    {work?.typeOfWork === 'PROJECT' &&
-                      ['CRDN', 'ADMIN'].includes(p?.scope) && (
-                        <Button
-                          onClick={() =>
-                            mutate({
-                              action: 'add-person',
-                              personId: p?.id,
-                              role: 'COORDINATOR',
-                              status: 'ACTIVE',
-                            })
-                          }
-                        >
-                          Add as Coordinator
-                        </Button>
-                      )}
-                  </td>
-                  <td className="px-5 py-3 text-xs">
-                    <Button
-                      onClick={() =>
-                        mutate({
-                          action: 'add-person',
-                          personId: p?.id,
-                          role: 'AUTHOR',
-                          status: 'ACTIVE',
-                        })
-                      }
-                    >
-                      Add as Author
-                    </Button>
+                    {['CRDN', 'ADMIN'].some((s) =>
+                      p?.scope?.map((s) => s?.scope)?.includes(s)
+                    ) && (
+                      <Button
+                        onClick={() =>
+                          mutate({
+                            action: 'add-person',
+                            personId: p?.id,
+                          })
+                        }
+                      >
+                        Add as Coordinator
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}

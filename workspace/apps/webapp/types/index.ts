@@ -8,3 +8,16 @@ export type ArticleFormData = {
   tags?: string[];
   courseIds?: string[];
 };
+
+export type CourseFormData = {
+  courseDuration: string;
+  caption: string;
+  coverPhoto?: string | ArrayBuffer;
+  repoURL: string;
+};
+
+export type WorkFormData = {
+  name: string;
+  note?: string;
+  coverPhoto?: string | ArrayBuffer;
+};

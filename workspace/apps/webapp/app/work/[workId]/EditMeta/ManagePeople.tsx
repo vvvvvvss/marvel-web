@@ -3,7 +3,6 @@ import { Avatar } from 'apps/webapp/components/Avatar';
 import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { HiUserAdd as PlusIcon } from 'react-icons/hi';
 import { Role, Status } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
@@ -19,7 +18,7 @@ const ManagePeople = ({ work }) => {
     ['people', search],
     async () =>
       (await axios.get('/api/people/search?q=' + search + '&limit=5')).data
-        ?.people,
+        ?.data,
     {
       enabled: false,
     }
@@ -150,7 +149,9 @@ const ManagePeople = ({ work }) => {
                   </td>
                   <td className="px-5 py-3 text-xs">
                     {work?.typeOfWork === 'PROJECT' &&
-                      ['CRDN', 'ADMIN'].includes(p?.scope) && (
+                      ['CRDN', 'ADMIN'].some((s) =>
+                        p?.scope?.map((s) => s?.scope)?.includes(s)
+                      ) && (
                         <Button
                           onClick={() =>
                             mutate({

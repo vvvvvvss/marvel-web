@@ -16,21 +16,17 @@ import ManagePeople from './ManagePeople';
 import { useMutation } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { CourseFormData } from 'apps/webapp/types';
 
-type Formdata = {
-  name: string;
-  note?: string;
-  coverPhoto?: string | ArrayBuffer;
-};
-
-const EditMeta = ({ work }) => {
+const EditMeta = ({ course }) => {
   const sessionUser = useSession()?.data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
-  const [copy, setCopy] = useState<Formdata>({
-    name: work?.name,
-    note: work?.note,
-    coverPhoto: work?.coverPhoto,
+  const [copy, setCopy] = useState<CourseFormData>({
+    courseDuration: course?.courseDuration,
+    caption: course?.caption,
+    coverPhoto: course?.coverPhoto,
+    repoURL: course?.repoURL,
   });
   const [changed, setChanged] = useState(false);
 
@@ -46,15 +42,18 @@ const EditMeta = ({ work }) => {
     reader.onloadend = () => {
       setCopy({
         ...copy,
-        coverPhoto: reader?.result as Formdata['coverPhoto'],
+        coverPhoto: reader?.result as CourseFormData['coverPhoto'],
       });
     };
   };
 
   const { data, isLoading, mutate } = useMutation(
     async () =>
-      (await axios.post('/api/work/edit-meta?workId=' + work?.id, { ...copy }))
-        .data,
+      (
+        await axios.post('/api/course/edit-meta?courseId=' + course?.id, {
+          ...copy,
+        })
+      ).data,
     {
       onError: (e: AxiosError) => alert(e.response?.data?.['message']),
       onSuccess: (data: any) => {
@@ -65,16 +64,11 @@ const EditMeta = ({ work }) => {
   );
 
   //button will be visible to:
-  //those who are active members of the work.
-  //if its a coursework, then to regular coordinators
+  //those who are coordinators of the course.
   //and admins
   if (
-    work?.People?.filter((p) => p?.status == 'ACTIVE')
-      ?.map((p) => p?.personId)
-      .includes(sessionUser?.id) ||
     //work is coursework and session user is a coordinator
-    (work?.typeOfWork === 'COURSE' &&
-      sessionUser?.scope?.map((s) => s.scope).includes('CRDN')) ||
+    course?.Coodinators?.map((p) => p?.personId).includes(sessionUser?.id) ||
     //session user is an admin
     sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
   ) {
@@ -106,35 +100,46 @@ const EditMeta = ({ work }) => {
                 className="my-5 flex flex-col pb-56"
                 onSubmit={(e) => e.preventDefault()}
               >
-                {work?.typeOfWork === 'PROJECT' && (
-                  <>
-                    <label htmlFor="name" className="text-3xl py-3">
-                      Project Name
-                    </label>
-                    <TextField
-                      id="name"
-                      value={copy?.name}
-                      onChange={(e) => {
-                        setCopy({ ...copy, name: e.target?.value });
-                        setChanged(true);
-                      }}
-                      placeholder="Project name"
-                      maxLength={60}
-                    />
-                  </>
-                )}
+                <>
+                  <label htmlFor="name" className="text-3xl py-3">
+                    GitHub Repo URL
+                  </label>
+                  <TextField
+                    id="repoURL"
+                    value={copy?.repoURL}
+                    onChange={(e) => {
+                      setCopy({ ...copy, repoURL: e.target?.value });
+                      setChanged(true);
+                    }}
+                    placeholder="link to the GitHub Repo that has course data."
+                    maxLength={60}
+                  />
+                </>
                 <label htmlFor="caption" className="text-3xl py-3">
                   Caption
                 </label>
                 <TextField
                   id="caption"
-                  value={copy?.note}
+                  value={copy?.caption}
                   onChange={(e) => {
-                    setCopy({ ...copy, note: e.target?.value });
+                    setCopy({ ...copy, caption: e.target?.value });
                     setChanged(true);
                   }}
-                  placeholder="(Optional). A short caption..."
+                  placeholder="Caption..."
                   maxLength={200}
+                />
+                <label htmlFor="caption" className="text-3xl py-3">
+                  Course duration
+                </label>
+                <TextField
+                  id="duration"
+                  value={copy?.courseDuration}
+                  onChange={(e) => {
+                    setCopy({ ...copy, courseDuration: e.target?.value });
+                    setChanged(true);
+                  }}
+                  placeholder="Course duration"
+                  maxLength={20}
                 />
                 <ReactImageUploading
                   value={copy?.coverPhoto as unknown as ImageListType}
@@ -177,15 +182,7 @@ const EditMeta = ({ work }) => {
                   Update
                 </Button>
                 <hr className="my-5 border-r-p-4 dark:border-p-4" />
-                {/* amoung the conditions valid till here, exclude work authors. 
-                and include admins
-                */}
-                {(!work?.People?.filter((p) => p?.role == 'AUTHOR')
-                  ?.map((p) => p?.personId)
-                  ?.includes(sessionUser?.id) ||
-                  sessionUser?.scope
-                    ?.map((s) => s.scope)
-                    ?.includes('ADMIN')) && <ManagePeople work={work} />}
+                <ManagePeople course={course} />
               </form>
             </div>
           </FullScreenDialog>

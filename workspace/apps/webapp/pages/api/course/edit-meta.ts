@@ -3,7 +3,7 @@ import dbClient from 'apps/webapp/utils/dbConnector';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { v2 as cloudinary } from 'cloudinary';
-import { WorkFormData } from 'apps/webapp/types';
+import { CourseFormData } from 'apps/webapp/types';
 
 export default async function edit_meta(
   req: NextApiRequest & { url: string },
@@ -17,29 +17,23 @@ export default async function edit_meta(
       secure: true,
     });
     const session = await unstable_getServerSession(req, res, authOptions);
-    const formData: WorkFormData = req.body;
+    const formData: CourseFormData = req.body;
 
-    if (
-      formData?.name?.length > 60 ||
-      (formData?.note && formData?.note?.length > 200)
-    ) {
+    if (formData?.caption && formData?.caption?.length > 200) {
       return res.status(400).json({
         message: 'Invalid form data.',
       });
     }
 
-    const work = await dbClient.work.findUnique({
+    const course = await dbClient.course.findUnique({
       where: {
-        id: req?.query?.workId as string,
+        id: req?.query?.courseId as string,
       },
       select: {
         coverPhoto: true,
         id: true,
-        typeOfWork: true,
-        People: {
-          where: {
-            status: 'ACTIVE',
-          },
+        courseCode: true,
+        Coordinators: {
           select: {
             personId: true,
           },
@@ -48,23 +42,20 @@ export default async function edit_meta(
     });
 
     const condition =
-      (work?.typeOfWork === 'COURSE' &&
-        session?.user?.scope?.map((s) => s.scope)?.includes('CRDN')) ||
-      (work?.typeOfWork === 'PROJECT' &&
-        work?.People?.map((p) => p.personId)?.includes(
-          session?.user?.id as string
-        )) ||
-      session?.user?.scope?.map((s) => s.scope).includes('ADMIN');
+      course?.Coordinators?.map((p) => p.personId).includes(
+        session?.user?.id as string
+      ) || session?.user?.scope?.map((s) => s.scope).includes('ADMIN');
+
     if (!condition) {
       return res.status(403).json({ message: 'Access denied.' });
     }
 
     let coverPhoto: string | null;
-    if (formData?.coverPhoto && formData?.coverPhoto !== work?.coverPhoto) {
+    if (formData?.coverPhoto && formData?.coverPhoto !== course?.coverPhoto) {
       coverPhoto = (
         await cloudinary.uploader.upload(formData?.coverPhoto as string, {
-          public_id: work?.id,
-          folder: 'work_covers',
+          public_id: course?.id,
+          folder: 'course_covers',
           resource_type: 'image',
           overwrite: true,
           secure: true,
@@ -72,26 +63,27 @@ export default async function edit_meta(
       ).secure_url;
     } else if (
       (!formData?.coverPhoto || formData?.coverPhoto == '') &&
-      (work?.coverPhoto || work?.coverPhoto !== '')
+      (course?.coverPhoto || course?.coverPhoto !== '')
     ) {
-      await cloudinary.uploader.destroy(`work_covers/${work?.id}`);
+      await cloudinary.uploader.destroy(`course_covers/${course?.id}`);
       coverPhoto = null;
     } else {
-      coverPhoto = work?.coverPhoto as string;
+      coverPhoto = course?.coverPhoto as string;
     }
 
-    await dbClient?.work?.update({
+    await dbClient?.course?.update({
       where: {
-        id: work?.id,
+        id: course?.id,
       },
       data: {
         coverPhoto: coverPhoto,
-        name: formData?.name,
-        note: formData?.note,
+        caption: formData?.caption,
+        courseDuration: formData?.courseDuration,
+        repoURL: formData?.repoURL,
       },
     });
 
-    await res.revalidate(`/work/${work?.id}`);
+    await res.revalidate(`/course/${course?.courseCode}`);
     return res.status(201).json({
       message: 'meta data updated successfully',
     });

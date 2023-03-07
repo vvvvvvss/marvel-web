@@ -1,8 +1,9 @@
-import { MarkdownRender, Paper } from '@marvel/web-ui';
+import { MarkdownRender, Paper, Tab, TabGroup } from '@marvel/web-ui';
 import dbClient from 'apps/webapp/utils/dbConnector';
 import axios from 'axios';
 import ContentsIndex from './ContentsIndex';
 import { Octokit } from '@octokit/core';
+import Link from 'next/link';
 
 const getSyllabus = async (courseCode: string) => {
   const course = await dbClient.course.findUnique({
@@ -51,7 +52,18 @@ export default async function page({ params }) {
   const { content, course } = await getSyllabus(params?.courseCode);
   return (
     <div className="flex flex-col w-full gap-5 items-center">
-      <div className="w-full max-w-2xl mt-5">
+      <TabGroup className="self-center mt-5">
+        <Link href={`/course/${params?.courseCode}/`}>
+          <Tab active>Syllabus</Tab>
+        </Link>
+        <Link href={`/course/${params?.courseCode}/articles`}>
+          <Tab>Articles</Tab>
+        </Link>
+        <Link href={`/course/${params?.courseCode}/works`}>
+          <Tab>Works</Tab>
+        </Link>
+      </TabGroup>
+      <div className="w-full max-w-2xl">
         <ContentsIndex course={course} />
         {content?.map((c, i) => (
           <div id={`${i + 1}`} key={i} className="w-full">

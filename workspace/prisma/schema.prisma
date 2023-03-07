@@ -49,13 +49,13 @@ model Scope {
 
 model CoordinatorsToCourse {
   course   Course @relation(fields: [courseId], references: [id])
-  person   People @relation(fields: [peopleId], references: [id])
+  person   People @relation(fields: [personId], references: [id])
   courseId String
-  peopleId String
+  personId String
 
-  @@id([courseId, peopleId])
+  @@id([courseId, personId])
   @@index([courseId])
-  @@index([peopleId])
+  @@index([personId])
 }
 
 model Course {
@@ -73,7 +73,7 @@ model Course {
   Articles       ArticleToCourse[]
   Coordinators   CoordinatorsToCourse[]
 
-  @@index([courseCode])
+  @@index([courseCode, caption])
 }
 
 //in works

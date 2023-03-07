@@ -41,6 +41,7 @@ export const IconButton = ({
       className={`${props?.className || ''}
       overflow-hidden rounded-full p-2 aspect-square min-w-max cursor-pointer select-none
       transition hover:translate-y-[-1px] active:scale-[97%] border
+      disabled:opacity-50 disabled:cursor-not-allowed disabled:active:transform-none disabled:hover:transform-none
       ${
         variant == 'outlined'
           ? 'bg-p-1 hover:bg-p-2 text-p-10 border-p-6'

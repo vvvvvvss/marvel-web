@@ -12,12 +12,15 @@ const getCourse = async (id: string) => {
         courseCode: id,
       },
       select: {
+        id: true,
         caption: true,
         courseCode: true,
         courseDuration: true,
         coverPhoto: true,
+        repoURL: true,
         Coordinators: {
           select: {
+            personId: true,
             person: {
               select: {
                 profilePic: true,
@@ -91,8 +94,9 @@ export default async function layout({ children, params }) {
                   />
                 </Link>
               ))}
-              <p className="text-p-4 self-center">Coordinators</p>
+              <p className="text-p-4 self-center ml-5">Coordinators</p>
             </div>
+            <EditMeta course={course} />
           </Paper>
           <Paper className="w-full md:w-1/2 md:h-full flex-1">
             {course?.coverPhoto && (
@@ -105,7 +109,6 @@ export default async function layout({ children, params }) {
               />
             )}
           </Paper>
-          {/* <EditMeta /> */}
         </Paper>
         <div className="w-full">{children}</div>
       </div>

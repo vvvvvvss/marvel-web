@@ -16,18 +16,13 @@ import ManagePeople from './ManagePeople';
 import { useMutation } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-
-type Formdata = {
-  name: string;
-  note?: string;
-  coverPhoto?: string | ArrayBuffer;
-};
+import { WorkFormData } from 'apps/webapp/types';
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
-  const [copy, setCopy] = useState<Formdata>({
+  const [copy, setCopy] = useState<WorkFormData>({
     name: work?.name,
     note: work?.note,
     coverPhoto: work?.coverPhoto,
@@ -44,7 +39,10 @@ const EditMeta = ({ work }) => {
     const reader = new FileReader();
     reader.readAsDataURL(compressedImage);
     reader.onloadend = () => {
-      setCopy({ ...copy, coverPhoto: reader?.result });
+      setCopy({
+        ...copy,
+        coverPhoto: reader?.result as WorkFormData['coverPhoto'],
+      });
     };
   };
 
