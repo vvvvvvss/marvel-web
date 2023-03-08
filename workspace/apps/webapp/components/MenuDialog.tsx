@@ -4,20 +4,25 @@ import {
   FullScreenDialog,
   IconButton,
   LoadingPulser,
-  Paper,
   Tab,
   TabGroup,
   TextField,
 } from '@marvel/web-ui';
 import { useSession } from 'next-auth/react';
-import { VscClose as CloseIcon, VscCloseAll } from 'react-icons/vsc';
+import { VscClose as CloseIcon } from 'react-icons/vsc';
 import { useState } from 'react';
-import { Course, People, ScopeEnum } from '@prisma/client';
-import { BsSearch, BsX, BsXLg } from 'react-icons/bs';
+import { Course, ScopeEnum } from '@prisma/client';
+import { BsSearch, BsXLg } from 'react-icons/bs';
 import Link from 'next/link';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import axios from 'axios';
-import { Avatar } from './Avatar';
+import {
+  ArticleCard,
+  CourseCard,
+  PersonCard,
+  ReportCard,
+  WorkCard,
+} from './Cards';
 
 const tabs = {
   people: 'People',
@@ -26,22 +31,35 @@ const tabs = {
   article: 'Articles',
   report: 'Reports',
 };
-type Tabs = keyof typeof tabs;
+type Tab = keyof typeof tabs;
 
 const MenuDialog = ({ menuOpen, setMenuOpen }) => {
   const sessionUser = useSession()?.data?.user;
   const [query, setQuery] = useState<string>('');
-  const [selectedTab, setSelectedTab] = useState<Tabs>('people');
+  const [queryTemp, setQueryTemp] = useState<string>('');
+  const [selectedTab, setSelectedTab] = useState<Tab>('people');
 
-  const { data, isLoading, refetch } = useQuery(
+  const {
+    data,
+    isLoading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
     [selectedTab, query],
-    async () =>
-      (await axios.get(`/api/${selectedTab}/search?q=${query}`)).data?.data,
+    async ({ pageParam }) =>
+      (
+        await axios.get(
+          `/api/${selectedTab}/search?q=${query}&skip=${pageParam}`
+        )
+      ).data?.data,
     {
-      enabled: false,
+      enabled: !!query || false,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage?.length == 12 ? pages?.length * 12 : null,
     }
   );
-
   return (
     <FullScreenDialog
       open={menuOpen}
@@ -52,132 +70,137 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
         <IconButton className="mb-5" onClick={() => setMenuOpen((p) => !p)}>
           <CloseIcon className="h-10 w-20" />
         </IconButton>
-        <div className="w-full pb-48 flex flex-wrap gap-5">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              refetch();
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setQuery(queryTemp);
+          }}
+          className="flex gap-2 w-full"
+        >
+          <TextField
+            id="query"
+            className="flex-1"
+            placeholder="Search Marvel"
+            autoComplete="Off"
+            value={queryTemp}
+            onChange={(e) => setQueryTemp(e.target.value)}
+          />
+          <IconButton
+            type="reset"
+            disabled={queryTemp === ''}
+            variant="outlined"
+            onClick={() => {
+              setQueryTemp('');
+              setQuery('');
             }}
-            className="flex gap-2 w-full"
           >
-            <TextField
-              className="flex-1"
-              placeholder="Search Marvel"
-              value={query}
-              onChange={(e) => setQuery(e.target?.value)}
-            />
-            <IconButton
-              type="reset"
-              disabled={query === ''}
-              variant="outlined"
-              onClick={() => setQuery('')}
-            >
-              <BsXLg className="w-6" />
-            </IconButton>
-            <IconButton
-              type="submit"
-              disabled={query === ''}
-              variant="outlined"
-            >
-              <BsSearch className="w-6" />
-            </IconButton>
-          </form>
-          {query !== '' ? (
-            <>
-              <TabGroup className="overflow-auto w-full max-w-full">
-                {Object.keys(tabs)?.map((t: Tabs) => (
+            <BsXLg className="w-6" />
+          </IconButton>
+          <IconButton
+            type="submit"
+            disabled={queryTemp === ''}
+            variant="outlined"
+          >
+            <BsSearch className="w-6" />
+          </IconButton>
+        </form>
+        {query !== '' || queryTemp !== '' ? (
+          <>
+            <div className="w-full">
+              <TabGroup
+                className={`overflow-auto w-full max-w-[100vw - 10px] mt-5`}
+              >
+                {Object.keys(tabs)?.map((t: Tab, i) => (
                   <Tab
+                    key={i}
                     active={t == selectedTab}
-                    onClick={() => setSelectedTab(t)}
+                    onClick={() => {
+                      setSelectedTab(t);
+                    }}
                   >
                     {tabs?.[t]}
                   </Tab>
                 ))}
               </TabGroup>
-              <br />
-              {isLoading ? (
-                <span className="w-full flex justify-center">
-                  <LoadingPulser />
-                </span>
-              ) : (
-                <>
-                  {selectedTab === 'people' ? (
-                    <>
-                      {data?.map((d: People, i) => (
-                        <Link
-                          key={i}
-                          href={`/u/${d?.slug}`}
-                          prefetch={false}
-                          className="flex-1"
-                        >
-                          <Paper
-                            border
-                            elevateOnHover
-                            className="rounded-lg p-5 flex gap-5 w-full h-full"
-                          >
-                            <Avatar className="w-10" src={d?.profilePic} />
-                            <h6 className="text-lg flex-1 self-center">
-                              {d?.name}
-                            </h6>
-                          </Paper>
-                        </Link>
-                      ))}
-                    </>
-                  ) : selectedTab === 'course' ? (
-                    <>
-                      {data?.map((d: Course, i) => (
-                        <Link
-                          key={i}
-                          href={`/course/${d?.courseCode}`}
-                          prefetch={false}
-                          className="flex-1"
-                        >
-                          <Paper
-                            border
-                            elevateOnHover
-                            className="rounded-lg p-5 w-full h-full"
-                          >
-                            <h3 className="text-3xl whitespace-nowrap">
-                              {d?.courseCode}
-                            </h3>
-                            <p className="text-sm text-p-6 whitespace-nowrap">
-                              {d?.totalLevels} Levels &#183; {d?.courseDuration}
-                            </p>
-                            <hr className="border-p-4 my-2" />
-                            <p>{d?.caption}</p>
-                          </Paper>
-                        </Link>
-                      ))}
-                    </>
+            </div>
+            <br />
+            {query === '' ? (
+              <>
+                <div className="w-full flex justify-center text-sm text-p-6">
+                  Type query and press Enter...
+                </div>
+              </>
+            ) : isLoading || isFetching ? (
+              <div className="w-full flex justify-center">
+                <LoadingPulser />
+              </div>
+            ) : (
+              <div className="w-full flex flex-wrap gap-5 pb-48">
+                {selectedTab === 'people' ? (
+                  <>
+                    {data?.pages?.flat()?.map((d, i) => (
+                      <PersonCard key={i} data={d} />
+                    ))}
+                  </>
+                ) : selectedTab === 'course' ? (
+                  <>
+                    {data?.pages?.flat()?.map((d: Course, i) => (
+                      <CourseCard data={d} key={i} />
+                    ))}
+                  </>
+                ) : selectedTab === 'work' ? (
+                  <>
+                    {data?.pages?.flat()?.map((d, i) => (
+                      <WorkCard data={d} key={i} />
+                    ))}
+                  </>
+                ) : selectedTab === 'article' ? (
+                  <>
+                    {data?.pages?.flat()?.map((d, i) => (
+                      <ArticleCard data={d} key={i} />
+                    ))}
+                  </>
+                ) : selectedTab === 'report' ? (
+                  <>
+                    {data?.pages?.flat()?.map((d, i) => (
+                      <ReportCard data={d} key={i} />
+                    ))}
+                  </>
+                ) : null}
+                <div className="w-full flex justify-center">
+                  {isFetchingNextPage ? (
+                    <p className="text-p-6 text-sm">Loading...</p>
+                  ) : hasNextPage ? (
+                    <Button onClick={() => fetchNextPage()}>Load more</Button>
                   ) : (
-                    <></>
+                    <p className="text-p-6 text-sm">That's it. </p>
                   )}
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <Link href={`/`} className="flex-1">
-                <Button className="w-full">Home</Button>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="w-full flex flex-wrap gap-5 mt-5">
+            <Link href={`/`} className="flex-1">
+              <Button className="w-full">Home</Button>
+            </Link>
+            {['CRDN', 'ADMIN'].some((s) =>
+              sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
+            ) && (
+              <Link href={`/birdseye`} className="flex-1">
+                <Button className="w-full">Birds Eye</Button>
               </Link>
-              {['CRDN', 'ADMIN'].some((s) =>
-                sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
-              ) && (
-                <>
-                  <Button className="flex-1">Birds eye</Button>
-                </>
-              )}
-              {sessionUser?.id && (
-                <Link href={`/u/${sessionUser?.slug}`} className="flex-1">
-                  <Button className="w-full">My Profile</Button>
-                </Link>
-              )}
-              <Link href={`/about`} className="flex-1">
-                <Button className="w-full">About</Button>
+            )}
+            {sessionUser?.id && (
+              <Link href={`/u/${sessionUser?.slug}`} className="flex-1">
+                <Button className="w-full">My Profile</Button>
               </Link>
-            </>
-          )}
-        </div>
+            )}
+            <Link href={`/about`} className="flex-1">
+              <Button className="w-full">About</Button>
+            </Link>
+          </div>
+        )}
       </div>
     </FullScreenDialog>
   );

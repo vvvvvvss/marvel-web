@@ -6,20 +6,33 @@ export default async function (
   res: NextApiResponse
 ) {
   try {
-    const people = await dbClient.people.findMany({
+    const works = await dbClient.work.findMany({
       where: {
-        name: {
-          contains: req?.query?.q as string,
-        },
+        OR: [
+          {
+            name: {
+              contains: req?.query?.q as string,
+            },
+          },
+          {
+            courseCode: {
+              contains: req?.query?.q as string,
+            },
+          },
+        ],
       },
       select: {
         name: true,
-        slug: true,
-        profilePic: true,
         id: true,
-        scope: {
-          where: {
-            OR: [{ scope: 'CRDN' }, { scope: 'ADMIN' }],
+        courseCode: true,
+        typeOfWork: true,
+        People: {
+          select: {
+            person: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -28,13 +41,13 @@ export default async function (
     });
 
     return res.json({
-      data: people,
+      data: works,
       status: 200,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Couldn't fetch people list",
+      message: "Couldn't fetch work list",
       error: error?.message,
     });
   }
