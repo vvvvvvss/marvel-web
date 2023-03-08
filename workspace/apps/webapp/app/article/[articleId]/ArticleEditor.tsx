@@ -33,7 +33,6 @@ const ArticleEditor = ({ article }) => {
     content: article?.content,
     courseIds: article?.Courses?.map((c) => c?.courseId),
     coverPhoto: article?.coverPhoto,
-    tags: article?.tags?.split(','),
   });
 
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
@@ -75,7 +74,10 @@ const ArticleEditor = ({ article }) => {
       const reader = new FileReader();
       reader.readAsDataURL(compressedImage);
       reader.onloadend = () => {
-        setFormData({ ...formData, coverPhoto: reader?.result });
+        setFormData({
+          ...formData,
+          coverPhoto: reader?.result as ArticleFormData['coverPhoto'],
+        });
         setChanged(true);
       };
     } catch (error) {
@@ -203,69 +205,13 @@ const ArticleEditor = ({ article }) => {
                     </div>
                   )}
                 </ReactImageUploading>
-                {/* tags  */}
-                <Paper className="my-5 flex flex-wrap gap-5">
-                  <TextField
-                    id="tags"
-                    className="w-full flex-initial"
-                    value={newTag}
-                    disabled={isUpdating}
-                    onChange={(e) => {
-                      if (e.target.value.slice(-1) === ',' && newTag !== '') {
-                        if (
-                          formData?.tags?.length < 8 ||
-                          !formData?.tags?.length
-                        ) {
-                          if (
-                            formData?.tags?.includes(
-                              e.target?.value?.slice(0, -1)
-                            )
-                          )
-                            return alert(`You've already added that tag`);
-                          setFormData({
-                            ...formData,
-                            tags: [
-                              ...(formData?.tags ? formData?.tags : []),
-                              e.target?.value?.slice(0, -1).toString(),
-                            ],
-                          });
-                          setChanged(true);
 
-                          setNewTag('');
-                        } else {
-                          alert('Maximum number of tags is 8');
-                        }
-                      } else {
-                        setNewTag(`${e.target.value}`);
-                      }
-                    }}
-                    placeholder="Tags (Optional). Press comma ( , ) after each tag to add."
-                  />
-                  {formData?.tags?.map((tag, i) => (
-                    <Button
-                      className="flex flex-nowrap items-center gap-2"
-                      key={i}
-                      variant="outlined"
-                      disabled={isUpdating}
-                      onClick={() => {
-                        setFormData({
-                          ...formData,
-                          tags: formData?.tags.filter((i) => i !== tag),
-                        });
-                        setChanged(true);
-                      }}
-                    >
-                      <MinusIcon />
-                      {tag}
-                    </Button>
-                  ))}
-                </Paper>
                 {article?.typeOfArticle == 'RESOURCE' && (
                   <>
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses
                     </label>
-                    <div className="flex gap-5 flex-wrap mb-5">
+                    <div className="flex gap-5 flex-wrap">
                       {isCourseListLoading ? (
                         <>
                           {Array.from({ length: 3 }).map((_, i) => (
@@ -316,7 +262,7 @@ const ArticleEditor = ({ article }) => {
                   </>
                 )}
 
-                <div className="w-full flex gap-5 justify-end pb-48">
+                <div className="w-full flex gap-5 justify-end pb-48 mt-5">
                   <Button
                     onClick={() => handleSubmit()}
                     disabled={

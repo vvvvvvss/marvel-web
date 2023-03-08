@@ -9,7 +9,6 @@ export default async function manage_scope(
   res: NextApiResponse
 ) {
   try {
-    //@ts-ignore
     const session = await unstable_getServerSession(req, res, authOptions);
 
     //if session user is *not* CRDN or ADMIN
@@ -37,14 +36,14 @@ export default async function manage_scope(
     if (req?.query?.action === 'add') {
       await dbClient.people.update({
         where: {
-          id: person.id,
+          id: person?.id,
         },
         data: {
           scope: {
             connectOrCreate: {
               where: {
                 personId_scope: {
-                  personId: person.id,
+                  personId: person?.id as string,
                   scope: req.query?.scope as ScopeEnum,
                 },
               },
@@ -58,13 +57,13 @@ export default async function manage_scope(
     } else if (req.query?.action === 'remove') {
       await dbClient.people.update({
         where: {
-          id: person.id,
+          id: person?.id,
         },
         data: {
           scope: {
             delete: {
               personId_scope: {
-                personId: person.id,
+                personId: person?.id as string,
                 scope: req?.query?.scope as ScopeEnum,
               },
             },
@@ -75,7 +74,7 @@ export default async function manage_scope(
       return res.status(400).json({ message: 'invalid action' });
     }
 
-    await res.revalidate(`/u/${person.slug}`);
+    await res.revalidate(`/u/${person?.slug}`);
     return res.json({
       status: 201,
       message: 'profile meta-data updated successfully',

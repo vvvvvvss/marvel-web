@@ -38,11 +38,7 @@ export default async function create_article(
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
-    if (
-      formData?.title?.length >= 60 ||
-      cleanContent?.length >= 15_000 ||
-      formData?.tags?.length >= 10
-    ) {
+    if (formData?.title?.length >= 60 || cleanContent?.length >= 15_000) {
       return res.status(400).json({
         message: 'Invalid form data.',
       });
@@ -53,17 +49,17 @@ export default async function create_article(
         title: formData?.title,
         caption: formData?.caption,
         coverPhoto: '',
-        tags: formData?.tags?.join(','),
         content: cleanContent,
         reviewStatus:
-          session.user.scope?.map((s) => s.scope)?.includes('CRDN') ||
-          session.user.scope?.map((s) => s.scope)?.includes('ADMIN')
+          session &&
+          (session.user.scope?.map((s) => s.scope)?.includes('CRDN') ||
+            session.user.scope?.map((s) => s.scope)?.includes('ADMIN'))
             ? 'APPROVED'
             : 'PENDING',
         People: {
           create: [
             {
-              personId: session?.user?.id,
+              personId: session?.user?.id as string,
               role: 'OP',
             },
           ],

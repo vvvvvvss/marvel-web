@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbClient from 'apps/webapp/utils/dbConnector';
+import { ReviewStatus } from '@prisma/client';
 
 export default async function (
   req: NextApiRequest & { url: string },
@@ -8,9 +9,24 @@ export default async function (
   try {
     const reports = await dbClient.report.findMany({
       where: {
-        title: {
-          contains: req?.query?.q as string,
-        },
+        AND: [
+          ...(req?.query?.q
+            ? [
+                {
+                  title: {
+                    contains: req?.query?.q as string,
+                  },
+                },
+              ]
+            : []),
+          ...(req?.query?.reviewStatus
+            ? [
+                {
+                  reviewStatus: req?.query?.reviewStatus as ReviewStatus,
+                },
+              ]
+            : []),
+        ],
       },
       select: {
         id: true,

@@ -106,10 +106,8 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
         </form>
         {query !== '' || queryTemp !== '' ? (
           <>
-            <div className="w-full">
-              <TabGroup
-                className={`overflow-auto w-full max-w-[100vw - 10px] mt-5`}
-              >
+            <div className="w-full flex">
+              <TabGroup className={`overflow-auto max-w-full mt-5`}>
                 {Object.keys(tabs)?.map((t: Tab, i) => (
                   <Tab
                     key={i}
@@ -188,7 +186,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
               sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
             ) && (
               <Link href={`/birdseye`} className="flex-1">
-                <Button className="w-full">Birds Eye</Button>
+                <Button className="w-full">Coordinator Dashboard</Button>
               </Link>
             )}
             {sessionUser?.id && (

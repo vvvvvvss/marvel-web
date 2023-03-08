@@ -28,7 +28,6 @@ const getArticle = async (id: string) => {
             },
           },
         },
-        tags: true,
         typeOfArticle: true,
         feedback: true,
         reviewStatus: true,

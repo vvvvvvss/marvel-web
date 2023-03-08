@@ -16,7 +16,7 @@ export default async function spawn_new_work(
 ) {
   try {
     const sessionUser = (await unstable_getServerSession(req, res, authOptions))
-      .user;
+      ?.user;
     const formData: FormData = req.body?.formData;
     const type: TypeOfWork = req.query?.type as TypeOfWork;
 
@@ -39,7 +39,7 @@ export default async function spawn_new_work(
     });
     if (!author) return res.status(400).json({ message: 'Invalid request' });
 
-    let course: { totalLevels: number };
+    let course: { totalLevels: number } | null = { totalLevels: 0 };
     if (type == 'COURSE') {
       course = await dbClient.course.findUnique({
         where: {
@@ -65,7 +65,7 @@ export default async function spawn_new_work(
               courseCode: formData?.selectedCourse,
             },
           },
-          totalLevels: course.totalLevels,
+          totalLevels: Number(course?.totalLevels),
           searchTerms: author.name + ' ' + formData?.selectedCourse,
         }),
         ...(type === 'PROJECT' && {

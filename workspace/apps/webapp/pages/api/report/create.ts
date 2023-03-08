@@ -35,7 +35,7 @@ export default async function create_level_report(
         },
       },
     });
-    const senderIsActiveAuthor = work.People?.map((p) => p?.personId).includes(
+    const senderIsActiveAuthor = work?.People?.map((p) => p?.personId).includes(
       session?.user?.id as string
     );
 
@@ -44,7 +44,7 @@ export default async function create_level_report(
 
     if (
       work?.typeOfWork === 'COURSE' &&
-      work?.Reports?.length + 1 > work?.totalLevels
+      work?.Reports?.length + 1 > Number(work?.totalLevels)
     ) {
       return res.status(400).json({
         message: 'All the reports are already written',
@@ -76,7 +76,7 @@ export default async function create_level_report(
         isOverview: work?.Reports?.length === 0 ? true : false,
         work: {
           connect: {
-            id: work.id,
+            id: work?.id,
           },
         },
       },
@@ -87,7 +87,7 @@ export default async function create_level_report(
     });
 
     await res.revalidate(
-      `/work/${work.id}/${createdReport?.isOverview ? '' : createdReport?.id}`
+      `/work/${work?.id}/${createdReport?.isOverview ? '' : createdReport?.id}`
     );
     return res.json({
       status: 201,

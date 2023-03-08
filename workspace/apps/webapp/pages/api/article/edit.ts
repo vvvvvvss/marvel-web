@@ -43,24 +43,20 @@ export default async function edit_article(
     });
 
     const condition = existingArticle?.People?.map((p) => p.personId)?.includes(
-      session?.user?.id
+      session?.user?.id as string
     );
 
     if (!condition) return res.status(403).json({ message: 'Access denied' });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
-    if (
-      formData?.title?.length >= 60 ||
-      cleanContent?.length >= 15_000 ||
-      formData?.tags?.length >= 10
-    ) {
+    if (formData?.title?.length >= 60 || cleanContent?.length >= 15_000) {
       return res.status(400).json({
         message: 'Invalid form data.',
       });
     }
 
-    let coverPhoto: string;
+    let coverPhoto: string | null;
     if (
       formData?.coverPhoto &&
       formData?.coverPhoto !== existingArticle?.coverPhoto
@@ -83,21 +79,20 @@ export default async function edit_article(
       );
       coverPhoto = null;
     } else {
-      coverPhoto = existingArticle?.coverPhoto;
+      coverPhoto = existingArticle?.coverPhoto as string;
     }
 
-    let coursesToAdd: string[], coursesToDelete: string[];
+    let coursesToAdd: string[] = [];
+    let coursesToDelete: string[] = [];
     if (existingArticle?.typeOfArticle === 'RESOURCE') {
       const oldListOfCourses = existingArticle?.Courses?.map(
         (c) => c?.courseId
       );
       const newListOfCourses = formData?.courseIds;
-      coursesToAdd = newListOfCourses?.filter(
-        (c) => !oldListOfCourses?.includes(c)
-      );
-      coursesToDelete = oldListOfCourses?.filter(
-        (c) => !newListOfCourses?.includes(c)
-      );
+      coursesToAdd =
+        newListOfCourses?.filter((c) => !oldListOfCourses?.includes(c)) || [];
+      coursesToDelete =
+        oldListOfCourses?.filter((c) => !newListOfCourses?.includes(c)) || [];
     }
 
     await dbClient.article.update({
@@ -108,13 +103,8 @@ export default async function edit_article(
         title: formData?.title,
         caption: formData?.caption,
         coverPhoto: coverPhoto,
-        tags: formData?.tags?.join(','),
         content: cleanContent,
-        reviewStatus:
-          session.user.scope?.map((s) => s.scope)?.includes('CRDN') ||
-          session.user.scope?.map((s) => s.scope)?.includes('ADMIN')
-            ? 'APPROVED'
-            : 'PENDING',
+        reviewStatus: 'PENDING',
         ...(existingArticle?.typeOfArticle === 'RESOURCE'
           ? {
               Courses: {

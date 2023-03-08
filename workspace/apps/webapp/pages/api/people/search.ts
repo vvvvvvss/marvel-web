@@ -1,16 +1,43 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbClient from 'apps/webapp/utils/dbConnector';
+import { ScopeEnum } from '@prisma/client';
 
 export default async function (
   req: NextApiRequest & { url: string },
   res: NextApiResponse
 ) {
   try {
+    console.log(req.query);
     const people = await dbClient.people.findMany({
       where: {
-        name: {
-          contains: req?.query?.q as string,
-        },
+        AND: [
+          ...(req?.query?.q
+            ? [
+                {
+                  name: {
+                    contains: req?.query?.q as string,
+                  },
+                },
+              ]
+            : []),
+          ...(req?.query?.scope
+            ? [
+                {
+                  scope: {
+                    some: {
+                      OR: [
+                        ...(req?.query?.scope as string)
+                          ?.split(',')
+                          ?.map((s) => ({
+                            scope: s as ScopeEnum,
+                          })),
+                      ],
+                    },
+                  },
+                },
+              ]
+            : []),
+        ],
       },
       select: {
         name: true,
