@@ -1,11 +1,8 @@
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ["ui"],
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  transpilePackages: ['ui'],
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ['res.cloudinary.com'],
   },
   experimental: {
     appDir: true,
