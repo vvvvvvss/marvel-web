@@ -7,11 +7,7 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: [
-    "./apps/webapp/app/**/*.{js,ts,jsx,tsx}",
-    "./apps/webapp/components/**/*.{js,ts,jsx,tsx}",
-    "./libs/ui/**/*.{js,ts,tsx,jsx}",
-  ],
+  content: [`src/**/*.{js,ts,jsx,tsx}`],
   theme: {
     colors: {
       transparent: "hsla(0,0%,0%,0)",

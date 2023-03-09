@@ -11,6 +11,7 @@ module.exports = {
     './apps/webapp/app/**/*.{js,ts,jsx,tsx}',
     './apps/webapp/components/**/*.{js,ts,jsx,tsx}',
     './libs/ui/**/*.{js,ts,tsx,jsx}',
+    `src/**/*.{js,ts,jsx,tsx}`,
   ],
   theme: {
     colors: {

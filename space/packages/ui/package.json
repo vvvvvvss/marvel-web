@@ -11,6 +11,17 @@
   "scripts": {
     "lint": "eslint \"**/*.ts*\""
   },
+  "dependencies": {
+    "@radix-ui/react-avatar": "^1.0.1",
+    "@radix-ui/react-context-menu": "^2.1.1",
+    "@radix-ui/react-select": "^1.1.2",
+    "@radix-ui/react-switch": "^1.0.1",
+    "@types/he": "^1.1.2",
+    "@types/sanitize-html": "^2.6.2",
+    "he": "^1.2.0",
+    "markdown-to-jsx": "^7.1.7",
+    "sanitize-html": "^2.7.3"
+  },
   "devDependencies": {
     "@types/react": "^18.0.22",
     "eslint": "^7.32.0",
