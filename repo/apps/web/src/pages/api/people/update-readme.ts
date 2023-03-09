@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { SANITIZE_OPTIONS } from '@marvel/web-utils';
-import sanitize from 'sanitize-html';
-import dbClient from '../../../utils/dbConnector';
-import { unstable_getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
+import { NextApiRequest, NextApiResponse } from "next";
+import { SANITIZE_OPTIONS } from "shared-utils";
+import sanitize from "sanitize-html";
+import dbClient from "../../../utils/dbConnector";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function profile_readMe_editor(
   req: NextApiRequest & { url: string },
@@ -15,9 +15,9 @@ export default async function profile_readMe_editor(
 
     const condition =
       slug === session?.user?.slug ||
-      session?.user?.scope?.map((s) => s.scope)?.includes('ADMIN');
+      session?.user?.scope?.map((s) => s.scope)?.includes("ADMIN");
 
-    if (!condition) return res.status(403).json({ message: 'Access denied' });
+    if (!condition) return res.status(403).json({ message: "Access denied" });
 
     const content = req.body?.content;
     const cleanContent = sanitize(content, SANITIZE_OPTIONS);
@@ -34,7 +34,7 @@ export default async function profile_readMe_editor(
     await res.revalidate(`/u/${slug}`);
     return res.json({
       status: 201,
-      message: 'profile readMe updated successfully',
+      message: "profile readMe updated successfully",
     });
   } catch (error) {
     console.log(error);

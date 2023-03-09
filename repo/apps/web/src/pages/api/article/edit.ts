@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { SANITIZE_OPTIONS } from '@marvel/web-utils';
-import sanitize from 'sanitize-html';
-import dbClient from '../../../utils/dbConnector';
-import { unstable_getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { v2 as cloudinary } from 'cloudinary';
-import { ArticleFormData } from 'apps/webapp/types';
+import { NextApiRequest, NextApiResponse } from "next";
+import { SANITIZE_OPTIONS } from "shared-utils";
+import sanitize from "sanitize-html";
+import dbClient from "../../../utils/dbConnector";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
+import { v2 as cloudinary } from "cloudinary";
+import { ArticleFormData } from "apps/web/types";
 
 export default async function edit_article(
   req: NextApiRequest & { url: string },
@@ -46,13 +46,13 @@ export default async function edit_article(
       session?.user?.id as string
     );
 
-    if (!condition) return res.status(403).json({ message: 'Access denied' });
+    if (!condition) return res.status(403).json({ message: "Access denied" });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
     if (formData?.title?.length >= 60 || cleanContent?.length >= 15_000) {
       return res.status(400).json({
-        message: 'Invalid form data.',
+        message: "Invalid form data.",
       });
     }
 
@@ -64,15 +64,15 @@ export default async function edit_article(
       coverPhoto = (
         await cloudinary.uploader.upload(formData?.coverPhoto as string, {
           public_id: existingArticle?.id,
-          folder: 'article_covers',
-          resource_type: 'image',
+          folder: "article_covers",
+          resource_type: "image",
           overwrite: true,
           secure: true,
         })
       ).secure_url;
     } else if (
-      (!formData?.coverPhoto || formData?.coverPhoto == '') &&
-      (!existingArticle?.coverPhoto || existingArticle?.coverPhoto !== '')
+      (!formData?.coverPhoto || formData?.coverPhoto == "") &&
+      (!existingArticle?.coverPhoto || existingArticle?.coverPhoto !== "")
     ) {
       await cloudinary.uploader.destroy(
         `article_covers/${existingArticle?.id}`
@@ -84,7 +84,7 @@ export default async function edit_article(
 
     let coursesToAdd: string[] = [];
     let coursesToDelete: string[] = [];
-    if (existingArticle?.typeOfArticle === 'RESOURCE') {
+    if (existingArticle?.typeOfArticle === "RESOURCE") {
       const oldListOfCourses = existingArticle?.Courses?.map(
         (c) => c?.courseId
       );
@@ -104,8 +104,8 @@ export default async function edit_article(
         caption: formData?.caption,
         coverPhoto: coverPhoto,
         content: cleanContent,
-        reviewStatus: 'PENDING',
-        ...(existingArticle?.typeOfArticle === 'RESOURCE'
+        reviewStatus: "PENDING",
+        ...(existingArticle?.typeOfArticle === "RESOURCE"
           ? {
               Courses: {
                 create: coursesToAdd?.map((c) => ({ courseId: c })),
@@ -118,7 +118,7 @@ export default async function edit_article(
               },
             }
           : null),
-        feedback: '',
+        feedback: "",
       },
     });
 

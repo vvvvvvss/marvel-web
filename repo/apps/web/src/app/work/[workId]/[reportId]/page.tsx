@@ -1,9 +1,9 @@
-import { MarkdownRender, Paper } from 'ui';
-import dbClient from 'webapp/utils/dbConnector';
-import ReportWriter from '../ReportWriter';
-import ReportReviewer from '../ReportReviewer';
-import ReportEditor from '../ReportEditor';
-import { ReviewStatus } from '@prisma/client';
+import { MarkdownRender, Paper } from "ui";
+import dbClient from "../../../../utils/dbConnector";
+import ReportWriter from "../ReportWriter";
+import ReportReviewer from "../ReportReviewer";
+import ReportEditor from "../ReportEditor";
+import { ReviewStatus } from "@prisma/client";
 
 const getReport = async (workId: string, stageId: string) => {
   const work = await dbClient.work.findUnique({
@@ -29,7 +29,7 @@ const getReport = async (workId: string, stageId: string) => {
       totalLevels: true,
     },
   });
-  if (stageId == 'new') {
+  if (stageId == "new") {
     return { report: null, work };
   }
   const report = await dbClient.report.findFirst({
@@ -57,19 +57,19 @@ export default async function page({ params, searchParams }) {
       {!report ? (
         <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">
           {/* if the url reportid param is "new":  */}
-          {params?.reportId == 'new' &&
-          ((work?.typeOfWork === 'COURSE' &&
+          {params?.reportId == "new" &&
+          ((work?.typeOfWork === "COURSE" &&
             work?.Reports?.length < work.totalLevels &&
-            !['PENDING', 'FLAGGED'].some((s: ReviewStatus) =>
+            !["PENDING", "FLAGGED"].some((s: ReviewStatus) =>
               work?.Reports?.map((r) => r.reviewStatus).includes(s)
             )) ||
-            work?.typeOfWork === 'PROJECT') ? (
+            work?.typeOfWork === "PROJECT") ? (
             <>
               <h1 className="text-2xl">
-                {work?.typeOfWork === 'PROJECT' ? 'Stage' : 'Level'}{' '}
-                {work?.typeOfWork === 'PROJECT'
+                {work?.typeOfWork === "PROJECT" ? "Stage" : "Level"}{" "}
+                {work?.typeOfWork === "PROJECT"
                   ? work?.Reports?.length
-                  : work?.Reports?.length + 1}{' '}
+                  : work?.Reports?.length + 1}{" "}
                 report is yet to be written.
               </h1>
               <img
@@ -89,7 +89,7 @@ export default async function page({ params, searchParams }) {
         </div>
       ) : (
         <article className="w-full max-w-2xl">
-          {report?.reviewStatus === 'PENDING' ? (
+          {report?.reviewStatus === "PENDING" ? (
             <Paper
               border
               className="rounded-lg p-5 mb-5 bg-[#ffdf7f] text-[#4b4b00] dark:bg-[#3a3a00] dark:text-[#ffd262]"
@@ -97,7 +97,7 @@ export default async function page({ params, searchParams }) {
               This Report is yet to be approved by a Coordinator.
             </Paper>
           ) : (
-            report?.reviewStatus == 'FLAGGED' && (
+            report?.reviewStatus == "FLAGGED" && (
               <Paper
                 border
                 className="rounded-lg p-5 mb-5 bg-[#ff7f7f] text-[#4b0000] dark:bg-[#3a0000] dark:text-[#ff6a6a]"
@@ -111,8 +111,8 @@ export default async function page({ params, searchParams }) {
           <p className="text-p-6">
             {new Date(report?.createdAt)
               ?.toLocaleDateString()
-              .split('/')
-              .join(' / ')}
+              .split("/")
+              .join(" / ")}
           </p>
           <hr className="my-5 border-p-3" />
           <MarkdownRender content={report?.content} />

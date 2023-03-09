@@ -4,10 +4,15 @@ const primaryHue = 0;
 const secondaryHue = 170;
 
 module.exports = {
+  mode: "jit",
   future: {
     hoverOnlyWhenSupported: true,
   },
-  content: [`src/**/*.{js,ts,jsx,tsx}`],
+  content: [
+    `src/**/*.{js,ts,jsx,tsx}`,
+    `lib/**/*.{js,ts,jsx,tsx}`,
+    // "../../packages/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     colors: {
       transparent: "hsla(0,0%,0%,0)",

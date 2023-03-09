@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { Window, Paper, Button } from 'ui';
-import { Avatar } from 'webapp/components/Avatar';
-import dbClient from '../../../utils/dbConnector';
-import Manager from './UserManager';
+import { ReactNode } from "react";
+import { Window, Paper, Button } from "ui";
+import { Avatar } from "../../../components/Avatar";
+import dbClient from "../../../utils/dbConnector";
+import Manager from "./UserManager";
 
 const getUserBySlug = async (slug: string) => {
   const person = await dbClient.people.findFirst({
@@ -20,7 +20,7 @@ const getUserBySlug = async (slug: string) => {
       },
     },
   });
-  console.info({ info: 'getUserBySlug is called in profile page' });
+  console.info({ info: "getUserBySlug is called in profile page" });
   return person;
 };
 
@@ -55,7 +55,7 @@ export default async function layout({
                 <h1 className="ml-5 text-lg">{dude?.name}</h1>
               </div>
               {/* coordinating courses */}
-              {dude?.scope?.map((s) => s.scope)?.includes('CRDN') && (
+              {dude?.scope?.map((s) => s.scope)?.includes("CRDN") && (
                 <div className="flex items-center border-t pt-5 max-w-full overflow-x-auto border-p-3">
                   <Button
                     variant="outlined"

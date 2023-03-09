@@ -1,16 +1,16 @@
-'use client';
-import { Button, FullScreenDialog, IconButton, Paper, TextField } from 'ui';
-import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
-import { VscSettings as ManageIcon } from 'react-icons/vsc';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import ReactImageUploading, { ImageListType } from 'react-images-uploading';
-import ImageCompressor from 'browser-image-compression';
-import ManagePeople from './ManagePeople';
-import { useMutation } from 'react-query';
-import axios, { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
-import { CourseFormData } from 'webapp/types';
+"use client";
+import { Button, FullScreenDialog, IconButton, Paper, TextField } from "ui";
+import { useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { VscSettings as ManageIcon } from "react-icons/vsc";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import ReactImageUploading, { ImageListType } from "react-images-uploading";
+import ImageCompressor from "browser-image-compression";
+import ManagePeople from "./ManagePeople";
+import { useMutation } from "react-query";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { CourseFormData } from "../../../../types";
 
 const EditMeta = ({ course }) => {
   const sessionUser = useSession()?.data?.user;
@@ -36,7 +36,7 @@ const EditMeta = ({ course }) => {
     reader.onloadend = () => {
       setCopy({
         ...copy,
-        coverPhoto: reader?.result as CourseFormData['coverPhoto'],
+        coverPhoto: reader?.result as CourseFormData["coverPhoto"],
       });
     };
   };
@@ -44,12 +44,12 @@ const EditMeta = ({ course }) => {
   const { data, isLoading, mutate } = useMutation(
     async () =>
       (
-        await axios.post('/api/course/edit-meta?courseId=' + course?.id, {
+        await axios.post("/api/course/edit-meta?courseId=" + course?.id, {
           ...copy,
         })
       ).data,
     {
-      onError: (e: AxiosError) => alert(e.response?.data?.['message']),
+      onError: (e: AxiosError) => alert(e.response?.data?.["message"]),
       onSuccess: (data: any) => {
         router.refresh();
         setModalOpen(false);
@@ -64,7 +64,7 @@ const EditMeta = ({ course }) => {
     //work is coursework and session user is a coordinator
     course?.Coodinators?.map((p) => p?.personId).includes(sessionUser?.id) ||
     //session user is an admin
-    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
+    sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")
   ) {
     return (
       <>
@@ -146,7 +146,7 @@ const EditMeta = ({ course }) => {
                         border
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center cursor-pointer"
                         onClick={() => {
-                          setCopy((p) => ({ ...p, coverPhoto: '' }));
+                          setCopy((p) => ({ ...p, coverPhoto: "" }));
                           setChanged(true);
                           onImageUpload();
                         }}

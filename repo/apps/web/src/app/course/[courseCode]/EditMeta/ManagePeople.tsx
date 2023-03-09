@@ -1,22 +1,22 @@
-import { Button, Paper, TextField } from 'ui';
-import { Avatar } from 'webapp/components/Avatar';
-import axios, { AxiosError } from 'axios';
-import { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import { useRouter } from 'next/navigation';
+import { Button, Paper, TextField } from "ui";
+import { Avatar } from "../../../../components/Avatar";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { useRouter } from "next/navigation";
 
 const ManagePeople = ({ course }) => {
   const router = useRouter();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const {
     data: peopleFromSearch,
     isLoading: isPeopleLoading,
     refetch: fetchPeople,
   } = useQuery(
-    ['people', search],
+    ["people", search],
     async () =>
-      (await axios.get('/api/people/search?q=' + search + '&limit=5')).data
+      (await axios.get("/api/people/search?q=" + search + "&limit=5")).data
         ?.data,
     {
       enabled: false,
@@ -27,7 +27,7 @@ const ManagePeople = ({ course }) => {
   );
   const { data, isLoading, mutate } = useMutation(
     async (args: {
-      action: 'add-person' | 'remove-person';
+      action: "add-person" | "remove-person";
       personId: string;
     }) =>
       await axios.post(`/api/course/manage-people?courseId=${course?.id}`, {
@@ -35,14 +35,14 @@ const ManagePeople = ({ course }) => {
       }),
     {
       onSuccess: () => router.refresh(),
-      onError: (data: AxiosError) => alert(data?.response?.data?.['message']),
+      onError: (data: AxiosError) => alert(data?.response?.data?.["message"]),
     }
   );
   return (
     <Paper
       border
       className={`rounded-lg p-5 flex gap-5 flex-wrap ${
-        isLoading && 'opacity-50 pointer-events-none'
+        isLoading && "opacity-50 pointer-events-none"
       }`}
     >
       <h6 className="text-2xl w-full">People</h6>
@@ -65,7 +65,7 @@ const ManagePeople = ({ course }) => {
                   <Button
                     onClick={() =>
                       mutate({
-                        action: 'remove-person',
+                        action: "remove-person",
                         personId: p?.personId,
                       })
                     }
@@ -89,7 +89,7 @@ const ManagePeople = ({ course }) => {
         />
         <Button
           onClick={() => fetchPeople()}
-          disabled={search === '' || isPeopleLoading}
+          disabled={search === "" || isPeopleLoading}
         >
           Search
         </Button>
@@ -109,13 +109,13 @@ const ManagePeople = ({ course }) => {
                     {p?.name}
                   </td>
                   <td className="px-5 py-3 text-xs">
-                    {['CRDN', 'ADMIN'].some((s) =>
+                    {["CRDN", "ADMIN"].some((s) =>
                       p?.scope?.map((s) => s?.scope)?.includes(s)
                     ) && (
                       <Button
                         onClick={() =>
                           mutate({
-                            action: 'add-person',
+                            action: "add-person",
                             personId: p?.id,
                           })
                         }

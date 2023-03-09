@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { SANITIZE_OPTIONS } from '@marvel/web-utils';
-import sanitize from 'sanitize-html';
-import dbClient from '../../../utils/dbConnector';
-import { unstable_getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
+import { NextApiRequest, NextApiResponse } from "next";
+import { SANITIZE_OPTIONS } from "shared-utils";
+import sanitize from "sanitize-html";
+import dbClient from "../../../utils/dbConnector";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function create_level_report(
   req: NextApiRequest & { url: string },
@@ -26,7 +26,7 @@ export default async function create_level_report(
           select: {
             People: {
               where: {
-                status: 'ACTIVE',
+                status: "ACTIVE",
               },
               select: {
                 personId: true,
@@ -40,23 +40,23 @@ export default async function create_level_report(
     });
 
     if (!existingReport?.id)
-      return res.status(400).json({ message: 'That report does not exist' });
+      return res.status(400).json({ message: "That report does not exist" });
 
     //sender should either be an admin or active member in the work
     if (
-      !session?.user?.scope?.map((s) => s.scope).includes('ADMIN') ||
+      !session?.user?.scope?.map((s) => s.scope).includes("ADMIN") ||
       !existingReport?.work?.People?.map((p) => p.personId).includes(
         session?.user?.id
       )
     )
-      return res.status(403).json({ message: 'Access denied' });
+      return res.status(403).json({ message: "Access denied" });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 
     if (formData?.title?.length > 60 || cleanContent?.length > 15_000) {
       return res.status(400).json({
         status: 403,
-        message: 'Invalid form data. too big.',
+        message: "Invalid form data. too big.",
       });
     }
 
@@ -67,13 +67,13 @@ export default async function create_level_report(
       data: {
         title: formData?.title,
         content: formData?.content,
-        reviewStatus: 'PENDING',
+        reviewStatus: "PENDING",
       },
     });
 
     await res.revalidate(
       `/work/${existingReport?.workId}${
-        existingReport?.isOverview ? '' : `/${existingReport?.id}`
+        existingReport?.isOverview ? "" : `/${existingReport?.id}`
       }`
     );
 

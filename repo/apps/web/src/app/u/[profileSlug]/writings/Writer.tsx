@@ -1,45 +1,50 @@
-'use client';
+"use client";
 
-import { Button, FullScreenDialog, IconButton, Paper } from 'ui';
-import { MarkdownEditor } from 'ui/client';
-import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { TextField } from 'ui';
-import { useMutation, useQuery } from 'react-query';
-import { useRouter } from 'next/navigation';
-import axios, { AxiosError } from 'axios';
-import ImageCompressor from 'browser-image-compression';
-import ImageUploading from 'react-images-uploading';
-import { ImageListType } from 'react-images-uploading/dist/typings';
-import { AiOutlineMinusCircle as MinusIcon } from 'react-icons/ai';
-import { ArticleFormData } from 'webapp/types';
-import { TypeOfArticle } from '@prisma/client';
+import { Button, FullScreenDialog, IconButton, Paper } from "ui";
+import { MarkdownEditor } from "../../../../components/MarkdownEditor";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { TextField } from "ui";
+import { useMutation, useQuery } from "react-query";
+import { useRouter } from "next/navigation";
+import axios, { AxiosError } from "axios";
+import ImageCompressor from "browser-image-compression";
+import ImageUploading from "react-images-uploading";
+import { ImageListType } from "react-images-uploading/dist/typings";
+import { AiOutlineMinusCircle as MinusIcon } from "react-icons/ai";
+import { ArticleFormData } from "../../../../types";
+import { TypeOfArticle } from "@prisma/client";
 
 const Writer = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const session = useSession();
   const sessionUser = session?.data?.user;
   const [formData, setFormData] = useState<ArticleFormData>({
-    title: '',
-    caption: '',
-    tags: [],
-    content: '',
+    title: "",
+    caption: "",
+    content: "",
     courseIds: [],
-    coverPhoto: '',
+    coverPhoto: "",
   });
-  const [newTag, setNewTag] = useState<string>('');
-  const [formType, setFormType] = useState<TypeOfArticle>('BLOG');
+  const [newTag, setNewTag] = useState<string>("");
+  const [formType, setFormType] = useState<TypeOfArticle>("BLOG");
   const router = useRouter();
 
   useEffect(() => {
-    setFormData({});
+    setFormData({
+      title: "",
+      caption: "",
+      content: "",
+      courseIds: [],
+      coverPhoto: "",
+    });
   }, [formType]);
 
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
-    ['course-list'],
+    ["course-list"],
     async () => (await axios.post(`/api/course/get-list`)).data?.courseList,
-    { enabled: formType === 'RESOURCE' }
+    { enabled: formType === "RESOURCE" }
   );
 
   const { mutate: sendMutation, isLoading: isCreateLoading } = useMutation(
@@ -51,7 +56,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
       ).data,
     {
       onError: (e: AxiosError) =>
-        alert(e?.response?.data?.['message'] || 'Something went wrong.'),
+        alert(e?.response?.data?.["message"] || "Something went wrong."),
       onSuccess: () => {
         router.refresh();
         setDialogOpen(false);
@@ -82,13 +87,13 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
 
   const handleSubmit = () => {
     if (!formData?.title || formData?.title?.length < 4) {
-      alert('title cannot be less than 4 characters long.');
+      alert("title cannot be less than 4 characters long.");
       return;
     } else if (!formData?.content?.length) {
-      alert('content cannot be empty');
+      alert("content cannot be empty");
       return;
-    } else if (formType === 'RESOURCE' && !formData?.courseIds?.length) {
-      alert('Resource articles must target atleast one course.');
+    } else if (formType === "RESOURCE" && !formData?.courseIds?.length) {
+      alert("Resource articles must target atleast one course.");
       return;
     } else {
       sendMutation();
@@ -99,24 +104,24 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     return (
       <>
         <div className="flex flex-wrap gap-5 flex-auto">
-          {sessionUser?.scope?.map((s) => s.scope)?.includes('WRITER') && (
+          {sessionUser?.scope?.map((s) => s.scope)?.includes("WRITER") && (
             <Button
               className="flex-1"
               variant="outlined"
               onClick={() => {
-                setFormType('BLOG');
+                setFormType("BLOG");
                 setDialogOpen((p) => !p);
               }}
             >
               New Blog Post
             </Button>
           )}
-          {sessionUser?.scope?.map((s) => s.scope)?.includes('R_WRITER') && (
+          {sessionUser?.scope?.map((s) => s.scope)?.includes("R_WRITER") && (
             <Button
               className="flex-1"
               variant="outlined"
               onClick={() => {
-                setFormType('RESOURCE');
+                setFormType("RESOURCE");
                 setDialogOpen((p) => !p);
               }}
             >
@@ -139,7 +144,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   fullwidth
                   id="title"
                   placeholder="Title of the Article"
-                  type={'text'}
+                  type={"text"}
                   value={formData?.title}
                   onChange={(e) =>
                     setFormData((p) => ({
@@ -156,7 +161,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   fullwidth
                   id="caption"
                   placeholder="A short aption for your article..."
-                  type={'text'}
+                  type={"text"}
                   value={formData?.caption}
                   onChange={(e) =>
                     setFormData((p) => ({
@@ -189,7 +194,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                         border
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
                         onClick={() => {
-                          setFormData((p) => ({ ...p, coverPhoto: '' }));
+                          setFormData((p) => ({ ...p, coverPhoto: "" }));
                           onImageUpload();
                         }}
                         {...dragProps}
@@ -211,60 +216,8 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   )}
                 </ImageUploading>
                 {/* tags  */}
-                <Paper className="mb-5 flex flex-wrap gap-5 mt-5">
-                  <TextField
-                    id="tags"
-                    className="w-full flex-initial"
-                    value={newTag}
-                    disabled={isCreateLoading}
-                    onChange={(e) => {
-                      if (e.target.value.slice(-1) === ',' && newTag !== '') {
-                        if (
-                          formData?.tags?.length < 8 ||
-                          !formData?.tags?.length
-                        ) {
-                          if (
-                            formData?.tags?.includes(
-                              e.target?.value?.slice(0, -1)
-                            )
-                          )
-                            return alert(`You've already added that tag`);
-                          setFormData({
-                            ...formData,
-                            tags: [
-                              ...(formData?.tags ? formData?.tags : []),
-                              e.target?.value?.slice(0, -1).toString(),
-                            ],
-                          });
-                          setNewTag('');
-                        } else {
-                          alert('Maximum number of tags is 8');
-                        }
-                      } else {
-                        setNewTag(`${e.target.value}`);
-                      }
-                    }}
-                    placeholder="Tags (Optional). Press comma ( , ) after each tag to add."
-                  />
-                  {formData?.tags?.map((tag, i) => (
-                    <Button
-                      className="flex flex-nowrap items-center gap-2"
-                      key={i}
-                      variant="outlined"
-                      disabled={isCreateLoading}
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          tags: formData?.tags.filter((i) => i !== tag),
-                        })
-                      }
-                    >
-                      <MinusIcon />
-                      {tag}
-                    </Button>
-                  ))}
-                </Paper>
-                {formType == 'RESOURCE' && (
+
+                {formType == "RESOURCE" && (
                   <>
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses
@@ -303,8 +256,8 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                               border={formData?.courseIds?.includes(course?.id)}
                               className={`rounded-lg ${
                                 formData?.courseIds?.includes(course?.id)
-                                  ? 'bg-p-2 border-2 border-p-10'
-                                  : 'bg-p-1 border-2 border-transparent'
+                                  ? "bg-p-2 border-2 border-p-10"
+                                  : "bg-p-1 border-2 border-transparent"
                               } p-5 select-none cursor-pointer box-border`}
                             >
                               <h3 className="text-2xl">{course?.courseCode}</h3>
@@ -326,7 +279,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                       isCreateLoading ||
                       !formData?.content ||
                       !formData?.title ||
-                      (formType === 'RESOURCE' && !formData?.courseIds)
+                      (formType === "RESOURCE" && !formData?.courseIds)
                     }
                   >
                     Create Article

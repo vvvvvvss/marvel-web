@@ -1,23 +1,23 @@
-import { Button, Paper, TextField } from 'ui';
-import { Avatar } from 'webapp/components/Avatar';
-import axios, { AxiosError } from 'axios';
-import { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import { Role, Status } from '@prisma/client';
-import { useRouter } from 'next/navigation';
+import { Button, Paper, TextField } from "ui";
+import { Avatar } from "../../../../components/Avatar";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { Role, Status } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const ManagePeople = ({ work }) => {
   const router = useRouter();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const {
     data: peopleFromSearch,
     isLoading: isPeopleLoading,
     refetch: fetchPeople,
   } = useQuery(
-    ['people', search],
+    ["people", search],
     async () =>
-      (await axios.get('/api/people/search?q=' + search + '&limit=5')).data
+      (await axios.get("/api/people/search?q=" + search + "&limit=5")).data
         ?.data,
     {
       enabled: false,
@@ -28,7 +28,7 @@ const ManagePeople = ({ work }) => {
   );
   const { data, isLoading, mutate } = useMutation(
     async (args: {
-      action: 'add-person' | 'remove-person' | 'change-status';
+      action: "add-person" | "remove-person" | "change-status";
       personId: string;
       status: Status;
       role: Role;
@@ -38,7 +38,7 @@ const ManagePeople = ({ work }) => {
       }),
     {
       onSuccess: () => router.refresh(),
-      onError: (data: AxiosError) => alert(data?.response?.data?.['message']),
+      onError: (data: AxiosError) => alert(data?.response?.data?.["message"]),
     }
   );
 
@@ -46,7 +46,7 @@ const ManagePeople = ({ work }) => {
     <Paper
       border
       className={`rounded-lg p-5 flex gap-5 flex-wrap ${
-        isLoading && 'opacity-50 pointer-events-none'
+        isLoading && "opacity-50 pointer-events-none"
       }`}
     >
       <h6 className="text-2xl w-full">People</h6>
@@ -54,7 +54,7 @@ const ManagePeople = ({ work }) => {
       <div className="overflow-x-auto w-full">
         <table className="w-full whitespace-nowrap">
           <tbody>
-            {work?.People?.sort((p) => (p?.role === 'AUTHOR' ? -1 : 1))?.map(
+            {work?.People?.sort((p) => (p?.role === "AUTHOR" ? -1 : 1))?.map(
               (p, i) => (
                 <tr key={i} className="border-y p-5 border-p-5 dark:border-p-3">
                   <td className="flex gap-3 items-center py-3 px-5 text-base">
@@ -72,17 +72,17 @@ const ManagePeople = ({ work }) => {
                       defaultValue={p?.status}
                       onChange={(e) =>
                         mutate({
-                          action: 'change-status',
+                          action: "change-status",
                           personId: p?.personId,
                           role: p?.role,
                           status: e?.target?.value as Status,
                         })
                       }
                     >
-                      <option className="bg-p-0" value={'ACTIVE'}>
+                      <option className="bg-p-0" value={"ACTIVE"}>
                         ACTIVE
                       </option>
-                      <option className="bg-p-0" value={'INACTIVE'}>
+                      <option className="bg-p-0" value={"INACTIVE"}>
                         INACTIVE
                       </option>
                     </select>
@@ -91,21 +91,21 @@ const ManagePeople = ({ work }) => {
                     <Button
                       onClick={() =>
                         mutate({
-                          action: 'remove-person',
+                          action: "remove-person",
                           personId: p?.personId,
                           role: p?.role,
                           status: p?.status,
                         })
                       }
                       disabled={
-                        (p?.role === 'AUTHOR' &&
+                        (p?.role === "AUTHOR" &&
                           work?.People?.filter(
-                            (p) => p?.role == 'AUTHOR' && p?.status == 'ACTIVE'
+                            (p) => p?.role == "AUTHOR" && p?.status == "ACTIVE"
                           ).length <= 1) ||
-                        (p?.role === 'COORDINATOR' &&
+                        (p?.role === "COORDINATOR" &&
                           work?.People?.filter(
                             (p) =>
-                              p?.role == 'COORDINATOR' && p?.status == 'ACTIVE'
+                              p?.role == "COORDINATOR" && p?.status == "ACTIVE"
                           ).length <= 1)
                       }
                     >
@@ -128,7 +128,7 @@ const ManagePeople = ({ work }) => {
         />
         <Button
           onClick={() => fetchPeople()}
-          disabled={search === '' || isPeopleLoading}
+          disabled={search === "" || isPeopleLoading}
         >
           Search
         </Button>
@@ -148,17 +148,17 @@ const ManagePeople = ({ work }) => {
                     {p?.name}
                   </td>
                   <td className="px-5 py-3 text-xs">
-                    {work?.typeOfWork === 'PROJECT' &&
-                      ['CRDN', 'ADMIN'].some((s) =>
+                    {work?.typeOfWork === "PROJECT" &&
+                      ["CRDN", "ADMIN"].some((s) =>
                         p?.scope?.map((s) => s?.scope)?.includes(s)
                       ) && (
                         <Button
                           onClick={() =>
                             mutate({
-                              action: 'add-person',
+                              action: "add-person",
                               personId: p?.id,
-                              role: 'COORDINATOR',
-                              status: 'ACTIVE',
+                              role: "COORDINATOR",
+                              status: "ACTIVE",
                             })
                           }
                         >
@@ -170,10 +170,10 @@ const ManagePeople = ({ work }) => {
                     <Button
                       onClick={() =>
                         mutate({
-                          action: 'add-person',
+                          action: "add-person",
                           personId: p?.id,
-                          role: 'AUTHOR',
-                          status: 'ACTIVE',
+                          role: "AUTHOR",
+                          status: "ACTIVE",
                         })
                       }
                     >

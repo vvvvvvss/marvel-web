@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import { useMutation } from 'react-query';
-import axios from 'axios';
+import React from "react";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { useMutation } from "react-query";
+import axios from "axios";
 import {
   Button,
   TextField,
   FullScreenDialog,
   IconButton,
   LoadingPulser,
-} from 'ui';
-import { MarkdownEditor } from 'ui/client';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { useRouter } from 'next/navigation';
+} from "ui";
+import { MarkdownEditor } from "../../../components/MarkdownEditor";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { useRouter } from "next/navigation";
 
 const ReportEditor = ({ report, work }) => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const ReportEditor = ({ report, work }) => {
   const { isLoading: isUpdating, mutate: updateReport } = useMutation(
     async () =>
       (
-        await axios.post('/api/report/edit?id=' + report?.id, {
+        await axios.post("/api/report/edit?id=" + report?.id, {
           formData,
         })
       ).data,
@@ -46,7 +46,7 @@ const ReportEditor = ({ report, work }) => {
   );
 
   if (
-    work?.People?.filter((p) => p?.status === 'ACTIVE')
+    work?.People?.filter((p) => p?.status === "ACTIVE")
       .map((p) => p?.personId)
       .includes(sessionUser?.id)
   ) {
@@ -67,7 +67,7 @@ const ReportEditor = ({ report, work }) => {
               </IconButton>
 
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
-                {!(work?.typeOfWork === 'PROJECT' && report?.isOverview) && (
+                {!(work?.typeOfWork === "PROJECT" && report?.isOverview) && (
                   <TextField
                     required
                     id="title"
@@ -95,7 +95,7 @@ const ReportEditor = ({ report, work }) => {
                     type="submit"
                     disabled={isUpdating || !changed}
                     className={`float-right m-5 ${
-                      isUpdating ? 'animate-pulse' : 'animate-none'
+                      isUpdating ? "animate-pulse" : "animate-none"
                     }`}
                     onClick={() => updateReport()}
                   >

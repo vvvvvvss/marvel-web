@@ -1,9 +1,9 @@
-import { MarkdownRender, Paper, Tab, TabGroup } from 'ui';
-import dbClient from 'webapp/utils/dbConnector';
-import axios from 'axios';
-import ContentsIndex from './ContentsIndex';
-import { Octokit } from '@octokit/core';
-import Link from 'next/link';
+import { MarkdownRender, Paper, Tab, TabGroup } from "ui";
+import dbClient from "../../../utils/dbConnector";
+import axios from "axios";
+import ContentsIndex from "./ContentsIndex";
+import { Octokit } from "@octokit/core";
+import Link from "next/link";
 
 const getSyllabus = async (courseCode: string) => {
   const course = await dbClient.course.findUnique({
@@ -16,20 +16,20 @@ const getSyllabus = async (courseCode: string) => {
     },
   });
   const repoName = course?.repoURL?.slice(
-    course?.repoURL.search('github.com') + 11 //number of chars in github.com + 1
+    course?.repoURL.search("github.com") + 11 //number of chars in github.com + 1
   );
-  const owner = repoName?.split('/')?.[0];
-  const repo = repoName?.split('/')?.[1];
+  const owner = repoName?.split("/")?.[0];
+  const repo = repoName?.split("/")?.[1];
   const octokt = new Octokit({ auth: process.env?.GITHUB_PAT });
   const filesMetaData: any = (
-    await octokt.request('GET /repos/{owner}/{repo}/contents/{path}', {
+    await octokt.request("GET /repos/{owner}/{repo}/contents/{path}", {
       owner: owner as string,
       repo: repo as string,
-      path: '',
+      path: "",
     })
   ).data;
   const levels = filesMetaData?.filter((e) =>
-    /^LEVEL\d+\.md$/.test(e?.['path'])
+    /^LEVEL\d+\.md$/.test(e?.["path"])
   );
   if (course?.totalLevels !== levels?.length) {
     await dbClient.course.update({

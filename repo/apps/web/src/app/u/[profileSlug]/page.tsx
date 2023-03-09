@@ -1,8 +1,8 @@
-import { Paper, TabGroup, Tab } from 'ui';
-import Link from 'next/link';
-import dbClient from 'webapp/utils/dbConnector';
-import { MarkdownRender } from 'ui';
-import ReadMeEditor from './ReadMeEditor';
+import { Paper, TabGroup, Tab } from "ui";
+import Link from "next/link";
+import dbClient from "../../../utils/dbConnector";
+import { MarkdownRender } from "ui";
+import ReadMeEditor from "./ReadMeEditor";
 
 const getUserReadmeBySlug = async (slug: string) => {
   const person = await dbClient.people.findFirst({
@@ -15,7 +15,7 @@ const getUserReadmeBySlug = async (slug: string) => {
       name: true,
     },
   });
-  console.log({ info: 'fetched readme of user in profile page' });
+  console.log({ info: "fetched readme of user in profile page" });
   return person;
 };
 
@@ -40,7 +40,7 @@ export default async function page({ params, searchParams }) {
         border
         className=" w-full rounded-lg flex flex-col p-5 mb-32"
       >
-        {['', null].includes(readMeData?.readMe) ? (
+        {["", null].includes(readMeData?.readMe) ? (
           <div className="w-full">
             {/* <img
               src={

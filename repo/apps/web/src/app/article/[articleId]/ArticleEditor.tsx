@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import axios from 'axios';
+import React from "react";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
 import {
   Button,
   TextField,
@@ -12,21 +12,20 @@ import {
   IconButton,
   LoadingPulser,
   Paper,
-} from 'ui';
-import { MarkdownEditor } from 'ui/client';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { useRouter } from 'next/navigation';
-import { ArticleFormData } from 'webapp/types';
-import ReactImageUploading, { ImageListType } from 'react-images-uploading';
-import ImageCompressor from 'browser-image-compression';
-import { AiOutlineMinusCircle as MinusIcon } from 'react-icons/ai';
+} from "ui";
+import { MarkdownEditor } from "../../../components/MarkdownEditor";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { useRouter } from "next/navigation";
+import { ArticleFormData } from "../../../types";
+import ReactImageUploading, { ImageListType } from "react-images-uploading";
+import ImageCompressor from "browser-image-compression";
 
 const ArticleEditor = ({ article }) => {
   const router = useRouter();
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const [changed, setChanged] = useState<boolean>(false);
-  const [newTag, setNewTag] = useState<string>('');
+  const [newTag, setNewTag] = useState<string>("");
   const [formData, setFormData] = useState<ArticleFormData>({
     title: article?.title,
     caption: article?.caption,
@@ -36,15 +35,15 @@ const ArticleEditor = ({ article }) => {
   });
 
   const { data: courseList, isLoading: isCourseListLoading } = useQuery(
-    ['course-list'],
+    ["course-list"],
     async () => (await axios.post(`/api/course/get-list`)).data?.courseList,
-    { enabled: article?.typeOfArticle === 'RESOURCE' }
+    { enabled: article?.typeOfArticle === "RESOURCE" }
   );
 
   const { isLoading: isUpdating, mutate: updateArticle } = useMutation(
     async () =>
       (
-        await axios.post('/api/article/edit?id=' + article?.id, {
+        await axios.post("/api/article/edit?id=" + article?.id, {
           ...formData,
         })
       ).data,
@@ -76,7 +75,7 @@ const ArticleEditor = ({ article }) => {
       reader.onloadend = () => {
         setFormData({
           ...formData,
-          coverPhoto: reader?.result as ArticleFormData['coverPhoto'],
+          coverPhoto: reader?.result as ArticleFormData["coverPhoto"],
         });
         setChanged(true);
       };
@@ -87,16 +86,16 @@ const ArticleEditor = ({ article }) => {
 
   const handleSubmit = () => {
     if (!formData?.title || formData?.title?.length < 4) {
-      alert('title cannot be less than 4 characters long.');
+      alert("title cannot be less than 4 characters long.");
       return;
     } else if (!formData?.content?.length) {
-      alert('content cannot be empty');
+      alert("content cannot be empty");
       return;
     } else if (
-      article?.typeOfArticle === 'RESOURCE' &&
+      article?.typeOfArticle === "RESOURCE" &&
       !formData?.courseIds?.length
     ) {
-      alert('Resource articles must target atleast one course.');
+      alert("Resource articles must target atleast one course.");
       return;
     } else {
       updateArticle();
@@ -104,7 +103,7 @@ const ArticleEditor = ({ article }) => {
   };
 
   if (
-    article?.People?.filter((p) => p?.status !== 'PENDING')
+    article?.People?.filter((p) => p?.status !== "PENDING")
       .map((p) => p?.personId)
       .includes(sessionUser?.id)
   ) {
@@ -129,7 +128,7 @@ const ArticleEditor = ({ article }) => {
                   fullwidth
                   id="title"
                   placeholder="Title of the Article"
-                  type={'text'}
+                  type={"text"}
                   value={formData?.title}
                   onChange={(e) => {
                     setFormData((p) => ({
@@ -147,7 +146,7 @@ const ArticleEditor = ({ article }) => {
                   className="mt-5"
                   id="caption"
                   placeholder="A short aption for your article..."
-                  type={'text'}
+                  type={"text"}
                   value={formData?.caption}
                   onChange={(e) => {
                     setFormData((p) => ({
@@ -182,7 +181,7 @@ const ArticleEditor = ({ article }) => {
                         border
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
                         onClick={() => {
-                          setFormData((p) => ({ ...p, coverPhoto: '' }));
+                          setFormData((p) => ({ ...p, coverPhoto: "" }));
                           setChanged(true);
 
                           onImageUpload();
@@ -206,7 +205,7 @@ const ArticleEditor = ({ article }) => {
                   )}
                 </ReactImageUploading>
 
-                {article?.typeOfArticle == 'RESOURCE' && (
+                {article?.typeOfArticle == "RESOURCE" && (
                   <>
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses
@@ -246,8 +245,8 @@ const ArticleEditor = ({ article }) => {
                               border={formData?.courseIds?.includes(course?.id)}
                               className={`rounded-lg ${
                                 formData?.courseIds?.includes(course?.id)
-                                  ? 'bg-p-2 border-2 border-p-10'
-                                  : 'bg-p-1 border-2 border-transparent'
+                                  ? "bg-p-2 border-2 border-p-10"
+                                  : "bg-p-1 border-2 border-transparent"
                               } p-5 select-none cursor-pointer box-border`}
                             >
                               <h3 className="text-2xl">{course?.courseCode}</h3>
@@ -270,7 +269,7 @@ const ArticleEditor = ({ article }) => {
                       isUpdating ||
                       !formData?.content ||
                       !formData?.title ||
-                      (article?.typeOfArticle === 'RESOURCE' &&
+                      (article?.typeOfArticle === "RESOURCE" &&
                         !formData?.courseIds)
                     }
                   >

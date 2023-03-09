@@ -1,9 +1,9 @@
-import { MarkdownRender, Paper } from 'ui';
-import dbClient from 'webapp/utils/dbConnector';
-import ReportWriter from './ReportWriter';
-import ReportReviewer from './ReportReviewer';
-import ReportEditor from './ReportEditor';
-import Tabs from './Tabs';
+import { MarkdownRender, Paper } from "ui";
+import dbClient from "../../../utils/dbConnector";
+import ReportWriter from "./ReportWriter";
+import ReportReviewer from "./ReportReviewer";
+import ReportEditor from "./ReportEditor";
+import Tabs from "./Tabs";
 
 const getReport = async (workId: string) => {
   const work = await dbClient.work.findUnique({
@@ -35,7 +35,7 @@ const getReport = async (workId: string) => {
     },
     take: 1,
     orderBy: {
-      createdAt: 'asc',
+      createdAt: "asc",
     },
     select: {
       title: true,
@@ -58,7 +58,7 @@ export default async function page({ params }) {
         <div className="w-full flex flex-col items-center mx-5 max-w-3xl gap-5">
           <>
             <h1 className="text-2xl">
-              {work?.typeOfWork === 'PROJECT' ? 'Overview' : 'Level 1 report'}{' '}
+              {work?.typeOfWork === "PROJECT" ? "Overview" : "Level 1 report"}{" "}
               is yet to be written.
             </h1>
 
@@ -72,7 +72,7 @@ export default async function page({ params }) {
         </div>
       ) : (
         <div className="w-full max-w-2xl">
-          {report?.reviewStatus === 'PENDING' ? (
+          {report?.reviewStatus === "PENDING" ? (
             <Paper
               border
               className="rounded-lg p-5 mb-5 bg-[#ffdf7f] text-[#4b4b00] dark:bg-[#3a3a00] dark:text-[#ffd262]"
@@ -80,7 +80,7 @@ export default async function page({ params }) {
               This Report is yet to be approved by a Coordinator.
             </Paper>
           ) : (
-            report?.reviewStatus == 'FLAGGED' && (
+            report?.reviewStatus == "FLAGGED" && (
               <Paper
                 border
                 className="rounded-lg p-5 mb-5 bg-[#ff7f7f] text-[#4b0000] dark:bg-[#3a0000] dark:text-[#ff6a6a]"
@@ -90,14 +90,14 @@ export default async function page({ params }) {
               </Paper>
             )
           )}
-          {!(work?.typeOfWork === 'PROJECT' && report?.isOverview) && (
+          {!(work?.typeOfWork === "PROJECT" && report?.isOverview) && (
             <>
               <h2 className="text-4xl mb-5">{report?.title}</h2>
               <p className="text-p-6">
                 {new Date(report?.createdAt)
                   ?.toLocaleDateString()
-                  .split('/')
-                  .join(' / ')}
+                  .split("/")
+                  .join(" / ")}
               </p>
               <hr className="my-5 border-p-3" />
             </>

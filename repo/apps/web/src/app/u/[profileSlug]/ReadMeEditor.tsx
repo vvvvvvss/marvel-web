@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button, FullScreenDialog, IconButton, LoadingPulser } from 'ui';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { useMutation } from 'react-query';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { MarkdownEditor } from 'ui/client';
+import { Button, FullScreenDialog, IconButton, LoadingPulser } from "ui";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { useMutation } from "react-query";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { MarkdownEditor } from "../../../components/MarkdownEditor";
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
 
@@ -39,8 +39,8 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
   return (
     <>
       {((sessionUser?.slug === profileSlug &&
-        sessionUser?.scope?.map((s) => s.scope)?.includes('PROFILE')) ||
-        sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) && (
+        sessionUser?.scope?.map((s) => s.scope)?.includes("PROFILE")) ||
+        sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) && (
         <Button
           onClick={() => setDialogOpen((p) => !p)}
           variant="outlined"
@@ -68,7 +68,7 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
               <Button
                 disabled={isLoading || !changed}
                 className={`float-right m-5 ${
-                  isLoading ? 'animate-pulse' : 'animate-none'
+                  isLoading ? "animate-pulse" : "animate-none"
                 }`}
                 onClick={() => mutateReadMe()}
               >

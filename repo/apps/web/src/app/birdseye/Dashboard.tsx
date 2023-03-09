@@ -1,33 +1,33 @@
-'use client';
-import { Button, LoadingPulser, Tab, TabGroup } from 'ui';
-import { ScopeEnum } from '@prisma/client';
-import { ArticleCard, PersonCard, ReportCard } from 'webapp/components/Cards';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useInfiniteQuery } from 'react-query';
+"use client";
+import { Button, LoadingPulser, Tab, TabGroup } from "ui";
+import { ScopeEnum } from "@prisma/client";
+import { ArticleCard, PersonCard, ReportCard } from "../../components/Cards";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 
 const tabs = {
-  report: 'Reports to review',
-  article: 'Articles to review',
-  people: 'Coordinators',
+  report: "Reports to review",
+  article: "Articles to review",
+  people: "Coordinators",
 };
 
 type Tab = keyof typeof tabs;
 
 export default () => {
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState<Tab>('report');
+  const [selectedTab, setSelectedTab] = useState<Tab>("report");
   const sessionUser = useSession()?.data?.user;
   useEffect(() => {
     if (
       sessionUser &&
-      !['ADMIN', 'CRDN'].some((s: ScopeEnum) =>
+      !["ADMIN", "CRDN"].some((s: ScopeEnum) =>
         sessionUser?.scope?.map((s) => s?.scope).includes(s)
       )
     ) {
-      router.replace('/');
+      router.replace("/");
     }
   }, [sessionUser]);
 
@@ -39,7 +39,7 @@ export default () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery(
-    [selectedTab, 'birdseye'],
+    [selectedTab, "birdseye"],
     async ({ pageParam }) =>
       (
         await axios.get(
@@ -74,19 +74,19 @@ export default () => {
       ) : (
         <>
           <div className="py-5 flex flex-wrap gap-5">
-            {selectedTab == 'report' ? (
+            {selectedTab == "report" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
                   <ReportCard key={i} data={d} />
                 ))}
               </>
-            ) : selectedTab == 'article' ? (
+            ) : selectedTab == "article" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
                   <ArticleCard key={i} data={d} />
                 ))}
               </>
-            ) : selectedTab == 'people' ? (
+            ) : selectedTab == "people" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
                   <PersonCard key={i} data={d} />

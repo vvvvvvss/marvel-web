@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import dbClient from '../../../utils/dbConnector';
-import { unstable_getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { v2 as cloudinary } from 'cloudinary';
-import { WorkFormData } from 'apps/webapp/types';
+import { NextApiRequest, NextApiResponse } from "next";
+import dbClient from "../../../utils/dbConnector";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
+import { v2 as cloudinary } from "cloudinary";
+import { WorkFormData } from "apps/web/types";
 
 export default async function edit_meta(
   req: NextApiRequest & { url: string },
@@ -24,7 +24,7 @@ export default async function edit_meta(
       (formData?.note && formData?.note?.length > 200)
     ) {
       return res.status(400).json({
-        message: 'Invalid form data.',
+        message: "Invalid form data.",
       });
     }
 
@@ -38,7 +38,7 @@ export default async function edit_meta(
         typeOfWork: true,
         People: {
           where: {
-            status: 'ACTIVE',
+            status: "ACTIVE",
           },
           select: {
             personId: true,
@@ -48,15 +48,15 @@ export default async function edit_meta(
     });
 
     const condition =
-      (work?.typeOfWork === 'COURSE' &&
-        session?.user?.scope?.map((s) => s.scope)?.includes('CRDN')) ||
-      (work?.typeOfWork === 'PROJECT' &&
+      (work?.typeOfWork === "COURSE" &&
+        session?.user?.scope?.map((s) => s.scope)?.includes("CRDN")) ||
+      (work?.typeOfWork === "PROJECT" &&
         work?.People?.map((p) => p.personId)?.includes(
           session?.user?.id as string
         )) ||
-      session?.user?.scope?.map((s) => s.scope).includes('ADMIN');
+      session?.user?.scope?.map((s) => s.scope).includes("ADMIN");
     if (!condition) {
-      return res.status(403).json({ message: 'Access denied.' });
+      return res.status(403).json({ message: "Access denied." });
     }
 
     let coverPhoto: string | null;
@@ -64,15 +64,15 @@ export default async function edit_meta(
       coverPhoto = (
         await cloudinary.uploader.upload(formData?.coverPhoto as string, {
           public_id: work?.id,
-          folder: 'work_covers',
-          resource_type: 'image',
+          folder: "work_covers",
+          resource_type: "image",
           overwrite: true,
           secure: true,
         })
       ).secure_url;
     } else if (
-      (!formData?.coverPhoto || formData?.coverPhoto == '') &&
-      (work?.coverPhoto || work?.coverPhoto !== '')
+      (!formData?.coverPhoto || formData?.coverPhoto == "") &&
+      (work?.coverPhoto || work?.coverPhoto !== "")
     ) {
       await cloudinary.uploader.destroy(`work_covers/${work?.id}`);
       coverPhoto = null;
@@ -93,7 +93,7 @@ export default async function edit_meta(
 
     await res.revalidate(`/work/${work?.id}`);
     return res.status(201).json({
-      message: 'meta data updated successfully',
+      message: "meta data updated successfully",
     });
   } catch (error) {
     console.log(error);

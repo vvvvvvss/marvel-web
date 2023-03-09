@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { SANITIZE_OPTIONS } from "@marvel/web-utils";
+import { SANITIZE_OPTIONS } from "shared-utils";
 import sanitize from "sanitize-html";
 import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { TypeOfArticle } from "database";
-import { ArticleFormData } from "webapp/types";
+import { ArticleFormData } from "web/types";
 
 export default async function create_article(
   req: NextApiRequest & { url: string },

@@ -1,10 +1,10 @@
-import { Window, Paper } from 'ui';
-import { Avatar } from '../../../components/Avatar';
-import dbClient from 'webapp/utils/dbConnector';
-import EditMeta from './EditMeta/EditMeta';
-import Tabs from './Tabs';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Window, Paper } from "ui";
+import { Avatar } from "../../../components/Avatar";
+import dbClient from "../../../utils/dbConnector";
+import EditMeta from "./EditMeta/EditMeta";
+import Tabs from "./Tabs";
+import Image from "next/image";
+import Link from "next/link";
 
 const getWork = async (id: string) => {
   try {
@@ -38,14 +38,14 @@ const getWork = async (id: string) => {
             reviewStatus: true,
           },
           orderBy: {
-            createdAt: 'asc',
+            createdAt: "asc",
           },
         },
         totalLevels: true,
         typeOfWork: true,
       },
     });
-    console.info({ info: 'got work' });
+    console.info({ info: "got work" });
     return work;
   } catch (error) {}
 };
@@ -59,13 +59,13 @@ export default async function layout({ children, params }) {
   const work = await getWork(params?.workId);
 
   const title =
-    work?.typeOfWork === 'COURSE' ? (
+    work?.typeOfWork === "COURSE" ? (
       <>
-        {work.People.filter((p) => p?.role === 'AUTHOR')
-          .map((a) => a?.person?.name?.split(' ')[0])
-          .join(' and ')}
+        {work.People.filter((p) => p?.role === "AUTHOR")
+          .map((a) => a?.person?.name?.split(" ")[0])
+          .join(" and ")}
         's <span className="whitespace-nowrap">{work?.courseCode}</span> course
-        work.{' '}
+        work.{" "}
         <span className="text-sm bg-p-2 rounded-lg p-2">
           {`Lv ${work?.Reports?.length}`}
         </span>
@@ -75,13 +75,13 @@ export default async function layout({ children, params }) {
     );
 
   const coverPhotoSrc = work?.coverPhoto
-    ? work?.coverPhoto?.slice(0, work?.coverPhoto?.search('upload') + 6) +
-      '/ar_1.77,c_crop' +
-      work?.coverPhoto?.slice(work?.coverPhoto?.search('upload') + 6)
-    : '';
+    ? work?.coverPhoto?.slice(0, work?.coverPhoto?.search("upload") + 6) +
+      "/ar_1.77,c_crop" +
+      work?.coverPhoto?.slice(work?.coverPhoto?.search("upload") + 6)
+    : "";
 
   return (
-    <Window className={'pt-5 md:pt-12 pb-40'}>
+    <Window className={"pt-5 md:pt-12 pb-40"}>
       {/* whole thing  */}
       <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
         {/* hero box  */}
@@ -89,7 +89,7 @@ export default async function layout({ children, params }) {
           className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
           width={1000}
           height={200}
-          alt={'cover photo'}
+          alt={"cover photo"}
           src={coverPhotoSrc}
         />
 
@@ -103,7 +103,7 @@ export default async function layout({ children, params }) {
             <div>
               <p className="text-p-6 tracking-widest">
                 {work?.typeOfWork}
-                {work?.typeOfWork === 'COURSE' ? 'WORK' : ''}
+                {work?.typeOfWork === "COURSE" ? "WORK" : ""}
               </p>
               <h1 className="text-4xl my-2">{title}</h1>
               <p className="text-p-8 mt-5">{work?.note}</p>
@@ -112,7 +112,7 @@ export default async function layout({ children, params }) {
               <table className="w-full text-sm text-left whitespace-nowrap">
                 <tbody>
                   {work?.People?.sort((p) =>
-                    p?.role === 'AUTHOR' ? -1 : 1
+                    p?.role === "AUTHOR" ? -1 : 1
                   )?.map((p, i) => (
                     <tr
                       key={i}

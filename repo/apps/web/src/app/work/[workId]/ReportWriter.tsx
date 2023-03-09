@@ -1,39 +1,39 @@
-'use client';
-import { Button, FullScreenDialog, LoadingPulser, TextField } from 'ui';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
-import { IconButton } from 'ui';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { MarkdownEditor } from 'ui/client';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Button, FullScreenDialog, LoadingPulser, TextField } from "ui";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { IconButton } from "ui";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { MarkdownEditor } from "../../../components/MarkdownEditor";
+import { useRouter } from "next/navigation";
 
 const ReportWriter = ({ work }) => {
   const router = useRouter();
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
+    title: "",
+    content: "",
   });
 
   const { isLoading: isCreating, mutate: createReport } = useMutation(
     async () =>
       (
-        await axios.post('/api/report/create?workId=' + work?.id, {
+        await axios.post("/api/report/create?workId=" + work?.id, {
           formData,
         })
       ).data,
     {
       onSuccess: (data) => {
-        setFormData({ title: '', content: '' });
+        setFormData({ title: "", content: "" });
         setModalOpen((p) => !p);
         console.log(data);
         router.replace(`/work/${work?.id}/${data?.reportId}`);
       },
       onError: (data: any) => {
-        alert(data?.response?.data?.message || 'Something went wrong');
+        alert(data?.response?.data?.message || "Something went wrong");
       },
     }
   );
@@ -41,7 +41,7 @@ const ReportWriter = ({ work }) => {
   if (
     sessionUser &&
     work?.People?.map(
-      (p) => p?.status == 'ACTIVE' && p?.role == 'AUTHOR' && p?.personId
+      (p) => p?.status == "ACTIVE" && p?.role == "AUTHOR" && p?.personId
     ).includes(sessionUser?.id)
   ) {
     return (
@@ -58,7 +58,7 @@ const ReportWriter = ({ work }) => {
 
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
                 {!(
-                  work?.typeOfWork === 'PROJECT' && work?._count?.Reports === 0
+                  work?.typeOfWork === "PROJECT" && work?._count?.Reports === 0
                 ) && (
                   <TextField
                     id="title"
@@ -85,7 +85,7 @@ const ReportWriter = ({ work }) => {
                     type="submit"
                     disabled={isCreating}
                     className={`float-right m-5 ${
-                      isCreating ? 'animate-pulse' : 'animate-none'
+                      isCreating ? "animate-pulse" : "animate-none"
                     }`}
                     onClick={() => createReport()}
                   >

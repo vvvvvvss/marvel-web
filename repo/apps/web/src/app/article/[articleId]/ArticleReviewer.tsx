@@ -1,27 +1,27 @@
-'use client';
-import { Button } from 'ui';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+"use client";
+import { Button } from "ui";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useMutation } from "react-query";
 
 const ArticleReviewer = ({ article }) => {
   const sessionUser = useSession().data?.user;
   const router = useRouter();
-  const [feedback, setFeedback] = useState({ isOpen: false, content: '' });
+  const [feedback, setFeedback] = useState({ isOpen: false, content: "" });
   const [confirmApprove, setConfirmApprove] = useState(0);
 
   const { isLoading, mutate: sendAction } = useMutation(
-    async (action: 'approve' | 'feedback') =>
+    async (action: "approve" | "feedback") =>
       await axios.post(
-        '/api/article/review?id=' + article?.id + '&action=' + action,
+        "/api/article/review?id=" + article?.id + "&action=" + action,
         { content: feedback?.content }
       ),
     {
       onSuccess: () => {
         setConfirmApprove(0);
-        setFeedback({ isOpen: false, content: '' });
+        setFeedback({ isOpen: false, content: "" });
         router.refresh();
       },
       onError: (data: any) => {
@@ -32,11 +32,11 @@ const ArticleReviewer = ({ article }) => {
 
   if (
     //session user is a coordinator
-    (sessionUser?.scope?.map((s) => s.scope).includes('CRDN') ||
+    (sessionUser?.scope?.map((s) => s.scope).includes("CRDN") ||
       //session user is an admin
-      sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) &&
+      sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) &&
     //with report status being PENDING
-    article?.reviewStatus === 'PENDING'
+    article?.reviewStatus === "PENDING"
   ) {
     return (
       <>
@@ -45,15 +45,15 @@ const ArticleReviewer = ({ article }) => {
             disabled={isLoading}
             onClick={() =>
               confirmApprove === 2
-                ? sendAction('approve')
+                ? sendAction("approve")
                 : setConfirmApprove((p) => p + 1)
             }
           >
             {confirmApprove === 0
-              ? 'Approve Report'
+              ? "Approve Report"
               : confirmApprove === 1
-              ? 'Are you sure?'
-              : 'Confirm.'}
+              ? "Are you sure?"
+              : "Confirm."}
           </Button>
         )}
         <Button
@@ -79,7 +79,7 @@ const ArticleReviewer = ({ article }) => {
             ></textarea>
             <div className="flex gap-5">
               <Button
-                onClick={() => sendAction('feedback')}
+                onClick={() => sendAction("feedback")}
                 className="mt-5"
                 disabled={isLoading}
                 type="submit"
@@ -99,8 +99,8 @@ const ArticleReviewer = ({ article }) => {
       </>
     );
   } else if (
-    article?.reviewStatus === 'FLAGGED' &&
-    article?.People?.filter((p) => p?.status !== 'PENDING')
+    article?.reviewStatus === "FLAGGED" &&
+    article?.People?.filter((p) => p?.status !== "PENDING")
       ?.map((p) => p?.personId)
       .includes(sessionUser?.id)
   ) {

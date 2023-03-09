@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { SANITIZE_OPTIONS } from "@marvel/web-utils";
+import { SANITIZE_OPTIONS } from "shared-utils";
 import sanitize from "sanitize-html";
 import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";

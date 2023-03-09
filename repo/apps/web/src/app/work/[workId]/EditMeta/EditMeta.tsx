@@ -1,16 +1,16 @@
-'use client';
-import { Button, FullScreenDialog, IconButton, Paper, TextField } from 'ui';
-import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
-import { VscSettings as ManageIcon } from 'react-icons/vsc';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import ReactImageUploading, { ImageListType } from 'react-images-uploading';
-import ImageCompressor from 'browser-image-compression';
-import ManagePeople from './ManagePeople';
-import { useMutation } from 'react-query';
-import axios, { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
-import { WorkFormData } from 'webapp/types';
+"use client";
+import { Button, FullScreenDialog, IconButton, Paper, TextField } from "ui";
+import { useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { VscSettings as ManageIcon } from "react-icons/vsc";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import ReactImageUploading, { ImageListType } from "react-images-uploading";
+import ImageCompressor from "browser-image-compression";
+import ManagePeople from "./ManagePeople";
+import { useMutation } from "react-query";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { WorkFormData } from "../../../../types";
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
@@ -35,17 +35,17 @@ const EditMeta = ({ work }) => {
     reader.onloadend = () => {
       setCopy({
         ...copy,
-        coverPhoto: reader?.result as WorkFormData['coverPhoto'],
+        coverPhoto: reader?.result as WorkFormData["coverPhoto"],
       });
     };
   };
 
   const { data, isLoading, mutate } = useMutation(
     async () =>
-      (await axios.post('/api/work/edit-meta?workId=' + work?.id, { ...copy }))
+      (await axios.post("/api/work/edit-meta?workId=" + work?.id, { ...copy }))
         .data,
     {
-      onError: (e: AxiosError) => alert(e.response?.data?.['message']),
+      onError: (e: AxiosError) => alert(e.response?.data?.["message"]),
       onSuccess: (data: any) => {
         router.refresh();
         setModalOpen(false);
@@ -58,14 +58,14 @@ const EditMeta = ({ work }) => {
   //if its a coursework, then to regular coordinators
   //and admins
   if (
-    work?.People?.filter((p) => p?.status == 'ACTIVE')
+    work?.People?.filter((p) => p?.status == "ACTIVE")
       ?.map((p) => p?.personId)
       .includes(sessionUser?.id) ||
     //work is coursework and session user is a coordinator
-    (work?.typeOfWork === 'COURSE' &&
-      sessionUser?.scope?.map((s) => s.scope).includes('CRDN')) ||
+    (work?.typeOfWork === "COURSE" &&
+      sessionUser?.scope?.map((s) => s.scope).includes("CRDN")) ||
     //session user is an admin
-    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
+    sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")
   ) {
     return (
       <>
@@ -95,7 +95,7 @@ const EditMeta = ({ work }) => {
                 className="my-5 flex flex-col pb-56"
                 onSubmit={(e) => e.preventDefault()}
               >
-                {work?.typeOfWork === 'PROJECT' && (
+                {work?.typeOfWork === "PROJECT" && (
                   <>
                     <label htmlFor="name" className="text-3xl py-3">
                       Project Name
@@ -136,7 +136,7 @@ const EditMeta = ({ work }) => {
                         border
                         className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center cursor-pointer"
                         onClick={() => {
-                          setCopy((p) => ({ ...p, coverPhoto: '' }));
+                          setCopy((p) => ({ ...p, coverPhoto: "" }));
                           setChanged(true);
                           onImageUpload();
                         }}
@@ -169,12 +169,12 @@ const EditMeta = ({ work }) => {
                 {/* amoung the conditions valid till here, exclude work authors. 
                 and include admins
                 */}
-                {(!work?.People?.filter((p) => p?.role == 'AUTHOR')
+                {(!work?.People?.filter((p) => p?.role == "AUTHOR")
                   ?.map((p) => p?.personId)
                   ?.includes(sessionUser?.id) ||
                   sessionUser?.scope
                     ?.map((s) => s.scope)
-                    ?.includes('ADMIN')) && <ManagePeople work={work} />}
+                    ?.includes("ADMIN")) && <ManagePeople work={work} />}
               </form>
             </div>
           </FullScreenDialog>

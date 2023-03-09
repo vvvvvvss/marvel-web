@@ -1,7 +1,7 @@
-import { Paper, Tab, TabGroup } from 'ui';
-import Link from 'next/link';
-import dbClient from 'webapp/utils/dbConnector';
-import Spawner from './Spawner';
+import { Paper, Tab, TabGroup } from "ui";
+import Link from "next/link";
+import dbClient from "../../../../utils/dbConnector";
+import Spawner from "./Spawner";
 
 const getUserWorksBySlug = async (slug: string) => {
   const works = await dbClient.work.findMany({
@@ -21,7 +21,7 @@ const getUserWorksBySlug = async (slug: string) => {
       typeOfWork: true,
     },
   });
-  console.log({ info: 'find() on works' });
+  console.log({ info: "find() on works" });
   return works;
 };
 
@@ -50,11 +50,11 @@ export default async function page({ params, searchParams }) {
               <Link className="flex-auto" key={i} href={`/work/${w?.id}`}>
                 <Paper
                   border
-                  shadow={'hover'}
+                  shadow={"hover"}
                   elevateOnHover
                   className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
-                  {w?.typeOfWork === 'COURSE' ? (
+                  {w?.typeOfWork === "COURSE" ? (
                     <>
                       <h6 className="text-xs tracking-widest">COURSE WORK</h6>
                       <h1 className="text-2xl">{w?.courseCode} Course Work</h1>

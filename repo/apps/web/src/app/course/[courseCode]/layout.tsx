@@ -1,9 +1,9 @@
-import { Window, Paper } from 'ui';
-import { Avatar } from '../../../components/Avatar';
-import dbClient from 'webapp/utils/dbConnector';
-import Image from 'next/image';
-import Link from 'next/link';
-import EditMeta from './EditMeta/EditMeta';
+import { Window, Paper } from "ui";
+import { Avatar } from "../../../components/Avatar";
+import dbClient from "../../../utils/dbConnector";
+import Image from "next/image";
+import Link from "next/link";
+import EditMeta from "./EditMeta/EditMeta";
 
 const getCourse = async (id: string) => {
   try {
@@ -33,7 +33,7 @@ const getCourse = async (id: string) => {
         totalLevels: true,
       },
     });
-    console.info({ info: 'got course' });
+    console.info({ info: "got course" });
     return course;
   } catch (error) {}
 };
@@ -47,13 +47,13 @@ export default async function layout({ children, params }) {
   const course = await getCourse(params?.courseCode);
 
   const coverPhotoSrc = course?.coverPhoto
-    ? course?.coverPhoto?.slice(0, course?.coverPhoto?.search('upload') + 6) +
-      '/ar_1.77,c_crop' +
-      course?.coverPhoto?.slice(course?.coverPhoto?.search('upload') + 6)
-    : '';
+    ? course?.coverPhoto?.slice(0, course?.coverPhoto?.search("upload") + 6) +
+      "/ar_1.77,c_crop" +
+      course?.coverPhoto?.slice(course?.coverPhoto?.search("upload") + 6)
+    : "";
 
   return (
-    <Window className={'pt-5 md:pt-12 pb-40'}>
+    <Window className={"pt-5 md:pt-12 pb-40"}>
       {/* whole thing  */}
       <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
         {/* hero box  */}
@@ -61,7 +61,7 @@ export default async function layout({ children, params }) {
           className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
           width={1000}
           height={200}
-          alt={'cover photo'}
+          alt={"cover photo"}
           src={coverPhotoSrc}
         />
 
@@ -84,7 +84,7 @@ export default async function layout({ children, params }) {
               {course?.Coordinators?.map((p, i) => (
                 <Link
                   key={i}
-                  className={`${i !== 0 && '-translate-x-3'}`}
+                  className={`${i !== 0 && "-translate-x-3"}`}
                   href={`/u/${p?.person?.slug}`}
                 >
                   <Avatar

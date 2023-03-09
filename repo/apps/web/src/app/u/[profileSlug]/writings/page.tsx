@@ -1,7 +1,7 @@
-import { Paper, Tab, TabGroup } from 'ui';
-import Link from 'next/link';
-import dbClient from 'webapp/utils/dbConnector';
-import Writer from './Writer';
+import { Paper, Tab, TabGroup } from "ui";
+import Link from "next/link";
+import dbClient from "../../../../utils/dbConnector";
+import Writer from "./Writer";
 
 const getUserWritingsBySlug = async (slug: string) => {
   const writings = await dbClient.article.findMany({
@@ -22,7 +22,7 @@ const getUserWritingsBySlug = async (slug: string) => {
       reviewStatus: true,
     },
   });
-  console.log({ info: 'find() on articles' });
+  console.log({ info: "find() on articles" });
   return writings;
 };
 
@@ -51,11 +51,11 @@ export default async function page({ params, searchParams }) {
               <Link className="flex-auto" key={i} href={`/article/${w?.id}`}>
                 <Paper
                   border
-                  shadow={'hover'}
+                  shadow={"hover"}
                   elevateOnHover
                   className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
-                  {w?.typeOfArticle === 'BLOG' ? (
+                  {w?.typeOfArticle === "BLOG" ? (
                     <>
                       <h6 className="text-xs tracking-widest">BLOG POST</h6>
                       <h1 className="text-2xl">{w?.title}</h1>
