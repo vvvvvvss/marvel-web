@@ -1,6 +1,3 @@
-import { IconBase } from 'react-icons';
-import { BsDot } from 'react-icons/bs';
-
 export const LoadingPulser = ({
   className,
   ...props

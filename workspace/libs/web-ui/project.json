@@ -3,34 +3,29 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web-ui/src",
   "projectType": "library",
-  "tags": ["ui"],
+  "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "outputPath": "dist/libs/web-ui",
-        "declaration": true,
-        "tsConfig": "libs/web-ui/tsconfig.lib.json",
-        "project": "libs/web-ui/package.json",
-        "entryFile": "libs/web-ui/src/index.ts",
-        "external": ["react/jsx-runtime"],
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-        "compiler": "swc",
-        "assets": [
-          {
-            "glob": "libs/web-ui/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ]
+        "lintFilePatterns": ["libs/web-ui/**/*.{ts,tsx,js,jsx}"]
       }
     },
-    "lint": {
-      "executor": "@angular-devkit/build-angular:tslint",
+    "build": {
+      "executor": "@nrwl/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "tsConfig": ["libs/web-ui/tsconfig.lib.json"],
-        "exclude": ["**/node_modules/**", "!libs/web-ui/**/*"]
+        "outputPath": "dist/libs/web-ui"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
       }
     }
   }
