@@ -129,7 +129,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                   Type query and press Enter...
                 </div>
               </>
-            ) : isLoading || isFetching ? (
+            ) : isLoading ? (
               <div className="w-full flex justify-center">
                 <LoadingPulser />
               </div>
