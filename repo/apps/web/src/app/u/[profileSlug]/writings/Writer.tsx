@@ -12,7 +12,6 @@ import axios, { AxiosError } from "axios";
 import ImageCompressor from "browser-image-compression";
 import ImageUploading from "react-images-uploading";
 import { ImageListType } from "react-images-uploading/dist/typings";
-import { AiOutlineMinusCircle as MinusIcon } from "react-icons/ai";
 import { ArticleFormData } from "../../../../types";
 import { TypeOfArticle } from "@prisma/client";
 
@@ -104,29 +103,29 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     return (
       <>
         <div className="flex flex-wrap gap-5 flex-auto">
-          {sessionUser?.scope?.map((s) => s.scope)?.includes("WRITER") && (
-            <Button
-              className="flex-1"
-              variant="outlined"
-              onClick={() => {
-                setFormType("BLOG");
-                setDialogOpen((p) => !p);
-              }}
-            >
-              New Blog Post
-            </Button>
-          )}
-          {sessionUser?.scope?.map((s) => s.scope)?.includes("R_WRITER") && (
-            <Button
-              className="flex-1"
-              variant="outlined"
-              onClick={() => {
-                setFormType("RESOURCE");
-                setDialogOpen((p) => !p);
-              }}
-            >
-              New Resource Article
-            </Button>
+          {sessionUser?.scope?.map((s) => s.scope)?.includes("PROFILE") && (
+            <>
+              <Button
+                className="flex-1"
+                variant="outlined"
+                onClick={() => {
+                  setFormType("BLOG");
+                  setDialogOpen((p) => !p);
+                }}
+              >
+                New Blog Post
+              </Button>
+              <Button
+                className="flex-1"
+                variant="outlined"
+                onClick={() => {
+                  setFormType("RESOURCE");
+                  setDialogOpen((p) => !p);
+                }}
+              >
+                New Resource Article
+              </Button>
+            </>
           )}
         </div>
         {dialogOpen && (

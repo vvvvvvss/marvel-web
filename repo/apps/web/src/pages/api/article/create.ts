@@ -5,8 +5,8 @@ import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
-import { TypeOfArticle } from "database";
-import { ArticleFormData } from "web/types";
+import { ScopeEnum, TypeOfArticle } from "database";
+import { ArticleFormData } from "../../..//types";
 
 export default async function create_article(
   req: NextApiRequest & { url: string },
@@ -29,10 +29,9 @@ export default async function create_article(
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData: ArticleFormData = req.body;
 
-    const condition =
-      typeOfArticle === "BLOG"
-        ? session?.user?.scope?.map((s) => s.scope)?.includes("WRITER")
-        : session?.user?.scope?.map((s) => s.scope)?.includes("R_WRITER");
+    const condition = session?.user?.scope
+      ?.map((s) => s.scope)
+      ?.includes("PROFILE");
 
     if (!condition) return res.status(403).json({ message: "Access denied" });
 

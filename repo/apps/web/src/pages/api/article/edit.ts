@@ -5,7 +5,7 @@ import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
-import { ArticleFormData } from "apps/web/types";
+import { ArticleFormData } from "../../../types";
 
 export default async function edit_article(
   req: NextApiRequest & { url: string },

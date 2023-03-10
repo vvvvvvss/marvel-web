@@ -6,7 +6,6 @@ import { VscSettings as ManageIcon } from "react-icons/vsc";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import ReactImageUploading, { ImageListType } from "react-images-uploading";
 import ImageCompressor from "browser-image-compression";
-import ManagePeople from "./ManagePeople";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -58,14 +57,8 @@ const EditMeta = ({ course }) => {
   );
 
   //button will be visible to:
-  //those who are coordinators of the course.
-  //and admins
-  if (
-    //work is coursework and session user is a coordinator
-    course?.Coodinators?.map((p) => p?.personId).includes(sessionUser?.id) ||
-    //session user is an admin
-    sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")
-  ) {
+  //admins
+  if (sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) {
     return (
       <>
         <IconButton
@@ -175,8 +168,6 @@ const EditMeta = ({ course }) => {
                 >
                   Update
                 </Button>
-                <hr className="my-5 border-r-p-4 dark:border-p-4" />
-                <ManagePeople course={course} />
               </form>
             </div>
           </FullScreenDialog>

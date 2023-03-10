@@ -20,7 +20,6 @@ const getUserBySlug = async (slug: string) => {
       },
     },
   });
-  console.info({ info: "getUserBySlug is called in profile page" });
   return person;
 };
 

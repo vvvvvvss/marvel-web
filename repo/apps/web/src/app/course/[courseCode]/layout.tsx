@@ -18,18 +18,6 @@ const getCourse = async (id: string) => {
         courseDuration: true,
         coverPhoto: true,
         repoURL: true,
-        Coordinators: {
-          select: {
-            personId: true,
-            person: {
-              select: {
-                profilePic: true,
-                name: true,
-                slug: true,
-              },
-            },
-          },
-        },
         totalLevels: true,
       },
     });
@@ -79,22 +67,6 @@ export default async function layout({ children, params }) {
                 {course?.totalLevels} Levels &#183; {course?.courseDuration}
               </p>
               <p className="text-p-8 mt-5">{course?.caption}</p>
-            </div>
-            <div className="flex flex-wrap pt-5">
-              {course?.Coordinators?.map((p, i) => (
-                <Link
-                  key={i}
-                  className={`${i !== 0 && "-translate-x-3"}`}
-                  href={`/u/${p?.person?.slug}`}
-                >
-                  <Avatar
-                    className={`w-10`}
-                    alt={p?.person?.name}
-                    src={p?.person?.profilePic}
-                  />
-                </Link>
-              ))}
-              <p className="text-p-4 self-center ml-5">Coordinators</p>
             </div>
             <EditMeta course={course} />
           </Paper>

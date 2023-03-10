@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Button,
   FullScreenDialog,
@@ -7,37 +7,37 @@ import {
   Tab,
   TabGroup,
   TextField,
-} from 'ui';
-import { useSession } from 'next-auth/react';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
-import { useState } from 'react';
-import { Course, ScopeEnum } from '@prisma/client';
-import { BsSearch, BsXLg } from 'react-icons/bs';
-import Link from 'next/link';
-import { useInfiniteQuery, useQuery } from 'react-query';
-import axios from 'axios';
+} from "ui";
+import { useSession } from "next-auth/react";
+import { VscClose as CloseIcon } from "react-icons/vsc";
+import { useState } from "react";
+import { Course, ScopeEnum } from "@prisma/client";
+import { BsSearch, BsXLg } from "react-icons/bs";
+import Link from "next/link";
+import { useInfiniteQuery, useQuery } from "react-query";
+import axios from "axios";
 import {
   ArticleCard,
   CourseCard,
   PersonCard,
   ReportCard,
   WorkCard,
-} from './Cards';
+} from "./Cards";
 
 const tabs = {
-  people: 'People',
-  course: 'Courses',
-  work: 'Works',
-  article: 'Articles',
-  report: 'Reports',
+  people: "People",
+  course: "Courses",
+  work: "Works",
+  article: "Articles",
+  report: "Reports",
 };
 type Tab = keyof typeof tabs;
 
 const MenuDialog = ({ menuOpen, setMenuOpen }) => {
   const sessionUser = useSession()?.data?.user;
-  const [query, setQuery] = useState<string>('');
-  const [queryTemp, setQueryTemp] = useState<string>('');
-  const [selectedTab, setSelectedTab] = useState<Tab>('people');
+  const [query, setQuery] = useState<string>("");
+  const [queryTemp, setQueryTemp] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<Tab>("people");
 
   const {
     data,
@@ -82,29 +82,30 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             className="flex-1"
             placeholder="Search Marvel"
             autoComplete="Off"
+            autoFocus
             value={queryTemp}
             onChange={(e) => setQueryTemp(e.target.value)}
           />
           <IconButton
             type="reset"
-            disabled={queryTemp === ''}
+            disabled={queryTemp === ""}
             variant="outlined"
             onClick={() => {
-              setQueryTemp('');
-              setQuery('');
+              setQueryTemp("");
+              setQuery("");
             }}
           >
             <BsXLg className="w-6" />
           </IconButton>
           <IconButton
             type="submit"
-            disabled={queryTemp === ''}
+            disabled={queryTemp === ""}
             variant="outlined"
           >
             <BsSearch className="w-6" />
           </IconButton>
         </form>
-        {query !== '' || queryTemp !== '' ? (
+        {query !== "" || queryTemp !== "" ? (
           <>
             <div className="w-full flex">
               <TabGroup className={`overflow-auto max-w-full mt-5`}>
@@ -122,7 +123,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
               </TabGroup>
             </div>
             <br />
-            {query === '' ? (
+            {query === "" ? (
               <>
                 <div className="w-full flex justify-center text-sm text-p-6">
                   Type query and press Enter...
@@ -134,31 +135,31 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
               </div>
             ) : (
               <div className="w-full flex flex-wrap gap-5 pb-48">
-                {selectedTab === 'people' ? (
+                {selectedTab === "people" ? (
                   <>
                     {data?.pages?.flat()?.map((d, i) => (
                       <PersonCard key={i} data={d} />
                     ))}
                   </>
-                ) : selectedTab === 'course' ? (
+                ) : selectedTab === "course" ? (
                   <>
                     {data?.pages?.flat()?.map((d: Course, i) => (
                       <CourseCard data={d} key={i} />
                     ))}
                   </>
-                ) : selectedTab === 'work' ? (
+                ) : selectedTab === "work" ? (
                   <>
                     {data?.pages?.flat()?.map((d, i) => (
                       <WorkCard data={d} key={i} />
                     ))}
                   </>
-                ) : selectedTab === 'article' ? (
+                ) : selectedTab === "article" ? (
                   <>
                     {data?.pages?.flat()?.map((d, i) => (
                       <ArticleCard data={d} key={i} />
                     ))}
                   </>
-                ) : selectedTab === 'report' ? (
+                ) : selectedTab === "report" ? (
                   <>
                     {data?.pages?.flat()?.map((d, i) => (
                       <ReportCard data={d} key={i} />
@@ -182,7 +183,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             <Link href={`/`} className="flex-1">
               <Button className="w-full">Home</Button>
             </Link>
-            {['CRDN', 'ADMIN'].some((s) =>
+            {["CRDN", "ADMIN"].some((s) =>
               sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
             ) && (
               <Link href={`/birdseye`} className="flex-1">

@@ -15,7 +15,6 @@ const getUserReadmeBySlug = async (slug: string) => {
       name: true,
     },
   });
-  console.log({ info: "fetched readme of user in profile page" });
   return person;
 };
 

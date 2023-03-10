@@ -1,4 +1,4 @@
-import { ImageListType } from 'react-images-uploading';
+import { ImageListType } from "react-images-uploading";
 
 export type ArticleFormData = {
   title: string;
@@ -19,4 +19,11 @@ export type WorkFormData = {
   name: string;
   note?: string;
   coverPhoto?: string | ArrayBuffer;
+};
+
+export type TrackDescription = {
+  title: string;
+  desc: string;
+  link: string;
+  buttonText: string;
 };

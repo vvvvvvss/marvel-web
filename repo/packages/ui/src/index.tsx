@@ -12,3 +12,4 @@ export * from "./MardownRender";
 export * from "./Dialog";
 export * from "./Loading";
 export * from "./TextField";
+export * from "./MarvelLogo";

@@ -1,31 +1,54 @@
-'use client';
+"use client";
 
-import { Appbar, Button, IconButton, LoadingPulser } from 'ui';
-import { Avatar } from './Avatar';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import Link from 'next/link';
+import { Appbar, Button, IconButton, LoadingPulser } from "ui";
+import { Avatar } from "./Avatar";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 import {
   HiChevronDoubleDown as DownIcon,
   HiOutlineBars2 as MenuIcon,
-} from 'react-icons/hi2';
-import { useState } from 'react';
-import MenuDialog from './MenuDialog';
+} from "react-icons/hi2";
+import { useEffect, useMemo, useState } from "react";
+import MenuDialog from "./MenuDialog";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const selectedSegment = useSelectedLayoutSegment();
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [selectedSegment]);
+
+  useMemo(() => {
+    typeof window !== "undefined" &&
+      window.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.ctrlKey && e.key == "m") {
+            if (!menuOpen) {
+              setMenuOpen(true);
+            }
+          } else if (e.key == "Escape") {
+            setMenuOpen(false);
+          }
+        },
+        false
+      );
+  }, []);
 
   return (
     <>
       {menuOpen && <MenuDialog menuOpen={menuOpen} setMenuOpen={setMenuOpen} />}
-      <Appbar className={'bottom-0 z-max'}>
+      <Appbar className={"bottom-0 z-max"}>
         <div
           className={`w-full max-w-screen-lg flex justify-between items-center relative `}
         >
           <div className="flex items-center">
             <IconButton
               onClick={() => setMenuOpen((p) => !p)}
-              variant={'text'}
+              variant={"text"}
               className="mr-2"
             >
               {menuOpen ? (
@@ -34,7 +57,7 @@ const Navbar = () => {
                 <MenuIcon className="h-6 w-6 text-p-10" />
               )}
             </IconButton>
-            <Link href={'/'}>
+            <Link href={"/"}>
               <span className="text-p-8 font-semibold text-center cursor-pointer">
                 MARVEL.
               </span>
@@ -59,12 +82,12 @@ const Navbar = () => {
                 Sign Out
               </Button>
             </div>
-          ) : status === 'loading' ? (
+          ) : status === "loading" ? (
             <LoadingPulser />
           ) : (
             <Button
-              onClick={() => signIn('google', { redirect: false })}
-              className={'text-sm'}
+              onClick={() => signIn("google", { redirect: false })}
+              className={"text-sm"}
             >
               Sign In
             </Button>

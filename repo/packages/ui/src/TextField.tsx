@@ -1,4 +1,6 @@
-type TextFieldProps = JSX.IntrinsicElements['input'] & {
+import clsx from "clsx";
+
+type TextFieldProps = JSX.IntrinsicElements["input"] & {
   fullwidth?: boolean;
 };
 
@@ -10,9 +12,9 @@ export const TextField = ({
 }: TextFieldProps) => {
   return (
     <input
-      className={`${className} 
-    py-2 px-3 rounded-lg bg-p-2 
-    ${fullwidth && 'w-full'}`}
+      className={clsx(className, "py-2 px-3 rounded-lg bg-p-2", {
+        "w-full": fullwidth,
+      })}
       {...props}
     >
       {children}

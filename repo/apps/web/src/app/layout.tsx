@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Context from "./Context";
+import "ui/styles.css";
 import "../styles/globals.css";
 
 function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {

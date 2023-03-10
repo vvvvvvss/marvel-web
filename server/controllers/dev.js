@@ -1,5 +1,7 @@
 import course from "../models/course.js";
 import user from "../models/user.js";
+import blogPost from "../models/blogPost.js";
+import FileSystem from "fs";
 
 export const createCourse = async (req, res) => {
   try {
@@ -60,20 +62,19 @@ export const assignIns = async (req, res) => {
 
 export const assignStu = async (req, res) => {
   try {
-    // const clcy = [
-    //     "vishalvinayram5432@gmail.com"
-    // ];
-    // const updated = await user.updateMany({email: {$in: clcy}}, {
-    //     enrollmentStatus: "ACTIVE",
-    //     currentRole: "STU",
-    //     currentStuCourse: "CL-CY-001",
-    //     currentLevel : 1,
-    //     $push:{
-    //         roleHistory: {role: "STU", stuCourse:"CL-CY-001", startTime: new Date()}
-    //     },
-    // }
-    // );
-    // return res.json({updated});
+    const data = await user
+      .find({
+        enrollmentStatus: { $in: ["ACTIVE", "INACTIVE"] },
+      })
+      .select(
+        "-_id slug name email profilePic id currentRole currentStuCourse currentInsCourse "
+      )
+      .lean()
+      .exec();
+    FileSystem.writeFile("users.json", JSON.stringify(data), (e) =>
+      console.log(e)
+    );
+    return res.json({ message: "success" });
   } catch (error) {
     console.log(error);
     return res.json({ error });
@@ -82,25 +83,9 @@ export const assignStu = async (req, res) => {
 
 export const play = async (req, res) => {
   try {
-    // const updated = await user.updateMany(
-    //     {
-    //         email:{$in:[
-    //             'uvcemarvel@gmail.com',
-    //         ]}
-    //     },
-    //     {
-    //         enrollmentStatus: "ACTIVE",
-    //         currentRole: "INS",
-    //         currentInsCourse : ['AI-ML-001','IOT-001','D-P-001','CL-CY-001','EV-RE-001'],
-    //         roleHistory:[{
-    //             role: "INS",
-    //             insCourse: ['AI-ML-001','IOT-001','D-P-001','CL-CY-001','EV-RE-001'],
-    //             startTime : new Date()
-    //         }]
-    //     },
-    //     {new:true, timestamps:true}
-    // );
-    // return res.json(updated);
+    const data = await user.find().lean().exec();
+    FileSystem.writeFile("users.json", JSON.stringify(data));
+    return res.json({ message: "success" });
   } catch (error) {
     return res.json(error);
   }

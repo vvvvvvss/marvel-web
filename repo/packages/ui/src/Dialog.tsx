@@ -1,16 +1,29 @@
+import clsx from "clsx";
+
 export const FullScreenDialog = ({
   open,
   className,
   children,
   ...props
-}: JSX.IntrinsicElements['dialog']) => {
+}: JSX.IntrinsicElements["dialog"]) => {
   return (
     <dialog
       open={open}
-      className={`${className || ''}
-    w-screen h-screen fixed inset-x-0 top-0 rounded-lg backdrop-blur-md p-5
-    flex justify-center bg-[rgba(0,0,0,0.5)] overflow-y-auto
-    `}
+      className={clsx(
+        className,
+        "w-screen",
+        "h-screen",
+        "fixed",
+        "inset-x-0",
+        "top-0",
+        "rounded-lg",
+        `bg-[hsla(0, 0%, 9%, 0.5)]`,
+        "backdrop-blur-md",
+        "p-5",
+        "flex",
+        "justify-center",
+        "overflow-y-auto"
+      )}
       {...props}
     >
       {children}
@@ -23,14 +36,25 @@ export const Dialog = ({
   className,
   children,
   ...props
-}: JSX.IntrinsicElements['dialog']) => {
+}: JSX.IntrinsicElements["dialog"]) => {
   return (
     <dialog
       open={open}
-      className={`${className || ''}
-    fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg backdrop-blur-md p-5
-    flex justify-center bg-[rgba(0,0,0,0.5)] overflow-y-auto
-    `}
+      className={clsx(
+        className,
+        "fixed",
+        "top-1/2",
+        "left-1/2",
+        "-translate-x-1/2",
+        "-translate-y-1/2",
+        "rounded-lg",
+        `bg-[hsla(0, 0%, 9%, 0.5)]`,
+        "backdrop-blur-md",
+        "p-5",
+        "flex",
+        "justify-center",
+        "overflow-y-auto"
+      )}
       {...props}
     >
       {children}

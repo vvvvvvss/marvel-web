@@ -11,27 +11,24 @@ datasource db {
 //scope of user
 enum ScopeEnum {
   PROFILE
-  WRITER
-  R_WRITER
   CRDN
   ADMIN
 }
 
 model People {
-  id                  String                 @id @default(uuid())
-  googleId            String                 @unique
-  slug                String                 @unique
-  email               String                 @unique
-  name                String
-  profilePic          String
-  scope               Scope[]
-  readMe              String?                @db.Text
-  rankingScore        Int                    @default(1)
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @updatedAt
-  Works               PeopleOnWork[]
-  Articles            ArticleToPeople[]
-  CoordinatingCourses CoordinatorsToCourse[]
+  id           String            @id @default(uuid())
+  googleId     String            @unique
+  slug         String            @unique
+  email        String            @unique
+  name         String
+  profilePic   String
+  scope        Scope[]
+  readMe       String?           @db.Text
+  rankingScore Int               @default(1)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  Works        PeopleOnWork[]
+  Articles     ArticleToPeople[]
 
   @@index([googleId, slug, email, name])
 }
@@ -47,31 +44,19 @@ model Scope {
   @@index([scope])
 }
 
-model CoordinatorsToCourse {
-  course   Course @relation(fields: [courseId], references: [id])
-  person   People @relation(fields: [personId], references: [id])
-  courseId String
-  personId String
-
-  @@id([courseId, personId])
-  @@index([courseId])
-  @@index([personId])
-}
-
 model Course {
-  id             String                 @id @default(uuid())
-  courseCode     String                 @unique
+  id             String            @id @default(uuid())
+  courseCode     String            @unique
   courseDuration String
   caption        String
   coverPhoto     String?
   totalLevels    Int
-  repoURL        String                 @default("")
-  rankingScore   Int                    @default(1)
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
+  repoURL        String            @default("")
+  rankingScore   Int               @default(1)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
   Works          Work[]
   Articles       ArticleToCourse[]
-  Coordinators   CoordinatorsToCourse[]
 
   @@index([courseCode, caption])
 }

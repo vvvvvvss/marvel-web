@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import utilRoutes from "./routes/utils.js";
-// import devRoutes from "./routes/devRoutes.js";
+import devRoutes from "./routes/devRoutes.js";
 import feedRoutes from "./routes/feedRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
 import getRoutes from "./routes/getRoutes.js";
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 
 //starting points for routes
 app.use("", utilRoutes);
-// app.use('/dev', devRoutes); // only for dev use
+app.use("/dev", devRoutes); // only for dev use
 app.use("/get", getRoutes);
 app.use("/update", updateRoutes);
 app.use("/create", createRoutes);

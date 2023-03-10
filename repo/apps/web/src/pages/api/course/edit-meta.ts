@@ -3,7 +3,7 @@ import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
-import { CourseFormData } from "apps/web/types";
+import { CourseFormData } from "../../../types";
 
 export default async function edit_meta(
   req: NextApiRequest & { url: string },
@@ -33,18 +33,12 @@ export default async function edit_meta(
         coverPhoto: true,
         id: true,
         courseCode: true,
-        Coordinators: {
-          select: {
-            personId: true,
-          },
-        },
       },
     });
 
-    const condition =
-      course?.Coordinators?.map((p) => p.personId).includes(
-        session?.user?.id as string
-      ) || session?.user?.scope?.map((s) => s.scope).includes("ADMIN");
+    const condition = session?.user?.scope
+      ?.map((s) => s.scope)
+      .includes("ADMIN");
 
     if (!condition) {
       return res.status(403).json({ message: "Access denied." });

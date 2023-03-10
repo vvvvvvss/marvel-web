@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Button, FullScreenDialog, IconButton, Paper } from 'ui';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { VscClose as CloseIcon } from 'react-icons/vsc';
+import { Button, FullScreenDialog, IconButton, Paper } from "ui";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { VscClose as CloseIcon } from "react-icons/vsc";
 import {
   AiOutlineMinusCircle as MinusIcon,
   AiOutlinePlusCircle as PlusIcon,
-} from 'react-icons/ai';
-import { useMutation } from 'react-query';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { Scope, ScopeEnum } from '@prisma/client';
+} from "react-icons/ai";
+import { useMutation } from "react-query";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { Scope, ScopeEnum } from "@prisma/client";
 
 const Manager = ({ dude }: { dude: any }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -20,7 +20,7 @@ const Manager = ({ dude }: { dude: any }) => {
   const router = useRouter();
 
   const { mutate: sendMutation, isLoading } = useMutation(
-    async (args: { action: 'add' | 'remove'; scope: ScopeEnum }) =>
+    async (args: { action: "add" | "remove"; scope: ScopeEnum }) =>
       (
         await axios.post(
           `/api/people/manage-scope?slug=${dude?.slug}&scope=${args.scope}&action=${args.action}`
@@ -35,8 +35,8 @@ const Manager = ({ dude }: { dude: any }) => {
   );
 
   if (
-    sessionUser?.scope?.map((s) => s.scope)?.includes('CRDN') ||
-    sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')
+    sessionUser?.scope?.map((s) => s.scope)?.includes("CRDN") ||
+    sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")
   ) {
     return (
       <>
@@ -56,12 +56,12 @@ const Manager = ({ dude }: { dude: any }) => {
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
               <div
-                className={isLoading ? 'opacity-60 pointer-events-none' : ''}
+                className={isLoading ? "opacity-60 pointer-events-none" : ""}
               >
-                {(sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN') ||
+                {(sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN") ||
                   sessionUser?.scope
                     ?.map((s) => s.scope)
-                    ?.includes('CRDN')) && (
+                    ?.includes("CRDN")) && (
                   <div>
                     <Paper
                       border
@@ -71,7 +71,7 @@ const Manager = ({ dude }: { dude: any }) => {
                       {dude?.scope?.map((s: Scope) => (
                         <Button
                           onClick={() =>
-                            sendMutation({ action: 'remove', scope: s?.scope })
+                            sendMutation({ action: "remove", scope: s?.scope })
                           }
                           variant="outlined"
                           className="mr-5 mb-5 inline-flex items-center gap-2"
@@ -83,20 +83,18 @@ const Manager = ({ dude }: { dude: any }) => {
                     </Paper>
                     <div className="pl-5 pt-5">
                       {[
-                        'PROFILE',
-                        'WRITER',
-                        'R_WRITER',
+                        "PROFILE",
                         ...(sessionUser?.scope
                           ?.map((s) => s.scope)
-                          ?.includes('ADMIN')
-                          ? ['CRDN', 'ADMIN']
+                          ?.includes("ADMIN")
+                          ? ["CRDN", "ADMIN"]
                           : []),
                       ].map(
                         (s: ScopeEnum) =>
                           !dude?.scope?.map((s) => s.scope)?.includes(s) && (
                             <Button
                               onClick={() =>
-                                sendMutation({ action: 'add', scope: s })
+                                sendMutation({ action: "add", scope: s })
                               }
                               variant="outlined"
                               className="mr-5 mb-5 inline-flex items-center gap-2"
