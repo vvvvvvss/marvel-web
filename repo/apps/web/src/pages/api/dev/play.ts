@@ -1,28 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbClient from "../../../utils/dbConnector";
+import fileSystem from "fs";
+import {
+  Article,
+  ArticleToCourse,
+  ArticleToPeople,
+  Course,
+  People,
+  Report,
+  Scope,
+  Work,
+} from "database";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    // await dbClient.peopleOnWork.deleteMany({
-    //   where: {
-    //     work: {
-    //       Reports: {
-    //         none: {},
-    //       },
-    //     },
-    //   },
-    // });
-    // await dbClient.work.deleteMany({
-    //   where: {
-    //     Reports: {
-    //       none: {},
-    //     },
-    //   },
-    // });
-
     return res.json({ data: "successs" });
   } catch (err) {
     console.log(err);
