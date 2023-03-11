@@ -11,6 +11,7 @@ import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { WorkFormData } from "../../../../types";
+import Image from "next/image";
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
@@ -146,12 +147,12 @@ const EditMeta = ({ work }) => {
                       </Paper>
                       {copy?.coverPhoto && (
                         <div className="w-1/2">
-                          <img
-                            className="flex-1 rounded-lg object-cover h-48"
+                          <Image
+                            className="w-full flex-1 rounded-lg object-cover h-48"
                             src={copy?.coverPhoto as string}
                             alt="cover photo"
                             height="150"
-                            width="100%"
+                            width="150"
                           />
                         </div>
                       )}

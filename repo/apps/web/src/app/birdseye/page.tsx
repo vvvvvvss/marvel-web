@@ -1,7 +1,7 @@
-import { Window } from 'ui';
-import Dashboard from './Dashboard';
+import { Window } from "ui";
+import Dashboard from "./Dashboard";
 
-export default function page({ pageParams }) {
+export default function page() {
   return (
     <Window>
       <div className="w-full max-w-5xl p-5">

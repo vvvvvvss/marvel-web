@@ -4,6 +4,7 @@ import ReportWriter from "./ReportWriter";
 import ReportReviewer from "./ReportReviewer";
 import ReportEditor from "./ReportEditor";
 import Tabs from "./Tabs";
+import Image from "next/image";
 
 const getReport = async (workId: string) => {
   const work = await dbClient.work.findUnique({
@@ -62,10 +63,12 @@ export default async function page({ params }) {
               is yet to be written.
             </h1>
 
-            <img
-              className="rounded-lg max-w-full"
+            <Image
+              className="aspect-video rounded-lg max-w-full"
               src="https://media.tenor.com/w-L80nXWEjoAAAAd/pen-in-flames-umineko.gif"
               alt="Level report is yet to be written"
+              width={"400"}
+              height={"400"}
             />
             <ReportWriter work={work} />
           </>

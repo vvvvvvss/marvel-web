@@ -14,6 +14,7 @@ import ImageUploading from "react-images-uploading";
 import { ImageListType } from "react-images-uploading/dist/typings";
 import { ArticleFormData } from "../../../../types";
 import { TypeOfArticle } from "@prisma/client";
+import Image from "next/image";
 
 const Writer = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -202,12 +203,12 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                       </Paper>
                       {formData?.coverPhoto && (
                         <div className="w-1/2">
-                          <img
-                            className="flex-1 rounded-lg object-cover h-48"
+                          <Image
+                            className="w-full flex-1 rounded-lg object-cover h-48"
                             src={formData?.coverPhoto as string}
                             alt="cover photo"
                             height="150"
-                            width="100%"
+                            width="150"
                           />
                         </div>
                       )}
@@ -233,8 +234,9 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                         </>
                       ) : (
                         <>
-                          {(courseList ? courseList : [])?.map((course) => (
+                          {(courseList ? courseList : [])?.map((course, i) => (
                             <Paper
+                              key={i}
                               onClick={() => {
                                 setFormData((p) => ({
                                   ...p,

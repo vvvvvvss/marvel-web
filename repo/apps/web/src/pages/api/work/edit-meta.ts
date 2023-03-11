@@ -3,7 +3,7 @@ import dbClient from "../../../utils/dbConnector";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
-import { WorkFormData } from "apps/web/types";
+import { WorkFormData } from "../../../types";
 
 export default async function edit_meta(
   req: NextApiRequest & { url: string },

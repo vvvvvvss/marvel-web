@@ -68,8 +68,9 @@ const Manager = ({ dude }: { dude: any }) => {
                       shadow
                       className="rounded-lg pl-5 pt-5 min-h-[60px] mt-5"
                     >
-                      {dude?.scope?.map((s: Scope) => (
+                      {dude?.scope?.map((s: Scope, i) => (
                         <Button
+                          key={i}
                           onClick={() =>
                             sendMutation({ action: "remove", scope: s?.scope })
                           }
@@ -90,9 +91,10 @@ const Manager = ({ dude }: { dude: any }) => {
                           ? ["CRDN", "ADMIN"]
                           : []),
                       ].map(
-                        (s: ScopeEnum) =>
+                        (s: ScopeEnum, i) =>
                           !dude?.scope?.map((s) => s.scope)?.includes(s) && (
                             <Button
+                              key={i}
                               onClick={() =>
                                 sendMutation({ action: "add", scope: s })
                               }

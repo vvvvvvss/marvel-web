@@ -23,7 +23,7 @@ const tracks: TrackDescription[] = [
   },
 ];
 
-export function Index() {
+export default function page() {
   return (
     <Window>
       {/*whole thing*/}
@@ -63,8 +63,9 @@ export function Index() {
             TRACKS
           </h1>
           <div className="flex gap-5 flex-wrap mt-5">
-            {tracks?.map((t) => (
+            {tracks?.map((t, i) => (
               <Paper
+                key={i}
                 border
                 className="bg-p-1 rounded-lg p-5 flex flex-col gap-3 flex-1 max-h-fit justify-between"
               >
@@ -88,5 +89,3 @@ export function Index() {
     </Window>
   );
 }
-
-export default Index;

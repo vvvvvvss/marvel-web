@@ -172,7 +172,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                   ) : hasNextPage ? (
                     <Button onClick={() => fetchNextPage()}>Load more</Button>
                   ) : (
-                    <p className="text-p-6 text-sm">That's it. </p>
+                    <p className="text-p-6 text-sm">That&apos;s it. </p>
                   )}
                 </div>
               </div>

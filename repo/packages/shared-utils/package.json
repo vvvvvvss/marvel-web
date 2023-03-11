@@ -2,6 +2,12 @@
     "name": "shared-utils",
     "main": "./index.ts",
     "types": "./index.ts",
+    "devDependencies": {
+        "typescript": "^4.9.4",
+        "tsconfig": "workspace:*",
+        "eslint": "^7.32.0",
+        "eslint-config-custom": "workspace:*"
+    },
     "dependencies": {
         "@types/sanitize-html": "^2.8.1",
         "sanitize-html": "^2.10.0"

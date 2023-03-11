@@ -1,7 +1,6 @@
 import { Window, Paper, MarkdownRender, Button } from "ui";
 import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
-// import EditMeta from './EditMeta/EditMeta';
 import Image from "next/image";
 import Link from "next/link";
 import ArticleReviewer from "./ArticleReviewer";
@@ -9,7 +8,7 @@ import ArticleEditor from "./ArticleEditor";
 
 const getArticle = async (id: string) => {
   try {
-    const article = await dbClient.article.findUniqueOrThrow({
+    const article = await dbClient.article.findFirst({
       where: {
         id: id,
       },
@@ -96,8 +95,8 @@ export default async function layout({ children, params }) {
               <p className="text-p-8 mt-5">{article?.caption}</p>
               {article?.typeOfArticle === "RESOURCE" && (
                 <div className="flex gap-3 flex-wrap mt-5">
-                  {article?.Courses?.map((c) => (
-                    <Link href={`/course/${c?.course?.courseCode}`}>
+                  {article?.Courses?.map((c, i) => (
+                    <Link key={i} href={`/course/${c?.course?.courseCode}`}>
                       <Button className="text-sm">
                         {c?.course?.courseCode}
                       </Button>
@@ -174,6 +173,7 @@ export default async function layout({ children, params }) {
             <ArticleEditor article={article} />
           </div>
         </div>
+        {children}
       </div>
     </Window>
   );

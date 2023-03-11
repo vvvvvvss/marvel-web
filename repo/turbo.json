@@ -22,5 +22,18 @@
     "db:push": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "GOOGLE_ID",
+    "GOOGLE_SECRET",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET",
+    "NEXT_REVALIDATE_SECRET",
+    "CLDNRY_API_KEY",
+    "CLDNRY_API_SECRET",
+    "CLDNRY_CLOUD_NAME",
+    "SIB_API_KEY",
+    "GITHUB_PAT"
+  ]
 }

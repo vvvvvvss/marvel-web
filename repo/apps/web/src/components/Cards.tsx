@@ -1,6 +1,6 @@
-import { Paper } from 'ui';
-import Link from 'next/link';
-import { Avatar } from './Avatar';
+import { Paper } from "ui";
+import Link from "next/link";
+import { Avatar } from "./Avatar";
 
 export const PersonCard = ({ data: d }) => {
   return (
@@ -38,21 +38,21 @@ export const WorkCard = ({ data: d }) => {
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-5 text-sm">{d?.typeOfWork} WORK</p>
         <h3 className="text-2xl mt-2">
-          {d?.typeOfWork === 'COURSE' ? (
+          {d?.typeOfWork === "COURSE" ? (
             <>
-              {d?.People?.map((a) => a?.person?.name?.split(' ')[0]).join(
-                ' and '
+              {d?.People?.map((a) => a?.person?.name?.split(" ")[0]).join(
+                " and "
               )}
-              's <span className="whitespace-nowrap">{d?.courseCode}</span>{' '}
-              course work.{' '}
+              &apos;s <span className="whitespace-nowrap">{d?.courseCode}</span>{" "}
+              course work.{" "}
             </>
           ) : (
             d?.name
           )}
         </h3>
-        {d?.typeOfWork === 'PROJECT' && (
+        {d?.typeOfWork === "PROJECT" && (
           <p className="w-full text-p-5 text-sm">
-            By {d?.People?.map((p) => p?.person?.name)?.join(' ,')}
+            By {d?.People?.map((p) => p?.person?.name)?.join(" ,")}
           </p>
         )}
       </Paper>
@@ -65,7 +65,7 @@ export const ArticleCard = ({ data: d }) => {
     <Link href={`/article/${d?.id}`} prefetch={false} className="flex-1">
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-5 text-sm whitespace-nowrap">
-          {d?.typeOfArticle} &#183;{' '}
+          {d?.typeOfArticle} &#183;{" "}
           {new Date(d?.createdAt).toLocaleDateString()}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
@@ -77,7 +77,7 @@ export const ArticleCard = ({ data: d }) => {
 export const ReportCard = ({ data: d }) => {
   return (
     <Link
-      href={`/work/${d?.workId}${d?.isOverview ? '' : `/${d?.id}`}`}
+      href={`/work/${d?.workId}${d?.isOverview ? "" : `/${d?.id}`}`}
       prefetch={false}
       className="flex-1"
     >

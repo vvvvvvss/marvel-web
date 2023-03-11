@@ -16,7 +16,7 @@ const tabs = {
 
 type Tab = keyof typeof tabs;
 
-export default () => {
+const Dashboard = () => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<Tab>("report");
   const sessionUser = useSession()?.data?.user;
@@ -29,7 +29,7 @@ export default () => {
     ) {
       router.replace("/");
     }
-  }, [sessionUser]);
+  }, [sessionUser, router]);
 
   const {
     data,
@@ -100,7 +100,7 @@ export default () => {
             ) : hasNextPage ? (
               <Button onClick={() => fetchNextPage()}>Load more</Button>
             ) : (
-              <p className="text-p-6 text-sm">That's it. </p>
+              <p className="text-p-6 text-sm">That&apos;s it. </p>
             )}
           </div>
         </>
@@ -108,3 +108,5 @@ export default () => {
     </div>
   );
 };
+
+export default Dashboard;

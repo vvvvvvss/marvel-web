@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  // transpilePackages: ['ui'],
+  transpilePackages: ["ui", "shared-utils"],
   images: {
     domains: ["res.cloudinary.com"],
   },

@@ -64,8 +64,8 @@ export default async function layout({ children, params }) {
         {work.People.filter((p) => p?.role === "AUTHOR")
           .map((a) => a?.person?.name?.split(" ")[0])
           .join(" and ")}
-        's <span className="whitespace-nowrap">{work?.courseCode}</span> course
-        work.{" "}
+        &apos;s <span className="whitespace-nowrap">{work?.courseCode}</span>{" "}
+        course work.{" "}
         <span className="text-sm bg-p-2 rounded-lg p-2">
           {`Lv ${work?.Reports?.length}`}
         </span>

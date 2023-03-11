@@ -10,6 +10,7 @@ import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { CourseFormData } from "../../../../types";
+import Image from "next/image";
 
 const EditMeta = ({ course }) => {
   const sessionUser = useSession()?.data?.user;
@@ -149,12 +150,12 @@ const EditMeta = ({ course }) => {
                       </Paper>
                       {copy?.coverPhoto && (
                         <div className="w-1/2">
-                          <img
-                            className="flex-1 rounded-lg object-cover h-48"
+                          <Image
+                            className="flex-1 rounded-lg object-cover h-48 w-full"
                             src={copy?.coverPhoto as string}
                             alt="cover photo"
                             height="150"
-                            width="100%"
+                            width="150"
                           />
                         </div>
                       )}

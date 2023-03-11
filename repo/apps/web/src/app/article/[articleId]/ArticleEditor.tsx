@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { ArticleFormData } from "../../../types";
 import ReactImageUploading, { ImageListType } from "react-images-uploading";
 import ImageCompressor from "browser-image-compression";
+import Image from "next/image";
 
 const ArticleEditor = ({ article }) => {
   const router = useRouter();
@@ -192,12 +193,12 @@ const ArticleEditor = ({ article }) => {
                       </Paper>
                       {formData?.coverPhoto && (
                         <div className="w-1/2">
-                          <img
-                            className="flex-1 rounded-lg object-cover h-48"
+                          <Image
+                            className="flex-1 rounded-lg object-cover h-48 w-full"
                             src={formData?.coverPhoto as string}
                             alt="cover photo"
                             height="150"
-                            width="100%"
+                            width="150"
                           />
                         </div>
                       )}
@@ -222,8 +223,9 @@ const ArticleEditor = ({ article }) => {
                         </>
                       ) : (
                         <>
-                          {(courseList ? courseList : [])?.map((course) => (
+                          {(courseList ? courseList : [])?.map((course, i) => (
                             <Paper
+                              key={i}
                               onClick={() => {
                                 setFormData((p) => ({
                                   ...p,
