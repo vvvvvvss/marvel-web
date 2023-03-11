@@ -1,8 +1,8 @@
 import { IOptions } from "sanitize-html";
 
 export const SANITIZE_OPTIONS: IOptions = {
-  allowedTags: ["iframe", "br", "strong", "blockquote", "script"],
-  allowedAttributes: { iframe: ["src", "height"], script: ["src"] },
+  allowedTags: ["iframe", "br", "strong", "blockquote"],
+  allowedAttributes: { iframe: ["src", "height"] },
   allowedIframeHostnames: [
     "www.youtube.com",
     "codesandbox.io",
@@ -15,7 +15,4 @@ export const SANITIZE_OPTIONS: IOptions = {
     "plotly.com",
   ],
   nestingLimit: 5,
-  allowedScriptDomains: ["gist.github.com"],
-  allowedScriptHostnames: ["gist.github.com"],
-  allowVulnerableTags: true,
 };

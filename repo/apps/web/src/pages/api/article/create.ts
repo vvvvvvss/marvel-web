@@ -6,7 +6,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { ScopeEnum, TypeOfArticle } from "database";
-import { ArticleFormData } from "../../..//types";
+import { ArticleFormData } from "../../../types";
 
 export default async function create_article(
   req: NextApiRequest & { url: string },

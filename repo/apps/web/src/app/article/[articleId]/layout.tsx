@@ -1,4 +1,4 @@
-import { Window, Paper, MarkdownRender, Button } from "ui";
+import { Window, Paper, Button, MarkdownRender } from "ui";
 import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
@@ -71,6 +71,8 @@ export default async function layout({ children, params }) {
     <Window className={"pt-5 md:pt-12 pb-40"}>
       {/* whole thing  */}
       <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
+        {children}
+
         {/* hero box  */}
         <Image
           className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
@@ -173,7 +175,6 @@ export default async function layout({ children, params }) {
             <ArticleEditor article={article} />
           </div>
         </div>
-        {children}
       </div>
     </Window>
   );
