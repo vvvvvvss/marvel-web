@@ -35,8 +35,16 @@ export function Index() {
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
               <Button className="text-sm flex-1">About</Button>
               <Button className="text-sm flex-1">Tracks</Button>
-              <Button className="text-sm flex-1">Courses</Button>
-              <Button className="text-sm flex-1">Annual Report 2022</Button>
+              <Link href={"/courses"} target="_blank" rel="noopener noreferrer">
+                <Button className="text-sm flex-1">Courses</Button>
+              </Link>
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"https://www.playbook.com/s/marvel/uvce-marvel"}
+              >
+                <Button className="text-sm flex-1">Annual Report 2022</Button>
+              </Link>
               <Button className="text-sm flex-1">Contact</Button>
             </div>
             <p className="text-p-8 max-w-xl text-lg font-normal py-5">

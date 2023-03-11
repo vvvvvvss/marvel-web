@@ -1,14 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbClient from "../../../utils/dbConnector";
-import { People, ReviewStatus, ScopeEnum, TypeOfWork } from "database";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    return res.json({ success: true });
+    await dbClient.peopleOnWork.deleteMany({
+      where: {
+        work: {
+          Reports: {
+            none: {},
+          },
+        },
+      },
+    });
+    await dbClient.work.deleteMany({
+      where: {
+        Reports: {
+          none: {},
+        },
+      },
+    });
+
+    return res.json({ data: "successs" });
   } catch (err) {
-    return res.status(500).send("Error");
+    console.log(err);
+    return res.status(500).send({ error: err });
   }
 }
