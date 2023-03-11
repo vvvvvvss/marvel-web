@@ -6,22 +6,22 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await dbClient.peopleOnWork.deleteMany({
-      where: {
-        work: {
-          Reports: {
-            none: {},
-          },
-        },
-      },
-    });
-    await dbClient.work.deleteMany({
-      where: {
-        Reports: {
-          none: {},
-        },
-      },
-    });
+    // await dbClient.peopleOnWork.deleteMany({
+    //   where: {
+    //     work: {
+    //       Reports: {
+    //         none: {},
+    //       },
+    //     },
+    //   },
+    // });
+    // await dbClient.work.deleteMany({
+    //   where: {
+    //     Reports: {
+    //       none: {},
+    //     },
+    //   },
+    // });
 
     return res.json({ data: "successs" });
   } catch (err) {
