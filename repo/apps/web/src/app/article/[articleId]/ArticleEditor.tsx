@@ -26,7 +26,7 @@ const ArticleEditor = ({ article }) => {
   const sessionUser = useSession().data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const [changed, setChanged] = useState<boolean>(false);
-  const [newTag, setNewTag] = useState<string>("");
+  const [confirmDelete, setConfirmDelete] = useState<number>(0);
   const [formData, setFormData] = useState<ArticleFormData>({
     title: article?.title,
     caption: article?.caption,
@@ -56,6 +56,21 @@ const ArticleEditor = ({ article }) => {
       },
       onError: (data: any) => {
         alert(data?.response?.data?.message);
+      },
+    }
+  );
+
+  const { isLoading: isDeleting, mutate: sendDelete } = useMutation(
+    async () =>
+      (await axios.delete(`/api/article/delete?id=${article?.id}`)).data,
+    {
+      onSuccess: () => {
+        alert("Article successfully deleted.");
+        router.refresh();
+        router.back();
+      },
+      onError: () => {
+        alert("Couldn't delete article");
       },
     }
   );
@@ -112,6 +127,20 @@ const ArticleEditor = ({ article }) => {
       <>
         <Button variant="standard" onClick={() => setModalOpen(true)}>
           Edit Article
+        </Button>
+        <Button
+          variant="outlined"
+          className="border border-[red]"
+          disabled={isDeleting}
+          onClick={() =>
+            confirmDelete === 2 ? sendDelete() : setConfirmDelete((p) => p + 1)
+          }
+        >
+          {confirmDelete === 0
+            ? "Delete Article"
+            : confirmDelete === 1
+            ? "Are you sure?"
+            : "Confirm."}
         </Button>
         {modalOpen && (
           <FullScreenDialog open={modalOpen}>

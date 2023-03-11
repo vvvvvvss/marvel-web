@@ -3,6 +3,7 @@ import { Window, Paper, Button } from "ui";
 import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
 import Manager from "./UserManager";
+import { ScopeEnum } from "database";
 
 const getUserBySlug = async (slug: string) => {
   const person = await dbClient.people.findFirst({
@@ -42,19 +43,27 @@ export default async function layout({
         {/* whole thing  */}
         <Paper className="w-full max-w-5xl mx-5 flex flex-col items-center md:flex-row md:items-start gap-5">
           {/* left part  */}
-          <div className="w-full flex flex-col gap-5 max-w-xs max-h-min">
-            <Paper shadow border className="w-full max-h-min rounded-lg p-5">
+          <div className="w-full flex flex-col gap-5 max-h-min sm:max-w-xs">
+            <Paper
+              shadow
+              border
+              className="w-full max-h-min rounded-lg p-5 flex-1"
+            >
               {/* picture and name  */}
               <div className="flex items-center pb-5">
                 <Avatar
                   src={dude?.profilePic}
-                  className="w-14"
+                  className="border border-p-6"
                   alt={dude?.name}
                 />
                 <h1 className="ml-5 text-lg">{dude?.name}</h1>
               </div>
               {/* coordinating courses */}
-              {dude?.scope?.map((s) => s.scope)?.includes("CRDN") && (
+              {["ADMIN", "CRDN"].some((s) =>
+                dude?.scope
+                  ?.map((dudeScope) => dudeScope?.scope)
+                  .includes(s as ScopeEnum)
+              ) && (
                 <div className="flex items-center border-t pt-5 max-w-full overflow-x-auto border-p-3">
                   <Button
                     variant="outlined"

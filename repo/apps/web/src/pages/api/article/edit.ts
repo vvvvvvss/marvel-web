@@ -21,7 +21,6 @@ export default async function edit_article(
 
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData: ArticleFormData = req.body;
-    console.log(formData);
     const existingArticle = await dbClient.article.findUnique({
       where: {
         id: req?.query?.id as string,

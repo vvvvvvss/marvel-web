@@ -8,7 +8,7 @@ import ArticleEditor from "./ArticleEditor";
 
 const getArticle = async (id: string) => {
   try {
-    const article = await dbClient.article.findFirst({
+    const article = await dbClient.article.findUniqueOrThrow({
       where: {
         id: id,
       },
@@ -49,7 +49,7 @@ const getArticle = async (id: string) => {
     console.info({ info: "got article" });
     return article;
   } catch (error) {
-    throw new Error("Couldn't get data.");
+    return null;
   }
 };
 

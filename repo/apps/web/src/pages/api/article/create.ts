@@ -29,9 +29,9 @@ export default async function create_article(
     const session = await unstable_getServerSession(req, res, authOptions);
     const formData: ArticleFormData = req.body;
 
-    const condition = session?.user?.scope
-      ?.map((s) => s.scope)
-      ?.includes("PROFILE");
+    const condition = ["ADMIN", "CRDN", "PROFILE"].some((s) =>
+      session?.user?.scope?.map((s) => s.scope)?.includes(s as ScopeEnum)
+    );
 
     if (!condition) return res.status(403).json({ message: "Access denied" });
 

@@ -13,13 +13,12 @@ import ImageCompressor from "browser-image-compression";
 import ImageUploading from "react-images-uploading";
 import { ImageListType } from "react-images-uploading/dist/typings";
 import { ArticleFormData } from "../../../../types";
-import { TypeOfArticle } from "@prisma/client";
+import { TypeOfArticle, ScopeEnum } from "@prisma/client";
 import Image from "next/image";
 
 const Writer = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const session = useSession();
-  const sessionUser = session?.data?.user;
+  const sessionUser = useSession()?.data?.user;
   const [formData, setFormData] = useState<ArticleFormData>({
     title: "",
     caption: "",
@@ -27,7 +26,6 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     courseIds: [],
     coverPhoto: "",
   });
-  const [newTag, setNewTag] = useState<string>("");
   const [formType, setFormType] = useState<TypeOfArticle>("BLOG");
   const router = useRouter();
 
@@ -100,11 +98,13 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     }
   };
 
-  if (sessionUser?.slug === authorSlug) {
+  if (sessionUser?.slug == authorSlug) {
     return (
       <>
         <div className="flex flex-wrap gap-5 flex-auto">
-          {sessionUser?.scope?.map((s) => s.scope)?.includes("PROFILE") && (
+          {["PROFILE", "ADMIN", "CRDN"].some((s) =>
+            sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
+          ) && (
             <>
               <Button
                 className="flex-1"
@@ -222,7 +222,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                     <label className="text-4xl my-5 mt-8 w-full block">
                       Target Courses
                     </label>
-                    <div className="flex gap-5 flex-wrap mb-5">
+                    <div className="flex gap-5 flex-wrap">
                       {isCourseListLoading ? (
                         <>
                           {Array.from({ length: 3 }).map((_, i) => (
@@ -273,7 +273,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   </>
                 )}
 
-                <div className="w-full flex gap-5 justify-end pb-48">
+                <div className="w-full flex gap-5 justify-end pb-48 mt-5">
                   <Button
                     onClick={() => handleSubmit()}
                     disabled={
@@ -293,7 +293,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
       </>
     );
   } else {
-    return <div></div>;
+    return <></>;
   }
 };
 

@@ -57,31 +57,23 @@ const Navbar = () => {
                 <MenuIcon className="h-6 w-6 text-p-10" />
               )}
             </IconButton>
-            <Link href={"/"}>
-              <span className="text-p-8 font-semibold text-center cursor-pointer">
-                MARVEL.
-              </span>
-            </Link>
           </div>
+          <Link href={"/"}>
+            <span className="text-p-8 font-semibold text-center cursor-pointer">
+              UVCE MARVEL.
+            </span>
+          </Link>
           {session?.user ? (
-            <div className="flex items-center">
-              <Link
-                href={`/u/${session?.user?.slug}`}
-                className="mr-3 flex items-center"
-              >
-                <Avatar
-                  className="w-10"
-                  src={session?.user?.profilePic}
-                  alt={session?.user?.name}
-                />
-              </Link>
-              <Button
-                onClick={() => signOut()}
-                className="text-sm hidden md:block"
-              >
-                Sign Out
-              </Button>
-            </div>
+            <Link
+              href={`/u/${session?.user?.slug}`}
+              className="mr-3 flex items-center"
+            >
+              <Avatar
+                className="w-10"
+                src={session?.user?.profilePic}
+                alt={session?.user?.name}
+              />
+            </Link>
           ) : status === "loading" ? (
             <LoadingPulser />
           ) : (

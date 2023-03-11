@@ -77,8 +77,8 @@ export default async function page({ params, searchParams }) {
                 className="aspect-video rounded-lg max-w-full"
                 src="https://media.tenor.com/w-L80nXWEjoAAAAd/pen-in-flames-umineko.gif"
                 alt="Level report is yet to be written"
-                width={"400"}
-                height={"400"}
+                width={"700"}
+                height={"500"}
               />
               <ReportWriter work={work} />
             </>

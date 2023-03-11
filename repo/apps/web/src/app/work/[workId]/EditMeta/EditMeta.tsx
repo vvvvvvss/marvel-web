@@ -12,6 +12,7 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { WorkFormData } from "../../../../types";
 import Image from "next/image";
+import WorkDeleter from "./WorkDeleter";
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
@@ -176,6 +177,8 @@ const EditMeta = ({ work }) => {
                   sessionUser?.scope
                     ?.map((s) => s.scope)
                     ?.includes("ADMIN")) && <ManagePeople work={work} />}
+
+                <WorkDeleter work={work} />
               </form>
             </div>
           </FullScreenDialog>

@@ -8,13 +8,13 @@ import {
   TabGroup,
   TextField,
 } from "ui";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useState } from "react";
 import { Course, ScopeEnum } from "@prisma/client";
 import { BsSearch, BsXLg } from "react-icons/bs";
 import Link from "next/link";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import axios from "axios";
 import {
   ArticleCard,
@@ -23,6 +23,7 @@ import {
   ReportCard,
   WorkCard,
 } from "./Cards";
+import { GoSignOut, GoSignIn } from "react-icons/go";
 
 const tabs = {
   people: "People",
@@ -198,6 +199,22 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             <Link href={`/about`} className="flex-1">
               <Button className="w-full">About</Button>
             </Link>
+            <Link href={`/courses`} className="flex-1">
+              <Button className="w-full">Courses</Button>
+            </Link>
+            {!!sessionUser?.id ? (
+              <Button onClick={() => signOut()}>
+                <span className="whitespace-nowrap flex gap-3 items-center">
+                  <GoSignOut /> Sign Out
+                </span>
+              </Button>
+            ) : (
+              <Button onClick={() => signIn("google", { redirect: false })}>
+                <span className="whitespace-nowrap flex gap-3 items-center">
+                  <GoSignIn /> Sign In
+                </span>
+              </Button>
+            )}
           </div>
         )}
       </div>

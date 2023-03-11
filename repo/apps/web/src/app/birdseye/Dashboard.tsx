@@ -67,7 +67,7 @@ const Dashboard = () => {
           ))}
         </TabGroup>
       </div>
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <div className="py-5 w-full flex justify-center">
           <LoadingPulser />
         </div>
