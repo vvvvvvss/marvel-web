@@ -10,7 +10,7 @@ export const Window = ({
       {...props}
       className={clsx(
         className,
-        "w-full min-h-screen overflow-x-hidden flex justify-center bg-p-10 dark:bg-p-0"
+        "ui-w-full ui-min-h-screen ui-overflow-x-hidden ui-flex ui-justify-center ui-bg-p-10 dark:ui-bg-p-0"
       )}
     >
       {children}

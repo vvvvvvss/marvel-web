@@ -1,20 +1,19 @@
-import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import dbClient from '../../../utils/dbConnector';
-import slugify from 'slugify';
+import NextAuth, { AuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import dbClient from "../../../utils/dbConnector";
+import slugify from "slugify";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
-  site: process.env.NEXTAUTH_URL,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
       authorization: {
         params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
         },
       },
     }),
@@ -38,7 +37,7 @@ export const authOptions = {
           profilePic: true,
         },
       });
-      console.info('auth called');
+      console.info("auth called");
       if (!existingUser) {
         // if no user, create slug and new user with the available data.
         let newSlug = slugify(token?.name, {
@@ -56,6 +55,7 @@ export const authOptions = {
         }
 
         //populate session with our data
+        //@ts-ignore
         session.user = await dbClient.people.create({
           data: {
             slug: newSlug,
@@ -78,13 +78,17 @@ export const authOptions = {
           },
         });
       } else {
+        //@ts-ignore
         session.user = existingUser;
       }
+      //@ts-ignore
       session.accessToken = token.accessToken;
+      //@ts-ignore
       session.error = token.error;
       return session;
     },
   },
+  secret: process.env?.NEXTAUTH_SECRET as string,
 };
 
 export default NextAuth(authOptions);

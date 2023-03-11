@@ -12,8 +12,8 @@ export const TextField = ({
 }: TextFieldProps) => {
   return (
     <input
-      className={clsx(className, "py-2 px-3 rounded-lg bg-p-2", {
-        "w-full": fullwidth,
+      className={clsx(className, "ui-py-2 ui-px-3 ui-rounded-lg ui-bg-p-2", {
+        "ui-w-full": fullwidth,
       })}
       {...props}
     >

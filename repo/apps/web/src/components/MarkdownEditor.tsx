@@ -38,7 +38,6 @@ export const MarkdownEditor = ({
           {...props}
         />
       ) : (
-        //@ts-ignore
         <MarkdownRender content={value as string} />
       )}
     </div>

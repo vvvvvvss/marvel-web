@@ -7,13 +7,13 @@ export const TabGroup = ({ children, className, ...props }: TabGroupProps) => {
     <div
       className={clsx(
         className,
-        "flex",
-        "border",
-        "rounded-full",
-        "max-w-min",
-        "p-2",
-        "border-p-6",
-        "w-min"
+        "ui-flex",
+        "ui-border",
+        "ui-rounded-full",
+        "ui-max-w-min",
+        "ui-p-2",
+        "ui-border-p-6",
+        "ui-w-min"
       )}
       {...props}
     >
@@ -36,30 +36,30 @@ export const Tab = ({
     <button
       className={clsx(
         className,
-        "relative",
-        "overflow-hidden",
-        "rounded-full",
-        "px-[1.2em]",
-        "py-[0.5em]",
-        "min-w-max",
-        "whitespace-nowrap",
-        "cursor-pointer",
-        "select-none",
-        "transition",
-        "active:scale-[97%]",
-        "border",
-        "border-transparent",
-        "disabled:opacity-50",
-        "disabled:cursor-not-allowed",
-        "hover:bg-p-1",
-        "text-p-10",
-        "hover:border-p-6",
-        "active:text-p-8",
-        active && "text-p-10",
-        active && "bg-p-2",
-        active && "border-p-2",
-        active && "pointer-events-none",
-        active && "cursor-not-allowed"
+        "ui-relative",
+        "ui-overflow-hidden",
+        "ui-rounded-full",
+        "ui-px-[1.2em]",
+        "ui-py-[0.5em]",
+        "ui-min-w-max",
+        "ui-whitespace-nowrap",
+        "ui-cursor-pointer",
+        "ui-select-none",
+        "ui-transition",
+        "active:ui-scale-[97%]",
+        "ui-border",
+        "ui-border-transparent",
+        "disabled:ui-opacity-50",
+        "disabled:ui-cursor-not-allowed",
+        "hover:ui-bg-p-1",
+        "ui-text-p-10",
+        "hover:ui-border-p-6",
+        "active:ui-text-p-8",
+        active && "ui-text-p-10",
+        active && "ui-bg-p-2",
+        active && "ui-border-p-2",
+        active && "ui-pointer-events-none",
+        active && "ui-cursor-not-allowed"
       )}
       {...props}
     >

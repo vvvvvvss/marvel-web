@@ -33,19 +33,19 @@ export default function page() {
           <MarvelLogo className="border border-p-6 shadow-2xl shadow-p-3 min-w-[300px] min-h-[300px] max-w-full flex-1 md:max-w-[300px] md:max-h-[300px]" />
           <div>
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
-              <Button className="text-sm flex-1">About</Button>
-              <Button className="text-sm flex-1">Tracks</Button>
-              <Link href={"/courses"} target="_blank" rel="noopener noreferrer">
-                <Button className="text-sm flex-1">Courses</Button>
+              <Button className="text-sm ">About</Button>
+              <Button className="text-sm ">Tracks</Button>
+              <Link href={"/courses"}>
+                <Button className="text-sm ">Courses</Button>
               </Link>
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://www.playbook.com/s/marvel/uvce-marvel"}
               >
-                <Button className="text-sm flex-1">Annual Report 2022</Button>
+                <Button className="text-sm ">Annual Report 2022</Button>
               </Link>
-              <Button className="text-sm flex-1">Contact</Button>
+              <Button className="text-sm ">Contact</Button>
             </div>
             <p className="text-p-8 max-w-xl text-lg font-normal py-5">
               Makerspace for Advanced Research, Vital Education and Learning AKA

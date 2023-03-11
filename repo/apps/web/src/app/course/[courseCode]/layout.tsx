@@ -47,8 +47,8 @@ export default async function layout({ children, params }) {
         {/* hero box  */}
         <Image
           className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
-          width={1000}
-          height={200}
+          width={"1000"}
+          height={"200"}
           alt={"cover photo"}
           src={coverPhotoSrc}
         />
@@ -73,8 +73,8 @@ export default async function layout({ children, params }) {
           <Paper className="w-full md:w-1/2 md:h-full flex-1">
             {course?.coverPhoto && (
               <Image
-                width={1000}
-                height={1000}
+                width={"1000"}
+                height={"1000"}
                 className="max-h-min object-cover w-full h-full"
                 src={coverPhotoSrc}
                 alt={course?.courseCode}

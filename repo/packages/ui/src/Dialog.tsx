@@ -11,18 +11,18 @@ export const FullScreenDialog = ({
       open={open}
       className={clsx(
         className,
-        "w-screen",
-        "h-screen",
-        "fixed",
-        "inset-x-0",
-        "top-0",
-        "rounded-lg",
-        `bg-[hsla(0, 0%, 9%, 0.5)]`,
-        "backdrop-blur-md",
-        "p-5",
-        "flex",
-        "justify-center",
-        "overflow-y-auto"
+        "ui-w-screen",
+        "ui-h-screen",
+        "ui-fixed",
+        "ui-inset-x-0",
+        "ui-top-0",
+        "ui-rounded-lg",
+        "ui-backdrop-blur-md",
+        "ui-p-5",
+        "ui-flex",
+        "ui-justify-center",
+        "ui-overflow-y-auto",
+        "ui-bg-[hsla(0, 0%, 9%, 0.5)]"
       )}
       {...props}
     >
@@ -42,18 +42,18 @@ export const Dialog = ({
       open={open}
       className={clsx(
         className,
-        "fixed",
-        "top-1/2",
-        "left-1/2",
-        "-translate-x-1/2",
-        "-translate-y-1/2",
-        "rounded-lg",
-        `bg-[hsla(0, 0%, 9%, 0.5)]`,
-        "backdrop-blur-md",
-        "p-5",
-        "flex",
-        "justify-center",
-        "overflow-y-auto"
+        "ui-fixed",
+        "ui-top-1/2",
+        "ui-left-1/2",
+        "-ui-translate-x-1/2",
+        "-ui-translate-y-1/2",
+        "ui-rounded-lg",
+        "ui-backdrop-blur-md",
+        "ui-p-5",
+        "ui-flex",
+        "ui-justify-center",
+        "ui-overflow-y-auto",
+        `ui-bg-[hsla(0, 0%, 9%, 0.5)]`
       )}
       {...props}
     >

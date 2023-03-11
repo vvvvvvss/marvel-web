@@ -40,6 +40,7 @@ importers:
       camel-case: ^4.1.2
       class-variance-authority: ^0.4.0
       cloudinary: ^1.33.0
+      clsx: ^1.2.1
       core-js: ^3.6.5
       database: workspace:*
       encoding: ^0.1.13
@@ -84,6 +85,7 @@ importers:
       camel-case: 4.1.2
       class-variance-authority: 0.4.0_typescript@4.9.4
       cloudinary: 1.35.0
+      clsx: 1.2.1
       core-js: 3.29.0
       database: link:../../packages/database
       encoding: 0.1.13

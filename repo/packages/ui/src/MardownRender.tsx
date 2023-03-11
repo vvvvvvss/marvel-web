@@ -1,9 +1,9 @@
-import { memo } from 'react';
-import Markdown from 'markdown-to-jsx';
-import he from 'he';
-import sanitizer from 'sanitize-html';
+import { memo } from "react";
+import Markdown from "markdown-to-jsx";
+import he from "he";
+import sanitizer from "sanitize-html";
 
-type MarkdownRenderType = JSX.IntrinsicElements['div'] & { content: string };
+type MarkdownRenderType = JSX.IntrinsicElements["div"] & { content: string };
 
 export const MarkdownRender = memo(
   ({ content, className, ...props }: MarkdownRenderType) => {
@@ -11,65 +11,66 @@ export const MarkdownRender = memo(
       <Markdown
         options={{
           disableParsingRawHTML: false,
-          wrapper: 'div',
+          wrapper: "div",
           overrides: {
             h1: {
-              props: { className: 'text-5xl my-5' },
+              props: { className: "ui-text-5xl ui-my-5" },
             },
             h2: {
-              props: { className: 'text-4xl my-5' },
+              props: { className: "ui-text-4xl ui-my-5" },
             },
             h3: {
-              props: { className: 'text-3xl my-5' },
+              props: { className: "ui-text-3xl ui-my-5" },
             },
             h4: {
-              props: { className: 'text-2xl my-5' },
+              props: { className: "ui-text-2xl ui-my-5" },
             },
             h5: {
-              props: { className: 'text-xl my-5' },
+              props: { className: "ui-text-xl ui-my-5" },
             },
             h6: {
-              props: { className: 'text-xl my-5' },
+              props: { className: "ui-text-xl ui-my-5" },
             },
             blockquote: {
               props: {
                 className:
-                  'p-5 my-5 bg-p-2 border-l shadow-2xl shadow-p-0 dark:shadow-p-2',
+                  "ui-p-5 ui-my-5 ui-bg-p-2 ui-border-l ui-shadow-2xl ui-shadow-p-0 dark:ui-shadow-p-2",
               },
             },
             ol: {
               props: {
-                className: 'space-y-1 list-decimal list-inside',
+                className: "ui-space-y-1 ui-list-decimal ui-list-inside",
               },
             },
             ul: {
               props: {
-                className: 'space-y-1 list-disc list-inside',
+                className: "ui-space-y-1 ui-list-disc ui-list-inside",
               },
             },
             code: {
               props: {
-                className: 'text-p-8',
+                className: "ui-text-p-8",
               },
             },
             pre: {
               props: {
                 className:
-                  'border border-p-6 rounded-lg my-5 p-5 whitespace-pre-wrap break-words',
+                  "ui-border ui-border-p-6 ui-rounded-lg ui-my-5 ui-p-5 ui-whitespace-pre-wrap ui-break-words",
               },
             },
             a: {
               props: {
-                target: '_blank',
-                rel: 'noopener noreferrer',
-                className: 'text-base text-s-6 hover:underline break-words',
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className:
+                  "ui-text-base ui-text-s-6 hover:ui-underline ui-break-words",
               },
             },
-            img: { props: { className: 'my-5 rounded-lg w-full ' } },
+            img: { props: { className: "ui-my-5 ui-rounded-lg ui-w-full " } },
             iframe: {
               props: {
-                frameBorder: '0',
-                className: 'w-full max-h-[500px] rounded-lg',
+                frameBorder: "0",
+                className: "ui-w-full ui-max-h-[500px] ui-rounded-lg ui-bg-p-0",
               },
             },
           },
@@ -78,22 +79,22 @@ export const MarkdownRender = memo(
       >
         {he.decode(
           sanitizer(content, {
-            allowedTags: ['iframe', 'br', 'strong', 'blockquote', 'script'],
-            allowedAttributes: { iframe: ['src', 'height'], script: ['src'] },
+            allowedTags: ["iframe", "br", "strong", "blockquote", "script"],
+            allowedAttributes: { iframe: ["src", "height"], script: ["src"] },
             allowedIframeHostnames: [
-              'www.youtube.com',
-              'codesandbox.io',
-              'codepen.io',
-              'www.thiscodeworks.com',
-              'gist.github.com',
-              'plot.ly',
-              'www.kaggle.com',
-              'player.vimeo.com',
-              'plotly.com',
+              "www.youtube.com",
+              "codesandbox.io",
+              "codepen.io",
+              "www.thiscodeworks.com",
+              "gist.github.com",
+              "plot.ly",
+              "www.kaggle.com",
+              "player.vimeo.com",
+              "plotly.com",
             ],
             nestingLimit: 5,
-            allowedScriptDomains: ['gist.github.com'],
-            allowedScriptHostnames: ['gist.github.com'],
+            allowedScriptDomains: ["gist.github.com"],
+            allowedScriptHostnames: ["gist.github.com"],
             allowVulnerableTags: true,
           })
         )}
