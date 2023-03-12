@@ -42,7 +42,11 @@ export default async function page({ params, searchParams }) {
           <Tab active>Writings</Tab>
         </Link>
       </TabGroup>
-      <Paper shadow border className="flex mt-5 p-5 rounded-lg gap-5 flex-wrap">
+      <Paper
+        shadow
+        border
+        className="flex mt-5 p-5 rounded-lg gap-5 flex-wrap bg-p-9 dark:bg-p-0"
+      >
         {writings.length == 0 ? (
           <h1 className="text-4xl text-p-4 dark:text-p-6 ">No writings</h1>
         ) : (
@@ -53,7 +57,7 @@ export default async function page({ params, searchParams }) {
                   border
                   shadow={"hover"}
                   elevateOnHover
-                  className="p-5 bg-p-9 dark:bg-p-1 rounded-lg min-w-fit cursor-pointer"
+                  className="p-5 bg-p-10 dark:bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
                   {w?.typeOfArticle === "BLOG" ? (
                     <>

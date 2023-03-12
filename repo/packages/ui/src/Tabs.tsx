@@ -57,7 +57,7 @@ export const Tab = ({
         "dark:active:text-p-8",
         active && "text-p-0 dark:text-p-10",
         active && "bg-p-8 dark:bg-p-2",
-        active && "border-p-0 dark:border-p-2",
+        active && "border-p-8 dark:border-p-2",
         active && "pointer-events-none",
         active && "cursor-not-allowed"
       )}

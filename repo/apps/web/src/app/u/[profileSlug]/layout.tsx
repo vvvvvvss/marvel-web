@@ -53,10 +53,10 @@ export default async function layout({
               <div className="flex items-center pb-5">
                 <Avatar
                   src={dude?.profilePic}
-                  className="border border-p-6"
+                  className="border-[1.5px] dark:border border-p-0 dark:border-p-6"
                   alt={dude?.name}
                 />
-                <h1 className="ml-5 text-lg">{dude?.name}</h1>
+                <h1 className="ml-5 text-xl">{dude?.name}</h1>
               </div>
               {/* coordinating courses */}
               {["ADMIN", "CRDN"].some((s) =>

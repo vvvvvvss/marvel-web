@@ -186,7 +186,7 @@ const EditMeta = ({ work }) => {
       </>
     );
   } else {
-    return <div></div>;
+    return <div className="absolute"></div>;
   }
 };
 export default EditMeta;

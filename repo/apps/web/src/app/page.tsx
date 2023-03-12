@@ -30,7 +30,7 @@ export default function page() {
       <div className="w-full max-w-5xl flex flex-col pb-48">
         {/* hero box  */}
         <div className="flex flex-col md:flex-row h-screen max-h-screen gap-10 md:justify-center items-center p-10">
-          <MarvelLogo className="border border-p-6 shadow-2xl shadow-p-3 min-w-[300px] min-h-[300px] max-w-full flex-1 md:max-w-[300px] md:max-h-[300px]" />
+          <MarvelLogo className="aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
           <div>
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
               <Button className="flex-1 md:flex-auto">About</Button>

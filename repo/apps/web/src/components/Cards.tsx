@@ -10,7 +10,7 @@ export const PersonCard = ({ data: d }) => {
         elevateOnHover
         className="rounded-lg p-5 flex gap-5 w-full h-full"
       >
-        <Avatar className="w-10" src={d?.profilePic} />
+        <Avatar className="w-10 h-10" src={d?.profilePic} alt={d?.name} />
         <h6 className="text-lg flex-1 self-center">{d?.name}</h6>
       </Paper>
     </Link>
