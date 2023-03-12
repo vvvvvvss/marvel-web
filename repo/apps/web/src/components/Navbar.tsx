@@ -10,16 +10,16 @@ import {
 } from "react-icons/hi2";
 import { useEffect, useMemo, useState } from "react";
 import MenuDialog from "./MenuDialog";
-import { useSelectedLayoutSegments } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const selectedSegment = useSelectedLayoutSegments();
+  const path = usePathname();
 
   useEffect(() => {
     setMenuOpen(false);
-  }, [selectedSegment]);
+  }, [path]);
 
   useMemo(() => {
     typeof window !== "undefined" &&

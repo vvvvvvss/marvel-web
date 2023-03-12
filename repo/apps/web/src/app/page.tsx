@@ -46,7 +46,6 @@ export default function page() {
               >
                 <Button className="w-full">Annual Report 2022</Button>
               </Link>
-              <Button className="flex-1 md:flex-auto">Contact</Button>
             </div>
             <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal py-5">
               Makerspace for Advanced Research, Vital Education and Learning AKA
