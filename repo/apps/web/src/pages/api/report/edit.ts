@@ -43,13 +43,13 @@ export default async function create_level_report(
       return res.status(400).json({ message: "That report does not exist" });
 
     //sender should either be an admin or active member in the work
-    if (
-      !session?.user?.scope?.map((s) => s.scope).includes("ADMIN") ||
-      !existingReport?.work?.People?.map((p) => p.personId).includes(
+    const condition =
+      session?.user?.scope?.map((s) => s.scope).includes("ADMIN") ||
+      existingReport?.work?.People?.map((p) => p.personId).includes(
         session?.user?.id
-      )
-    )
-      return res.status(403).json({ message: "Access denied" });
+      );
+
+    if (!condition) return res.status(403).json({ message: "Access denied" });
 
     const cleanContent = sanitize(formData.content, SANITIZE_OPTIONS);
 

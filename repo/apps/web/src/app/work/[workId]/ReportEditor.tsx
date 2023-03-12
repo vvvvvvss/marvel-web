@@ -48,7 +48,8 @@ const ReportEditor = ({ report, work }) => {
   if (
     work?.People?.filter((p) => p?.status === "ACTIVE")
       .map((p) => p?.personId)
-      .includes(sessionUser?.id)
+      .includes(sessionUser?.id) ||
+    sessionUser?.scope?.map((s) => s.scope).includes("ADMIN")
   ) {
     return (
       <>

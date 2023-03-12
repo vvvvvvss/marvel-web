@@ -44,7 +44,7 @@ export default async function page({ params, searchParams }) {
       </TabGroup>
       <Paper shadow border className="flex mt-5 p-5 rounded-lg gap-5 flex-wrap">
         {writings.length == 0 ? (
-          <h1 className="text-4xl text-p-6 ">No writings</h1>
+          <h1 className="text-4xl text-p-4 dark:text-p-6 ">No writings</h1>
         ) : (
           <>
             {writings.map((w, i) => (
@@ -53,7 +53,7 @@ export default async function page({ params, searchParams }) {
                   border
                   shadow={"hover"}
                   elevateOnHover
-                  className="p-5 bg-p-1 rounded-lg min-w-fit cursor-pointer"
+                  className="p-5 bg-p-9 dark:bg-p-1 rounded-lg min-w-fit cursor-pointer"
                 >
                   {w?.typeOfArticle === "BLOG" ? (
                     <>

@@ -136,7 +136,7 @@ const EditMeta = ({ work }) => {
                     <div className="w-full flex gap-5 my-5">
                       <Paper
                         border
-                        className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center cursor-pointer"
+                        className="flex-auto bg-p-8 dark:bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center cursor-pointer"
                         onClick={() => {
                           setCopy((p) => ({ ...p, coverPhoto: "" }));
                           setChanged(true);

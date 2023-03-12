@@ -5,6 +5,7 @@ import EditMeta from "./EditMeta/EditMeta";
 import Tabs from "./Tabs";
 import Image from "next/image";
 import Link from "next/link";
+import { getCroppedCloudinaryImage } from "shared-utils";
 
 const getWork = async (id: string) => {
   try {
@@ -66,7 +67,7 @@ export default async function layout({ children, params }) {
           .join(" and ")}
         &apos;s <span className="whitespace-nowrap">{work?.courseCode}</span>{" "}
         course work.{" "}
-        <span className="text-sm bg-p-2 rounded-lg p-2">
+        <span className="text-sm bg-p-8 dark:bg-p-2 rounded-lg p-2">
           {`Lv ${work?.Reports?.length}`}
         </span>
       </>
@@ -74,49 +75,48 @@ export default async function layout({ children, params }) {
       work?.name
     );
 
-  const coverPhotoSrc = work?.coverPhoto
-    ? work?.coverPhoto?.slice(0, work?.coverPhoto?.search("upload") + 6) +
-      "/ar_1.77,c_crop" +
-      work?.coverPhoto?.slice(work?.coverPhoto?.search("upload") + 6)
-    : "";
+  const coverPhotoSrc = getCroppedCloudinaryImage(
+    work?.coverPhoto,
+    work?.typeOfWork
+  );
 
   return (
-    <Window className={"pt-5 md:pt-12 pb-40"}>
+    <Window className={"pt-12 pb-40"}>
       {/* whole thing  */}
       <div className="w-full max-w-5xl flex flex-col items-center px-5 z-10">
-        {/* hero box  */}
         <Image
           className="absolute w-full top-0 -z-10 blur-3xl h-1/2 opacity-50"
-          width={1000}
-          height={200}
+          width={"1000"}
+          height={"200"}
           alt={"cover photo"}
           src={coverPhotoSrc}
         />
 
+        {/* hero box  */}
         <Paper
           shadow
           border
           className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-min"
         >
           {/* left box  */}
-          <Paper className="relative flex flex-col justify-between dark:bg-p-1 w-full md:w-1/2 max-h-min p-5 ">
+          <Paper className="relative flex flex-col justify-between bg-p-10 dark:bg-p-1 bg-opacity-50 w-full md:w-1/2 max-h-min p-5 ">
             <div>
-              <p className="text-p-6 tracking-widest">
+              <p className="text-p-3 dark:text-p-6 tracking-widest">
                 {work?.typeOfWork}
                 {work?.typeOfWork === "COURSE" ? "WORK" : ""}
               </p>
               <h1 className="text-4xl my-2">{title}</h1>
-              <p className="text-p-8 mt-5">{work?.note}</p>
+              <p className="text-p-2 dark:text-p-8 mt-5">{work?.note}</p>
             </div>
             <div className="overflow-x-auto pt-5 -mx-5 flex-grow-0 -mb-5">
               <table className="w-full text-sm text-left whitespace-nowrap">
-                <tbody>
+                <tbody className="border-b-[1.5px] dark:border-b md:border-none">
                   {work?.People?.sort((p) =>
                     p?.role === "AUTHOR" ? -1 : 1
                   )?.map((p, i) => (
                     <tr
                       key={i}
-                      className="border-t p-5 border-p-3 dark:border-p-6"
+                      className="border-t-[1.5px] dark:border-t p-5 border-p-3 dark:border-p-6"
                     >
                       <Link key={i} href={`/u/${p?.person?.slug}`}>
                         <td className="flex gap-3 items-center py-3 px-5 text-base">
@@ -138,15 +138,13 @@ export default async function layout({ children, params }) {
             <EditMeta work={work} />
           </Paper>
           <Paper className="w-full md:w-1/2 md:h-full flex-1">
-            {work?.coverPhoto && (
-              <Image
-                width={1000}
-                height={1000}
-                className="max-h-min object-cover w-full h-full"
-                src={coverPhotoSrc}
-                alt={work?.name as string}
-              />
-            )}
+            <Image
+              width={"1000"}
+              height={"1000"}
+              className="max-h-min object-cover w-full h-full"
+              src={coverPhotoSrc}
+              alt={work?.name as string}
+            />
           </Paper>
         </Paper>
         <Tabs work={work} />

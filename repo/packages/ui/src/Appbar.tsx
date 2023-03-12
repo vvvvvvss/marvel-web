@@ -10,16 +10,15 @@ export const Appbar = ({ children, className, ...props }: AppbarProps) => {
     <nav
       className={clsx(
         className,
-        "ui-fixed",
-        "ui-z-max",
-        "ui-inset-x-0",
-        `ui-bg-[hsla(0, 0%, 9%, 0.5)]`,
-        "ui-backdrop-blur-md",
-        "ui-border-y",
-        "ui-border-p-1",
-        "ui-flex",
-        "ui-justify-center",
-        "ui-p-2"
+        "fixed",
+        "z-max",
+        "inset-x-0",
+        "backdrop-blur-md",
+        "border-y-[1.5px] dark:border-y",
+        "dark:border-p-1 border-p-9",
+        "flex",
+        "justify-center",
+        "p-2"
       )}
       {...props}
     >

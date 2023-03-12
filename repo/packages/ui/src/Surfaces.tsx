@@ -19,13 +19,13 @@ export const Paper = ({
       className={clsx(
         className,
         shadow === "hover"
-          ? "ui-transition active:ui-shadow-none hover:ui-shadow-2xl hover:ui-shadow-p-0 dark:hover:ui-shadow-p-2"
+          ? "transition hover:shadow-2xl active:shadow-lg hover:shadow-p-1 dark:hover:shadow-p-2"
           : shadow
-          ? "ui-shadow-2xl ui-shadow-p-0 dark:ui-shadow-p-2"
+          ? "shadow-2xl shadow-p-0 dark:shadow-p-2"
           : "",
-        border ? "ui-border ui-border-p-2 dark:ui-border-p-6" : "",
+        border && "border-[1.5px] dark:border border-p-0 dark:border-p-6",
         elevateOnHover
-          ? "ui-transition hover:ui-translate-y-[-1px] active:ui-scale-[97%]"
+          ? "transition hover:translate-y-[-1px] active:scale-[97%] active:shadow-lg"
           : ""
       )}
       {...props}

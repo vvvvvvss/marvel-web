@@ -33,22 +33,22 @@ export default function page() {
           <MarvelLogo className="border border-p-6 shadow-2xl shadow-p-3 min-w-[300px] min-h-[300px] max-w-full flex-1 md:max-w-[300px] md:max-h-[300px]" />
           <div>
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
-              <Button className="text-sm flex-1 md:flex-auto">About</Button>
-              <Button className="text-sm ">Tracks</Button>
-              <Link href={"/courses"} className="text-sm flex-1 md:flex-auto">
+              <Button className="flex-1 md:flex-auto">About</Button>
+              <Button className="flex-1">Tracks</Button>
+              <Link href={"/courses"} className="flex-1 md:flex-auto">
                 <Button className="w-full">Courses</Button>
               </Link>
               <Link
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm flex-1 md:flex-auto"
+                className="flex-1 md:flex-auto"
                 href={"https://www.playbook.com/s/marvel/uvce-marvel"}
               >
                 <Button className="w-full">Annual Report 2022</Button>
               </Link>
-              <Button className="text-sm flex-1 md:flex-auto">Contact</Button>
+              <Button className="flex-1 md:flex-auto">Contact</Button>
             </div>
-            <p className="text-p-8 max-w-xl text-lg font-normal py-5">
+            <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal py-5">
               Makerspace for Advanced Research, Vital Education and Learning AKA
               Marvel at University of Visvesvaraya College of Engineering, is
               poised to spur genuine passion in every learner and redefine
@@ -62,7 +62,7 @@ export default function page() {
         <div className="p-5">
           <h1
             id={"tracks"}
-            className="capitalize tracking-widest text-2xl text-p-5 border-y border-p-4 p-5"
+            className="capitalize tracking-widest text-2xl text-p-0 dark:text-p-5 border-y border-p-5 p-5"
           >
             TRACKS
           </h1>
@@ -71,11 +71,12 @@ export default function page() {
               <Paper
                 key={i}
                 border
-                className="bg-p-1 rounded-lg p-5 flex flex-col gap-3 flex-1 max-h-fit justify-between min-w-[300px]"
+                shadow
+                className="bg-p-10 dark:bg-p-1 rounded-lg p-5 flex flex-col gap-3 flex-1 max-h-fit justify-between min-w-[300px]"
               >
                 <h2 className="text-2xl">{t?.title}</h2>
                 <hr className="border-p-5" />
-                <p className="text-sm text-p-9">{t?.desc}</p>
+                <p className="text-base text-p-0 dark:text-p-9">{t?.desc}</p>
                 <Link
                   href={t?.link}
                   target={t?.link?.startsWith("http") ? "_blank" : "_self"}

@@ -32,7 +32,7 @@ export const MarkdownEditor = ({
       </TabGroup>
       {editorMode == "write" ? (
         <textarea
-          className="bg-p-2 p-5 pb-10 rounded-lg w-full min-h-[300px]"
+          className="bg-p-9 dark:bg-p-2 p-5 pb-10 rounded-lg w-full min-h-[300px]"
           onChange={onChange}
           value={value}
           {...props}

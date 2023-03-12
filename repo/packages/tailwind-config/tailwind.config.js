@@ -4,6 +4,7 @@ const primaryHue = 0;
 const secondaryHue = 170;
 
 module.exports = {
+  darkMode: "class",
   future: {
     hoverOnlyWhenSupported: true,
   },
@@ -22,7 +23,7 @@ module.exports = {
         5: `hsla(${primaryHue}, 0%, 57%, 1)`,
         6: `hsla(${primaryHue}, 0%, 66%, 1)`,
         7: `hsla(${primaryHue}, 0%, 73%, 1)`,
-        8: `hsla(${primaryHue}, 0%, 82%, 1)`,
+        8: `hsla(${primaryHue}, 0%, 83%, 1)`,
         9: `hsla(${primaryHue}, 0%, 91%, 1)`,
         10: `hsla(${primaryHue}, 0%, 100%, 1)`,
       },

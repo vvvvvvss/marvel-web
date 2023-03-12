@@ -77,7 +77,11 @@ export default async function edit_meta(
       },
     });
 
-    await res.revalidate(`/course/${course?.courseCode}`);
+    await Promise.all([
+      res.revalidate(`/course/${course?.courseCode}`),
+      res.revalidate(`/courses`),
+    ]);
+
     return res.status(201).json({
       message: "meta data updated successfully",
     });

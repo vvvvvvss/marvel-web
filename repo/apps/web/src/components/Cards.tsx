@@ -20,9 +20,14 @@ export const PersonCard = ({ data: d }) => {
 export const CourseCard = ({ data: d }) => {
   return (
     <Link href={`/course/${d?.courseCode}`} prefetch={false} className="flex-1">
-      <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
+      <Paper
+        border
+        elevateOnHover
+        shadow={"hover"}
+        className="rounded-lg p-5 w-full h-full"
+      >
         <h3 className="text-3xl whitespace-nowrap">{d?.courseCode}</h3>
-        <p className="text-sm text-p-6 whitespace-nowrap">
+        <p className="text-sm text-p-3 dark:text-p-6 whitespace-nowrap">
           {d?.totalLevels} Levels &#183; {d?.courseDuration}
         </p>
         <hr className="border-p-4 my-2" />
@@ -36,7 +41,9 @@ export const WorkCard = ({ data: d }) => {
   return (
     <Link href={`/work/${d?.id}`} prefetch={false} className="flex-1">
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
-        <p className="w-full text-p-5 text-sm">{d?.typeOfWork} WORK</p>
+        <p className="w-full text-p-4 dark:text-p-5 text-sm">
+          {d?.typeOfWork} WORK
+        </p>
         <h3 className="text-2xl mt-2">
           {d?.typeOfWork === "COURSE" ? (
             <>
@@ -64,7 +71,7 @@ export const ArticleCard = ({ data: d }) => {
   return (
     <Link href={`/article/${d?.id}`} prefetch={false} className="flex-1">
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
-        <p className="w-full text-p-5 text-sm whitespace-nowrap">
+        <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
           {d?.typeOfArticle} &#183;{" "}
           {new Date(d?.createdAt).toLocaleDateString()}
         </p>
@@ -82,7 +89,7 @@ export const ReportCard = ({ data: d }) => {
       className="flex-1"
     >
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
-        <p className="w-full text-p-5 text-sm whitespace-nowrap">
+        <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
           {new Date(d?.createdAt).toLocaleDateString()}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>

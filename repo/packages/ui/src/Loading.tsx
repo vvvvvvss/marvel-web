@@ -8,12 +8,12 @@ export const LoadingPulser = ({
     <div
       className={clsx(
         className,
-        "ui-aspect-square",
-        "ui-h-5",
-        "ui-rounded-full",
-        "ui-animate-pulse",
-        "ui-bg-p-3",
-        "dark:ui-text-p-8"
+        "aspect-square",
+        "h-5",
+        "rounded-full",
+        "animate-pulse",
+        "bg-p-3",
+        "dark:text-p-8"
       )}
     />
   );

@@ -26,15 +26,17 @@ const WorkDeleter = ({ work }) => {
     <Paper
       border
       className={
-        "p-5 w-full border-[red] flex gap-5 flex-col bg-p-0 mt-5 rounded-lg"
+        "p-5 w-full border-[red] flex gap-5 flex-col bg-p-10 dark:bg-p-0 mt-5 rounded-lg"
       }
     >
       <h3 className="text-2xl">Delete Work</h3>
       <p>
         Deleting this work will also delete all of the reports in this work. Are
         you sure?. Type{" "}
-        <span className="font-bold text-s-5">{confirmationText}</span> to
-        confirm.
+        <span className="font-bold text-s-4 dark:text-s-5">
+          {confirmationText}
+        </span>{" "}
+        to confirm.
       </p>
       <TextField
         placeholder="Type here..."

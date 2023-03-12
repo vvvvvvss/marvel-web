@@ -24,6 +24,8 @@ import {
   WorkCard,
 } from "./Cards";
 import { GoSignOut, GoSignIn } from "react-icons/go";
+import { useTheme } from "next-themes";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
 const tabs = {
   people: "People",
@@ -36,6 +38,7 @@ type Tab = keyof typeof tabs;
 
 const MenuDialog = ({ menuOpen, setMenuOpen }) => {
   const sessionUser = useSession()?.data?.user;
+  const theme = useTheme();
   const [query, setQuery] = useState<string>("");
   const [queryTemp, setQueryTemp] = useState<string>("");
   const [selectedTab, setSelectedTab] = useState<Tab>("people");
@@ -126,7 +129,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             <br />
             {query === "" ? (
               <>
-                <div className="w-full flex justify-center text-sm text-p-6">
+                <div className="w-full flex justify-center text-sm text-p-3 dark:text-p-6">
                   Type query and press Enter...
                 </div>
               </>
@@ -215,6 +218,26 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                 </span>
               </Button>
             )}
+            <Button
+              className="whitespace-nowrap flex gap-3 items-center"
+              onClick={() =>
+                theme.theme === "light"
+                  ? theme.setTheme("dark")
+                  : theme.setTheme("light")
+              }
+            >
+              {theme.theme === "light" ? (
+                <>
+                  {" "}
+                  <MdDarkMode /> Dark Mode{" "}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <MdLightMode /> Light Mode{" "}
+                </>
+              )}
+            </Button>
           </div>
         )}
       </div>

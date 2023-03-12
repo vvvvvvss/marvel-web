@@ -10,12 +10,12 @@ import {
 } from "react-icons/hi2";
 import { useEffect, useMemo, useState } from "react";
 import MenuDialog from "./MenuDialog";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const selectedSegment = useSelectedLayoutSegment();
+  const selectedSegment = useSelectedLayoutSegments();
 
   useEffect(() => {
     setMenuOpen(false);
@@ -52,14 +52,14 @@ const Navbar = () => {
               className="mr-2"
             >
               {menuOpen ? (
-                <DownIcon className="h-6 w-6 text-p-10" />
+                <DownIcon className="h-6 w-6 text-p-0 dark:text-p-10" />
               ) : (
-                <MenuIcon className="h-6 w-6 text-p-10" />
+                <MenuIcon className="h-6 w-6 text-p-0 dark:text-p-10" />
               )}
             </IconButton>
           </div>
           <Link href={"/"}>
-            <span className="text-p-8 font-semibold text-center cursor-pointer">
+            <span className="text-p-2 dark:text-p-8 font-semibold text-center cursor-pointer">
               UVCE MARVEL.
             </span>
           </Link>
@@ -77,10 +77,7 @@ const Navbar = () => {
           ) : status === "loading" ? (
             <LoadingPulser />
           ) : (
-            <Button
-              onClick={() => signIn("google", { redirect: false })}
-              className={"text-sm"}
-            >
+            <Button onClick={() => signIn("google", { redirect: false })}>
               Sign In
             </Button>
           )}

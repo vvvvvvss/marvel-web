@@ -2,7 +2,6 @@ import { MarkdownRender, Paper, Tab, TabGroup } from "ui";
 import dbClient from "../../../utils/dbConnector";
 import axios from "axios";
 import ContentsIndex from "./ContentsIndex";
-import { Octokit } from "@octokit/core";
 import Link from "next/link";
 
 const getSyllabus = async (courseCode: string) => {
@@ -20,14 +19,14 @@ const getSyllabus = async (courseCode: string) => {
   );
   const owner = repoName?.split("/")?.[0];
   const repo = repoName?.split("/")?.[1];
-  const octokt = new Octokit({ auth: process.env?.GITHUB_PAT });
   const filesMetaData: any = (
-    await octokt.request("GET /repos/{owner}/{repo}/contents/{path}", {
-      owner: owner as string,
-      repo: repo as string,
-      path: "",
+    await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_PAT}`,
+      },
     })
   ).data;
+  console.log(filesMetaData?.map((f) => f?.name));
   const levels = filesMetaData?.filter((e) =>
     /^LEVEL\d+\.md$/.test(e?.["path"])
   );
@@ -41,9 +40,16 @@ const getSyllabus = async (courseCode: string) => {
       },
     });
   }
-
   const content = (
-    await Promise.all(levels?.map((l) => axios.get(l?.download_url)))
+    await Promise.all(
+      levels?.map((l) =>
+        axios.get(l?.download_url, {
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_PAT}`,
+          },
+        })
+      )
+    )
   ).map((response) => Buffer.from(response?.data).toString());
   return { content, course };
 };
@@ -68,7 +74,9 @@ export default async function page({ params }) {
         {content?.map((c, i) => (
           <div id={`${i + 1}`} key={i} className="w-full">
             <hr className="border-p-4 my-5" />
-            <h1 className="text-xl font-mono text-p-6">Level {i + 1}</h1>
+            <h1 className="text-xl font-mono text-p-4 dark:text-p-6">
+              Level {i + 1}
+            </h1>
             <hr className="border-p-4 my-5" />
             <MarkdownRender content={c} />
           </div>

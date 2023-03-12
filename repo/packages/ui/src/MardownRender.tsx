@@ -15,48 +15,48 @@ export const MarkdownRender = memo(
           wrapper: "div",
           overrides: {
             h1: {
-              props: { className: "ui-text-5xl ui-my-5" },
+              props: { className: "text-5xl my-5" },
             },
             h2: {
-              props: { className: "ui-text-4xl ui-my-5" },
+              props: { className: "text-4xl my-5" },
             },
             h3: {
-              props: { className: "ui-text-3xl ui-my-5" },
+              props: { className: "text-3xl my-5" },
             },
             h4: {
-              props: { className: "ui-text-2xl ui-my-5" },
+              props: { className: "text-2xl my-5" },
             },
             h5: {
-              props: { className: "ui-text-xl ui-my-5" },
+              props: { className: "text-xl my-5" },
             },
             h6: {
-              props: { className: "ui-text-xl ui-my-5" },
+              props: { className: "text-xl my-5" },
             },
             blockquote: {
               props: {
                 className:
-                  "ui-p-5 ui-my-5 ui-bg-p-2 ui-border-l ui-shadow-2xl ui-shadow-p-0 dark:ui-shadow-p-2",
+                  "p-5 my-5 bg-p-9 dark:bg-p-2 border-l-2 shadow-2xl shadow-p-2",
               },
             },
             ol: {
               props: {
-                className: "ui-space-y-1 ui-list-decimal ui-list-inside",
+                className: "space-y-1 list-decimal list-inside",
               },
             },
             ul: {
               props: {
-                className: "ui-space-y-1 ui-list-disc ui-list-inside",
+                className: "space-y-1 list-disc list-inside",
               },
             },
             code: {
               props: {
-                className: "ui-text-p-8",
+                className: "text-p-3 dark:text-p-8",
               },
             },
             pre: {
               props: {
                 className:
-                  "ui-border ui-border-p-6 ui-rounded-lg ui-my-5 ui-p-5 ui-whitespace-pre-wrap ui-break-words",
+                  "border-[1.5px] dark:border border-p-0 dark:border-p-6 rounded-lg my-5 p-5 whitespace-pre-wrap break-words",
               },
             },
             a: {
@@ -64,14 +64,14 @@ export const MarkdownRender = memo(
                 target: "_blank",
                 rel: "noopener noreferrer",
                 className:
-                  "ui-text-base ui-text-s-6 hover:ui-underline ui-break-words",
+                  "text-base text-s-4 dark:text-s-6 hover:underline break-words",
               },
             },
-            img: { props: { className: "ui-my-5 ui-rounded-lg ui-w-full " } },
+            img: { props: { className: "my-5 rounded-lg w-full " } },
             iframe: {
               props: {
                 frameBorder: "0",
-                className: "ui-w-full ui-max-h-[500px] ui-rounded-lg ui-bg-p-0",
+                className: "w-full max-h-[500px] rounded-lg bg-p-0",
               },
             },
           },

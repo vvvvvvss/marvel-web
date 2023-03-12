@@ -55,7 +55,7 @@ const Dashboard = () => {
   return (
     <div className="w-full">
       <div className="w-full flex">
-        <TabGroup className="max-w-full overflow-auto w-full">
+        <TabGroup className="max-w-full overflow-auto">
           {Object.keys(tabs)?.map((t: Tab, i) => (
             <Tab
               active={selectedTab === t}
@@ -89,7 +89,15 @@ const Dashboard = () => {
             ) : selectedTab == "people" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
-                  <PersonCard key={i} data={d} />
+                  <div
+                    key={i}
+                    className={
+                      d?.scope?.map((s) => s.scope)?.includes("ADMIN") &&
+                      "rounded-xl border-[red] border-2"
+                    }
+                  >
+                    <PersonCard data={d} />
+                  </div>
                 ))}
               </>
             ) : null}

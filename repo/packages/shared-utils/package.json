@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@types/sanitize-html": "^2.8.1",
-        "sanitize-html": "^2.10.0"
+        "sanitize-html": "^2.10.0",
+        "database" : "workspace:*"
     }
 }
