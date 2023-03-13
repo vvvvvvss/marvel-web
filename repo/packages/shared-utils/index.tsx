@@ -2,8 +2,8 @@ import { IOptions } from "sanitize-html";
 import { TypeOfArticle, TypeOfWork } from "database";
 
 export const SANITIZE_OPTIONS: IOptions = {
-  allowedTags: ["iframe", "br", "strong", "blockquote"],
-  allowedAttributes: { iframe: ["src", "height"] },
+  allowedTags: ["iframe", "br", "strong", "blockquote", "script"],
+  allowedAttributes: { iframe: ["src", "height"], script: ["src"] },
   allowedIframeHostnames: [
     "www.youtube.com",
     "codesandbox.io",
@@ -16,6 +16,9 @@ export const SANITIZE_OPTIONS: IOptions = {
     "plotly.com",
   ],
   nestingLimit: 5,
+  allowVulnerableTags: true,
+  allowedScriptDomains: ["gist.github.com"],
+  allowedScriptHostnames: ["gist.github.com"],
 };
 
 const courseWorkPhoto =

@@ -1,7 +1,7 @@
 import { Button, Paper, TextField } from "ui";
 import { Avatar } from "../../../../components/Avatar";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { Role, Status } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -190,4 +190,4 @@ const ManagePeople = ({ work }) => {
   );
 };
 
-export default ManagePeople;
+export default memo(ManagePeople);

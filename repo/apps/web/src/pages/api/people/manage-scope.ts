@@ -21,7 +21,12 @@ export default async function manage_scope(
       !session?.user?.scope?.map((s) => s.scope)?.includes("ADMIN") &&
       ["CRDN", "ADMIN"].includes(req.query?.scope as string);
     if (condition || condition2)
-      return res.status(403).json({ message: "access denied" });
+      return res
+        .status(403)
+        .json({
+          message:
+            "Access denied. Only admins can add/remove CRDN and ADMIN scope.",
+        });
 
     const person = await dbClient.people.findUnique({
       where: {

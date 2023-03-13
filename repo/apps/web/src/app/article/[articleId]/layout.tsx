@@ -32,6 +32,7 @@ const getArticle = async (id: string) => {
         feedback: true,
         reviewStatus: true,
         coverPhoto: true,
+        createdAt: true,
         People: {
           select: {
             personId: true,
@@ -48,7 +49,7 @@ const getArticle = async (id: string) => {
       },
     });
     console.info({ info: "got article" });
-    return article;
+    return JSON.parse(JSON.stringify(article));
   } catch (error) {
     return null;
   }
@@ -92,7 +93,8 @@ export default async function layout({ children, params }) {
           <Paper className="relative flex flex-col justify-between bg-p-10 bg-opacity-50 dark:bg-p-1 w-full md:w-1/2 max-h-min p-5 ">
             <div>
               <p className=" text-p-3 dark:text-p-6 tracking-widest">
-                {article?.typeOfArticle}
+                {article?.typeOfArticle} &#183;{" "}
+                {new Date(article?.createdAt)?.toLocaleDateString()}
               </p>
               <h1 className="text-4xl my-2">{article?.title}</h1>
               <p className="text-p-2 dark:text-p-8 mt-5">{article?.caption}</p>

@@ -1,7 +1,7 @@
 "use client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useMutation } from "react-query";
 import { Button, Paper, TextField } from "ui";
 
@@ -54,4 +54,4 @@ const WorkDeleter = ({ work }) => {
   );
 };
 
-export default WorkDeleter;
+export default memo(WorkDeleter);

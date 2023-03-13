@@ -27,7 +27,6 @@
     "database": "workspace:*",
     "encoding": "^0.1.13",
     "he": "^1.2.0",
-    "markdown-to-jsx": "^7.1.7",
     "mongoose": "^6.6.3",
     "mongoose-slug-generator": "^1.0.4",
     "next": "^13.2.4",

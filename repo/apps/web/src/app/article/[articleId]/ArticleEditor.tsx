@@ -119,9 +119,11 @@ const ArticleEditor = ({ article }) => {
   };
 
   if (
+    //if not accepted request
     article?.People?.filter((p) => p?.status !== "PENDING")
       .map((p) => p?.personId)
-      .includes(sessionUser?.id)
+      .includes(sessionUser?.id) ||
+    sessionUser?.scope?.map((s) => s?.scope)?.includes("ADMIN")
   ) {
     return (
       <>
@@ -209,7 +211,7 @@ const ArticleEditor = ({ article }) => {
                     <div className="w-full flex gap-5">
                       <Paper
                         border
-                        className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
+                        className="flex-auto bg-p-9 dark:bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
                         onClick={() => {
                           setFormData((p) => ({ ...p, coverPhoto: "" }));
                           setChanged(true);

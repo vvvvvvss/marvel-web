@@ -41,9 +41,10 @@ export default async function edit_article(
       },
     });
 
-    const condition = existingArticle?.People?.map((p) => p.personId)?.includes(
-      session?.user?.id as string
-    );
+    const condition =
+      existingArticle?.People?.map((p) => p.personId)?.includes(
+        session?.user?.id as string
+      ) || session?.user?.scope?.map((s) => s?.scope)?.includes("ADMIN");
 
     if (!condition) return res.status(403).json({ message: "Access denied" });
 

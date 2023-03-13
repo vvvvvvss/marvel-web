@@ -10,7 +10,7 @@ import {
 } from "react-icons/ai";
 import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Scope, ScopeEnum } from "@prisma/client";
 
 const Manager = ({ dude }: { dude: any }) => {
@@ -27,7 +27,7 @@ const Manager = ({ dude }: { dude: any }) => {
         )
       ).data,
     {
-      onError: () => alert("Couldn't update user. loss"),
+      onError: (e: AxiosError) => alert(e?.response?.data?.["message"]),
       onSuccess: () => {
         router.refresh();
       },
