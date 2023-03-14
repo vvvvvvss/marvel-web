@@ -48,11 +48,12 @@ export const MarkdownRender = memo(
               {children}
             </pre>
           ),
-          a: ({ children }) => (
+          a: ({ children, ...props }) => (
             <a
               target="_blank"
               rel="noopener noreferrer"
               className="text-base text-s-4 dark:text-s-6 hover:underline break-words"
+              {...props}
             >
               {children}
             </a>
