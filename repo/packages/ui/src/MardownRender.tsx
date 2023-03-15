@@ -67,7 +67,6 @@ export const MarkdownRender = memo(
               {...props}
             />
           ),
-          // script: ({ src }) => <script src={src}></script>,
         }}
       >
         {he.decode(sanitizer(content, SANITIZE_OPTIONS))}
