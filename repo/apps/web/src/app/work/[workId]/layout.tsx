@@ -110,7 +110,7 @@ export default async function layout({ children, params }) {
             </div>
             <div className="overflow-x-auto pt-5 -mx-5 flex-grow-0 -mb-5">
               <table className="w-full text-sm text-left whitespace-nowrap">
-                <tbody className="border-b-[1.5px] dark:border-b md:border-none">
+                <tbody className="border-b-[1.5px] border-p-0 dark:border-p-6 dark:border-b md:border-none">
                   {work?.People?.sort((p) =>
                     p?.role === "AUTHOR" ? -1 : 1
                   )?.map((p, i) => (

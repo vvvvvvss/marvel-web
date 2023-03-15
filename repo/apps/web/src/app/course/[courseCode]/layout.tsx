@@ -59,7 +59,7 @@ export default async function layout({ children, params }) {
           className="w-full flex flex-col md:flex-row mx-5 min-h-[250px] h-min"
         >
           {/* left box  */}
-          <Paper className="border-b-[1.5px] dark:border-b md:border-none relative flex flex-col justify-between bg-opacity-50 bg-p-10 dark:bg-p-1 w-full md:w-1/2 max-h-min p-5 ">
+          <Paper className="border-b-[1.5px] border-p-0 dark:border-p-6 dark:border-b md:border-none relative flex flex-col justify-between bg-opacity-50 bg-p-10 dark:bg-p-1 w-full md:w-1/2 max-h-min p-5 ">
             <div>
               <p className="text-p-3 dark:text-p-6 tracking-widest">COURSE</p>
               <h1 className="text-6xl my-2">{course?.courseCode}</h1>

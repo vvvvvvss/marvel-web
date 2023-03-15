@@ -53,6 +53,11 @@ module.exports = {
       zIndex: {
         max: "100",
       },
+      fontFamily: {
+        sans: ["var(--font-ibm-sans)"],
+        serif: ["var(--font-ibm-serif)"],
+        mono: ["var(--font-ibm-mono)"],
+      },
     },
   },
   plugins: [],
