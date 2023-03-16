@@ -36,6 +36,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
+        secureUrl:
+          "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
       },
     ],
   },

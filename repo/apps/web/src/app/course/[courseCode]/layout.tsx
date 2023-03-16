@@ -30,6 +30,12 @@ const getCourse = cache(async (id: string) => {
 export async function generateMetadata({ params, searchParams }) {
   const course = await getCourse(params?.courseCode);
 
+  const og_url = new URL(process.env.NEXTAUTH_URL);
+  og_url.searchParams.append("courseCode", course?.courseCode);
+  og_url.searchParams.append("caption", course?.caption);
+  og_url.searchParams.append("totalLevels", course?.totalLevels?.toString());
+  og_url.searchParams.append("courseDuration", course?.courseDuration);
+
   return {
     title: `${course?.courseCode} | UVCE MARVEL`,
     description: course?.caption,
@@ -39,7 +45,8 @@ export async function generateMetadata({ params, searchParams }) {
       description: course?.caption,
       images: [
         {
-          url: `${process.env.NEXTAUTH_URL}/api/og/course?courseCode=${course?.courseCode}&caption=${course?.caption}&totalLevels=${course?.totalLevels}&courseDuration=${course?.courseDuration}`,
+          url: og_url,
+          secureUrl: og_url,
         },
       ],
     },
