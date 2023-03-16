@@ -3,7 +3,9 @@ import Context from "./Context";
 import { IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono } from "next/font/google";
 import "ui/styles.css";
 import "../styles/globals.css";
+import { Metadata } from "next";
 
+//fonts
 const sans = IBM_Plex_Sans({
   weight: ["200", "300", "400", "500", "600", "700"],
   variable: "--font-ibm-sans",
@@ -32,13 +34,6 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
       className={`${sans.variable} ${serif.variable} ${mono.variable}`}
       style={{ scrollbarGutter: "stable" }}
     >
-      <head>
-        <title>marvel.</title>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </head>
       <body>
         <Context>
           {children}

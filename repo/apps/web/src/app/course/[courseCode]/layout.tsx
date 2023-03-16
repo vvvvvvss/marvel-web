@@ -1,12 +1,12 @@
 import { Window, Paper } from "ui";
-import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
-import Link from "next/link";
 import EditMeta from "./EditMeta/EditMeta";
 import { getCroppedCloudinaryImage } from "shared-utils";
+import { Metadata } from "next";
+import { cache } from "react";
 
-const getCourse = async (id: string) => {
+const getCourse = cache(async (id: string) => {
   try {
     const course = await dbClient.course.findUnique({
       where: {
@@ -25,7 +25,26 @@ const getCourse = async (id: string) => {
     console.info({ info: "got course" });
     return course;
   } catch (error) {}
-};
+});
+
+export async function generateMetadata({ params, searchParams }) {
+  const course = await getCourse(params?.courseCode);
+
+  return {
+    title: `${course?.courseCode} | UVCE MARVEL`,
+    description: course?.caption,
+    openGraph: {
+      type: "book",
+      title: `${course?.courseCode} | UVCE MARVEL`,
+      description: course?.caption,
+      images: [
+        {
+          url: `${process.env.NEXTAUTH_URL}/api/og/course?courseCode=${course?.courseCode}&caption=${course?.caption}&totalLevels=${course?.totalLevels}&courseDuration=${course?.courseDuration}`,
+        },
+      ],
+    },
+  } as Metadata;
+}
 
 export async function generateStaticParams() {
   return [];
