@@ -7,8 +7,6 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "marvel.",
   description: "UVCE's own Makerspace",
-  abstract:
-    "Makerspace for advanced research vital education and learning. AKA Marvel at University of Visveswaraya College of Engineering.",
   applicationName: "UVCE Marvel",
   authors: [{ name: "UVCE" }, { name: "UVCE MARVEL" }],
   category: "Education and Research",
@@ -38,6 +36,9 @@ export const metadata: Metadata = {
         url: "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
         secureUrl:
           "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
+        type: "image/jpeg",
+        width: 800,
+        height: 800,
       },
     ],
   },

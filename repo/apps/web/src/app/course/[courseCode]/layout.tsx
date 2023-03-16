@@ -30,7 +30,7 @@ const getCourse = cache(async (id: string) => {
 export async function generateMetadata({ params, searchParams }) {
   const course = await getCourse(params?.courseCode);
 
-  const og_url = new URL(process.env.NEXTAUTH_URL);
+  const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/course`);
   og_url.searchParams.append("courseCode", course?.courseCode);
   og_url.searchParams.append("caption", course?.caption);
   og_url.searchParams.append("totalLevels", course?.totalLevels?.toString());
@@ -47,6 +47,9 @@ export async function generateMetadata({ params, searchParams }) {
         {
           url: og_url,
           secureUrl: og_url,
+          type: "image/jpeg",
+          width: 800,
+          height: 800,
         },
       ],
     },
