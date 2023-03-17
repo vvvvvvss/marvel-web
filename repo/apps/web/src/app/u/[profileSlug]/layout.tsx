@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const person = await getUserBySlug(params?.profileSlug);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/people`);

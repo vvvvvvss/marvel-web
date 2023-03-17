@@ -30,7 +30,7 @@ const getCourse = cache(async (id: string) => {
   }
 });
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const course = await getCourse(params?.courseCode);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/course`);

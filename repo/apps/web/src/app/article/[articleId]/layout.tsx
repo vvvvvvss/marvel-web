@@ -59,7 +59,7 @@ const getArticle = cache(async (id: string) => {
   }
 });
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const article = await getArticle(params?.articleId);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/article`);

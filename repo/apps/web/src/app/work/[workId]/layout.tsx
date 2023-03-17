@@ -61,7 +61,7 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const work = await getWork(params?.workId);
 
   const title = `${
