@@ -61,7 +61,7 @@ export default async function handler(req: NextRequest) {
               margin: "20px 40px 0px 50px",
             }}
           >
-            {searchParams?.get("caption")}
+            {searchParams?.get("caption") || ""}
           </p>
           <svg
             style={{

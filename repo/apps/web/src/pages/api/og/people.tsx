@@ -48,7 +48,7 @@ export default async function handler(req: NextRequest) {
             src={searchParams.get("profilePic")}
             style={{
               borderRadius: "500px",
-              margin: "40px 40px 10px 50px",
+              margin: "40px 40px 20px 50px",
               width: "200px",
               aspectRatio: "1 / 1",
             }}
