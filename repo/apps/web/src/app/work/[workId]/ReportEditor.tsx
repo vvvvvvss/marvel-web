@@ -79,6 +79,7 @@ const ReportEditor = ({ report, work }) => {
                       setFormData({ ...formData, title: e.target.value });
                       setChanged(true);
                     }}
+                    maxLength={190}
                   />
                 )}
                 <MarkdownEditor

@@ -3,8 +3,9 @@ import dbClient from "../../../utils/dbConnector";
 import axios from "axios";
 import ContentsIndex from "./ContentsIndex";
 import Link from "next/link";
+import { cache } from "react";
 
-const getSyllabus = async (courseCode: string) => {
+const getSyllabus = cache(async (courseCode: string) => {
   const course = await dbClient.course.findUnique({
     where: {
       courseCode: courseCode,
@@ -52,7 +53,7 @@ const getSyllabus = async (courseCode: string) => {
     )
   ).map((response) => Buffer.from(response?.data).toString());
   return { content, course };
-};
+});
 
 export default async function page({ params }) {
   const { content, course } = await getSyllabus(params?.courseCode);

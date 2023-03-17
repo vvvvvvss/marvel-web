@@ -13,12 +13,11 @@ export default async function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const hasCourseCode = searchParams.has("courseCode");
-    const hasCaption = searchParams.has("caption");
-    const hasTotalLevels = searchParams.has("totalLevels");
-    const hasCourseDuration = searchParams.has("courseDuration");
+    const hasName = searchParams.has("name");
+    const hasTypeOfWork = searchParams.has("typeOfWork");
+    const hasReportCount = searchParams.has("reportCount");
 
-    if (!hasCourseCode || !hasCaption || !hasTotalLevels || !hasCourseDuration)
+    if (!hasName || !hasTypeOfWork || !hasReportCount)
       return new Response(`Invalid data`, {
         status: 401,
       });
@@ -40,33 +39,25 @@ export default async function handler(req: NextRequest) {
             tw="text-4xl"
             style={{
               color: "#333",
-              letterSpacing: "0.25em",
-              margin: "40px 40px 10px 60px",
+              letterSpacing: "0.2em",
+              margin: "40px 40px 10px 55px",
             }}
           >
-            COURSE
+            {searchParams.get("typeOfWork")} WORK
           </h3>
           <h1
-            tw="text-9xl"
+            tw="text-8xl"
             style={{ color: "#000", margin: "0px 40px 0px 50px" }}
           >
-            {searchParams.get("courseCode")}
+            {searchParams.get("name")}
           </h1>
+
           <p
             tw="text-4xl"
-            style={{
-              color: "#222",
-              margin: "20px 40px 0px 60px",
-            }}
+            style={{ color: "#222", margin: "30px 40px 0px 55px" }}
           >
-            {searchParams?.get("caption")}
-          </p>
-          <p
-            tw="text-4xl"
-            style={{ color: "#333", margin: "30px 40px 0px 60px" }}
-          >
-            {searchParams.get("totalLevels")} Levels &#183;{" "}
-            {searchParams.get("courseDuration")}
+            {searchParams.get("reportCount")}{" "}
+            {searchParams?.get("reportCount") == "1" ? "Report" : "Reports"}
           </p>
           <svg
             style={{

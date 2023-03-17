@@ -169,7 +169,7 @@ const ArticleEditor = ({ article }) => {
                     }));
                     setChanged(true);
                   }}
-                  maxLength={50}
+                  maxLength={190}
                   required
                   minLength={3}
                 />

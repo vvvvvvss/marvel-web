@@ -1,12 +1,14 @@
-import { ReactNode } from "react";
+import { ReactNode, cache } from "react";
 import { Window, Paper, Button } from "ui";
 import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
 import Manager from "./UserManager";
-import { ScopeEnum } from "database";
+import { People, ScopeEnum } from "database";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-const getUserBySlug = async (slug: string) => {
-  const person = await dbClient.people.findFirst({
+const getUserBySlug = cache(async (slug: string) => {
+  const person = await dbClient.people.findUnique({
     where: {
       slug: slug,
     },
@@ -22,12 +24,39 @@ const getUserBySlug = async (slug: string) => {
     },
   });
   return person;
-};
+});
 
 export async function generateStaticParams() {
   return [];
 }
 export const dynamicParams = true;
+
+export async function generateMetadata({ params, searchParams }) {
+  const person = await getUserBySlug(params?.profileSlug);
+
+  const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/people`);
+  og_url.searchParams.append("name", person?.name);
+  og_url.searchParams.append("profilePic", person?.profilePic);
+
+  return {
+    title: `${person?.name}'s Profile | UVCE MARVEL`,
+    description: `${person?.name}'s Profile on UVCE MARVEL. UVCE's own Makerspace.`,
+    openGraph: {
+      type: "profile",
+      title: `${person?.name}'s Profile | UVCE MARVEL`,
+      description: `${person?.name}'s Profile on UVCE MARVEL. UVCE's own Makerspace.`,
+      images: [
+        {
+          url: og_url,
+          secureUrl: og_url,
+          type: "image/jpeg",
+          width: 800,
+          height: 800,
+        },
+      ],
+    },
+  } as Metadata;
+}
 
 export default async function layout({
   children,
@@ -37,6 +66,9 @@ export default async function layout({
   params: { profileSlug?: String };
 }) {
   const dude = await getUserBySlug(params?.profileSlug as string);
+  if (!dude) {
+    notFound();
+  }
   return (
     <>
       <Window className="pt-10">

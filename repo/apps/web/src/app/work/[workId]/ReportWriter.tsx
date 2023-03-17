@@ -62,6 +62,7 @@ const ReportWriter = ({ work }) => {
                 ) && (
                   <TextField
                     id="title"
+                    maxLength={190}
                     required
                     fullwidth
                     placeholder="Title of the Report..."

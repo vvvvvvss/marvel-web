@@ -5,6 +5,7 @@ import EditMeta from "./EditMeta/EditMeta";
 import { getCroppedCloudinaryImage } from "shared-utils";
 import { Metadata } from "next";
 import { cache } from "react";
+import { notFound } from "next/navigation";
 
 const getCourse = cache(async (id: string) => {
   try {
@@ -24,7 +25,9 @@ const getCourse = cache(async (id: string) => {
     });
     console.info({ info: "got course" });
     return course;
-  } catch (error) {}
+  } catch (error) {
+    return null;
+  }
 });
 
 export async function generateMetadata({ params, searchParams }) {
@@ -63,6 +66,10 @@ export const dynamicParams = true;
 
 export default async function layout({ children, params }) {
   const course = await getCourse(params?.courseCode);
+
+  if (!course) {
+    notFound();
+  }
 
   const coverPhotoSrc = getCroppedCloudinaryImage(
     course?.coverPhoto,

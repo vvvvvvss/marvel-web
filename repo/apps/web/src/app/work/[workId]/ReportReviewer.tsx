@@ -1,27 +1,27 @@
-'use client';
-import { Button } from 'ui';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+"use client";
+import { Button } from "ui";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useMutation } from "react-query";
 
 const ReportReviewer = ({ report, work }) => {
   const sessionUser = useSession().data?.user;
   const router = useRouter();
-  const [feedback, setFeedback] = useState({ isOpen: false, content: '' });
+  const [feedback, setFeedback] = useState({ isOpen: false, content: "" });
   const [confirmApprove, setConfirmApprove] = useState(0);
 
   const { isLoading, mutate: sendAction } = useMutation(
-    async (action: 'approve' | 'feedback') =>
+    async (action: "approve" | "feedback") =>
       await axios.post(
-        '/api/report/review?id=' + report?.id + '&action=' + action,
+        "/api/report/review?id=" + report?.id + "&action=" + action,
         { content: feedback?.content }
       ),
     {
       onSuccess: () => {
         setConfirmApprove(0);
-        setFeedback({ isOpen: false, content: '' });
+        setFeedback({ isOpen: false, content: "" });
         router.refresh();
       },
       onError: (data: any) => {
@@ -32,19 +32,19 @@ const ReportReviewer = ({ report, work }) => {
 
   if (
     //work is project and session user is one of the coordinators
-    ((work?.typeOfWork === 'PROJECT' &&
+    ((work?.typeOfWork === "PROJECT" &&
       work?.People?.filter(
-        (p) => p?.role == 'COORDINATOR' && p?.status == 'ACTIVE'
+        (p) => p?.role == "COORDINATOR" && p?.status == "ACTIVE"
       )
         ?.map((p) => p?.personId)
         .includes(sessionUser?.id)) ||
       //work is coursework and session user is a coordinator
-      (work?.typeOfWork === 'COURSE' &&
-        sessionUser?.scope?.map((s) => s.scope).includes('CRDN')) ||
+      (work?.typeOfWork === "COURSE" &&
+        sessionUser?.scope?.map((s) => s.scope).includes("CRDN")) ||
       //session user is an admin
-      sessionUser?.scope?.map((s) => s.scope)?.includes('ADMIN')) &&
+      sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) &&
     //with report status being PENDING
-    report?.reviewStatus === 'PENDING'
+    report?.reviewStatus === "PENDING"
   ) {
     return (
       <>
@@ -53,15 +53,15 @@ const ReportReviewer = ({ report, work }) => {
             disabled={isLoading}
             onClick={() =>
               confirmApprove === 2
-                ? sendAction('approve')
+                ? sendAction("approve")
                 : setConfirmApprove((p) => p + 1)
             }
           >
             {confirmApprove === 0
-              ? 'Approve Report'
+              ? "Approve Report"
               : confirmApprove === 1
-              ? 'Are you sure?'
-              : 'Confirm.'}
+              ? "Are you sure?"
+              : "Confirm."}
           </Button>
         )}
         <Button
@@ -82,12 +82,12 @@ const ReportReviewer = ({ report, work }) => {
               onChange={(e) =>
                 setFeedback({ ...feedback, content: e.target.value })
               }
-              maxLength={500}
+              maxLength={225}
               required
             ></textarea>
             <div className="flex gap-5">
               <Button
-                onClick={() => sendAction('feedback')}
+                onClick={() => sendAction("feedback")}
                 className="mt-5"
                 disabled={isLoading}
                 type="submit"
@@ -107,7 +107,7 @@ const ReportReviewer = ({ report, work }) => {
       </>
     );
   } else if (
-    report?.reviewStatus === 'FLAGGED' &&
+    report?.reviewStatus === "FLAGGED" &&
     work?.People?.map((p) => p?.personId).includes(sessionUser?.id)
   ) {
     return (

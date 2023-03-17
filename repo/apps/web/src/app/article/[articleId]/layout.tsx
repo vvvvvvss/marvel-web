@@ -6,8 +6,12 @@ import Link from "next/link";
 import ArticleReviewer from "./ArticleReviewer";
 import ArticleEditor from "./ArticleEditor";
 import { getCroppedCloudinaryImage } from "shared-utils";
+import { notFound } from "next/navigation";
+import { cache } from "react";
+import { Article } from "database";
+import { Metadata } from "next";
 
-const getArticle = async (id: string) => {
+const getArticle = cache(async (id: string) => {
   try {
     const article = await dbClient.article.findUniqueOrThrow({
       where: {
@@ -53,7 +57,39 @@ const getArticle = async (id: string) => {
   } catch (error) {
     return null;
   }
-};
+});
+
+export async function generateMetadata({ params, searchParams }) {
+  const article = await getArticle(params?.articleId);
+
+  const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/article`);
+  og_url.searchParams.append("title", article?.title);
+  og_url.searchParams.append("caption", article?.caption);
+  og_url.searchParams.append("typeOfArticle", article?.typeOfArticle);
+  og_url.searchParams.append(
+    "createdAt",
+    new Date(article?.createdAt)?.toLocaleDateString()
+  );
+
+  return {
+    title: `${article?.title} | UVCE MARVEL`,
+    description: article?.caption,
+    openGraph: {
+      type: "article",
+      title: `${article?.title} | UVCE MARVEL`,
+      description: article?.caption,
+      images: [
+        {
+          url: og_url,
+          secureUrl: og_url,
+          type: "image/jpeg",
+          width: 800,
+          height: 800,
+        },
+      ],
+    },
+  } as Metadata;
+}
 
 export async function generateStaticParams() {
   return [];
@@ -63,6 +99,9 @@ export const dynamicParams = true;
 export default async function layout({ children, params }) {
   const article = await getArticle(params?.articleId);
 
+  if (!article) {
+    notFound();
+  }
   const coverPhotoSrc = getCroppedCloudinaryImage(
     article?.coverPhoto,
     article?.typeOfArticle

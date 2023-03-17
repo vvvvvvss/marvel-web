@@ -6,8 +6,11 @@ import Tabs from "./Tabs";
 import Image from "next/image";
 import Link from "next/link";
 import { getCroppedCloudinaryImage } from "shared-utils";
+import { cache } from "react";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-const getWork = async (id: string) => {
+const getWork = cache(async (id: string) => {
   try {
     const work = await dbClient.work.findUniqueOrThrow({
       where: {
@@ -48,17 +51,57 @@ const getWork = async (id: string) => {
     });
     console.info({ info: "got work" });
     return work;
-  } catch (error) {}
-};
+  } catch (error) {
+    return null;
+  }
+});
 
 export async function generateStaticParams() {
   return [];
 }
 export const dynamicParams = true;
 
-export default async function layout({ children, params }) {
+export async function generateMetadata({ params, searchParams }) {
   const work = await getWork(params?.workId);
 
+  const title = `${
+    work?.typeOfWork === "COURSE"
+      ? `${work?.People?.map((p) => p?.person?.name?.split(" ")[0])?.join(
+          " and "
+        )}'s ${work?.courseCode} course work.`
+      : work?.name
+  }`;
+
+  const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/work`);
+  og_url.searchParams.append("name", work?.name || title);
+  og_url.searchParams.append("typeOfWork", work?.typeOfWork);
+  og_url.searchParams.append("reportCount", work?.Reports?.length?.toString());
+
+  return {
+    title: title + " | UVCE MARVEL",
+    description: work?.note,
+    openGraph: {
+      type: "book",
+      title: title + " | UVCE MARVEL",
+      description: work?.note,
+      images: [
+        {
+          url: og_url,
+          secureUrl: og_url,
+          type: "image/jpeg",
+          width: 800,
+          height: 800,
+        },
+      ],
+    },
+  } as Metadata;
+}
+
+export default async function layout({ children, params }) {
+  const work = await getWork(params?.workId);
+  if (!work) {
+    notFound();
+  }
   const title =
     work?.typeOfWork === "COURSE" ? (
       <>

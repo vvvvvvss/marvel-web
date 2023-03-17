@@ -74,7 +74,7 @@ const ArticleReviewer = ({ article }) => {
               onChange={(e) =>
                 setFeedback({ ...feedback, content: e.target.value })
               }
-              maxLength={500}
+              maxLength={225}
               required
             ></textarea>
             <div className="flex gap-5">
