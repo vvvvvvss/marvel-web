@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Window, Button, Paper, MarvelLogo } from "ui";
 import { TrackDescription } from "../types";
 import { Metadata } from "next";
+import TracksButton from "../components/TracksButton";
 
 //seo
 export const metadata: Metadata = {
@@ -75,8 +76,7 @@ export default function page() {
           <MarvelLogo className="aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
           <div>
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
-              <Button className="flex-1 md:flex-auto">About</Button>
-              <Button className="flex-1">Tracks</Button>
+              <TracksButton />
               <Link href={"/courses"} className="flex-1 md:flex-auto">
                 <Button className="w-full">Courses</Button>
               </Link>

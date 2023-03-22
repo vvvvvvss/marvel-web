@@ -4,13 +4,12 @@ import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { VscSettings as ManageIcon } from "react-icons/vsc";
 import { VscClose as CloseIcon } from "react-icons/vsc";
-import ReactImageUploading, { ImageListType } from "react-images-uploading";
 import ImageCompressor from "browser-image-compression";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { CourseFormData } from "../../../../types";
-import Image from "next/image";
+import ImageUploader from "../../../../components/ImageUploader";
 
 const EditMeta = ({ course }) => {
   const sessionUser = useSession()?.data?.user;
@@ -129,39 +128,17 @@ const EditMeta = ({ course }) => {
                   placeholder="Course duration"
                   maxLength={20}
                 />
-                <ReactImageUploading
-                  value={copy?.coverPhoto as unknown as ImageListType}
-                  onChange={handleImageUpload}
-                  dataURLKey="data_url"
-                >
-                  {({ onImageUpload, dragProps }) => (
-                    <div className="w-full flex gap-5 my-5">
-                      <Paper
-                        border
-                        className="flex-auto bg-p-9 dark:bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center cursor-pointer"
-                        onClick={() => {
-                          setCopy((p) => ({ ...p, coverPhoto: "" }));
-                          setChanged(true);
-                          onImageUpload();
-                        }}
-                        {...dragProps}
-                      >
-                        <h6>Cover Photo (optional). Click or Drop here.</h6>
-                      </Paper>
-                      {copy?.coverPhoto && (
-                        <div className="w-1/2">
-                          <Image
-                            className="flex-1 rounded-lg object-cover h-48 w-full"
-                            src={copy?.coverPhoto as string}
-                            alt="cover photo"
-                            height="150"
-                            width="150"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </ReactImageUploading>
+                <ImageUploader
+                  value={copy?.coverPhoto}
+                  onClick={() => {
+                    setCopy({ ...copy, coverPhoto: "" });
+                    setChanged(true);
+                  }}
+                  onChange={(photo) => {
+                    setCopy({ ...copy, coverPhoto: photo });
+                    setChanged(true);
+                  }}
+                />
                 <Button
                   className="max-w-max self-end"
                   disabled={isLoading || !changed}

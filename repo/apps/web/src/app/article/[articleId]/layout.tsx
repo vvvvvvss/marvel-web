@@ -68,7 +68,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   og_url.searchParams.append("typeOfArticle", article?.typeOfArticle);
   og_url.searchParams.append(
     "createdAt",
-    new Date(article?.createdAt)?.toLocaleDateString()
+    new Date(article?.createdAt)?.toLocaleDateString("en-GB")
   );
 
   return {
@@ -133,7 +133,7 @@ export default async function layout({ children, params }) {
             <div>
               <p className=" text-p-3 dark:text-p-6 tracking-widest">
                 {article?.typeOfArticle} &#183;{" "}
-                {new Date(article?.createdAt)?.toLocaleDateString()}
+                {new Date(article?.createdAt)?.toLocaleDateString("en-GB")}
               </p>
               <h1 className="text-4xl my-2">{article?.title}</h1>
               <p className="text-p-2 dark:text-p-8 mt-5">{article?.caption}</p>

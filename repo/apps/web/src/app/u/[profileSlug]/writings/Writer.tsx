@@ -10,11 +10,9 @@ import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import ImageCompressor from "browser-image-compression";
-import ImageUploading from "react-images-uploading";
-import { ImageListType } from "react-images-uploading/dist/typings";
 import { ArticleFormData } from "../../../../types";
 import { TypeOfArticle, ScopeEnum } from "@prisma/client";
-import Image from "next/image";
+import ImageUploader from "../../../../components/ImageUploader";
 
 const Writer = ({ authorSlug }: { authorSlug: string }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -183,38 +181,15 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   }
                 />
                 <hr className="w-full my-5" />
-                <ImageUploading
-                  value={formData?.coverPhoto as ImageListType}
-                  onChange={handleImageUpload}
-                  dataURLKey="data_url"
-                >
-                  {({ onImageUpload, dragProps }) => (
-                    <div className="w-full flex gap-5">
-                      <Paper
-                        border
-                        className="flex-auto bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
-                        onClick={() => {
-                          setFormData((p) => ({ ...p, coverPhoto: "" }));
-                          onImageUpload();
-                        }}
-                        {...dragProps}
-                      >
-                        <h6>Cover Photo (optional). Click or Drop here.</h6>
-                      </Paper>
-                      {formData?.coverPhoto && (
-                        <div className="w-1/2">
-                          <Image
-                            className="w-full flex-1 rounded-lg object-cover h-48"
-                            src={formData?.coverPhoto as string}
-                            alt="cover photo"
-                            height="150"
-                            width="150"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </ImageUploading>
+                <ImageUploader
+                  value={formData?.coverPhoto}
+                  onClick={() => {
+                    setFormData({ ...formData, coverPhoto: "" });
+                  }}
+                  onChange={(photo) => {
+                    setFormData({ ...formData, coverPhoto: photo });
+                  }}
+                />
                 {/* tags  */}
 
                 {formType == "RESOURCE" && (

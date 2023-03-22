@@ -72,10 +72,13 @@ export const ArticleCard = ({ data: d }) => {
     <Link href={`/article/${d?.id}`} prefetch={false} className="flex-1">
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
-          {d?.typeOfArticle} &#183;{" "}
-          {new Date(d?.createdAt).toLocaleDateString()}
+          {d?.typeOfArticle && <>{d?.typeOfArticle} &#183;</>}
+          {new Date(d?.createdAt).toLocaleDateString("en-GB")}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
+        {d?.caption && (
+          <p className="text-p-5 mt-2 max-h-24 overflow-hidden">{d?.caption}</p>
+        )}
       </Paper>
     </Link>
   );
@@ -90,7 +93,7 @@ export const ReportCard = ({ data: d }) => {
     >
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
-          {new Date(d?.createdAt).toLocaleDateString()}
+          {new Date(d?.createdAt).toLocaleDateString("en-GB")}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
       </Paper>

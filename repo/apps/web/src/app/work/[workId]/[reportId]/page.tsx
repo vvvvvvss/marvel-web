@@ -113,7 +113,7 @@ export default async function page({ params, searchParams }) {
           <h2 className="text-4xl mb-5">{report?.title}</h2>
           <p className="text-p-3 dark:text-p-6">
             {new Date(report?.createdAt)
-              ?.toLocaleDateString()
+              ?.toLocaleDateString("en-GB")
               .split("/")
               .join(" / ")}
           </p>

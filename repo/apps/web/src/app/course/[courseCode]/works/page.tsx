@@ -1,7 +1,45 @@
-import { Tab, TabGroup } from 'ui';
-import Link from 'next/link';
+import { Tab, TabGroup } from "ui";
+import Link from "next/link";
+import { cache } from "react";
+import dbClient from "../../../../utils/dbConnector";
+import { WorkCard } from "../../../../components/Cards";
+
+export const revalidate = 60 * 60 * 24 * 7; //1 week
+
+const getWorks = cache(async (courseCode: string) => {
+  const works = await dbClient.work.findMany({
+    where: {
+      AND: [
+        { courseCode: courseCode },
+        {
+          NOT: {
+            Reports: {
+              none: {},
+            },
+          },
+        },
+      ],
+    },
+    select: {
+      id: true,
+      typeOfWork: true,
+      courseCode: true,
+      People: {
+        select: {
+          person: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return works;
+});
 
 export default async function page({ params }) {
+  const works = await getWorks(params?.courseCode as string);
   return (
     <div className="flex flex-col w-full gap-5 items-center">
       <TabGroup className="self-center mt-5">
@@ -15,6 +53,12 @@ export default async function page({ params }) {
           <Tab active>Works</Tab>
         </Link>
       </TabGroup>
+
+      <div className="w-full flex gap-5 flex-wrap">
+        {works?.map((a, i) => (
+          <WorkCard data={a} key={i} />
+        ))}
+      </div>
     </div>
   );
 }

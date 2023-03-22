@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { SANITIZE_OPTIONS } from "shared-utils";
 import sanitize from "sanitize-html";
 import dbClient from "../../../utils/dbConnector";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { ArticleFormData } from "../../../types";
@@ -19,7 +19,7 @@ export default async function edit_article(
       secure: true,
     });
 
-    const session = await unstable_getServerSession(req, res, authOptions);
+    const session = await getServerSession(req, res, authOptions);
     const formData: ArticleFormData = req.body;
     const existingArticle = await dbClient.article.findUnique({
       where: {
@@ -124,7 +124,7 @@ export default async function edit_article(
 
     await res.revalidate(`/article/${existingArticle?.id}`);
     if (formData?.title !== existingArticle?.title) {
-      await res.revalidate(`/u/${session?.user?.slug}/writings/`);
+      await res.revalidate(`/u/${session?.user?.slug}/writings`);
     }
     return res.status(201).json({
       message: `${existingArticle?.typeOfArticle} post updated successfully`,

@@ -17,9 +17,7 @@ import { MarkdownEditor } from "../../../components/MarkdownEditor";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useRouter } from "next/navigation";
 import { ArticleFormData } from "../../../types";
-import ReactImageUploading, { ImageListType } from "react-images-uploading";
-import ImageCompressor from "browser-image-compression";
-import Image from "next/image";
+import ImageUploader from "../../../components/ImageUploader";
 
 const ArticleEditor = ({ article }) => {
   const router = useRouter();
@@ -74,31 +72,6 @@ const ArticleEditor = ({ article }) => {
       },
     }
   );
-
-  const handleImageUpload = async (imageList) => {
-    const options = {
-      maxSizeMB: 0.2,
-      maxWidthOrHeight: 1080,
-      useWebWorker: true,
-    };
-    try {
-      const compressedImage = await ImageCompressor(
-        imageList[0]?.file,
-        options
-      );
-      const reader = new FileReader();
-      reader.readAsDataURL(compressedImage);
-      reader.onloadend = () => {
-        setFormData({
-          ...formData,
-          coverPhoto: reader?.result as ArticleFormData["coverPhoto"],
-        });
-        setChanged(true);
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSubmit = () => {
     if (!formData?.title || formData?.title?.length < 4) {
@@ -202,40 +175,17 @@ const ArticleEditor = ({ article }) => {
                   }}
                 />
                 <hr className="w-full my-5" />
-                <ReactImageUploading
-                  value={formData?.coverPhoto as ImageListType}
-                  onChange={handleImageUpload}
-                  dataURLKey="data_url"
-                >
-                  {({ onImageUpload, dragProps }) => (
-                    <div className="w-full flex gap-5">
-                      <Paper
-                        border
-                        className="flex-auto bg-p-9 dark:bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"
-                        onClick={() => {
-                          setFormData((p) => ({ ...p, coverPhoto: "" }));
-                          setChanged(true);
-
-                          onImageUpload();
-                        }}
-                        {...dragProps}
-                      >
-                        <h6>Cover Photo (optional). Click or Drop here.</h6>
-                      </Paper>
-                      {formData?.coverPhoto && (
-                        <div className="w-1/2">
-                          <Image
-                            className="flex-1 rounded-lg object-cover h-48 w-full"
-                            src={formData?.coverPhoto as string}
-                            alt="cover photo"
-                            height="150"
-                            width="150"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </ReactImageUploading>
+                <ImageUploader
+                  value={formData?.coverPhoto}
+                  onClick={() => {
+                    setFormData({ ...formData, coverPhoto: "" });
+                    setChanged(true);
+                  }}
+                  onChange={(photo) => {
+                    setFormData({ ...formData, coverPhoto: photo });
+                    setChanged(true);
+                  }}
+                />
 
                 {article?.typeOfArticle == "RESOURCE" && (
                   <>
@@ -296,6 +246,7 @@ const ArticleEditor = ({ article }) => {
 
                 <div className="w-full flex gap-5 justify-end pb-48 mt-5">
                   <Button
+                    className="flex gap-3 items-center"
                     onClick={() => handleSubmit()}
                     disabled={
                       !changed ||
@@ -306,7 +257,8 @@ const ArticleEditor = ({ article }) => {
                         !formData?.courseIds)
                     }
                   >
-                    Update Article
+                    {isUpdating && <LoadingPulser />}
+                    {isUpdating ? "Updating..." : "Update Article"}
                   </Button>
                 </div>
               </form>
