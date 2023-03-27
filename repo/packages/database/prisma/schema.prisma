@@ -194,3 +194,38 @@ model ArticleToCourse {
   @@index([articleId])
   @@index([courseId])
 }
+
+enum TypeOfEvent {
+  EVENT
+  WORKSHOP
+  COMPETITION
+  TALK
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLIC
+}
+
+model Event {
+  id            String        @id @default(uuid())
+  title         String
+  typeOfEvent   TypeOfEvent
+  caption       String        @db.VarChar(200)
+  coverPhoto    String?
+  description   String        @db.Text
+  publishStatus PublishStatus @default(DRAFT)
+
+  registrationStartTime DateTime?
+  registrationEndTime   DateTime?
+  eventStartTime        DateTime
+  eventEndTime          DateTime?
+
+  actionLink String?
+  actionText String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([title, caption])
+}

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { SANITIZE_OPTIONS } from "shared-utils";
 import sanitize from "sanitize-html";
 import dbClient from "../../../utils/dbConnector";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { ScopeEnum, TypeOfArticle } from "database";
@@ -26,7 +26,7 @@ export default async function create_article(
       secure: true,
     });
 
-    const session = await unstable_getServerSession(req, res, authOptions);
+    const session = await getServerSession(req, res, authOptions);
     const formData: ArticleFormData = req.body;
 
     const condition = ["ADMIN", "CRDN", "PROFILE"].some((s) =>

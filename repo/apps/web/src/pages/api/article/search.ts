@@ -10,7 +10,7 @@ export default async function (
     const articles = await dbClient.article.findMany({
       where: {
         AND: [
-          ...(req?.query?.q
+          ...(req?.query?.q?.toString()?.trim()
             ? [
                 {
                   OR: [
