@@ -8,6 +8,7 @@ type ImageUploaderProps = {
   onClick: () => void;
   onChange: (result: string | ArrayBuffer) => void;
   value: ImageListType | ArrayBuffer | string;
+  className?: string;
 };
 
 const ImageUploader = ({ ...props }: ImageUploaderProps) => {
@@ -39,7 +40,7 @@ const ImageUploader = ({ ...props }: ImageUploaderProps) => {
       dataURLKey="data_url"
     >
       {({ onImageUpload, dragProps }) => (
-        <div className="w-full flex gap-5">
+        <div className={props?.className + " w-full flex gap-5"}>
           <Paper
             border
             className="flex-auto bg-p-9 dark:bg-p-2 p-5 flex h-48 rounded-lg justify-center items-center"

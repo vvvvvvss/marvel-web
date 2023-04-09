@@ -60,27 +60,6 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
     }
   );
 
-  const handleImageUpload = async (imageList) => {
-    const options = {
-      maxSizeMB: 0.2,
-      maxWidthOrHeight: 1080,
-      useWebWorker: true,
-    };
-    try {
-      const compressedImage = await ImageCompressor(
-        imageList[0]?.file,
-        options
-      );
-      const reader = new FileReader();
-      reader.readAsDataURL(compressedImage);
-      reader.onloadend = () => {
-        setFormData({ ...formData, coverPhoto: reader?.result });
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSubmit = () => {
     if (!formData?.title || formData?.title?.length < 4) {
       alert("title cannot be less than 4 characters long.");
@@ -158,7 +137,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
                   className="mt-5"
                   fullwidth
                   id="caption"
-                  placeholder="A short aption for your article..."
+                  placeholder="A short caption for your article..."
                   type={"text"}
                   value={formData?.caption}
                   onChange={(e) =>

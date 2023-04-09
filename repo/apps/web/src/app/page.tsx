@@ -80,6 +80,9 @@ export default function page() {
               <Link href={"/courses"} className="flex-1 md:flex-auto">
                 <Button className="w-full">Courses</Button>
               </Link>
+              <Link href={"/events"} className="flex-1 md:flex-auto">
+                <Button className="w-full">Events</Button>
+              </Link>
               <Link
                 target="_blank"
                 rel="noopener noreferrer"

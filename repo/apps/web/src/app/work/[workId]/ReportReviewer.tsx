@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useMutation } from "react-query";
+import { ScopeEnum } from "database";
 
 const ReportReviewer = ({ report, work }) => {
   const sessionUser = useSession().data?.user;
@@ -108,7 +109,10 @@ const ReportReviewer = ({ report, work }) => {
     );
   } else if (
     report?.reviewStatus === "FLAGGED" &&
-    work?.People?.map((p) => p?.personId).includes(sessionUser?.id)
+    (work?.People?.map((p) => p?.personId).includes(sessionUser?.id) ||
+      ["CRDN", "ADMIN"].some((s) =>
+        sessionUser?.scope?.map((s) => s.scope).includes(s as ScopeEnum)
+      ))
   ) {
     return (
       <div className="w-full p-5 rounded-lg border border-[#ff5959]">

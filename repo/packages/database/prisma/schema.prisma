@@ -202,19 +202,13 @@ enum TypeOfEvent {
   TALK
 }
 
-enum PublishStatus {
-  DRAFT
-  PUBLIC
-}
-
 model Event {
-  id            String        @id @default(uuid())
-  title         String
-  typeOfEvent   TypeOfEvent
-  caption       String        @db.VarChar(200)
-  coverPhoto    String?
-  description   String        @db.Text
-  publishStatus PublishStatus @default(DRAFT)
+  id          String      @id @default(uuid())
+  title       String
+  typeOfEvent TypeOfEvent
+  caption     String      @db.VarChar(200)
+  coverPhoto  String?
+  description String      @db.Text
 
   registrationStartTime DateTime?
   registrationEndTime   DateTime?
@@ -222,7 +216,7 @@ model Event {
   eventEndTime          DateTime?
 
   actionLink String?
-  actionText String
+  actionText String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
