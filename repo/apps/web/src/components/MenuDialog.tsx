@@ -19,6 +19,7 @@ import axios from "axios";
 import {
   ArticleCard,
   CourseCard,
+  EventCard,
   PersonCard,
   ReportCard,
   WorkCard,
@@ -33,6 +34,7 @@ const tabs = {
   work: "Works",
   article: "Articles",
   report: "Reports",
+  event: "Events",
 };
 type Tab = keyof typeof tabs;
 
@@ -167,6 +169,12 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                   <>
                     {data?.pages?.flat()?.map((d, i) => (
                       <ReportCard data={d} key={i} />
+                    ))}
+                  </>
+                ) : selectedTab === "event" ? (
+                  <>
+                    {data?.pages?.flat()?.map((d, i) => (
+                      <EventCard data={d} key={i} />
                     ))}
                   </>
                 ) : null}

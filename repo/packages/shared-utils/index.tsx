@@ -1,5 +1,5 @@
 import { IOptions } from "sanitize-html";
-import { TypeOfArticle, TypeOfWork } from "database";
+import { TypeOfArticle, TypeOfEvent, TypeOfWork } from "database";
 
 export const SANITIZE_OPTIONS: IOptions = {
   allowedTags: ["iframe", "br", "strong", "blockquote"],
@@ -14,6 +14,8 @@ export const SANITIZE_OPTIONS: IOptions = {
     "www.kaggle.com",
     "player.vimeo.com",
     "plotly.com",
+    "docs.google.com",
+    "lu.ma",
   ],
   nestingLimit: 5,
 };
@@ -26,9 +28,17 @@ const articlePhoto =
   "https://res.cloudinary.com/marvelweb/image/upload/v1678645549/article_ol6oje.jpg";
 const coursePagePhoto =
   "https://res.cloudinary.com/marvelweb/image/upload/v1678650375/course_page_hvaudh.jpg";
+const competitionPhoto =
+  "https://res.cloudinary.com/marvelweb/image/upload/v1681331964/competition_rennib.png";
+const talkPhoto =
+  "https://res.cloudinary.com/marvelweb/image/upload/v1681331964/talk_zu423j.png";
+const workshopPhoto =
+  "https://res.cloudinary.com/marvelweb/image/upload/v1681331964/workshop_ujjfgy.png";
+const eventPhoto =
+  "https://res.cloudinary.com/marvelweb/image/upload/v1681331964/event_ojlfob.png";
 export const getCroppedCloudinaryImage = (
   src: string = "",
-  fallbackType: TypeOfArticle | TypeOfWork | "COURSE_PAGE"
+  fallbackType: TypeOfArticle | TypeOfWork | "COURSE_PAGE" | TypeOfEvent
 ): string =>
   src
     ? src?.slice(0, src?.search("upload") + 6) +
@@ -42,4 +52,12 @@ export const getCroppedCloudinaryImage = (
     ? articlePhoto
     : fallbackType == "COURSE_PAGE"
     ? coursePagePhoto
+    : fallbackType === "COMPETITION"
+    ? competitionPhoto
+    : fallbackType === "EVENT"
+    ? eventPhoto
+    : fallbackType === "TALK"
+    ? talkPhoto
+    : fallbackType === "WORKSHOP"
+    ? workshopPhoto
     : "";

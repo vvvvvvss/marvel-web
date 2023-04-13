@@ -1,26 +1,10 @@
+"use client";
 import { Metadata } from "next";
-import dbClient from "../../utils/dbConnector";
-import { Window } from "ui";
-import EventCreatingForm from "./EventCreatingForm";
-
-const getEventsList = async (page: number = 1) => {
-  const eventList = await dbClient.event.findMany({
-    select: {
-      id: true,
-      title: true,
-      typeOfEvent: true,
-      caption: true,
-      coverPhoto: true,
-      eventStartTime: true,
-      eventEndTime: true,
-      registrationStartTime: true,
-      registrationEndTime: true,
-    },
-    take: 20,
-    skip: ((page || 1) - 1) * 20,
-  });
-  return eventList;
-};
+import { Button, LoadingPulser, Window } from "ui";
+import EventCreatingForm from "./EventCreator";
+import { EventCard } from "../../components/Cards";
+import { useInfiniteQuery } from "react-query";
+import axios from "axios";
 
 export const metadata: Metadata = {
   title: "Events. | UVCE MARVEL",
@@ -42,23 +26,49 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function page({ params }) {
-  const eventList = await getEventsList(params?.page);
+export default function page({ params }) {
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery(
+      ["event_list"],
+      async ({ pageParam }) =>
+        (await axios.get(`/api/event/search?skip=${pageParam}`)).data?.data,
+      {
+        getNextPageParam: (lastPage, pages) =>
+          lastPage?.length == 12 ? pages?.length * 12 : null,
+      }
+    );
+
   return (
     <Window className={"pt-5 md:pt-12 pb-40"}>
-      <div className="w-full max-w-5xl flex flex-col p-5">
-        <h1 className="text-3xl md:text-6xl px-3">
-          <span className="text-p-0 dark:text-p-9">events</span>
-          <span className="text-p-4 dark:text-p-5">&nbsp;at marvel.</span>
-        </h1>
-        <p className="w-full max-w-2xl text-lg py-5 text-p-0 dark:text-p-9 px-3">
-          Events, Workshops, Competitions and Talks at UVCE MARVEL.
-        </p>
+      <div className="w-full max-w-4xl flex flex-col p-5">
+        {/* header  */}
+        <div className="my-10">
+          <h1 className="text-4xl md:text-6xl px-3">
+            <span className="text-p-0 dark:text-p-9">events</span>
+            <span className="text-p-4 dark:text-p-5">&nbsp;at marvel.</span>
+          </h1>
+          <p className="w-full max-w-2xl text-lg py-5 text-p-0 dark:text-p-6 px-3">
+            Events, Workshops, Competitions and Talks at UVCE MARVEL.
+          </p>
+        </div>
         <EventCreatingForm />
         <div className="flex w-full gap-5 flex-wrap mt-5">
-          {eventList?.map((e, i) => (
-            <div key={i}>{e?.id}</div>
-          ))}
+          {isLoading ? (
+            <div className="w-full flex justify-center">
+              <LoadingPulser />
+            </div>
+          ) : (
+            data?.pages?.flat()?.map((d, i) => <EventCard data={d} key={i} />)
+          )}
+          <div className="w-full flex justify-center">
+            {isFetchingNextPage ? (
+              <p className="text-p-6 text-sm">Loading...</p>
+            ) : hasNextPage ? (
+              <Button onClick={() => fetchNextPage()}>Load more</Button>
+            ) : (
+              !isLoading && <p className="text-p-6 text-sm">That&apos;s it. </p>
+            )}
+          </div>
         </div>
       </div>
     </Window>

@@ -1,4 +1,4 @@
-import { PublishStatus, TypeOfEvent } from "database";
+import { TypeOfEvent } from "database";
 import { ImageListType } from "react-images-uploading";
 
 export type ArticleFormData = {
@@ -36,12 +36,14 @@ export type EventFormData = {
   coverPhoto?: string | ArrayBuffer;
   description: string;
 
-  requiresRegistration: boolean;
-  registrationStartTime?: Date;
-  registrationEndTime?: Date;
   eventStartTime?: Date;
   eventEndTime?: Date;
 
-  actionLink?: String;
-  actionText?: String;
+  requiresRegistration: boolean;
+  registrationStartTime?: Date;
+  registrationEndTime?: Date;
+
+  requiresActionButton: boolean;
+  actionLink?: string;
+  actionText?: string;
 };

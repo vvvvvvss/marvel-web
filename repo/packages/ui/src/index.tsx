@@ -6,6 +6,7 @@ export * from "./Window";
 export * from "./Appbar";
 export * from "./Button";
 export * from "./Button";
+export * from "./Chip";
 export * from "./Surfaces";
 export * from "./Tabs";
 export * from "./MardownRender";

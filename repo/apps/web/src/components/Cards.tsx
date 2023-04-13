@@ -1,6 +1,11 @@
-import { Paper } from "ui";
+import { Paper, Chip } from "ui";
 import Link from "next/link";
 import { Avatar } from "./Avatar";
+import { Event } from "database";
+import Image from "next/image";
+import { getCroppedCloudinaryImage } from "shared-utils";
+import EventTimingText from "./EventTimingText";
+import { DATE_OPTIONS } from "../utils/DATE_OPTIONS";
 
 export const PersonCard = ({ data: d }) => {
   return (
@@ -96,6 +101,42 @@ export const ReportCard = ({ data: d }) => {
           {new Date(d?.createdAt).toLocaleDateString("en-GB")}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
+      </Paper>
+    </Link>
+  );
+};
+
+export const EventCard = ({ data: d }: { data: Event }) => {
+  const imageSrc = getCroppedCloudinaryImage(d?.coverPhoto, d?.typeOfEvent);
+  return (
+    <Link href={`/event/${d?.id}`} prefetch={false} className="w-full">
+      <Paper
+        border
+        elevateOnHover
+        className="relative flex flex-col md:flex-row w-full dark:bg-p-1"
+      >
+        <Image
+          alt={d?.title}
+          src={imageSrc}
+          width={800}
+          height={800}
+          className="relative aspect-square md:aspect-video w-full md:w-1/2 md:h-full object-cover border-p-0 md:border-r-[1.5px] md:dark:border-r dark:border-p-6 border-b-[1.5px] dark:border-b"
+        ></Image>
+        <div className="h-1/2 md:h-full relative p-5 flex flex-col gap-5 w-full md:w-1/2">
+          <div className="absolute right-0 top-0 rounded-bl-lg p-2 bg-p-0 text-p-10 dark:bg-p-9 dark:text-p-0 dark:font-semibold">
+            {new Date(d?.eventStartTime).toLocaleDateString(
+              "en-GB",
+              DATE_OPTIONS
+            )}
+          </div>
+          <Chip>{d?.typeOfEvent}</Chip>
+          <h2 className="text-4xl">{d?.title}</h2>
+          <p className="dark:text-p-6 mb-16">{d?.caption}</p>
+        </div>
+        <EventTimingText
+          data={d}
+          className="absolute font-medium dark:font-normal border-t-[1.5px] dark:border-t dark:border-p-6 w-full bg-p-10 dark:bg-p-1 bottom-0 flex justify-center px-5 py-3"
+        />
       </Paper>
     </Link>
   );
