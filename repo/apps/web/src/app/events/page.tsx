@@ -5,8 +5,9 @@ import EventCreatingForm from "./EventCreator";
 import { EventCard } from "../../components/Cards";
 import { useInfiniteQuery } from "react-query";
 import axios from "axios";
+import React from "react";
 
-export default function page({ params }) {
+const Page: React.FC<any> = ({ params }) => {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
       ["event_list"],
@@ -53,4 +54,6 @@ export default function page({ params }) {
       </div>
     </Window>
   );
-}
+};
+
+export default Page;
