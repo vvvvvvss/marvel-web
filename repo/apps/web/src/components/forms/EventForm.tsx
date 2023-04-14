@@ -12,6 +12,20 @@ type EventFormProps = {
   submitDisabled?: boolean;
 };
 
+const getOffSettedISOString = (date: Date): string => {
+  const timezoneOffset = date.getTimezoneOffset() * -1;
+  const isoString = new Date(date.getTime() + timezoneOffset * 60 * 1000)
+    .toISOString()
+    .slice(0, -8);
+  return isoString;
+};
+
+const getDateOneYearFromThis = (date: Date): Date => {
+  const newDate = new Date(date);
+  newDate.setFullYear(date.getFullYear() + 1);
+  return newDate;
+};
+
 const EventForm = ({
   formData,
   setFormData,
@@ -107,14 +121,12 @@ const EventForm = ({
       </label>
       <input
         required
-        min={new Date().toISOString().substring(0, 16)}
-        max={new Date(new Date().getFullYear() + 1, 11, 31)
-          .toISOString()
-          .substring(0, 16)}
+        min={getOffSettedISOString(new Date())}
+        max={getOffSettedISOString(getDateOneYearFromThis(new Date()))}
         className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
         id="start_time"
         type="datetime-local"
-        value={formData?.eventStartTime.toISOString().substring(0, 16)}
+        value={getOffSettedISOString(formData?.eventStartTime)}
         onChange={(e) =>
           e.target?.value &&
           setFormData({
@@ -128,14 +140,14 @@ const EventForm = ({
       </label>
       <input
         required
-        min={formData?.eventStartTime?.toISOString().substring(0, 16)}
-        max={new Date(formData?.eventStartTime?.getFullYear() + 1, 11, 31)
-          .toISOString()
-          .substring(0, 16)}
+        min={getOffSettedISOString(formData?.eventStartTime)}
+        max={getOffSettedISOString(
+          getDateOneYearFromThis(formData?.eventStartTime)
+        )}
         className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
         id="end_time"
         type="datetime-local"
-        value={formData?.eventEndTime?.toISOString()?.substring(0, 16)}
+        value={getOffSettedISOString(formData?.eventEndTime)}
         onChange={(e) =>
           e.target?.value &&
           setFormData({
@@ -172,16 +184,12 @@ const EventForm = ({
           </label>
           <input
             required
-            min={new Date().toISOString().substring(0, 16)}
-            max={new Date(new Date().getFullYear() + 1, 11, 31)
-              .toISOString()
-              .substring(0, 16)}
+            min={getOffSettedISOString(new Date())}
+            max={getOffSettedISOString(formData?.eventStartTime)}
             className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
             id="reg_start_time"
             type="datetime-local"
-            value={formData?.registrationStartTime
-              ?.toISOString()
-              ?.substring(0, 16)}
+            value={getOffSettedISOString(formData?.registrationStartTime)}
             onChange={(e) =>
               e.target?.value &&
               setFormData({
@@ -194,22 +202,12 @@ const EventForm = ({
             Registration ends at?
           </label>
           <input
-            min={formData?.registrationStartTime
-              ?.toISOString()
-              ?.substring(0, 16)}
-            max={new Date(
-              formData?.registrationStartTime?.getFullYear() + 1,
-              11,
-              31
-            )
-              ?.toISOString()
-              ?.substring(0, 16)}
+            min={getOffSettedISOString(formData?.registrationStartTime)}
+            max={getOffSettedISOString(formData?.eventStartTime)}
             className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
             id="reg_end_time"
             type="datetime-local"
-            value={formData?.registrationEndTime
-              ?.toISOString()
-              ?.substring(0, 16)}
+            value={getOffSettedISOString(formData?.registrationEndTime)}
             onChange={(e) =>
               e.target?.value &&
               setFormData({
