@@ -122,7 +122,7 @@ export const EventCard = ({ data: d }: { data: Event }) => {
           height={800}
           className="relative aspect-square md:aspect-video w-full md:w-1/2 md:h-full object-cover border-p-0 md:border-r-[1.5px] md:dark:border-r dark:border-p-6 border-b-[1.5px] dark:border-b"
         ></Image>
-        <div className="h-1/2 md:h-full relative p-5 flex flex-col gap-5 w-full md:w-1/2">
+        <div className="md:h-full relative p-5 flex flex-col gap-5 w-full md:w-1/2 h-min">
           <div className="absolute right-0 top-0 rounded-bl-lg p-2 bg-p-0 text-p-10 dark:bg-p-9 dark:text-p-0 dark:font-semibold">
             {new Date(d?.eventStartTime).toLocaleDateString(
               "en-GB",

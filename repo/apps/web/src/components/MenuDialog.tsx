@@ -31,10 +31,10 @@ import { MdLightMode, MdDarkMode } from "react-icons/md";
 const tabs = {
   people: "People",
   course: "Courses",
+  event: "Events",
   work: "Works",
   article: "Articles",
   report: "Reports",
-  event: "Events",
 };
 type Tab = keyof typeof tabs;
 

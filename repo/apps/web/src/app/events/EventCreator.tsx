@@ -4,7 +4,7 @@ import { Button, FullScreenDialog, IconButton, Paper } from "ui";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { VscClose as CloseIcon } from "react-icons/vsc";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { EventFormData } from "../../types";
@@ -30,6 +30,7 @@ const EventCreatingForm = () => {
     actionText: "",
   });
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate: sendMutation, isLoading: isCreateLoading } = useMutation(
     async () =>
@@ -42,7 +43,7 @@ const EventCreatingForm = () => {
       onError: (e: AxiosError) =>
         alert(e?.response?.data?.["message"] || "Something went wrong."),
       onSuccess: () => {
-        router.refresh();
+        queryClient.invalidateQueries(["event_list"]);
         setDialogOpen(false);
       },
     }

@@ -85,7 +85,6 @@ export default async function create_event(
       });
     }
 
-    await res.revalidate(`/events`);
     return res.status(201).json({
       message: `event created successfully`,
     });

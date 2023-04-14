@@ -1,6 +1,5 @@
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
-import { Chip } from "ui";
 
 export const config = {
   runtime: "edge",
@@ -35,39 +34,49 @@ export default async function handler(req: NextRequest) {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#fff",
+            backgroundColor: "#000",
+            position: "relative",
           }}
         >
           <img
             style={{
-              width: "100%",
-              maxHeight: "40%",
+              width: "100vw",
+              maxHeight: "100vh",
+              position: "absolute",
+              opacity: "0.4",
+              filter: "blur(10px)",
             }}
             src={searchParams.get("coverPhoto")}
-          ></img>
+            alt="cover"
+          />
+
+          <div tw="absolute z-10 right-0 top-0 rounded-bl-lg py-5 px-5 bg-[#fff] text-[#000] font-semibold text-5xl">
+            {searchParams.get("startTime")}
+          </div>
+
           <h3
             tw="text-4xl"
             style={{
-              color: "#333",
-              letterSpacing: "0.2em",
-              margin: "40px 40px 10px 55px",
+              color: "#fff",
+              padding: "10px 20px",
+              margin: "100px 40px 10px 40px",
+              letterSpacing: "0.25em",
             }}
           >
-            {searchParams.get("typeOfWork")} WORK
+            {searchParams.get("typeOfEvent")}
           </h3>
           <h1
             tw="text-8xl"
-            style={{ color: "#000", margin: "0px 40px 0px 50px" }}
+            style={{ color: "#fff", margin: "0px 40px 0px 50px" }}
           >
-            {searchParams.get("name")}
+            {searchParams.get("title")}
           </h1>
 
           <p
             tw="text-4xl"
-            style={{ color: "#222", margin: "30px 40px 0px 55px" }}
+            style={{ color: "#eee", margin: "30px 40px 0px 55px" }}
           >
-            {searchParams.get("reportCount")}{" "}
-            {searchParams?.get("reportCount") == "1" ? "Report" : "Reports"}
+            {searchParams?.get("caption")}
           </p>
           <svg
             style={{

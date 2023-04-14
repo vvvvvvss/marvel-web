@@ -97,10 +97,7 @@ export default async function update_event(
       },
     });
 
-    await Promise.all([
-      res.revalidate("/events"),
-      res.revalidate(`/event/${updatedEvent?.id}`),
-    ]);
+    await Promise.all([res.revalidate(`/event/${updatedEvent?.id}`)]);
     return res.status(201).json({
       message: `event updated successfully`,
     });
