@@ -33,8 +33,8 @@ const WorkDeleter = ({ course }) => {
       <h3 className="text-2xl">Delete Course</h3>
       <p>
         !!!IMPORTANT!!! Deleting this course will also delete ALL COURSE WORKS,
-        and ALL RESOURCE ARTICLES. It'll be a CATASTROPHE if you don't know what
-        you're doing. Are you sure? type&nbsp;
+        and ALL RESOURCE ARTICLES. It&apos;ll be a CATASTROPHE if you don&apos;t
+        know what you&apos;re doing. Are you sure? type&nbsp;
         <span className="font-bold text-s-4 dark:text-s-5">
           {confirmationText}
         </span>{" "}
