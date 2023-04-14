@@ -27,7 +27,7 @@ const getSyllabus = cache(async (courseCode: string) => {
       },
     })
   ).data;
-  console.log(filesMetaData?.map((f) => f?.name));
+
   const levels = filesMetaData?.filter((e) =>
     /^LEVEL\d+\.md$/.test(e?.["path"])
   );

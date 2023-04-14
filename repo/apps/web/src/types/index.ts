@@ -10,6 +10,7 @@ export type ArticleFormData = {
 };
 
 export type CourseFormData = {
+  courseCode?: string;
   courseDuration: string;
   caption: string;
   coverPhoto?: string | ArrayBuffer;

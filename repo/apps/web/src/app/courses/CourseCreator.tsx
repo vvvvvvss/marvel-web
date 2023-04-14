@@ -1,32 +1,31 @@
 "use client";
-import { FullScreenDialog, IconButton } from "ui";
+import { Button, FullScreenDialog, IconButton } from "ui";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import { VscSettings as ManageIcon } from "react-icons/vsc";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { CourseFormData } from "../../../../types";
-import CourseForm from "../../../../components/forms/CourseForm";
-import CourseDeleter from "./CourseDeleter";
+import { CourseFormData } from "../../types";
+import CourseForm from "../../components/forms/CourseForm";
 
-const EditMeta = ({ course }) => {
+const CourseCreator = () => {
   const sessionUser = useSession()?.data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
-  const [copy, setCopy] = useState<CourseFormData>({
-    courseDuration: course?.courseDuration,
-    caption: course?.caption,
-    coverPhoto: course?.coverPhoto,
-    repoURL: course?.repoURL,
+  const [formData, setFormData] = useState<CourseFormData>({
+    courseCode: "",
+    courseDuration: "",
+    caption: "",
+    coverPhoto: "",
+    repoURL: "",
   });
 
   const { data, isLoading, mutate } = useMutation(
     async () =>
       (
-        await axios.post("/api/course/edit-meta?courseId=" + course?.id, {
-          ...copy,
+        await axios.post("/api/course/create", {
+          ...formData,
         })
       ).data,
     {
@@ -43,13 +42,9 @@ const EditMeta = ({ course }) => {
   if (sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) {
     return (
       <>
-        <IconButton
-          onClick={() => setModalOpen((p) => !p)}
-          variant="standard"
-          className="absolute top-3 right-2 text-sm"
-        >
-          <ManageIcon className="h-5 w-5" />
-        </IconButton>
+        <Button onClick={() => setModalOpen((p) => !p)} variant="standard">
+          Create New Course
+        </Button>
         {modalOpen && (
           <FullScreenDialog
             className="z-10"
@@ -65,19 +60,14 @@ const EditMeta = ({ course }) => {
                 <CloseIcon className="h-10 w-20" />
               </IconButton>
 
-              <div className="w-full pb-56">
-                <CourseForm
-                  formData={copy}
-                  setFormData={setCopy}
-                  onSubmit={mutate}
-                  submitDisabled={isLoading}
-                  submitLabel="Update Course"
-                />
-                <hr className="border-p-0 dark:border-p-6 my-5" />
-                {sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN") && (
-                  <CourseDeleter course={course} />
-                )}
-              </div>
+              <CourseForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={mutate}
+                showCourseCode
+                submitDisabled={isLoading}
+                submitLabel="Create New Course"
+              />
             </div>
           </FullScreenDialog>
         )}
@@ -87,4 +77,4 @@ const EditMeta = ({ course }) => {
     return <div></div>;
   }
 };
-export default EditMeta;
+export default CourseCreator;

@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { CourseCard } from "../../components/Cards";
 import dbClient from "../../utils/dbConnector";
 import { Window } from "ui";
+import CourseCreator from "./CourseCreator";
 
 const getCourseList = async () => {
   const courseList = await dbClient.course.findMany({
@@ -52,6 +53,9 @@ export default async function page() {
           Computing and Cybersecurity, Design & Prototyping, and Renewable
           Energy Tech.
         </p>
+        <div className="w-full flex justify-end">
+          <CourseCreator />
+        </div>
         <div className="flex w-full gap-5 flex-wrap mt-5">
           {courseList?.map((c, i) => (
             <CourseCard data={c} key={i} />

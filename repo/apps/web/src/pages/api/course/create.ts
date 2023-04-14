@@ -4,8 +4,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { CourseFormData } from "../../../types";
+import axios from "axios";
 
-export default async function edit_meta(
+export default async function create_course(
   req: NextApiRequest & { url: string },
   res: NextApiResponse
 ) {
@@ -25,17 +26,6 @@ export default async function edit_meta(
       });
     }
 
-    const course = await dbClient.course.findUnique({
-      where: {
-        id: req?.query?.courseId as string,
-      },
-      select: {
-        coverPhoto: true,
-        id: true,
-        courseCode: true,
-      },
-    });
-
     const condition = session?.user?.scope
       ?.map((s) => s.scope)
       .includes("ADMIN");
@@ -44,51 +34,68 @@ export default async function edit_meta(
       return res.status(403).json({ message: "Access denied." });
     }
 
+    const repoName = formData?.repoURL?.slice(
+      formData?.repoURL.search("github.com") + 11 //number of chars in github.com + 1
+    );
+    const owner = repoName?.split("/")?.[0];
+    const repo = repoName?.split("/")?.[1];
+    const filesMetaData: any = (
+      await axios.get(
+        `https://api.github.com/repos/${owner}/${repo}/contents/`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.GITHUB_PAT}`,
+          },
+        }
+      )
+    ).data;
+    const levels = filesMetaData?.filter((e) =>
+      /^LEVEL\d+\.md$/.test(e?.["path"])
+    );
+
+    const createdCourse = await dbClient?.course?.create({
+      data: {
+        courseCode: formData?.courseCode,
+        caption: formData?.caption,
+        courseDuration: formData?.courseDuration,
+        repoURL: formData?.repoURL,
+        totalLevels: levels?.length,
+      },
+      select: {
+        id: true,
+      },
+    });
+
     let coverPhoto: string | null;
-    if (formData?.coverPhoto && formData?.coverPhoto !== course?.coverPhoto) {
+    if (formData?.coverPhoto && formData?.coverPhoto !== "") {
       coverPhoto = (
         await cloudinary.uploader.upload(formData?.coverPhoto as string, {
-          public_id: course?.id,
+          public_id: createdCourse?.id,
           folder: "course_covers",
           resource_type: "image",
           overwrite: true,
           secure: true,
         })
       ).secure_url;
-    } else if (
-      (!formData?.coverPhoto || formData?.coverPhoto == "") &&
-      (course?.coverPhoto || course?.coverPhoto !== "")
-    ) {
-      await cloudinary.uploader.destroy(`course_covers/${course?.id}`);
-      coverPhoto = null;
-    } else {
-      coverPhoto = course?.coverPhoto as string;
+      await dbClient.course.update({
+        where: {
+          id: createdCourse?.id,
+        },
+        data: {
+          coverPhoto: coverPhoto,
+        },
+      });
     }
 
-    await dbClient?.course?.update({
-      where: {
-        id: course?.id,
-      },
-      data: {
-        coverPhoto: coverPhoto,
-        caption: formData?.caption,
-        courseDuration: formData?.courseDuration,
-        repoURL: formData?.repoURL,
-      },
-    });
-
-    await Promise.all([
-      res.revalidate(`/course/${course?.courseCode}`),
-      res.revalidate(`/courses`),
-    ]);
+    await res.revalidate("/courses");
 
     return res.status(201).json({
-      message: "meta data updated successfully",
+      message: "created successfully",
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: `Couldn't update meta data`,
+      message: `Couldn't create`,
       error: error?.message,
     });
   }

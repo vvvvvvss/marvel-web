@@ -17,65 +17,41 @@ export default async function delete_article(
     });
 
     const session = await getServerSession(req, res, authOptions);
-    const existingArticle = await dbClient.article.findUnique({
+    const existingCourse = await dbClient.course.findUnique({
       where: {
         id: req?.query?.id as string,
       },
       select: {
         id: true,
-        typeOfArticle: true,
+        courseCode: true,
         coverPhoto: true,
-        People: {
-          select: {
-            personId: true,
-            role: true,
-            person: {
-              select: {
-                slug: true,
-              },
-            },
-          },
-        },
       },
     });
 
-    if (!existingArticle)
+    if (!existingCourse)
       return res.json({ message: "Couldn't delete because it doesnt exist." });
-    const condition = existingArticle?.People?.filter((p) => p?.role === "OP")
-      ?.map((p) => p.personId)
-      ?.includes(session?.user?.id as string);
+    const condition = session?.user?.scope
+      ?.map((s) => s?.scope)
+      ?.includes("ADMIN");
 
     if (!condition) return res.status(403).json({ message: "Access denied" });
 
-    await dbClient.articleToPeople.deleteMany({
+    await dbClient.articleToCourse.deleteMany({
       where: {
-        articleId: existingArticle?.id,
-      },
-    });
-    if (existingArticle?.typeOfArticle === "RESOURCE") {
-      await dbClient?.articleToCourse.deleteMany({
-        where: {
-          articleId: existingArticle?.id,
-        },
-      });
-    }
-    await dbClient.article.delete({
-      where: {
-        id: existingArticle?.id,
+        courseId: existingCourse?.id,
       },
     });
 
-    if (existingArticle?.coverPhoto) {
-      await cloudinary.uploader.destroy(
-        `article_covers/${existingArticle?.id}`
-      );
-    }
+    await dbClient.course.delete({
+      where: {
+        id: req?.query?.id as string,
+      },
+    });
 
-    await Promise.all(
-      existingArticle?.People?.map((p) =>
-        res.revalidate(`/u/${p?.person?.slug}/writings`)
-      )
-    );
+    if (existingCourse?.coverPhoto) {
+      await cloudinary.uploader.destroy(`course_covers/${existingCourse?.id}`);
+    }
+    await res.revalidate("/courses");
 
     return res.status(201).json({
       message: `deleted successfully`,
@@ -83,7 +59,7 @@ export default async function delete_article(
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: `Couldn't delete article`,
+      message: `Couldn't delete course`,
       error: error?.message,
     });
   }
