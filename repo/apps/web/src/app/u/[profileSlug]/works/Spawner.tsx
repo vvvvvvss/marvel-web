@@ -128,8 +128,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                                     className={`rounded-lg ${
                                       course?.courseCode ===
                                       formData?.selectedCourse
-                                        ? "bg-p-2 border-2 border-p-10"
-                                        : "bg-p-1 border-2 border-transparent"
+                                        ? "dark:bg-p-2 bg-p-9 border-2 dark:border-p-10"
+                                        : "dark:bg-p-1 bg-p-9 border-2 border-transparent"
                                     } p-5 select-none cursor-pointer box-border`}
                                   >
                                     <h6 className="text-xs tracking-wider">
