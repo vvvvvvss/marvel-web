@@ -58,7 +58,6 @@ const EventCreatingForm = () => {
       <>
         <div className="px-3 w-full flex justify-end">
           <Button
-            variant="outlined"
             onClick={() => {
               setDialogOpen((p) => !p);
             }}
