@@ -51,7 +51,7 @@ const CourseCreator = () => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl pt-24 gap-5 ">
+            <div className="w-full max-w-2xl pt-24 gap-5 pb-48">
               <IconButton
                 onClick={() => {
                   setModalOpen(false);

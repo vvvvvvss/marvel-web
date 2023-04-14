@@ -207,11 +207,11 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                 <Button className="w-full">My Profile</Button>
               </Link>
             )}
-            <Link href={`/about`} className="flex-1">
-              <Button className="w-full">About</Button>
-            </Link>
             <Link href={`/courses`} className="flex-1">
               <Button className="w-full">Courses</Button>
+            </Link>
+            <Link href={`/events`} className="flex-1">
+              <Button className="w-full">Events</Button>
             </Link>
             {!!sessionUser?.id ? (
               <Button onClick={() => signOut()}>

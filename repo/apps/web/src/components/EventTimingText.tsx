@@ -24,7 +24,7 @@ const EventTimingText = ({
   if (registrationStartTime && now < registrationStartTime) {
     text =
       "Registration Starts at " +
-      registrationStartTime?.toLocaleDateString("en-GB", DATE_OPTIONS);
+      registrationStartTime?.toLocaleDateString("en-IN", DATE_OPTIONS);
     color = { dark: "bg-p-1", light: "bg-p-10" };
     console.log(text, color);
   } else if (
@@ -34,7 +34,7 @@ const EventTimingText = ({
   ) {
     text =
       "Registrations are open!. Closes on " +
-      registrationEndTime?.toLocaleDateString("en-GB", DATE_OPTIONS);
+      registrationEndTime?.toLocaleDateString("en-IN", DATE_OPTIONS);
     color = { dark: "green", light: "green" };
   } else if (
     registrationEndTime &&
@@ -43,12 +43,12 @@ const EventTimingText = ({
   ) {
     text =
       "Registrations are Closed. Event Starts at " +
-      eventStartTime?.toLocaleDateString("en-GB", DATE_OPTIONS);
+      eventStartTime?.toLocaleDateString("en-IN", DATE_OPTIONS);
     color = { dark: "bg-p-1", light: "bg-p-10" };
   } else if (now > eventStartTime && now < eventEndTime) {
     text =
       "Event is in Progress. Ends at " +
-      eventEndTime?.toLocaleDateString("en-GB", DATE_OPTIONS);
+      eventEndTime?.toLocaleDateString("en-IN", DATE_OPTIONS);
     color = { dark: "yellow", light: "yellow" };
   } else if (now > eventEndTime) {
     text = "Event is Done.";

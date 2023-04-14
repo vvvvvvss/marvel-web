@@ -78,7 +78,7 @@ export const ArticleCard = ({ data: d }) => {
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
           {d?.typeOfArticle && <>{d?.typeOfArticle} &#183;</>}
-          {new Date(d?.createdAt).toLocaleDateString("en-GB")}
+          {new Date(d?.createdAt).toLocaleDateString("en-IN")}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
         {d?.caption && (
@@ -98,7 +98,7 @@ export const ReportCard = ({ data: d }) => {
     >
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
-          {new Date(d?.createdAt).toLocaleDateString("en-GB")}
+          {new Date(d?.createdAt).toLocaleDateString("en-IN")}
         </p>
         <h3 className="text-2xl mt-2">{d?.title}</h3>
       </Paper>
@@ -125,7 +125,7 @@ export const EventCard = ({ data: d }: { data: Event }) => {
         <div className="md:h-full relative p-5 flex flex-col gap-5 w-full md:w-1/2 h-min">
           <div className="absolute right-0 top-0 rounded-bl-lg p-2 bg-p-0 text-p-10 dark:bg-p-9 dark:text-p-0 dark:font-semibold">
             {new Date(d?.eventStartTime).toLocaleDateString(
-              "en-GB",
+              "en-IN",
               DATE_OPTIONS
             )}
           </div>

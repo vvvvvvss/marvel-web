@@ -34,7 +34,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   og_url.searchParams.append("typeOfEvent", event?.typeOfEvent);
   og_url.searchParams.append(
     "startTime",
-    event?.eventStartTime?.toLocaleDateString("en-GB", DATE_OPTIONS)
+    event?.eventStartTime?.toLocaleDateString("en-IN", DATE_OPTIONS)
   );
   og_url.searchParams.append(
     "coverPhoto",
@@ -97,8 +97,8 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({
     <div className="flex flex-col gap-3 bg-p-9 dark:bg-p-1 rounded-lg p-5">
       <h5 className="font-medium text-lg">{title}</h5>
       <h6 className="text-sm">
-        Starts at {startTime?.toLocaleDateString("en-GB", DATE_OPTIONS)} and
-        ends at {endTime?.toLocaleDateString("en-GB", DATE_OPTIONS)}
+        Starts at {startTime?.toLocaleDateString("en-IN", DATE_OPTIONS)} and
+        ends at {endTime?.toLocaleDateString("en-IN", DATE_OPTIONS)}
       </h6>
       <Link href={link} target="_blank" rel="nofollow">
         <Button className="w-full">Add this to my Calendar</Button>
@@ -131,7 +131,7 @@ export default async function page({ params }) {
             className="relative w-full md:max-w-xs flex flex-col max-h-min h-min bg-p-10 dark:bg-p-0"
           >
             <div className="absolute z-10 right-0 top-0 rounded-bl-lg py-2 px-5 bg-p-10 dark:bg-p-0 font-semibold">
-              {event?.eventStartTime.toLocaleDateString("en-GB", DATE_OPTIONS)}
+              {event?.eventStartTime.toLocaleDateString("en-IN", DATE_OPTIONS)}
             </div>
             <Image
               alt={event?.title}
