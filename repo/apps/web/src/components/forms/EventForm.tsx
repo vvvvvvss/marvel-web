@@ -10,6 +10,7 @@ type EventFormProps = {
   setFormData: (args: EventFormData | any) => void;
   onSubmit?: () => void;
   submitDisabled?: boolean;
+  mode: "create" | "edit";
 };
 
 const getOffSettedISOString = (date: Date): string => {
@@ -31,6 +32,7 @@ const EventForm = ({
   setFormData,
   onSubmit,
   submitDisabled = false,
+  mode,
   ...props
 }: EventFormProps) => {
   return (
@@ -45,6 +47,7 @@ const EventForm = ({
         Type of Event
       </label>
       <select
+        value={formData?.typeOfEvent}
         id="event_type"
         onChange={(e) =>
           setFormData({
@@ -121,7 +124,7 @@ const EventForm = ({
       </label>
       <input
         required
-        min={getOffSettedISOString(new Date())}
+        min={mode != "edit" ? getOffSettedISOString(new Date()) : null}
         max={getOffSettedISOString(getDateOneYearFromThis(new Date()))}
         className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
         id="start_time"
@@ -184,7 +187,7 @@ const EventForm = ({
           </label>
           <input
             required
-            min={getOffSettedISOString(new Date())}
+            min={mode !== "edit" ? getOffSettedISOString(new Date()) : null}
             max={getOffSettedISOString(formData?.eventStartTime)}
             className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
             id="reg_start_time"

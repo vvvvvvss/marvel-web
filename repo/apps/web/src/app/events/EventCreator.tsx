@@ -76,6 +76,7 @@ const EventCreatingForm = () => {
               </IconButton>
 
               <EventForm
+                mode="create"
                 formData={formData}
                 setFormData={setFormData}
                 onSubmit={sendMutation}

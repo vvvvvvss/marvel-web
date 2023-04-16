@@ -80,6 +80,7 @@ const EventEditor = ({ event }: { event: Event }) => {
               </IconButton>
 
               <EventForm
+                mode="edit"
                 formData={formData}
                 setFormData={setFormData}
                 onSubmit={sendMutation}

@@ -157,7 +157,7 @@ export default async function page({ params }) {
               )}
             </div>
             <EventTimingText
-              data={event}
+              data={JSON.parse(JSON.stringify(event))}
               className="w-full font-medium border-y-[1.5px] dark:border-y dark:border-p-6 dark:font-normal flex justify-center px-5 py-3"
             >
               <InfoIcon className="w-8 h-8 mr-3" />
@@ -197,8 +197,8 @@ export default async function page({ params }) {
               <MarkdownRender content={event?.description} />
             </Paper>
             <div className="z-10 w-full flex justify-end gap-5">
-              <EventDeleter event={event} />
-              <EventEditor event={event} />
+              <EventDeleter event={JSON.parse(JSON.stringify(event))} />
+              <EventEditor event={JSON.parse(JSON.stringify(event))} />
             </div>
           </div>
         </div>
