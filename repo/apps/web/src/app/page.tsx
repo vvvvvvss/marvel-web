@@ -3,6 +3,8 @@ import { Window, Button, Paper, MarvelLogo } from "ui";
 import { TrackDescription } from "../types";
 import { Metadata } from "next";
 import TracksButton from "../components/TracksButton";
+import Spline from "@splinetool/react-spline";
+import Minchu3D from "../components/Minchu3D";
 
 //seo
 export const metadata: Metadata = {
@@ -82,9 +84,11 @@ export default function page() {
       {/*whole thing*/}
       <div className="w-full max-w-5xl flex flex-col pb-48">
         {/* hero box  */}
-        <div className="flex flex-col md:flex-row h-screen max-h-screen gap-10 md:justify-center items-center p-10">
-          <MarvelLogo className="aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
-          <div>
+        <div className="relative flex flex-col md:flex-row min-h-screen gap-10 md:justify-center items-center p-10">
+          <Minchu3D className="absolute z-0 w-full h-full" />
+
+          <MarvelLogo className="z-10 aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
+          <div className="z-10">
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
               <TracksButton />
               <Link href={"/courses"} className="flex-1 md:flex-auto">
@@ -102,7 +106,7 @@ export default function page() {
                 <Button className="w-full">Annual Report 2022</Button>
               </Link>
             </div>
-            <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal py-5">
+            <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal my-5 p-5 bg-p-9 dark:bg-p-1 rounded-lg">
               Makerspace for Advanced Research, Vital Education and Learning AKA
               Marvel at University of Visvesvaraya College of Engineering, is
               poised to spur genuine passion in every learner and redefine
@@ -144,6 +148,25 @@ export default function page() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/*events section*/}
+        <div className="flex flex-col items-center justify-center md:flex-row gap-5 h-fit p-5">
+          <Minchu3D className="max-h-96 rounded-lg aspect-square" />
+          <div className="flex flex-col gap-5 w-full">
+            <h2 className="text-5xl flex-wrap leading-snug ">
+              Events
+              <span className="text-p-5"> at Marvel</span>
+            </h2>
+            <p className="max-w-sm">
+              Marvel conducts workshops, competitions, talks, and other events
+              throughout the year. Please check our event page for updates on
+              the latest events at Marvel.
+            </p>
+            <Link href={"/events"}>
+              <Button>Go to Events Page</Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ importers:
       '@radix-ui/react-context-menu': ^2.1.1
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-switch': ^1.0.1
+      '@splinetool/react-spline': ^2.2.6
       '@swc/helpers': ~0.4.11
       '@types/he': ^1.1.2
       '@types/node': ^18.11.17
@@ -74,6 +75,7 @@ importers:
       '@radix-ui/react-context-menu': 2.1.3_ib3m5ricvtkl2cll7qpr2f6lvq
       '@radix-ui/react-select': 1.2.1_ib3m5ricvtkl2cll7qpr2f6lvq
       '@radix-ui/react-switch': 1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@splinetool/react-spline': 2.2.6_bh7ekwouyavbnbbn5txob2lzjy
       '@swc/helpers': 0.4.14
       '@types/he': 1.2.0
       '@types/sanitize-html': 2.8.1
@@ -1829,6 +1831,27 @@ packages:
     dependencies:
       fflate: 0.7.4
       string.prototype.codepointat: 0.2.1
+    dev: false
+
+  /@splinetool/react-spline/2.2.6_bh7ekwouyavbnbbn5txob2lzjy:
+    resolution: {integrity: sha512-y9L2VEbnC6FNZZu8XMmWM9YTTTWal6kJVfP05Amf0QqDNzCSumKsJxZyGUODvuCmiAvy0PfIfEsiVKnSxvhsDw==}
+    peerDependencies:
+      '@splinetool/runtime': '*'
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+    dependencies:
+      '@splinetool/runtime': 0.9.298
+      lodash.debounce: 4.0.8
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-merge-refs: 2.0.1
+    dev: false
+
+  /@splinetool/runtime/0.9.298:
+    resolution: {integrity: sha512-S+vKP4WFX9UeSMlN22aqVaK1Liojkkz+RGpyK5uNQysUdeB/1akx0wRjZ9qZxTSskfmgvzfY/EgWV6qTsGG8Ig==}
+    dependencies:
+      on-change: 4.0.2
+      semver-compare: 1.0.0
     dev: false
 
   /@swc/helpers/0.4.14:
@@ -4158,6 +4181,10 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
+  /lodash.debounce/4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
+
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
@@ -4985,6 +5012,11 @@ packages:
     engines: {node: ^10.13.0 || >=12.0.0}
     dev: false
 
+  /on-change/4.0.2:
+    resolution: {integrity: sha512-cMtCyuJmTx/bg2HCpHo3ZLeF7FZnBOapLqZHr2AlLeJ5Ul0Zu2mUJJz051Fdwu/Et2YW04ZD+TtU+gVy0ACNCA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
   /once/1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
     dependencies:
@@ -5379,6 +5411,10 @@ packages:
       - supports-color
     dev: false
 
+  /react-merge-refs/2.0.1:
+    resolution: {integrity: sha512-pywF6oouJWuqL26xV3OruRSIqai31R9SdJX/I3gP2q8jLxUnA1IwXcLW8werUHLZOrp4N7YOeQNZrh/BKrHI4A==}
+    dev: false
+
   /react-query/3.39.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-nLfLz7GiohKTJDuT4us4X3h/8unOh+00MLb2yJoGTPjxKs2bc1iDhkNx2bd5MKklXnOD3NrVZ+J2UXujA5In4g==}
     peerDependencies:
@@ -5673,6 +5709,10 @@ packages:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
+
+  /semver-compare/1.0.0:
+    resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==}
+    dev: false
 
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}

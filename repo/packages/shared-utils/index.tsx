@@ -16,6 +16,7 @@ export const SANITIZE_OPTIONS: IOptions = {
     "plotly.com",
     "docs.google.com",
     "lu.ma",
+    "forms.gle",
   ],
   nestingLimit: 5,
 };
