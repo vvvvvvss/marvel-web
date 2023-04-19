@@ -25,6 +25,7 @@ export type WorkFormData = {
 
 export type TrackDescription = {
   title: string;
+  suffix: string;
   desc: string;
   link: string;
   buttonText: string;

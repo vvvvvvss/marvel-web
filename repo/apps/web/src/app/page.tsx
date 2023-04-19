@@ -48,21 +48,31 @@ export const metadata: Metadata = {
 const tracks: TrackDescription[] = [
   {
     title: "Student",
+    suffix: "Track",
     desc: "With Student Track, you'll be able to gain valuable experience in your areas of interest through a comprehensive, hands-on curriculum that utilizes Marvel's resources from the very beginning. The program is designed as a batch program and applications for enrollment will be accepted twice a year, giving students a unique opportunity to learn and grow with a cohort of like-minded individuals.",
     link: "/courses",
     buttonText: "Explore Courses",
   },
   {
     title: "Project",
+    suffix: "Track",
     desc: "Project Track is for UVCE students with project ideas but limited resources. Marvel provides facilities and resources to support these projects. Interested students can submit an abstract, timeline, team details, and budget estimate for consideration. Marvel's team screens applications and selects candidates for an interview or abstract presentation. Selected teams work closely with Marvel to turn their ideas into reality.",
     link: "https://forms.gle/aiD3WWXUBngknHzX9",
     buttonText: "Apply with an Idea",
   },
   {
     title: "Competition",
+    suffix: "Track",
     desc: "MARVEL's Competition Track supports UVCE students who want to participate in technical competitions across domains. Students can submit competition details and budget estimates, and MARVEL will screen and select promising entries. MARVEL provides resources such as financial assistance, mentorship, and guidance to ensure team success.",
     link: "https://forms.gle/Ds6EoHK7iYt6Ki6NA",
     buttonText: "Apply with an Idea",
+  },
+  {
+    title: "Open Learner",
+    suffix: "Programme",
+    desc: "While admission to Marvel's Student Track is limited, we invite you to continue upskilling yourself through our Open Learner Programme. Access any of Marvel's courses, utilize your own resources, and complete the tasks at your own pace. Upon completion of the coursework and submission of the final report, you will receive a certificate that highlights your achievement and dedication to continuous learning.",
+    link: "https://forms.gle/QCdFiTSu5K6hyysq5",
+    buttonText: "Apply to OLP",
   },
 ];
 
@@ -116,9 +126,9 @@ export default function page() {
                 className="p-5 flex flex-col md:flex-row w-full justify-between gap-5"
                 key={i}
               >
-                <h2 className="text-5xl flex-wrap leading-snug">
+                <h2 className="text-5xl flex-wrap leading-snug max-w-sm">
                   {t?.title}
-                  <span className="text-p-5"> Track</span>
+                  <span className="text-p-5"> {t?.suffix}</span>
                 </h2>
                 <div className="max-w-sm flex flex-col gap-10">
                   <p className="text-p-0 dark:text-p-9">{t?.desc}</p>
