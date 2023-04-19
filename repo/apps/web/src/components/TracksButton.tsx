@@ -5,6 +5,7 @@ import { Button } from "ui";
 const TracksButton = () => {
   return (
     <Button
+      variant="outlined"
       onClick={() => {
         if (typeof window !== "undefined") {
           window.location.hash = "tracks";

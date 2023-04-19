@@ -92,10 +92,14 @@ export default function page() {
             <div className="py-5 md:py-0 flex flex-wrap gap-3">
               <TracksButton />
               <Link href={"/courses"} className="flex-1 md:flex-auto">
-                <Button className="w-full">Courses</Button>
+                <Button variant="outlined" className="w-full">
+                  Courses
+                </Button>
               </Link>
               <Link href={"/events"} className="flex-1 md:flex-auto">
-                <Button className="w-full">Events</Button>
+                <Button variant="outlined" className="w-full">
+                  Events
+                </Button>
               </Link>
               <Link
                 target="_blank"
@@ -103,7 +107,9 @@ export default function page() {
                 className="flex-1 md:flex-auto"
                 href={"https://www.playbook.com/s/marvel/uvce-marvel"}
               >
-                <Button className="w-full">Annual Report 2022</Button>
+                <Button variant="outlined" className="w-full">
+                  Annual Report 2022
+                </Button>
               </Link>
             </div>
             <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal my-5 p-5 bg-p-9 dark:bg-p-1 rounded-lg">
