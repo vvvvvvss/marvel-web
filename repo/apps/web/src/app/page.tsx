@@ -4,47 +4,6 @@ import { TrackDescription } from "../types";
 import { Metadata } from "next";
 import TracksButton from "../components/TracksButton";
 
-//seo
-export const metadata: Metadata = {
-  title: "marvel.",
-  description: "UVCE's own Makerspace",
-  applicationName: "UVCE Marvel",
-  authors: [{ name: "UVCE" }, { name: "UVCE MARVEL" }],
-  category: "Education and Research",
-  icons: {
-    icon: "/images/icon.png",
-    shortcut: "/images/icon.png",
-    apple: "/images/icon.png",
-  },
-  keywords: [
-    "UVCE",
-    "UVCE MARVEL",
-    "University of visveswaraya college of engineering",
-    "Makerspace for advanced research vital education and learning",
-    "AIML",
-    "cloud computing",
-    "cyber security",
-    "design and prototyping",
-    "IOT",
-    "Renewable energy",
-  ],
-  openGraph: {
-    type: "website",
-    title: "marvel.",
-    description: "UVCE's own Makerspace",
-    images: [
-      {
-        url: "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
-        secureUrl:
-          "https://res.cloudinary.com/marvelweb/image/upload/v1678988482/Group_38_qrhqag.jpg",
-        type: "image/jpeg",
-        width: 800,
-        height: 800,
-      },
-    ],
-  },
-};
-
 const tracks: TrackDescription[] = [
   {
     title: "Student",
