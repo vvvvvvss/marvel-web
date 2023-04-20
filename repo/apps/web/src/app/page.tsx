@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { Window, Button, Paper, MarvelLogo } from "ui";
+import { Window, Button, MarvelLogo } from "ui";
 import { TrackDescription } from "../types";
 import { Metadata } from "next";
 import TracksButton from "../components/TracksButton";
-import Spline from "@splinetool/react-spline";
-import Minchu3D from "../components/Minchu3D";
 
 //seo
 export const metadata: Metadata = {
@@ -158,7 +156,7 @@ export default function page() {
         </div>
 
         {/*events section*/}
-        <div className="flex flex-col items-center justify-center md:flex-row gap-5 h-fit p-5">
+        <div className="flex flex-col items-center justify-center md:flex-row gap-10 h-fit p-10">
           {/* <Minchu3D className="max-h-96 rounded-lg aspect-square" /> */}
           <div className="flex flex-col gap-5 w-full">
             <h2 className="text-5xl flex-wrap leading-snug ">
@@ -171,7 +169,7 @@ export default function page() {
               the latest events at Marvel.
             </p>
             <Link href={"/events"}>
-              <Button>Go to Events Page</Button>
+              <Button variant="outlined">Go to Events Page</Button>
             </Link>
           </div>
         </div>
