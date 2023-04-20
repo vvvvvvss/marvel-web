@@ -85,7 +85,7 @@ export default function page() {
       <div className="w-full max-w-5xl flex flex-col pb-48">
         {/* hero box  */}
         <div className="relative flex flex-col md:flex-row min-h-screen gap-10 md:justify-center items-center p-10">
-          <Minchu3D className="absolute z-0 w-full h-full" />
+          {/* <Minchu3D className="absolute z-0 w-full h-full" /> */}
 
           <MarvelLogo className="z-10 aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
           <div className="z-10">
@@ -159,7 +159,7 @@ export default function page() {
 
         {/*events section*/}
         <div className="flex flex-col items-center justify-center md:flex-row gap-5 h-fit p-5">
-          <Minchu3D className="max-h-96 rounded-lg aspect-square" />
+          {/* <Minchu3D className="max-h-96 rounded-lg aspect-square" /> */}
           <div className="flex flex-col gap-5 w-full">
             <h2 className="text-5xl flex-wrap leading-snug ">
               Events
