@@ -11,7 +11,7 @@ import {
 import { signIn, signOut, useSession } from "next-auth/react";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useState } from "react";
-import { Course, ScopeEnum } from "@prisma/client";
+import { Course, ScopeEnum } from "database";
 import { BsSearch, BsXLg } from "react-icons/bs";
 import Link from "next/link";
 import { useInfiniteQuery } from "react-query";
