@@ -15,7 +15,8 @@ const WorkDeleter = ({ course }) => {
     async () =>
       (await axios.delete(`/api/course/delete?id=${course?.id}`)).data,
     {
-      onError: (e: AxiosError) => alert(e.response.data?.["message"]),
+      onError: (e: AxiosError) =>
+        alert(e.response?.data?.["message"] || "Couldn't delete."),
       onSuccess: () => {
         alert("Course deleted successfully.");
         router.back();
