@@ -119,7 +119,7 @@ export default async function layout({ children, params }) {
     );
 
   const coverPhotoSrc = getCroppedCloudinaryImage(
-    work?.coverPhoto,
+    work?.coverPhoto as string,
     work?.typeOfWork
   );
 
