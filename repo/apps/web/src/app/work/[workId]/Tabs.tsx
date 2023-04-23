@@ -1,14 +1,14 @@
-'use client';
-import { Tab, TabGroup } from 'ui';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { useSelectedLayoutSegment } from 'next/navigation';
-import React from 'react';
+"use client";
+import { Tab, TabGroup } from "ui";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useSelectedLayoutSegment } from "next/navigation";
+import React from "react";
 
 const Tabs = ({ work }) => {
   const reportId = useSelectedLayoutSegment();
   const allPreviousReportsAreApproved = !work?.Reports?.some(
-    (r) => r?.reviewStatus === 'PENDING' || r?.reviewStatus === 'FLAGGED'
+    (r) => r?.reviewStatus === "PENDING" || r?.reviewStatus === "FLAGGED"
   );
   const startIndexOfDisabledButtons = allPreviousReportsAreApproved
     ? work?.Reports?.length + 1
@@ -16,12 +16,12 @@ const Tabs = ({ work }) => {
 
   const workTabs = work?.Reports?.map((r) => r?.id);
   const sessionUser = useSession()?.data?.user;
-  if (work?.typeOfWork === 'COURSE') {
+  if (work?.typeOfWork === "COURSE") {
     if (allPreviousReportsAreApproved) {
-      workTabs?.push('new');
+      workTabs?.push("new");
     }
     return (
-      <TabGroup className="mx-5 my-10 overflow-x-auto">
+      <TabGroup className="mx-5 my-10 overflow-x-auto max-w-full">
         <>
           {Array.from({ length: work?.totalLevels }).map((_, i) =>
             i >= startIndexOfDisabledButtons ? (
@@ -31,7 +31,7 @@ const Tabs = ({ work }) => {
             ) : (
               <Link
                 key={i}
-                href={`/work/${work?.id}/${i === 0 ? '' : workTabs?.[i] || ''}`}
+                href={`/work/${work?.id}/${i === 0 ? "" : workTabs?.[i] || ""}`}
               >
                 <Tab
                   active={reportId === workTabs?.[i] || (!reportId && i == 0)}
@@ -44,19 +44,19 @@ const Tabs = ({ work }) => {
         </>
       </TabGroup>
     );
-  } else if (work?.typeOfWork === 'PROJECT') {
+  } else if (work?.typeOfWork === "PROJECT") {
     if (workTabs?.length === 0) {
-      workTabs?.push('overview');
+      workTabs?.push("overview");
     }
     if (
       work?.People?.filter(
-        (p) => p?.status === 'ACTIVE' && p?.role === 'AUTHOR'
+        (p) => p?.status === "ACTIVE" && p?.role === "AUTHOR"
       )
         ?.map((p) => p?.personId)
         .includes(sessionUser?.id) &&
       allPreviousReportsAreApproved
     ) {
-      workTabs?.push('new');
+      workTabs?.push("new");
     }
     return (
       <TabGroup className="mx-5 my-10 overflow-x-auto">
@@ -64,13 +64,13 @@ const Tabs = ({ work }) => {
           {Array.from({ length: workTabs?.length }).map((_, i) => (
             <Link
               key={i}
-              href={`/work/${work?.id}/${i === 0 ? '' : workTabs?.[i] || ''}`}
+              href={`/work/${work?.id}/${i === 0 ? "" : workTabs?.[i] || ""}`}
             >
               <Tab active={reportId === workTabs?.[i] || (!reportId && i == 0)}>
                 {i === 0
-                  ? 'Overview'
-                  : workTabs[i] === 'new'
-                  ? 'New'
+                  ? "Overview"
+                  : workTabs[i] === "new"
+                  ? "New"
                   : `Stage ${i}`}
               </Tab>
             </Link>
