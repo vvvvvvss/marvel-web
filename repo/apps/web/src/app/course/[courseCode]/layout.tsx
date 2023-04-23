@@ -72,7 +72,7 @@ export default async function layout({ children, params }) {
   }
 
   const coverPhotoSrc = getCroppedCloudinaryImage(
-    course?.coverPhoto,
+    course?.coverPhoto as string,
     "COURSE_PAGE"
   );
 
