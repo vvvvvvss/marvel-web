@@ -1,47 +1,29 @@
 "use client";
-import { Button, FullScreenDialog, IconButton, Paper, TextField } from "ui";
+import { Button, FullScreenDialog, IconButton, TextField } from "ui";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { VscSettings as ManageIcon } from "react-icons/vsc";
 import { VscClose as CloseIcon } from "react-icons/vsc";
-import ReactImageUploading, { ImageListType } from "react-images-uploading";
-import ImageCompressor from "browser-image-compression";
 import ManagePeople from "./ManagePeople";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { WorkFormData } from "../../../../types";
-import Image from "next/image";
 import WorkDeleter from "./WorkDeleter";
 import ImageUploader from "../../../../components/ImageUploader";
+import { ScopeEnum } from "database";
 
 const EditMeta = ({ work }) => {
   const sessionUser = useSession()?.data?.user;
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
-  const [copy, setCopy] = useState<WorkFormData>({
+  const [copy, setCopy] = useState<WorkFormData & { totalLevels?: number }>({
     name: work?.name,
     note: work?.note,
     coverPhoto: work?.coverPhoto,
+    totalLevels: work?.totalLevels,
   });
   const [changed, setChanged] = useState(false);
-
-  const handleImageUpload = async (imageList) => {
-    const options = {
-      maxSizeMB: 0.2,
-      maxWidthOrHeight: 1080,
-      useWebWorker: true,
-    };
-    const compressedImage = await ImageCompressor(imageList[0]?.file, options);
-    const reader = new FileReader();
-    reader.readAsDataURL(compressedImage);
-    reader.onloadend = () => {
-      setCopy({
-        ...copy,
-        coverPhoto: reader?.result as WorkFormData["coverPhoto"],
-      });
-    };
-  };
 
   const { data, isLoading, mutate } = useMutation(
     async () =>
@@ -95,8 +77,11 @@ const EditMeta = ({ work }) => {
               </IconButton>
 
               <form
-                className="my-5 flex flex-col pb-56"
-                onSubmit={(e) => e.preventDefault()}
+                className="my-5 flex flex-col pb-56 gap-5"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  mutate();
+                }}
               >
                 {work?.typeOfWork === "PROJECT" && (
                   <>
@@ -129,7 +114,7 @@ const EditMeta = ({ work }) => {
                   maxLength={200}
                 />
                 <ImageUploader
-                  value={copy?.coverPhoto}
+                  value={copy?.coverPhoto as any}
                   onClick={() => {
                     setCopy({ ...copy, coverPhoto: "" });
                     setChanged(true);
@@ -139,10 +124,43 @@ const EditMeta = ({ work }) => {
                     setChanged(true);
                   }}
                 />
+                {work?.typeOfWork == "COURSE" &&
+                  ["ADMIN", "CRDN"].some((s: ScopeEnum) =>
+                    sessionUser?.scope?.map((s) => s.scope)?.includes(s)
+                  ) && (
+                    <>
+                      <div>
+                        <label htmlFor="totalLevels" className="text-3xl py-3">
+                          No. of levels
+                        </label>
+                        <p className="text-p-4 dark:text-p-5">
+                          The number of reports authors can write in this course
+                          work is equal to the number of levels.
+                        </p>
+                      </div>
+
+                      <TextField
+                        id="totalLevels"
+                        type="number"
+                        value={copy?.totalLevels}
+                        min={1}
+                        max={6}
+                        onChange={(e) => {
+                          setCopy({
+                            ...copy,
+                            totalLevels: Number(e.target?.value),
+                          });
+                          setChanged(true);
+                        }}
+                        maxLength={200}
+                      />
+                    </>
+                  )}
                 <Button
                   className="max-w-max self-end"
                   disabled={isLoading || !changed}
-                  onClick={() => mutate()}
+                  type="submit"
+                  // onClick={() => mutate()}
                 >
                   Update
                 </Button>

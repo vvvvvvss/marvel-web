@@ -41,13 +41,6 @@ export default async function page({ params, searchParams }) {
       >
         {["", null].includes(readMeData?.readMe) ? (
           <div className="w-full">
-            {/* <img
-              src={
-                'https://media.tenor.com/9ud1r4sc-QQAAAAC/confused-john-travolta.gif'
-              }
-              alt={'ReadMe is Empty'}
-              className="w-full rounded-lg max-w-xs object-cover"
-            /> */}
             <h1 className="text-3xl text-p-5 m-5">ReadMe is Empty</h1>
           </div>
         ) : (

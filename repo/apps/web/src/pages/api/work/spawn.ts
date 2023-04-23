@@ -20,7 +20,6 @@ export default async function spawn_new_work(
     const formData: FormData = req.body?.formData;
     const type: TypeOfWork = req.query?.type as TypeOfWork;
 
-    console.log(formData);
     //if session user is *not* CRDN or ADMIN
     const condition = !["CRDN", "ADMIN"].some((e: any) =>
       sessionUser?.scope?.map((s) => s.scope)?.includes(e)
@@ -38,6 +37,39 @@ export default async function spawn_new_work(
       },
     });
     if (!author) return res.status(400).json({ message: "Invalid request" });
+
+    if (
+      await dbClient.work.count({
+        where: {
+          OR: [
+            ...(type == "PROJECT" && formData?.projectName
+              ? [{ name: formData?.projectName }]
+              : []),
+            ...(type == "COURSE" && formData?.selectedCourse
+              ? [
+                  {
+                    AND: [
+                      { courseCode: formData?.selectedCourse },
+                      {
+                        People: {
+                          some: {
+                            personId: author?.id,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ]
+              : []),
+          ],
+        },
+      })
+    ) {
+      console.log(type, formData);
+      return res.status(400).json({
+        message: "Similar work already exists. Can't create a duplicate one.",
+      });
+    }
 
     let course: { totalLevels: number } | null = { totalLevels: 0 };
     if (type == "COURSE") {

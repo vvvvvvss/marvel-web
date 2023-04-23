@@ -7,7 +7,7 @@ import { VscClose as CloseIcon } from "react-icons/vsc";
 import { TextField } from "ui";
 import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { TypeOfWork } from "@prisma/client";
 
 type FormData = {
@@ -44,7 +44,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
         })
       ).data,
     {
-      onError: () => alert("Couldn't spawn work. loss"),
+      onError: (error: AxiosError) =>
+        alert(error?.response?.data?.["message"] || "Couldn't create work."),
       onSuccess: () => {
         router.refresh();
         setDialogOpen(false);

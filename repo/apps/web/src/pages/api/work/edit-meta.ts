@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbClient from "../../../utils/dbConnector";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { WorkFormData } from "../../../types";
@@ -16,8 +16,8 @@ export default async function edit_meta(
       api_secret: process.env.CLDNRY_API_SECRET,
       secure: true,
     });
-    const session = await unstable_getServerSession(req, res, authOptions);
-    const formData: WorkFormData = req.body;
+    const session = await getServerSession(req, res, authOptions);
+    const formData: WorkFormData & { totalLevels?: number } = req.body;
 
     if (
       formData?.name?.length > 60 ||
@@ -42,6 +42,11 @@ export default async function edit_meta(
           },
           select: {
             personId: true,
+          },
+        },
+        _count: {
+          select: {
+            Reports: true,
           },
         },
       },
@@ -80,6 +85,20 @@ export default async function edit_meta(
       coverPhoto = work?.coverPhoto as string;
     }
 
+    if (
+      work?.typeOfWork == "COURSE" &&
+      formData?.totalLevels &&
+      (formData?.totalLevels > 6 ||
+        formData?.totalLevels < work?._count?.Reports)
+    ) {
+      return res
+        .status(400)
+        .json({
+          message:
+            "Invalid number of levels. Either it's too large or less than the number of existing reports.",
+        });
+    }
+
     await dbClient?.work?.update({
       where: {
         id: work?.id,
@@ -88,6 +107,9 @@ export default async function edit_meta(
         coverPhoto: coverPhoto,
         name: formData?.name,
         note: formData?.note,
+        ...(work?.typeOfWork == "COURSE"
+          ? { totalLevels: Number(formData?.totalLevels) }
+          : {}),
       },
     });
 
