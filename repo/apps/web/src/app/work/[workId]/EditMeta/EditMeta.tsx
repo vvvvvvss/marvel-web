@@ -30,7 +30,7 @@ const EditMeta = ({ work }) => {
       (await axios.post("/api/work/edit-meta?workId=" + work?.id, { ...copy }))
         .data,
     {
-      onError: (e: AxiosError) => alert(e.response?.data?.["message"]),
+      onError: (e: AxiosError) => alert(e?.response?.data?.["message"]),
       onSuccess: (data: any) => {
         router.refresh();
         setModalOpen(false);

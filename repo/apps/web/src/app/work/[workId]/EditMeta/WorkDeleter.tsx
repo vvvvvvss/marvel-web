@@ -14,7 +14,8 @@ const WorkDeleter = ({ work }) => {
   const { isLoading, mutate } = useMutation(
     async () => (await axios.delete(`/api/work/delete?id=${work?.id}`)).data,
     {
-      onError: (e: AxiosError) => alert(e.response.data?.["message"]),
+      onError: (e: AxiosError) =>
+        alert(e?.response?.data?.["message"] || "Coundn't delete."),
       onSuccess: () => {
         alert("Work deleted successfully.");
         router.back();
