@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Window, Button, MarvelLogo } from "ui";
 import { TrackDescription } from "../types";
-import { Metadata } from "next";
 import TracksButton from "../components/TracksButton";
 
 const tracks: TrackDescription[] = [
