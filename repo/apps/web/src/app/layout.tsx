@@ -84,11 +84,11 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         {/* microsoft clarity tracking */}
         <Script id="clarity-ms" strategy="afterInteractive">
           {`
-             (function(c,l,a,r,i,t,y){
-                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-             })(window, document, "clarity", "script", "aew7b13k2i");
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "aew7b13k2i");
           `}
         </Script>
         {/* google analytics tracking */}
@@ -98,11 +98,11 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         ></Script>
         <Script strategy="afterInteractive" id="g-tag">
           {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-            
-              gtag('config', 'G-VV9ZYE0VC2');
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          
+            gtag('config', 'G-VV9ZYE0VC2');
           `}
         </Script>
       </head>
