@@ -8,6 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@storybook/cli": "^7.0.7",
     "dotenv-cli": "^7.2.1",
     "eslint": "^8.38.0",
     "eslint-config-custom": "workspace:*",
