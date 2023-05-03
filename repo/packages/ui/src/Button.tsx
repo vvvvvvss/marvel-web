@@ -21,9 +21,10 @@ export const Button = ({
       className={clsx(
         props?.className,
         //base classes
-        "overflow-hidden min-w-max whitespace-nowrap cursor-pointer select-none flex gap-2 flex-nowrap items-center",
+        "overflow-hidden min-w-max whitespace-nowrap cursor-pointer select-none",
+        "flex justify-center gap-2 flex-nowrap items-center",
         "rounded-full px-[1.2em] py-[0.5em]",
-        "hover:translate-y-[-1.5px] active:scale-[97%] transition ease-out",
+        "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",
         "disabled:opacity-50",
         "disabled:cursor-not-allowed",
         "disabled:active:transform-none",
@@ -69,7 +70,7 @@ export const Button = ({
       {Right ? (
         <Right
           className={clsx(
-            "h-full aspect-square",
+            "h-full aspect-square -mr-1 -my-1",
             {
               "text-p-10": variant == "standard",
             },
@@ -84,11 +85,17 @@ export const Button = ({
   );
 };
 
+export type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "text" | "outlined" | "standard";
+  size?: "small" | "medium" | "large";
+};
+
 export const IconButton = ({
   children,
   variant = "standard",
+  size = "medium",
   ...props
-}: ButtonProps) => {
+}: IconButtonProps) => {
   return (
     <button
       id={props?.id || "Button"}
@@ -98,18 +105,24 @@ export const IconButton = ({
         //base classes
         "overflow-hidden min-w-max whitespace-nowrap cursor-pointer select-none",
         "rounded-full p-2 aspect-square",
-        "hover:translate-y-[-1px] active:scale-[97%] transition",
+        "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",
         "text-p-0 dark:text-p-10",
         "disabled:opacity-50",
         "disabled:cursor-not-allowed",
         "disabled:active:transform-none",
         "disabled:hover:transform-none",
+        //size
+        {
+          "text-sm": size == "small",
+          "text-base": size == "medium",
+          "text-2xl": size == "large",
+        },
         //variants
         {
-          //standanrd
-          "bg-p-8 hover:bg-p-9 dark:bg-p-2 dark:hover:bg-p-3":
+          //standard
+          "bg-p-1 hover:bg-p-2 text-p-10 dark:bg-p-2 dark:hover:bg-p-3":
             variant == "standard",
-          "border-[1.5px] border-p-8 hover:border-p-0 dark:border-p-2 dark:hover:border-p-3":
+          "border-[1.5px] border-p-1 hover:border-p-2 dark:border-p-2 dark:hover:border-p-3":
             variant == "standard",
           //outlined
           "bg-p-10 hover:bg-p-9 dark:bg-p-1 dark:hover:bg-p-2":

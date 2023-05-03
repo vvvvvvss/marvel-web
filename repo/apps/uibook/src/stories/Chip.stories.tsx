@@ -2,21 +2,21 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MdLaunch } from "react-icons/md";
 
 //@ts-ignore
-import { Button } from "ui";
+import { Chip } from "ui";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta = {
-  title: "Components/Button",
-  component: Button,
+  title: "Components/Chip",
+  component: Chip,
   tags: ["autodocs"],
   argTypes: {
     variant: {
-      options: ["standard", "outlined", "text"], // values
+      options: ["standard", "outlined"], // values
       control: {
         type: "radio",
       },
       table: {
-        type: { summary: "One of 3 Variants of the Button component" },
+        type: { summary: "One of 2 Variants of Chip" },
         defaultValue: { summary: "standard" },
       },
     },
@@ -27,11 +27,23 @@ const meta = {
       },
       table: {
         type: {
-          summary: "One of 3 Button sizes.",
+          summary: "One of 3 sizes.",
         },
         defaultValue: { summary: "medium" },
       },
     },
+    clickable: {
+      control: {
+        type: "boolean",
+      },
+      table: {
+        type: {
+          summary: "Clickable?",
+        },
+        defaultValue: { summary: false },
+      },
+    },
+
     disabled: {
       control: {
         type: "boolean",
@@ -44,31 +56,28 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Chip>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const DefaultStandardButton: Story = {
+export const DefaultStandardChip: Story = {
   args: {
-    children: "Button",
+    children: "Chip",
   },
 };
 
-export const ButtonVariants: Story = {
+export const ChipVariants: Story = {
   render: ({ ...args }) => {
     return (
       <div className="flex flex-wrap gap-5">
-        <Button {...args} variant="standard">
+        <Chip {...args} variant="standard">
           Standard
-        </Button>
-        <Button {...args} variant="outlined">
+        </Chip>
+        <Chip {...args} variant="outlined">
           Outlined
-        </Button>
-        <Button {...args} variant="text">
-          Text
-        </Button>
+        </Chip>
       </div>
     );
   },
@@ -77,17 +86,14 @@ export const ButtonVariants: Story = {
   },
 };
 
-export const DisabledButton: Story = {
+export const DisabledChip: Story = {
   render: () => {
     return (
       <div className="flex gap-5 flex-wrap">
-        <Button disabled>Button</Button>
-        <Button variant="outlined" disabled>
-          Button
-        </Button>
-        <Button variant="text" disabled>
-          Button
-        </Button>
+        <Chip disabled>Chip</Chip>
+        <Chip variant="outlined" disabled>
+          Chip
+        </Chip>
       </div>
     );
   },
@@ -97,13 +103,10 @@ export const LeftIcon: Story = {
   render: () => {
     return (
       <div className="flex gap-5 flex-wrap">
-        <Button left={MdLaunch}>Button</Button>
-        <Button variant="outlined" left={MdLaunch}>
-          Button
-        </Button>
-        <Button variant="text" left={MdLaunch}>
-          Button
-        </Button>
+        <Chip left={MdLaunch}>Chip</Chip>
+        <Chip variant="outlined" left={MdLaunch}>
+          Chip
+        </Chip>
       </div>
     );
   },
@@ -113,25 +116,22 @@ export const RightIcon: Story = {
   render: () => {
     return (
       <div className="flex gap-5 flex-wrap">
-        <Button right={MdLaunch}>Button</Button>
-        <Button variant="outlined" right={MdLaunch}>
-          Button
-        </Button>
-        <Button variant="text" right={MdLaunch}>
-          Button
-        </Button>
+        <Chip right={MdLaunch}>Chip</Chip>
+        <Chip variant="outlined" right={MdLaunch}>
+          Chip
+        </Chip>
       </div>
     );
   },
 };
 
-export const ButtonSizes: Story = {
+export const ChipSizes: Story = {
   render: () => {
     return (
       <div className="flex gap-5 flex-wrap items-center">
-        <Button size="small">Button</Button>
-        <Button size="medium">Button</Button>
-        <Button size="large">Button</Button>
+        <Chip size="small">Chip</Chip>
+        <Chip size="medium">Chip</Chip>
+        <Chip size="large">Chip</Chip>
       </div>
     );
   },

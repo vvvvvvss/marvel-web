@@ -18,7 +18,8 @@ export const Appbar = ({ children, className, ...props }: AppbarProps) => {
         "dark:border-p-1 border-p-9",
         "flex",
         "justify-center",
-        "p-2"
+        "py-2",
+        "px-5"
       )}
       {...props}
     >
