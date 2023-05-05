@@ -1,13 +1,14 @@
 "use client";
 import {
   Button,
-  FullScreenDialog,
   IconButton,
   LoadingPulser,
   Tab,
   TabGroup,
   TextField,
 } from "ui";
+import { FullScreenDialog } from "ui";
+
 import { signIn, signOut, useSession } from "next-auth/react";
 import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useState } from "react";

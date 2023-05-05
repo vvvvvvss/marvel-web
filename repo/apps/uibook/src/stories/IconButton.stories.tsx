@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { MdLaunch } from "react-icons/md";
 
-//@ts-ignore
 import { IconButton } from "ui";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction

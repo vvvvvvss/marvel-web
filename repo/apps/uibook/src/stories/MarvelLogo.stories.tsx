@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-//@ts-ignore
 import { MarvelLogo } from "ui";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
