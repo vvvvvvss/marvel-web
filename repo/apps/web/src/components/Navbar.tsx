@@ -2,7 +2,7 @@
 
 import { Appbar, Button, IconButton, LoadingPulser } from "ui";
 import { Avatar } from "./Avatar";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import {
   HiChevronDoubleDown as DownIcon,

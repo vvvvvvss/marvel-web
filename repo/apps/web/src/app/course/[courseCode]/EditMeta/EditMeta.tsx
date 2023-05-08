@@ -58,28 +58,18 @@ const EditMeta = ({ course }) => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl pt-24 gap-5 ">
-              <IconButton
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
-              <div className="w-full pb-56">
-                <CourseForm
-                  formData={copy}
-                  setFormData={setCopy}
-                  onSubmit={mutate}
-                  submitDisabled={isLoading}
-                  submitLabel="Update Course"
-                />
-                <hr className="border-p-0 dark:border-p-6 my-5" />
-                {sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN") && (
-                  <CourseDeleter course={course} />
-                )}
-              </div>
+            <div className="w-full pb-56">
+              <CourseForm
+                formData={copy}
+                setFormData={setCopy}
+                onSubmit={mutate}
+                submitDisabled={isLoading}
+                submitLabel="Update Course"
+              />
+              <hr className="border-p-0 dark:border-p-6 my-5" />
+              {sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN") && (
+                <CourseDeleter course={course} />
+              )}
             </div>
           </FullScreenDialog>
         )}

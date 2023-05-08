@@ -52,11 +52,11 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
         </Button>
       )}
       {isDialogOpen && (
-        <FullScreenDialog open={isDialogOpen}>
-          <div className="w-full max-w-2xl py-24">
-            <IconButton onClick={() => setDialogOpen((p) => !p)}>
-              <CloseIcon className="h-10 w-20" />
-            </IconButton>
+        <FullScreenDialog
+          open={isDialogOpen}
+          onClose={() => setDialogOpen(false)}
+        >
+          <div className="w-full py-24">
             <MarkdownEditor
               value={copy}
               onChange={(e) => {

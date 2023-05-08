@@ -43,7 +43,7 @@ export const DefaultDialog: Story = {
         <Button onClick={() => setOpen(true)}>Open Dialog</Button>
 
         <Dialog {...args} open={open} onClose={() => setOpen(false)}>
-          <div className="flex w-full flex-col items-start gap-5">
+          <div className="flex w-full flex-col items-start gap-5 text-p-0 dark:text-p-10">
             <h1 className="text-2xl">Terms & Conditions</h1>
             <p>
               By clicking on "Agree", you're agreeing to our terms and
@@ -70,7 +70,7 @@ export const DialogWithCloseButton: Story = {
         <Button onClick={() => setOpen(true)}>Open Dialog</Button>
 
         <Dialog displayCloseButton open={open} onClose={() => setOpen(false)}>
-          <div className="flex w-full flex-col items-start gap-5">
+          <div className="flex w-full flex-col items-start gap-5 text-p-0 dark:text-p-10">
             <h1 className="text-2xl">Terms & Conditions</h1>
             <p>
               By clicking on "Agree", you're agreeing to our terms and

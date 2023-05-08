@@ -50,6 +50,13 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const DefaultStandardButton: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="flex p-5 flex-wrap gap-5 bg-p-10 dark:bg-p-0">
+        <Button {...args} />
+      </div>
+    );
+  },
   args: {
     children: "Button",
   },
@@ -58,7 +65,7 @@ export const DefaultStandardButton: Story = {
 export const ButtonVariants: Story = {
   render: ({ ...args }) => {
     return (
-      <div className="flex flex-wrap gap-5">
+      <div className="flex flex-wrap gap-5 bg-p-10 dark:bg-p-0 p-10">
         <Button {...args} variant="standard">
           Standard
         </Button>
@@ -79,7 +86,7 @@ export const ButtonVariants: Story = {
 export const DisabledButton: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Button disabled>Button</Button>
         <Button variant="outlined" disabled>
           Button
@@ -95,7 +102,7 @@ export const DisabledButton: Story = {
 export const LeftIcon: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Button left={MdLaunch}>Button</Button>
         <Button variant="outlined" left={MdLaunch}>
           Button
@@ -111,7 +118,7 @@ export const LeftIcon: Story = {
 export const RightIcon: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Button right={MdLaunch}>Button</Button>
         <Button variant="outlined" right={MdLaunch}>
           Button
@@ -127,7 +134,7 @@ export const RightIcon: Story = {
 export const ButtonSizes: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap items-center">
+      <div className="flex gap-5 flex-wrap items-center bg-p-10 dark:bg-p-0 p-10">
         <Button size="small">Button</Button>
         <Button size="medium">Button</Button>
         <Button size="large">Button</Button>

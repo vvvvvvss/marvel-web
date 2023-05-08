@@ -1,15 +1,25 @@
 import clsx from "clsx";
 
-type TabGroupProps = JSX.IntrinsicElements["div"];
+type TabGroupProps = JSX.IntrinsicElements["div"] & {
+  orientation?: "vertical" | "horizontal";
+};
 
-export const TabGroup = ({ children, className, ...props }: TabGroupProps) => {
+export const TabGroup = ({
+  children,
+  className,
+  orientation = "horizontal",
+  ...props
+}: TabGroupProps) => {
   return (
     <div
       className={clsx(
         className,
         "flex",
+        "transition ease-out",
+        "overflow-auto",
+        orientation == "vertical" && "flex-col",
         "border-[1.5px] dark:border",
-        "rounded-full",
+        orientation === "vertical" ? "rounded-lg" : "rounded-full",
         "max-w-min",
         "p-2",
         "border-p-0 dark:border-p-6",
@@ -46,7 +56,7 @@ export const Tab = ({
         "cursor-pointer",
         "select-none",
         "transition",
-        "active:scale-[97%]",
+        "active:scale-95",
         "border-[1.5px] dark:border",
         "border-transparent",
         "disabled:opacity-50",

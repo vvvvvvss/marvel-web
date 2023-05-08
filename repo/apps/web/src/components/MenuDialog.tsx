@@ -73,10 +73,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
       className="z-max"
       onClose={() => setMenuOpen(false)}
     >
-      <div className="w-full max-w-2xl py-24">
-        <IconButton className="mb-5" onClick={() => setMenuOpen((p) => !p)}>
-          <CloseIcon className="h-10 w-20" />
-        </IconButton>
+      <div className="w-full py-24">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -91,7 +88,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             autoComplete="Off"
             autoFocus
             value={queryTemp}
-            onChange={(e) => setQueryTemp(e.target.value)}
+            onChange={(e) => setQueryTemp(e)}
           />
           <IconButton
             type="reset"

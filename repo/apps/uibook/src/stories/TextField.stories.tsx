@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 //@ts-ignore
 import { TextField, type TextFieldProps } from "ui";
+import { MdAlternateEmail } from "react-icons/md";
 
 const meta = {
   title: "Components/TextField",
@@ -139,6 +140,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TextFieldWithLabelAndPlaceholder: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="p-10 bg-p-10 dark:bg-p-0">
+        <TextField {...args} />
+      </div>
+    );
+  },
   args: {
     label: "Name",
     placeholder: "Enter your name",
@@ -146,6 +154,13 @@ export const TextFieldWithLabelAndPlaceholder: Story = {
 };
 
 export const FullWidth: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="p-10 bg-p-10 dark:bg-p-0">
+        <TextField {...args} />
+      </div>
+    );
+  },
   args: {
     label: "Name",
     placeholder: "Enter your name",
@@ -154,6 +169,13 @@ export const FullWidth: Story = {
 };
 
 export const WithDescription: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="p-10 bg-p-10 dark:bg-p-0">
+        <TextField {...args} />
+      </div>
+    );
+  },
   args: {
     label: "Name",
     placeholder: "Enter your name",
@@ -163,9 +185,31 @@ export const WithDescription: Story = {
 };
 
 export const WithErrorMessage: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="p-10 bg-p-10 dark:bg-p-0">
+        <TextField {...args} />
+      </div>
+    );
+  },
   args: {
     label: "Name",
     placeholder: "Enter your name",
     errorMessage: "Invalid Name. Please check and try again.",
+  },
+};
+
+export const TextFieldWithIcon: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="p-10 bg-p-10 dark:bg-p-0">
+        <TextField {...args} />
+      </div>
+    );
+  },
+  args: {
+    label: "Name",
+    placeholder: "Enter your name",
+    icon: MdAlternateEmail,
   },
 };

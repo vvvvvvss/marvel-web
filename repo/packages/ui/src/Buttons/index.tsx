@@ -21,7 +21,7 @@ export const Button = ({
       className={clsx(
         props?.className,
         //base classes
-        "overflow-hidden min-w-max whitespace-nowrap cursor-pointer select-none",
+        "overflow-hidden min-w-max max-h-min whitespace-nowrap cursor-pointer select-none",
         "flex justify-center gap-2 flex-nowrap items-center",
         "rounded-full px-[1.2em] py-[0.5em]",
         "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",
@@ -43,12 +43,13 @@ export const Button = ({
           "border-[1.5px] border-p-1 hover:border-p-2 dark:border-p-2 dark:hover:border-p-3":
             variant == "standard",
           //outlined
-          "bg-p-10 hover:bg-p-9 dark:bg-p-1 dark:hover:bg-p-2":
+          "bg-p-10 hover:bg-p-9 text-p-0 dark:text-p-10 dark:bg-p-1 dark:hover:bg-p-2":
             variant == "outlined",
           "border-[1.5px] dark:border-[1px] border-p-0 dark:border-p-6":
             variant == "outlined",
           //text
-          "underline hover:bg-p-9 hover:dark:bg-p-1": variant === "text",
+          "underline text-p-0 dark:text-p-10 hover:bg-p-9 hover:dark:bg-p-1":
+            variant === "text",
         }
       )}
     >

@@ -46,17 +46,12 @@ const Manager = ({ dude }: { dude: any }) => {
           <Button onClick={() => setDialogOpen((p) => !p)}>Manage User</Button>
         </div>
         {dialogOpen && (
-          <FullScreenDialog open={dialogOpen} className="z-10">
-            <div className="w-full max-w-2xl py-24">
-              <IconButton
-                className="mb-5"
-                onClick={() => {
-                  setDialogOpen((p) => !p);
-                  return;
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
+          <FullScreenDialog
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            className="z-10"
+          >
+            <div className="w-full py-24">
               <div
                 className={isLoading ? "opacity-60 pointer-events-none" : ""}
               >

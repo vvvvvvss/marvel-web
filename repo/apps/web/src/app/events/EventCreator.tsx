@@ -68,15 +68,12 @@ const EventCreatingForm = () => {
           </Button>
         </div>
         {dialogOpen && (
-          <FullScreenDialog open={dialogOpen} className="z-10">
-            <div className="w-full max-w-2xl py-24">
-              <IconButton
-                className="mb-5"
-                onClick={() => setDialogOpen((p) => !p)}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+          <FullScreenDialog
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            className="z-10"
+          >
+            <div className="w-full py-24">
               <EventForm
                 mode="create"
                 formData={formData}

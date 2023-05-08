@@ -85,31 +85,24 @@ const ArticleEditor = ({ article }) => {
             : "Confirm."}
         </Button>
         {modalOpen && (
-          <FullScreenDialog open={modalOpen}>
-            <div className="w-full max-w-2xl py-24">
-              <IconButton
-                onClick={() => {
-                  setModalOpen((p) => !p);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
-              <div className="py-5">
-                <ArticleForm
-                  formData={formData}
-                  setFormData={setFormData}
-                  typeOfArticle={article?.typeOfArticle}
-                  onSubmit={updateArticle}
-                  submitDisabled={
-                    isUpdating ||
-                    isDeleting ||
-                    (article?.typeOfArticle === "RESOURCE" &&
-                      !formData?.courseIds?.length)
-                  }
-                  submitLabel="Update Article"
-                />
-              </div>
+          <FullScreenDialog
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <div className="w-full p-5">
+              <ArticleForm
+                formData={formData}
+                setFormData={setFormData}
+                typeOfArticle={article?.typeOfArticle}
+                onSubmit={updateArticle}
+                submitDisabled={
+                  isUpdating ||
+                  isDeleting ||
+                  (article?.typeOfArticle === "RESOURCE" &&
+                    !formData?.courseIds?.length)
+                }
+                submitLabel="Update Article"
+              />
             </div>
           </FullScreenDialog>
         )}

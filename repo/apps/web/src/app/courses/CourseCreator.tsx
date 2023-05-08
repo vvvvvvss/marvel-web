@@ -53,15 +53,7 @@ const CourseCreator = () => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl pt-24 gap-5 pb-48">
-              <IconButton
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+            <div className="w-full pt-24 pb-48">
               <CourseForm
                 formData={formData}
                 setFormData={setFormData}

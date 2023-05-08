@@ -46,7 +46,7 @@ const ArticleForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            title: e.target.value,
+            title: e,
           }))
         }
         maxLength={50}
@@ -63,7 +63,7 @@ const ArticleForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            caption: e.target.value,
+            caption: e,
           }))
         }
         maxLength={200}

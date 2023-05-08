@@ -9,5 +9,6 @@ export * from "./Layout";
 export * from "./Loading";
 export * from "./Logos";
 export * from "./MarkdownRender";
+export * from "./MarkdownEditor";
 export * from "./Surfaces";
 export * from "./Tabs";

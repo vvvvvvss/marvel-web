@@ -52,12 +52,11 @@ const ReportWriter = ({ work }) => {
           Write Report!
         </Button>
         {modalOpen && (
-          <FullScreenDialog open={modalOpen}>
-            <div className="w-full max-w-2xl py-24 gap-5">
-              <IconButton onClick={() => setModalOpen((p) => !p)}>
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+          <FullScreenDialog
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <div className="w-full py-24">
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
                 {!(
                   work?.typeOfWork === "PROJECT" && work?._count?.Reports === 0
@@ -69,9 +68,7 @@ const ReportWriter = ({ work }) => {
                     fullwidth
                     placeholder="Title of the Report..."
                     value={formData?.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, title: e })}
                   />
                 )}
                 <MarkdownEditor

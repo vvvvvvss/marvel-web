@@ -123,7 +123,7 @@ const ManagePeople = ({ work }) => {
         <TextField
           className="flex-1"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e)}
           placeholder="Search to add Authors or Coordinators..."
         />
         <Button

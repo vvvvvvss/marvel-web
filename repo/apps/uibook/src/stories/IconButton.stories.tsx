@@ -52,9 +52,11 @@ type Story = StoryObj<typeof meta>;
 export const DefaultStandardIconButton: Story = {
   render: ({ ...args }) => {
     return (
-      <IconButton {...args}>
-        <MdLaunch />
-      </IconButton>
+      <div className="bg-p-10 dark:bg-p-0 p-10">
+        <IconButton {...args}>
+          <MdLaunch />
+        </IconButton>
+      </div>
     );
   },
 };
@@ -62,7 +64,7 @@ export const DefaultStandardIconButton: Story = {
 export const ButtonVariants: Story = {
   render: ({ ...args }) => {
     return (
-      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+      <div className="bg-p-10 dark:bg-p-0 p-10 flex gap-5 items-center">
         <IconButton {...args} variant="standard">
           <MdLaunch />
         </IconButton>
@@ -83,7 +85,7 @@ export const ButtonVariants: Story = {
 export const DisabledIconButtons: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="bg-p-10 dark:bg-p-0 p-10 flex gap-5 items-center">
         <IconButton disabled>
           <MdLaunch />
         </IconButton>
@@ -101,7 +103,7 @@ export const DisabledIconButtons: Story = {
 export const IconButtonSizes: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap items-center">
+      <div className="bg-p-10 dark:bg-p-0 p-10 flex gap-5 items-center">
         <IconButton size="small">
           <MdLaunch />
         </IconButton>

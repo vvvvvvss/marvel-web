@@ -72,7 +72,7 @@ const EventForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            title: e.target.value,
+            title: e,
           }))
         }
         maxLength={50}
@@ -88,7 +88,7 @@ const EventForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            caption: e.target.value,
+            caption: e,
           }))
         }
         maxLength={200}
@@ -264,7 +264,7 @@ const EventForm = ({
             onChange={(e) =>
               setFormData({
                 ...formData,
-                actionLink: e.target.value,
+                actionLink: e,
               })
             }
           />
@@ -281,7 +281,7 @@ const EventForm = ({
             onChange={(e) =>
               setFormData({
                 ...formData,
-                actionText: e.target.value,
+                actionText: e,
               })
             }
           />

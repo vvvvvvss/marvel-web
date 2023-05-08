@@ -69,15 +69,7 @@ const EditMeta = ({ work }) => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl pt-24 gap-5 ">
-              <IconButton
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+            <div className="w-full pt-24">
               <form
                 className="my-5 flex flex-col pb-56 gap-5"
                 onSubmit={(e) => {
@@ -94,7 +86,7 @@ const EditMeta = ({ work }) => {
                       id="name"
                       value={copy?.name}
                       onChange={(e) => {
-                        setCopy({ ...copy, name: e.target?.value });
+                        setCopy({ ...copy, name: e });
                         setChanged(true);
                       }}
                       placeholder="Project name"
@@ -109,7 +101,7 @@ const EditMeta = ({ work }) => {
                   id="caption"
                   value={copy?.note}
                   onChange={(e) => {
-                    setCopy({ ...copy, note: e.target?.value });
+                    setCopy({ ...copy, note: e });
                     setChanged(true);
                   }}
                   placeholder="(Optional). A short caption..."
@@ -150,7 +142,7 @@ const EditMeta = ({ work }) => {
                         onChange={(e) => {
                           setCopy({
                             ...copy,
-                            totalLevels: Number(e.target?.value),
+                            totalLevels: Number(e),
                           });
                           setChanged(true);
                         }}

@@ -114,7 +114,7 @@ export const Dialog = ({
           "bg-p-10 dark:bg-p-1",
           "relative appearance-none max-w-sm w-auto rounded-lg",
           "p-5 m-5",
-          "border-[1.5px] dark:border",
+          "border-[1.5px] dark:border border-p-0 dark:border-p-6",
           "shadow-xl"
         )}
       >
@@ -122,7 +122,7 @@ export const Dialog = ({
           <IconButton
             variant="outlined"
             size="small"
-            className="absolute -top-16 right-0 mx-5"
+            className="absolute -top-16 right-0"
             onClick={onClose}
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="x w-6 h-6">

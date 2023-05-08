@@ -62,6 +62,13 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const DefaultStandardChip: Story = {
+  render: ({ ...args }) => {
+    return (
+      <div className="bg-p-10 dark:bg-p-0 p-10">
+        <Chip {...args} />
+      </div>
+    );
+  },
   args: {
     children: "Chip",
   },
@@ -70,7 +77,7 @@ export const DefaultStandardChip: Story = {
 export const ChipVariants: Story = {
   render: ({ ...args }) => {
     return (
-      <div className="flex flex-wrap gap-5">
+      <div className="flex flex-wrap gap-5 bg-p-10 dark:bg-p-0 p-10">
         <Chip {...args} variant="standard">
           Standard
         </Chip>
@@ -88,7 +95,7 @@ export const ChipVariants: Story = {
 export const DisabledChip: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Chip disabled>Chip</Chip>
         <Chip variant="outlined" disabled>
           Chip
@@ -101,7 +108,7 @@ export const DisabledChip: Story = {
 export const LeftIcon: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Chip left={MdLaunch}>Chip</Chip>
         <Chip variant="outlined" left={MdLaunch}>
           Chip
@@ -114,7 +121,7 @@ export const LeftIcon: Story = {
 export const RightIcon: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap">
+      <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
         <Chip right={MdLaunch}>Chip</Chip>
         <Chip variant="outlined" right={MdLaunch}>
           Chip
@@ -127,7 +134,7 @@ export const RightIcon: Story = {
 export const ChipSizes: Story = {
   render: () => {
     return (
-      <div className="flex gap-5 flex-wrap items-center">
+      <div className="flex gap-5 flex-wrap items-center bg-p-10 dark:bg-p-0 p-10">
         <Chip size="small">Chip</Chip>
         <Chip size="medium">Chip</Chip>
         <Chip size="large">Chip</Chip>

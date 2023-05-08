@@ -33,6 +33,8 @@ export const Chip = ({
         "disabled:cursor-not-allowed",
         "disabled:active:transform-none",
         "disabled:hover:transform-none",
+        "font-medium dark:font-normal",
+        "text-p-0 dark:text-p-10",
         //size
         {
           "text-xs": size == "small",
@@ -42,13 +44,13 @@ export const Chip = ({
         //variants
         {
           //standard
-          "bg-p-8 dark:bg-p-2": variant == "standard",
+          "bg-p-9 dark:bg-p-2": variant == "standard",
           "border-[1.5px] border-p-8  dark:border-p-2 dark:hover:border-p-3":
             variant == "standard",
           "hover:border-p-0 dark:hover:border-p-3":
             variant == "standard" && clickable,
           //outlined
-          "bg-p-10  dark:bg-p-1 ": variant == "outlined",
+          "bg-p-10 dark:bg-p-1 ": variant == "outlined",
           "hover:bg-p-9 dark:hover:bg-p-2": variant == "outlined" && clickable,
           "border-[1.5px] dark:border-[1px] border-p-0 dark:border-p-6":
             variant == "outlined",

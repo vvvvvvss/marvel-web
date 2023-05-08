@@ -44,7 +44,7 @@ const WorkDeleter = ({ course }) => {
       <TextField
         placeholder="Type here..."
         value={input}
-        onChange={(e) => setInput(e.target?.value)}
+        onChange={(e) => setInput(e)}
       />
       <Button
         variant="outlined"
