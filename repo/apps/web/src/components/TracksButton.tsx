@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "ui";
+import { MdAltRoute } from "react-icons/md";
 
 const TracksButton = () => {
   return (
@@ -11,7 +12,8 @@ const TracksButton = () => {
           window.location.hash = "tracks";
         }
       }}
-      className="flex-1"
+      className="flex-1 md:flex-none"
+      left={MdAltRoute}
     >
       Tracks
     </Button>

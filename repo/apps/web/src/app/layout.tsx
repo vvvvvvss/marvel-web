@@ -5,6 +5,7 @@ import "ui/styles.css";
 import "../styles/globals.css";
 import { Metadata } from "next";
 import Script from "next/script";
+import Footer from "../components/Footer";
 
 //fonts
 const sans = IBM_Plex_Sans({
@@ -115,6 +116,7 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         <Context>
           {children}
           <Navbar />
+          <Footer />
         </Context>
       </body>
     </html>

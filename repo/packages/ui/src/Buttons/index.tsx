@@ -38,6 +38,7 @@ export const Button = ({
         props?.className,
         //base classes
         "overflow-hidden min-w-max max-h-min whitespace-nowrap cursor-pointer select-none",
+        "outline-none active:outline-none",
         "flex justify-center gap-2 flex-nowrap items-center",
         "rounded-full px-[1.2em] py-[0.5em]",
         "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",
@@ -125,6 +126,7 @@ export const IconButton = ({
         props?.className,
         //base classes
         "cursor-pointer select-none",
+        "outline-none active:outline-none",
         "rounded-full p-2 aspect-square",
         "flex justify-center items-center",
         "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",

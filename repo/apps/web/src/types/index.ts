@@ -27,8 +27,11 @@ export type TrackDescription = {
   title: string;
   suffix: string;
   desc: string;
-  link: string;
-  buttonText: string;
+  buttons?: {
+    link: string;
+    buttonText: string;
+    variant: "standard" | "outlined" | "text";
+  }[];
 };
 
 export type EventFormData = {
