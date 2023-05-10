@@ -2,7 +2,6 @@ const { PrismaPlugin } = require("experimental-prisma-webpack-plugin");
 
 module.exports = {
   reactStrictMode: true,
-  output: "standalone",
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins = [...config.plugins, new PrismaPlugin()];

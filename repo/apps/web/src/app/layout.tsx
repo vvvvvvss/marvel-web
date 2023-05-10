@@ -80,6 +80,10 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
       style={{ scrollbarGutter: "stable" }}
     >
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="utf-8" />
+        <meta name="theme-color" content="#000000" />
+
         {/* microsoft clarity tracking */}
         <Script id="clarity-ms" strategy="afterInteractive">
           {`
@@ -90,11 +94,13 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
             })(window, document, "clarity", "script", "aew7b13k2i");
           `}
         </Script>
+
         {/* google analytics tracking */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-VV9ZYE0VC2"
         ></Script>
+
         <Script strategy="afterInteractive" id="g-tag">
           {`
             window.dataLayer = window.dataLayer || [];

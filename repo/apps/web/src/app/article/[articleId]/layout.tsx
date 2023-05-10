@@ -163,7 +163,6 @@ export default async function layout({ children, params }) {
                         <Link key={i} href={`/u/${p?.person?.slug}`}>
                           <td className="flex gap-3 items-center py-3 px-5 text-base">
                             <Avatar
-                              className="w-6"
                               alt={p?.person?.name}
                               src={p?.person?.profilePic}
                             />
