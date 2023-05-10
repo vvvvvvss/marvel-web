@@ -1,11 +1,9 @@
 "use client";
 
-import { Button, IconButton, Paper } from "ui";
-import { FullScreenDialog } from "ui";
+import { FullScreenDialog, Button } from "../../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -23,12 +21,16 @@ const EventEditor = ({ event }: { event: Event }) => {
     coverPhoto: event.coverPhoto || "",
     typeOfEvent: event.typeOfEvent || "EVENT",
     eventStartTime: new Date(event.eventStartTime) || new Date(),
-    eventEndTime: new Date(event.eventEndTime) || new Date(),
+    eventEndTime: event?.eventEndTime
+      ? new Date(event?.eventEndTime)
+      : new Date(),
     requiresRegistration: !!event.registrationStartTime || false,
-    registrationStartTime: new Date(event.registrationStartTime) || new Date(),
-    registrationEndTime:
-      new Date(event.registrationEndTime) ||
-      new Date(new Date().setDate(new Date().getDate() + 2)),
+    registrationStartTime: event?.registrationStartTime
+      ? new Date(event.registrationStartTime)
+      : new Date(),
+    registrationEndTime: event?.registrationEndTime
+      ? new Date(event.registrationEndTime)
+      : new Date(new Date().setDate(new Date().getDate() + 2)),
     requiresActionButton: !!event.actionLink || false,
     actionLink: event.actionLink || "",
     actionText: event.actionText || "",
@@ -64,7 +66,7 @@ const EventEditor = ({ event }: { event: Event }) => {
         <div>
           <Button
             variant="outlined"
-            onClick={() => {
+            onPress={() => {
               setDialogOpen((p) => !p);
             }}
           >
@@ -77,7 +79,7 @@ const EventEditor = ({ event }: { event: Event }) => {
             onClose={() => setDialogOpen(false)}
             className="z-10"
           >
-            <div className="w-full py-24">
+            <div className="w-full pb-24">
               <EventForm
                 mode="edit"
                 formData={formData}

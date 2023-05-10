@@ -1,7 +1,6 @@
-import { Paper, TabGroup, Tab } from "ui";
+import { Paper, TabGroup, Tab, MarkdownRender } from "ui/server";
 import Link from "next/link";
 import dbClient from "../../../utils/dbConnector";
-import { MarkdownRender } from "ui";
 import ReadMeEditor from "./ReadMeEditor";
 
 const getUserReadmeBySlug = async (slug: string) => {
@@ -39,12 +38,15 @@ export default async function page({ params, searchParams }) {
         border
         className=" w-full rounded-lg flex flex-col p-5 mb-32"
       >
-        {["", null].includes(readMeData?.readMe) ? (
+        {["", null].includes(readMeData?.readMe as string) ? (
           <div className="w-full">
             <h1 className="text-3xl text-p-5 m-5">ReadMe is Empty</h1>
           </div>
         ) : (
-          <MarkdownRender content={readMeData?.readMe} className="mb-5" />
+          <MarkdownRender
+            content={readMeData?.readMe as string}
+            className="mb-5"
+          />
         )}
         <ReadMeEditor
           profileSlug={params?.profileSlug as string}

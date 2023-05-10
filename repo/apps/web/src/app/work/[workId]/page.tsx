@@ -1,9 +1,8 @@
-import { MarkdownRender, Paper } from "ui";
+import { MarkdownRender, Paper } from "ui/server";
 import dbClient from "../../../utils/dbConnector";
 import ReportWriter from "./ReportWriter";
 import ReportReviewer from "./ReportReviewer";
 import ReportEditor from "./ReportEditor";
-import Tabs from "./Tabs";
 import Image from "next/image";
 
 const getReport = async (workId: string) => {

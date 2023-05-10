@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import clsx from "clsx";
 import { useProgressBar, AriaProgressBarProps } from "react-aria";
@@ -14,7 +14,7 @@ export const LoadingPulser = ({ ...props }: LoadingPulserProps) => {
   });
 
   return (
-    <div
+    <progress
       className={clsx(
         props?.className,
         "flex w-fit h-fit flex-col gap-2 items-center"
@@ -39,6 +39,6 @@ export const LoadingPulser = ({ ...props }: LoadingPulserProps) => {
           {props?.label}
         </label>
       )}
-    </div>
+    </progress>
   );
 };

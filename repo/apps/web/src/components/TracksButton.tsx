@@ -6,7 +6,7 @@ const TracksButton = () => {
   return (
     <Button
       variant="outlined"
-      onClick={() => {
+      onPress={() => {
         if (typeof window !== "undefined") {
           window.location.hash = "tracks";
         }

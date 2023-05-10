@@ -32,35 +32,42 @@ export const FullScreenDialog = ({
     };
   }, [open, onClose]);
 
-  return (
-    <div
-      className={clsx(
-        className,
-        "fixed inset-0 z-max backdrop-brightness-90 backdrop-blur-2xl grid w-full justify-center",
-        "p-5",
-        { hidden: !open }
-      )}
-      {...props}
-    >
-      <div className="w-full max-w-2xl">
-        <IconButton
-          variant="outlined"
-          size="small"
-          className="mt-20 mb-8"
-          onClick={onClose}
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" className="w-20 h-20">
-            <path
-              fillRule="evenodd"
-              d="M14.348 5.652a.5.5 0 010 .707L10.707 10l3.64 3.64a.5.5 0 11-.707.707L10 10.707l-3.64 3.64a.5.5 0 11-.707-.707L9.293 10 5.652 6.36a.5.5 0 11.707-.707L10 9.293l3.64-3.64a.5.5 0 01.708 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </IconButton>
-        {children}
+  if (open) {
+    return (
+      <div
+        className={clsx(
+          className,
+          "fixed inset-0 z-max dark:backdrop-brightness-50 backdrop-blur-xl flex w-full h-full justify-center overflow-y-auto",
+          "p-5",
+          { hidden: !open }
+        )}
+        {...props}
+      >
+        <div className="flex flex-col items-start w-full h-full max-w-2xl py-20">
+          <IconButton variant="outlined" className="mb-8" onPress={onClose}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1"
+              stroke="currentColor"
+              width={"80"}
+              height={"80"}
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </IconButton>
+          {children}
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <></>;
+  }
 };
 
 interface DialogProps extends DialogBaseProps {
@@ -98,7 +105,7 @@ export const Dialog = ({
     <div
       ref={dialogRef}
       className={clsx(
-        "fixed inset-0 z-max backdrop-brightness-75 backdrop-blur-2xl grid place-items-center",
+        "fixed inset-0 z-max dark:backdrop-brightness-50 backdrop-blur-xl grid place-items-center",
         { hidden: !open }
       )}
       onClick={(event) => {
@@ -123,7 +130,7 @@ export const Dialog = ({
             variant="outlined"
             size="small"
             className="absolute -top-16 right-0"
-            onClick={onClose}
+            onPress={onClose}
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="x w-6 h-6">
               <path

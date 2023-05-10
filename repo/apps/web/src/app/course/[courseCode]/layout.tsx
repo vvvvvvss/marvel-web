@@ -1,4 +1,4 @@
-import { Window, Paper } from "ui";
+import { Window, Paper } from "ui/server";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
 import EditMeta from "./EditMeta/EditMeta";
@@ -34,10 +34,16 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const course = await getCourse(params?.courseCode);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/course`);
-  og_url.searchParams.append("courseCode", course?.courseCode);
-  og_url.searchParams.append("caption", course?.caption);
-  og_url.searchParams.append("totalLevels", course?.totalLevels?.toString());
-  og_url.searchParams.append("courseDuration", course?.courseDuration);
+  og_url.searchParams.append("courseCode", course?.courseCode as string);
+  og_url.searchParams.append("caption", course?.caption as string);
+  og_url.searchParams.append(
+    "totalLevels",
+    course?.totalLevels?.toString() as string
+  );
+  og_url.searchParams.append(
+    "courseDuration",
+    course?.courseDuration as string
+  );
 
   return {
     title: `${course?.courseCode} | UVCE MARVEL`,

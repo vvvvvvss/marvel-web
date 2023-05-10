@@ -1,4 +1,4 @@
-import { Paper, Tab, TabGroup } from "ui";
+import { Paper, Tab, TabGroup } from "ui/server";
 import Link from "next/link";
 import dbClient from "../../../../utils/dbConnector";
 import Spawner from "./Spawner";

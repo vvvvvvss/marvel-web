@@ -1,6 +1,9 @@
 "use client";
-import { Button, IconButton } from "ui";
-import { FullScreenDialog } from "ui";
+import {
+  FullScreenDialog,
+  Button,
+  IconButton,
+} from "../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
@@ -44,7 +47,7 @@ const CourseCreator = () => {
   if (sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) {
     return (
       <>
-        <Button onClick={() => setModalOpen((p) => !p)} variant="standard">
+        <Button onPress={() => setModalOpen((p) => !p)} variant="standard">
           Create New Course
         </Button>
         {modalOpen && (
@@ -53,7 +56,7 @@ const CourseCreator = () => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full pt-24 pb-48">
+            <div className="w-full pb-48">
               <CourseForm
                 formData={formData}
                 setFormData={setFormData}

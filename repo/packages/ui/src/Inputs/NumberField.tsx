@@ -1,26 +1,38 @@
 "use client";
 
 import clsx from "clsx";
-import { useTextField } from "react-aria";
-import type { AriaTextFieldProps } from "react-aria";
+import type { AriaNumberFieldProps } from "react-aria";
 import { useRef } from "react";
 
-export type TextFieldProps = AriaTextFieldProps & {
+import { useNumberFieldState } from "react-stately";
+import { useLocale, useNumberField } from "react-aria";
+
+import { IconButton } from "../Buttons";
+
+export type NumberFieldProps = AriaNumberFieldProps & {
   fullWidth?: boolean;
   label?: string;
   className?: string;
   icon?: React.ComponentType<any>;
 };
 
-export const TextField = ({
+export const NumberField = ({
   className,
   fullWidth = false,
   icon: Icon,
   ...props
-}: TextFieldProps) => {
-  let ref = useRef(null);
-  let { labelProps, inputProps, descriptionProps, errorMessageProps } =
-    useTextField(props, ref);
+}: NumberFieldProps) => {
+  let { locale } = useLocale();
+  let state = useNumberFieldState({ ...props, locale });
+  let inputRef = useRef(null);
+
+  let {
+    labelProps,
+    groupProps,
+    inputProps,
+    incrementButtonProps,
+    decrementButtonProps,
+  } = useNumberField(props, state, inputRef);
 
   return (
     <div
@@ -44,16 +56,15 @@ export const TextField = ({
         </label>
       ) : null}
       {props?.description ? (
-        <p
-          className={clsx("text-xs text-p-3 dark:text-p-7 max-w-full")}
-          {...descriptionProps}
-        >
+        <p className={clsx("text-xs text-p-3 dark:text-p-7 max-w-full")}>
           {props?.description}
         </p>
       ) : null}
 
       <div
+        {...groupProps}
         className={clsx(
+          "flex items-center gap-2",
           "w-full relative",
           "transition ease-out",
           "hover:-translate-y-[1.5px] active:-translate-y-[1.5px] focus-within:-translate-y-[1.5px]"
@@ -68,6 +79,7 @@ export const TextField = ({
           />
         ) : null}
         <input
+          ref={inputRef}
           className={clsx(
             "my-1 py-2 px-3",
             { "pl-9": Icon },
@@ -80,14 +92,22 @@ export const TextField = ({
             "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           )}
           {...inputProps}
-          ref={ref}
-        ></input>
+        />
+        <IconButton type="button" {...decrementButtonProps} className="h-full">
+          <svg viewBox="0 0 15 15" width="15" height="15">
+            <rect x="0" y="6" width="15" height="3" fill="currentColor" />
+          </svg>
+        </IconButton>
+        <IconButton type="button" {...incrementButtonProps} className="h-full">
+          <svg viewBox="0 0 15 15" width="15" height="15">
+            <rect x="6" y="0" width="3" height="15" fill="currentColor" />
+            <rect x="0" y="6" width="15" height="3" fill="currentColor" />
+          </svg>
+        </IconButton>
       </div>
 
       {props?.errorMessage ? (
-        <p className="text-xs text-[red] max-w-full" {...errorMessageProps}>
-          {props?.errorMessage}
-        </p>
+        <p className="text-xs text-[red] max-w-full">{props?.errorMessage}</p>
       ) : null}
     </div>
   );

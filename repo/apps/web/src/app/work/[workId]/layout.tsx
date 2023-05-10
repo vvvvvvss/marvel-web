@@ -1,4 +1,4 @@
-import { Window, Paper } from "ui";
+import { Window, Paper } from "ui/server";
 import { Avatar } from "../../../components/Avatar";
 import dbClient from "../../../utils/dbConnector";
 import EditMeta from "./EditMeta/EditMeta";
@@ -74,8 +74,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/work`);
   og_url.searchParams.append("name", work?.name || title);
-  og_url.searchParams.append("typeOfWork", work?.typeOfWork);
-  og_url.searchParams.append("reportCount", work?.Reports?.length?.toString());
+  og_url.searchParams.append("typeOfWork", work?.typeOfWork as string);
+  og_url.searchParams.append(
+    "reportCount",
+    work?.Reports?.length?.toString() as string
+  );
 
   return {
     title: title + " | UVCE MARVEL",

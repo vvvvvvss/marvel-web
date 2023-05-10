@@ -32,8 +32,11 @@ export default async function update_event(
     const cleanContent = sanitize(formData.description, SANITIZE_OPTIONS);
 
     if (
+      //@ts-ignore
       formData?.eventStartTime > formData?.eventEndTime ||
+      //@ts-ignore
       formData?.registrationStartTime > formData?.registrationEndTime ||
+      //@ts-ignore
       formData?.eventStartTime > new Date()
     ) {
       return res.status(400).json({

@@ -2,14 +2,17 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
-import { Button, TextField, IconButton, LoadingPulser } from "ui";
-import { FullScreenDialog } from "ui";
+import {
+  FullScreenDialog,
+  TextField,
+  LoadingPulser,
+  Button,
+} from "../../../components/clientComponents";
 
 import { MarkdownEditor } from "../../../components/MarkdownEditor";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useRouter } from "next/navigation";
 
 const ReportEditor = ({ report, work }) => {
@@ -49,7 +52,7 @@ const ReportEditor = ({ report, work }) => {
   ) {
     return (
       <>
-        <Button variant="standard" onClick={() => setModalOpen(true)}>
+        <Button variant="standard" onPress={() => setModalOpen(true)}>
           Edit Report
         </Button>
         {modalOpen && (
@@ -57,13 +60,13 @@ const ReportEditor = ({ report, work }) => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full py-24">
+            <div className="w-full pb-24">
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
                 {!(work?.typeOfWork === "PROJECT" && report?.isOverview) && (
                   <TextField
-                    required
+                    isRequired
                     id="title"
-                    fullwidth
+                    fullWidth
                     placeholder="Title of the Report..."
                     value={formData?.title}
                     onChange={(e) => {
@@ -86,11 +89,11 @@ const ReportEditor = ({ report, work }) => {
                 <div className="w-full pb-48">
                   <Button
                     type="submit"
-                    disabled={isUpdating || !changed}
+                    isDisabled={isUpdating || !changed}
                     className={`float-right m-5 ${
                       isUpdating ? "animate-pulse" : "animate-none"
                     }`}
-                    onClick={() => updateReport()}
+                    onPress={() => updateReport()}
                   >
                     <span className="flex items-center gap-3">
                       {isUpdating && <LoadingPulser className="h-5" />}

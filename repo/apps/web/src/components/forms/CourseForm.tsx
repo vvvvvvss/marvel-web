@@ -41,7 +41,8 @@ const CourseForm = ({
           </p>
           <TextField
             id="courseCode"
-            required
+            fullWidth
+            isRequired
             value={formData.courseCode}
             onChange={(e) => {
               setFormData({ ...formData, courseCode: e });
@@ -56,6 +57,7 @@ const CourseForm = ({
         GitHub Repo URL
       </label>
       <TextField
+        fullWidth
         id="repoURL"
         value={formData.repoURL}
         onChange={(e) => {
@@ -68,6 +70,7 @@ const CourseForm = ({
         Caption
       </label>
       <TextField
+        fullWidth
         id="caption"
         value={formData?.caption}
         onChange={(e) => {
@@ -80,6 +83,7 @@ const CourseForm = ({
         Course duration
       </label>
       <TextField
+        fullWidth
         id="duration"
         value={formData?.courseDuration}
         onChange={(e) => {
@@ -90,7 +94,7 @@ const CourseForm = ({
       />
       <ImageUploader
         className="my-5"
-        value={formData?.coverPhoto}
+        value={formData?.coverPhoto as string}
         onClick={() => {
           setFormData({ ...formData, coverPhoto: "" });
         }}
@@ -100,7 +104,7 @@ const CourseForm = ({
       />
       <Button
         className="max-w-max self-end"
-        disabled={submitDisabled}
+        isDisabled={submitDisabled}
         type="submit"
       >
         {submitLabel}

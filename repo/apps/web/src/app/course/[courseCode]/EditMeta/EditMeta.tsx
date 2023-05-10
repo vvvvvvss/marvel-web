@@ -1,17 +1,18 @@
 "use client";
-import { IconButton } from "ui";
-import { FullScreenDialog } from "ui";
-
+import {
+  FullScreenDialog,
+  IconButton,
+} from "../../../../components/clientComponents";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { VscSettings as ManageIcon } from "react-icons/vsc";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { CourseFormData } from "../../../../types";
 import CourseForm from "../../../../components/forms/CourseForm";
 import CourseDeleter from "./CourseDeleter";
+import { ScopeEnum } from "database";
 
 const EditMeta = ({ course }) => {
   const sessionUser = useSession()?.data?.user;
@@ -41,12 +42,16 @@ const EditMeta = ({ course }) => {
   );
 
   //button will be visible to:
-  //admins
-  if (sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) {
+  //admins and coordinators
+  if (
+    ["ADMIN", "CRDN"].some((s: ScopeEnum) =>
+      sessionUser?.scope?.map((s) => s?.scope)?.includes(s)
+    )
+  ) {
     return (
       <>
         <IconButton
-          onClick={() => setModalOpen((p) => !p)}
+          onPress={() => setModalOpen((p) => !p)}
           variant="standard"
           className="absolute top-3 right-2 text-sm"
         >

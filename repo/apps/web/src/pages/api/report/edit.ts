@@ -46,7 +46,7 @@ export default async function create_level_report(
     const condition =
       session?.user?.scope?.map((s) => s.scope).includes("ADMIN") ||
       existingReport?.work?.People?.map((p) => p.personId).includes(
-        session?.user?.id
+        session?.user?.id as string
       );
 
     if (!condition) return res.status(403).json({ message: "Access denied" });

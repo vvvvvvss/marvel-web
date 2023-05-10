@@ -1,4 +1,4 @@
-import { MarkdownRender, Paper } from "ui";
+import { MarkdownRender, Paper } from "ui/server";
 import dbClient from "../../../../utils/dbConnector";
 import ReportWriter from "../ReportWriter";
 import ReportReviewer from "../ReportReviewer";

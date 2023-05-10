@@ -1,15 +1,17 @@
 "use client";
 
-import { Button, IconButton, LoadingPulser } from "ui";
-import { FullScreenDialog } from "ui";
+import {
+  FullScreenDialog,
+  LoadingPulser,
+  Button,
+} from "../../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { MarkdownEditor } from "../../../components/MarkdownEditor";
+import { MarkdownEditor } from "../../../components/clientComponents";
 
 type ReadMeEditorProp = { profileSlug: string; content: string };
 
@@ -44,7 +46,7 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
         sessionUser?.scope?.map((s) => s.scope)?.includes("PROFILE")) ||
         sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) && (
         <Button
-          onClick={() => setDialogOpen((p) => !p)}
+          onPress={() => setDialogOpen((p) => !p)}
           variant="outlined"
           className="w-max mt-5 self-end"
         >
@@ -56,30 +58,29 @@ const ReadMeEditor = ({ profileSlug, content }: ReadMeEditorProp) => {
           open={isDialogOpen}
           onClose={() => setDialogOpen(false)}
         >
-          <div className="w-full py-24">
-            <MarkdownEditor
-              value={copy}
-              onChange={(e) => {
-                setCopy(e?.target?.value);
-                setChanged(true);
-              }}
-            />
+          <MarkdownEditor
+            className="min-w-full"
+            value={copy}
+            onChange={(e) => {
+              setCopy(e?.target?.value);
+              setChanged(true);
+            }}
+          />
 
-            {/* action area  */}
-            <div className="w-full pb-48">
-              <Button
-                disabled={isLoading || !changed}
-                className={`float-right m-5 ${
-                  isLoading ? "animate-pulse" : "animate-none"
-                }`}
-                onClick={() => mutateReadMe()}
-              >
-                <span className="flex items-center gap-3">
-                  {isLoading && <LoadingPulser className="h-5" />}
-                  Submit
-                </span>
-              </Button>
-            </div>
+          {/* action area  */}
+          <div className="w-full pb-48">
+            <Button
+              isDisabled={isLoading || !changed}
+              className={`float-right m-5 ${
+                isLoading ? "animate-pulse" : "animate-none"
+              }`}
+              onPress={() => mutateReadMe()}
+            >
+              <span className="flex items-center gap-3">
+                {isLoading && <LoadingPulser className="h-5" />}
+                Submit
+              </span>
+            </Button>
           </div>
         </FullScreenDialog>
       )}

@@ -1,11 +1,10 @@
 "use client";
-import { Button, IconButton, TextField } from "ui";
+import { Button, IconButton, NumberField, TextField } from "ui";
 import { FullScreenDialog } from "ui";
 
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { VscSettings as ManageIcon } from "react-icons/vsc";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import ManagePeople from "./ManagePeople";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
@@ -57,7 +56,7 @@ const EditMeta = ({ work }) => {
     return (
       <>
         <IconButton
-          onClick={() => setModalOpen((p) => !p)}
+          onPress={() => setModalOpen((p) => !p)}
           variant="standard"
           className="absolute top-3 right-2 text-sm"
         >
@@ -69,7 +68,7 @@ const EditMeta = ({ work }) => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full pt-24">
+            <div className="w-full pb-24">
               <form
                 className="my-5 flex flex-col pb-56 gap-5"
                 onSubmit={(e) => {
@@ -83,6 +82,7 @@ const EditMeta = ({ work }) => {
                       Project Name
                     </label>
                     <TextField
+                      fullWidth
                       id="name"
                       value={copy?.name}
                       onChange={(e) => {
@@ -98,6 +98,7 @@ const EditMeta = ({ work }) => {
                   Caption
                 </label>
                 <TextField
+                  fullWidth
                   id="caption"
                   value={copy?.note}
                   onChange={(e) => {
@@ -114,7 +115,7 @@ const EditMeta = ({ work }) => {
                     setChanged(true);
                   }}
                   onChange={(photo) => {
-                    setCopy({ ...copy, coverPhoto: photo });
+                    setCopy({ ...copy, coverPhoto: photo as string });
                     setChanged(true);
                   }}
                 />
@@ -133,26 +134,31 @@ const EditMeta = ({ work }) => {
                         </p>
                       </div>
 
-                      <TextField
-                        id="totalLevels"
-                        type="number"
-                        value={copy?.totalLevels}
-                        min={1}
-                        max={6}
-                        onChange={(e) => {
-                          setCopy({
-                            ...copy,
-                            totalLevels: Number(e),
-                          });
-                          setChanged(true);
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
                         }}
-                        maxLength={200}
-                      />
+                      >
+                        <NumberField
+                          id="totalLevels"
+                          value={copy?.totalLevels}
+                          fullWidth
+                          minValue={1}
+                          maxValue={6}
+                          onChange={(e) => {
+                            setCopy({
+                              ...copy,
+                              totalLevels: Number(e),
+                            });
+                            setChanged(true);
+                          }}
+                        />
+                      </form>
                     </>
                   )}
                 <Button
                   className="max-w-max self-end"
-                  disabled={isLoading || !changed}
+                  isDisabled={isLoading || !changed}
                   type="submit"
                   // onClick={() => mutate()}
                 >

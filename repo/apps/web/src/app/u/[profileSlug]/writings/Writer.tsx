@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, IconButton } from "ui";
-import { FullScreenDialog } from "ui";
+import {
+  FullScreenDialog,
+  Button,
+} from "../../../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -64,7 +65,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
               <Button
                 className="flex-1"
                 variant="outlined"
-                onClick={() => {
+                onPress={() => {
                   setFormType("BLOG");
                   setDialogOpen((p) => !p);
                 }}
@@ -74,7 +75,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
               <Button
                 className="flex-1"
                 variant="outlined"
-                onClick={() => {
+                onPress={() => {
                   setFormType("RESOURCE");
                   setDialogOpen((p) => !p);
                 }}
@@ -90,7 +91,7 @@ const Writer = ({ authorSlug }: { authorSlug: string }) => {
             onClose={() => setDialogOpen(false)}
             className="z-10"
           >
-            <div className="w-full py-24">
+            <div className="w-full pb-24">
               <ArticleForm
                 formData={formData}
                 setFormData={setFormData}

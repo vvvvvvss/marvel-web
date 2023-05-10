@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "ui";
+import { Button } from "../../../components/clientComponents";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -42,8 +42,8 @@ const ArticleReviewer = ({ article }) => {
       <>
         {!feedback.isOpen && (
           <Button
-            disabled={isLoading}
-            onClick={() =>
+            isDisabled={isLoading}
+            onPress={() =>
               confirmApprove === 2
                 ? sendAction("approve")
                 : setConfirmApprove((p) => p + 1)
@@ -57,11 +57,11 @@ const ArticleReviewer = ({ article }) => {
           </Button>
         )}
         <Button
-          onClick={() => {
+          onPress={() => {
             setFeedback({ ...feedback, isOpen: !feedback.isOpen });
             setConfirmApprove(0);
           }}
-          disabled={feedback.isOpen || isLoading}
+          isDisabled={feedback.isOpen || isLoading}
         >
           Flag and give feedback
         </Button>
@@ -79,17 +79,17 @@ const ArticleReviewer = ({ article }) => {
             ></textarea>
             <div className="flex gap-5">
               <Button
-                onClick={() => sendAction("feedback")}
+                onPress={() => sendAction("feedback")}
                 className="mt-5"
-                disabled={isLoading}
+                isDisabled={isLoading}
                 type="submit"
               >
                 Submit Feedback
               </Button>
               <Button
-                disabled={isLoading}
+                isDisabled={isLoading}
                 className="mt-5 "
-                onClick={() => setFeedback({ ...feedback, isOpen: false })}
+                onPress={() => setFeedback({ ...feedback, isOpen: false })}
               >
                 Cancel
               </Button>

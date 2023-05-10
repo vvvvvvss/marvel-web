@@ -3,7 +3,8 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import { useMutation } from "react-query";
-import { Button, Paper, TextField } from "ui";
+import { Paper } from "ui/server";
+import { TextField, Button } from "../../../../components/clientComponents";
 
 const confirmationText = "delete sim sim";
 
@@ -42,14 +43,15 @@ const WorkDeleter = ({ course }) => {
         to confirm.
       </p>
       <TextField
+        fullWidth
         placeholder="Type here..."
         value={input}
         onChange={(e) => setInput(e)}
       />
       <Button
         variant="outlined"
-        disabled={input !== confirmationText || isLoading}
-        onClick={() => mutate()}
+        isDisabled={input !== confirmationText || isLoading}
+        onPress={() => mutate()}
       >
         Delete this Course
       </Button>

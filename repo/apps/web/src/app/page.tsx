@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Window, Button, MarvelLogo } from "ui";
+import { Window, MarvelLogo } from "ui/server";
+import { Button } from "../components/clientComponents";
 import { TrackDescription } from "../types";
 import TracksButton from "../components/TracksButton";
 

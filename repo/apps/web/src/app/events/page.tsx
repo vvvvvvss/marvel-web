@@ -1,6 +1,6 @@
 "use client";
-import { Metadata } from "next";
-import { Button, LoadingPulser, Window } from "ui";
+import { Window } from "ui/server";
+import { LoadingPulser, Button } from "../../components/clientComponents";
 import EventCreatingForm from "./EventCreator";
 import { EventCard } from "../../components/Cards";
 import { useInfiniteQuery } from "react-query";
@@ -45,7 +45,7 @@ const Page: React.FC<any> = ({ params }) => {
             {isFetchingNextPage ? (
               <p className="text-p-6 text-sm">Loading...</p>
             ) : hasNextPage ? (
-              <Button onClick={() => fetchNextPage()}>Load more</Button>
+              <Button onPress={() => fetchNextPage()}>Load more</Button>
             ) : (
               !isLoading && <p className="text-p-6 text-sm">That&apos;s it. </p>
             )}

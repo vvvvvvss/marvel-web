@@ -1,5 +1,5 @@
-import { Window, Paper, Button, MarkdownRender } from "ui";
-import { Avatar } from "../../../components/Avatar";
+import { Window, Paper, MarkdownRender } from "ui/server";
+import { Avatar, Button } from "../../../components/clientComponents";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import ArticleEditor from "./ArticleEditor";
 import { getCroppedCloudinaryImage } from "shared-utils";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { Article } from "database";
 import { Metadata } from "next";
 
 const getArticle = cache(async (id: string) => {

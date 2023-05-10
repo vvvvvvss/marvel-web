@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "uvcemarvel",
   "scripts": {
     "build": "turbo run build",
     "dev": "dotenv -- turbo dev",
@@ -8,13 +9,13 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@storybook/cli": "^7.0.7",
+    "@storybook/cli": "^7.0.9",
     "dotenv-cli": "^7.2.1",
-    "eslint": "^8.38.0",
+    "eslint": "^8.40.0",
     "eslint-config-custom": "workspace:*",
     "next": "^13.4.1",
-    "prettier": "^2.8.7",
-    "prettier-plugin-tailwindcss": "^0.2.7",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.2.8",
     "turbo": "^1.9.3"
   },
   "packageManager": "pnpm@7.15.0"

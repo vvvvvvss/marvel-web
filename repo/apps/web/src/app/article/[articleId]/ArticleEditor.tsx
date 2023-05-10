@@ -5,9 +5,8 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
-import { Button, IconButton } from "ui";
-import { FullScreenDialog } from "ui";
-import { VscClose as CloseIcon } from "react-icons/vsc";
+import { Button, IconButton } from "../../../components/clientComponents";
+import { FullScreenDialog } from "../../../components/clientComponents";
 import { useRouter } from "next/navigation";
 import { ArticleFormData } from "../../../types";
 import ArticleForm from "../../../components/forms/ArticleForm";
@@ -67,14 +66,14 @@ const ArticleEditor = ({ article }) => {
   ) {
     return (
       <>
-        <Button variant="standard" onClick={() => setModalOpen(true)}>
+        <Button variant="standard" onPress={() => setModalOpen(true)}>
           Edit Article
         </Button>
         <Button
           variant="outlined"
           className="border border-[red]"
-          disabled={isDeleting}
-          onClick={() =>
+          isDisabled={isDeleting}
+          onPress={() =>
             confirmDelete === 2 ? sendDelete() : setConfirmDelete((p) => p + 1)
           }
         >

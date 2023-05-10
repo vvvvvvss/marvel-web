@@ -1,11 +1,9 @@
 "use client";
 
-import { Button, IconButton, Paper } from "ui";
-import { FullScreenDialog } from "ui";
+import { FullScreenDialog, Button } from "../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -60,7 +58,7 @@ const EventCreatingForm = () => {
       <>
         <div className="px-3 w-full flex justify-end">
           <Button
-            onClick={() => {
+            onPress={() => {
               setDialogOpen((p) => !p);
             }}
           >
@@ -73,7 +71,7 @@ const EventCreatingForm = () => {
             onClose={() => setDialogOpen(false)}
             className="z-10"
           >
-            <div className="w-full py-24">
+            <div className="w-full pb-24">
               <EventForm
                 mode="create"
                 formData={formData}

@@ -1,12 +1,14 @@
 "use client";
 
-import { Button, IconButton, Paper } from "ui";
-import { FullScreenDialog } from "ui";
+import { Paper } from "ui/server";
+import {
+  FullScreenDialog,
+  Button,
+} from "../../../../components/clientComponents";
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
-import { TextField } from "ui";
+import { TextField } from "../../../../components/clientComponents";
 import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -65,7 +67,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
           <Button
             className="flex-1"
             variant="outlined"
-            onClick={() => {
+            onPress={() => {
               setFormType("COURSE");
               setDialogOpen((p) => !p);
             }}
@@ -76,7 +78,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
             <Button
               className="flex-1"
               variant="outlined"
-              onClick={() => {
+              onPress={() => {
                 setFormType("PROJECT");
                 setDialogOpen((p) => !p);
               }}
@@ -91,7 +93,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
             onClose={() => setDialogOpen(false)}
             className="z-10"
           >
-            <div className="w-full py-24">
+            <div className="w-full pb-24">
               <div>
                 {(sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN") ||
                   sessionUser?.scope
@@ -158,7 +160,7 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                               Project Name
                             </label>
                             <TextField
-                              fullwidth
+                              fullWidth
                               id="project-name"
                               placeholder="Enter Project Name"
                               type={"text"}
@@ -178,8 +180,8 @@ const Spawner = ({ authorSlug }: { authorSlug: string }) => {
                 )}
                 <div className="w-full flex gap-5 justify-end pb-48">
                   <Button
-                    onClick={() => sendMutation()}
-                    disabled={
+                    onPress={() => sendMutation()}
+                    isDisabled={
                       isLoading ||
                       (formType === "COURSE" && !formData?.selectedCourse) ||
                       (formType === "PROJECT" &&

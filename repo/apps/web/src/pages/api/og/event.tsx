@@ -46,7 +46,7 @@ export default async function handler(req: NextRequest) {
               opacity: "0.4",
               filter: "blur(10px)",
             }}
-            src={searchParams.get("coverPhoto")}
+            src={searchParams.get("coverPhoto") as string}
             alt="cover"
           />
 

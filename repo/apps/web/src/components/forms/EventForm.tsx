@@ -1,7 +1,8 @@
 import React from "react";
 import { EventFormData } from "../../types";
 import { TypeOfEvent } from "database";
-import { Button, TextField } from "ui";
+import { Button } from "ui";
+import { TextField } from "../../components/clientComponents";
 import { MarkdownEditor } from "../MarkdownEditor";
 import ImageUploader from "../ImageUploader";
 
@@ -64,7 +65,7 @@ const EventForm = ({
       </select>
       <label className="text-2xl">About the Event</label>
       <TextField
-        fullwidth
+        fullWidth
         id="title"
         placeholder="Title of the Event"
         type={"text"}
@@ -76,11 +77,11 @@ const EventForm = ({
           }))
         }
         maxLength={50}
-        required
+        isRequired
         minLength={3}
       />
       <TextField
-        fullwidth
+        fullWidth
         id="caption"
         placeholder="A short caption for the event..."
         type={"text"}
@@ -92,7 +93,7 @@ const EventForm = ({
           }))
         }
         maxLength={200}
-        required
+        isRequired
         minLength={3}
       />
       <MarkdownEditor
@@ -109,7 +110,7 @@ const EventForm = ({
       />
       <hr className="w-full" />
       <ImageUploader
-        value={formData?.coverPhoto}
+        value={formData?.coverPhoto as string}
         onClick={() => {
           setFormData({ ...formData, coverPhoto: "" });
         }}
@@ -124,12 +125,12 @@ const EventForm = ({
       </label>
       <input
         required
-        min={mode != "edit" ? getOffSettedISOString(new Date()) : null}
+        min={mode != "edit" ? getOffSettedISOString(new Date()) : undefined}
         max={getOffSettedISOString(getDateOneYearFromThis(new Date()))}
         className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
         id="start_time"
         type="datetime-local"
-        value={getOffSettedISOString(formData?.eventStartTime)}
+        value={getOffSettedISOString(formData?.eventStartTime as Date)}
         onChange={(e) =>
           e.target?.value &&
           setFormData({
@@ -143,14 +144,14 @@ const EventForm = ({
       </label>
       <input
         required
-        min={getOffSettedISOString(formData?.eventStartTime)}
+        min={getOffSettedISOString(formData?.eventStartTime as Date)}
         max={getOffSettedISOString(
-          getDateOneYearFromThis(formData?.eventStartTime)
+          getDateOneYearFromThis(formData?.eventStartTime as Date)
         )}
         className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
         id="end_time"
         type="datetime-local"
-        value={getOffSettedISOString(formData?.eventEndTime)}
+        value={getOffSettedISOString(formData?.eventEndTime as Date)}
         onChange={(e) =>
           e.target?.value &&
           setFormData({
@@ -187,12 +188,16 @@ const EventForm = ({
           </label>
           <input
             required
-            min={mode !== "edit" ? getOffSettedISOString(new Date()) : null}
-            max={getOffSettedISOString(formData?.eventStartTime)}
+            min={
+              mode !== "edit" ? getOffSettedISOString(new Date()) : undefined
+            }
+            max={getOffSettedISOString(formData?.eventStartTime as Date)}
             className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
             id="reg_start_time"
             type="datetime-local"
-            value={getOffSettedISOString(formData?.registrationStartTime)}
+            value={getOffSettedISOString(
+              formData?.registrationStartTime as Date
+            )}
             onChange={(e) =>
               e.target?.value &&
               setFormData({
@@ -205,12 +210,12 @@ const EventForm = ({
             Registration ends at?
           </label>
           <input
-            min={getOffSettedISOString(formData?.registrationStartTime)}
-            max={getOffSettedISOString(formData?.eventStartTime)}
+            min={getOffSettedISOString(formData?.registrationStartTime as Date)}
+            max={getOffSettedISOString(formData?.eventStartTime as Date)}
             className="w-full p-2 rounded-lg dark:bg-p-2 border dark:border-p-6"
             id="reg_end_time"
             type="datetime-local"
-            value={getOffSettedISOString(formData?.registrationEndTime)}
+            value={getOffSettedISOString(formData?.registrationEndTime as Date)}
             onChange={(e) =>
               e.target?.value &&
               setFormData({
@@ -255,11 +260,12 @@ const EventForm = ({
             Action Link
           </label>
           <TextField
+            fullWidth
             id="action_link"
             value={formData?.actionLink}
-            required
-            min={3}
-            max={190}
+            isRequired
+            minLength={3}
+            maxLength={190}
             placeholder="Action Button Link"
             onChange={(e) =>
               setFormData({
@@ -272,11 +278,12 @@ const EventForm = ({
             Action Label
           </label>
           <TextField
+            fullWidth
             id="action_label"
             value={formData?.actionText}
-            required
-            min={3}
-            max={30}
+            isRequired
+            minLength={3}
+            maxLength={30}
             placeholder="Action Button Label"
             onChange={(e) =>
               setFormData({
@@ -288,7 +295,7 @@ const EventForm = ({
         </>
       )}
       <div className="w-full flex gap-5 justify-end pb-48 mt-5">
-        <Button type="submit" disabled={submitDisabled}>
+        <Button type="submit" isDisabled={submitDisabled}>
           Submit
         </Button>
       </div>

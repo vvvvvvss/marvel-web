@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbClient from "../../../utils/dbConnector";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
-import { v2 as cloudinary } from "cloudinary";
-import { WorkFormData } from "../../../types";
 
 export default async function delete_work(
   req: NextApiRequest & { url: string },
@@ -58,9 +56,13 @@ export default async function delete_work(
       },
     });
 
-    await Promise.all(
-      work?.People?.map((p) => res.revalidate(`/u/${p?.person?.slug}/works`))
-    );
+    if (work?.People) {
+      const promises = work.People?.map((p: any) =>
+        res.revalidate(`/u/${p?.person?.slug as string}/works`)
+      );
+      await Promise.all(promises);
+    }
+
     return res.status(201).json({
       message: "deleted successfully",
     });

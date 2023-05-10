@@ -17,7 +17,7 @@ export const MarkdownEditor = ({
   const [editorMode, setEditorMode] = useState<"write" | "preview">("write");
   return (
     <div className={clsx(className)}>
-      <TabGroup className="my-5">
+      <TabGroup className="mb-5">
         <Tab
           active={editorMode === "write"}
           onClick={() => setEditorMode("write")}

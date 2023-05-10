@@ -1,11 +1,23 @@
-import clsx from "clsx";
+"use client";
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "text" | "outlined" | "standard";
-  size?: "small" | "medium" | "large";
-  right?: React.ComponentType<any>;
-  left?: React.ComponentType<any>;
-};
+import clsx from "clsx";
+import { useRef } from "react";
+import {
+  AriaButtonProps,
+  LongPressProps,
+  useButton,
+  useLongPress,
+  mergeProps,
+} from "react-aria";
+
+export type ButtonProps = AriaButtonProps &
+  LongPressProps & {
+    variant?: "text" | "outlined" | "standard";
+    size?: "small" | "medium" | "large";
+    className?: string;
+    right?: React.ComponentType<any>;
+    left?: React.ComponentType<any>;
+  };
 
 export const Button = ({
   variant = "standard",
@@ -14,10 +26,14 @@ export const Button = ({
   left: Left,
   ...props
 }: ButtonProps) => {
+  let ref = useRef(null);
+  let { buttonProps } = useButton(props, ref);
+  let { longPressProps } = useLongPress(props);
+  let { children } = props;
+
   return (
     <button
-      id={props?.id || "Button"}
-      {...props}
+      {...mergeProps(buttonProps, longPressProps)}
       className={clsx(
         props?.className,
         //base classes
@@ -67,7 +83,7 @@ export const Button = ({
           )}
         />
       ) : null}
-      {props?.children}
+      {children}
       {Right ? (
         <Right
           className={clsx(
@@ -86,26 +102,31 @@ export const Button = ({
   );
 };
 
-export type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "text" | "outlined" | "standard";
-  size?: "small" | "medium" | "large";
-};
+export type IconButtonProps = AriaButtonProps &
+  LongPressProps & {
+    variant?: "text" | "outlined" | "standard";
+    size?: "small" | "medium" | "large";
+    className?: string;
+  };
 
 export const IconButton = ({
-  children,
   variant = "standard",
   size = "medium",
   ...props
 }: IconButtonProps) => {
+  let ref = useRef(null);
+  let { buttonProps } = useButton(props, ref);
+  let { longPressProps } = useLongPress(props);
+  let { children } = props;
   return (
     <button
-      id={props?.id || "Button"}
-      {...props}
+      {...mergeProps(buttonProps, longPressProps)}
       className={clsx(
         props?.className,
         //base classes
-        "overflow-hidden min-w-max whitespace-nowrap cursor-pointer select-none",
+        "cursor-pointer select-none",
         "rounded-full p-2 aspect-square",
+        "flex justify-center items-center",
         "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",
         "text-p-0 dark:text-p-10",
         "disabled:opacity-50",

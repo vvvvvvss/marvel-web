@@ -40,14 +40,15 @@ const WorkDeleter = ({ work }) => {
         to confirm.
       </p>
       <TextField
+        fullWidth
         placeholder="Type here..."
         value={input}
         onChange={(e) => setInput(e)}
       />
       <Button
         variant="outlined"
-        disabled={input !== confirmationText || isLoading}
-        onClick={() => mutate()}
+        isDisabled={input !== confirmationText || isLoading}
+        onPress={() => mutate()}
       >
         Delete this Work
       </Button>
