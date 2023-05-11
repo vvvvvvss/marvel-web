@@ -1,25 +1,44 @@
-"use client";
 import React from "react";
 import { MarvelLogo } from "ui/server";
-import { Button } from "../components/clientComponents";
+import { Button, LoadingPulser } from "../components/clientComponents";
 import Link from "next/link";
 import {
   AiFillGithub,
   AiFillInstagram,
   AiFillLinkedin,
   AiFillTwitterCircle,
-} from "react-icons/ai";
-import { MdOpenInNew } from "react-icons/md";
+  MdOpenInNew,
+} from "../components/ReactIcons";
 
 const Footer = () => {
   return (
     <div className="w-full bg-p-9 dark:bg-p-1 p-10 flex justify-center pb-40">
       <div className="w-full max-w-5xl flex flex-wrap justify-between gap-5">
-        <MarvelLogo className="aspect-square h-40 w-40" />
+        <div className="flex flex-wrap gap-5 ">
+          <MarvelLogo className="aspect-square w-40 h-40" />
+          <div className=" flex flex-col gap-5">
+            <p className="dark:text-p-7 text-p-3">
+              UVCE,
+              <br /> K. R Circle,
+              <br /> Bengaluru 01
+            </p>
+            <Link
+              href={
+                "https://www.google.com/maps/place/Makerspace+for+Advanced+Research,+Vital+Education+and+Learning/@12.9749208,77.5836797,17z/data=!3m1!4b1!4m6!3m5!1s0x3bae17598ebd4949:0x71a4357b4437dabe!8m2!3d12.9749156!4d77.5862546!16s%2Fg%2F11k9cbjqbt"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outlined" right={MdOpenInNew}>
+                See on Map
+              </Button>
+            </Link>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-5">
           <div className="rounded-lg p-5 bg-p-8 dark:bg-p-2 flex flex-col gap-2 flex-1">
-            <h6 className="font-bold">Social Media</h6>
+            <h6 className="text-xl">Social Media</h6>
             <Link
               href={"https://in.linkedin.com/company/uvcega"}
               target="_blank"
@@ -59,7 +78,7 @@ const Footer = () => {
           </div>
 
           <div className="rounded-lg p-5 bg-p-8 dark:bg-p-2 flex flex-col gap-2 flex-1">
-            <h6 className="font-bold">Useful links</h6>
+            <h6 className="text-xl">Useful links</h6>
             <Link
               href={"https://uvce.karnataka.gov.in"}
               target="_blank"

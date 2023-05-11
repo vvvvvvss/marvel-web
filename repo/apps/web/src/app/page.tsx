@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { Window, MarvelLogoMark } from "ui/server";
 import { Button } from "../components/clientComponents";
@@ -8,7 +7,7 @@ import {
   MdOutlineBook,
   MdAutoAwesome,
   MdOutlineOpenInNew,
-} from "react-icons/md";
+} from "../components/ReactIcons";
 import Image from "next/image";
 
 const tracks: TrackDescription[] = [
@@ -114,7 +113,9 @@ export default function page() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 md:flex-none"
-              href={"https://www.playbook.com/s/marvel/uvce-marvel"}
+              href={
+                "https://www.playbook.com/s/marvel/uvce-marvel?assetToken=1gSGCFMHguSACtL8jj1foG7Q"
+              }
             >
               <Button
                 variant="outlined"
@@ -200,10 +201,10 @@ export default function page() {
             alt="Events at Marvel"
             width={1000}
             height={720}
-            className="flex-1 w-full rounded-lg max-h-80 object-cover object-center"
+            className="flex-1 w-full md:max-w-[50%] rounded-lg max-h-80 object-cover object-center"
           />
           <div className="flex max-w-sm flex-col gap-5">
-            <p className="dark:font-light">
+            <p>
               Marvel conducts workshops, competitions, talks, and other events
               throughout the year. Please check our event page for updates on
               the latest events at Marvel.

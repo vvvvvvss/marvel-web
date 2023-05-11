@@ -126,7 +126,7 @@ export const IconButton = ({
         props?.className,
         //base classes
         "cursor-pointer select-none",
-        "outline-none active:outline-none",
+        "outline-none active:outline-none focus:outline-none",
         "rounded-full p-2 aspect-square",
         "flex justify-center items-center",
         "hover:translate-y-[-1.5px] active:scale-95 transition ease-out",

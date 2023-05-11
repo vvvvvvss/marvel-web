@@ -31,8 +31,8 @@ const mono = IBM_Plex_Mono({
 
 //seo
 export const metadata: Metadata = {
-  title: "marvel.",
-  description: "UVCE's own Makerspace",
+  title: "UVCE MARVEL | Makerspace and R&D Lab.",
+  description: "UVCE's own Makerspace and R&D Lab",
   applicationName: "UVCE Marvel",
   authors: [{ name: "UVCE" }, { name: "UVCE MARVEL" }],
   category: "Education and Research",

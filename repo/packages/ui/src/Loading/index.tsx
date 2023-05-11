@@ -14,16 +14,14 @@ export const LoadingPulser = ({ ...props }: LoadingPulserProps) => {
   });
 
   return (
-    <progress
+    <div
+      {...progressBarProps}
       className={clsx(
         props?.className,
         "flex w-fit h-fit flex-col gap-2 items-center"
       )}
     >
-      <div
-        {...progressBarProps}
-        className="flex gap-1 items-center justify-center"
-      >
+      <div className="flex gap-1 items-center justify-center">
         <div className="transition rounded-full aspect-square w-2 animate-pulse ease-in-out bg-p-4 dark:bg-p-6" />
         <div
           className="transition rounded-full aspect-square w-2 animate-pulse ease-in-out bg-p-4 dark:bg-p-6"
@@ -39,6 +37,6 @@ export const LoadingPulser = ({ ...props }: LoadingPulserProps) => {
           {props?.label}
         </label>
       )}
-    </progress>
+    </div>
   );
 };
