@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react";
 import { themes } from "@storybook/theming";
 import { withThemeByDataAttribute } from "@storybook/addon-styling";
-import "ui/styles.css";
+import "ui/index.css";
 import "../src/index.css";
 
 export const decorators = [

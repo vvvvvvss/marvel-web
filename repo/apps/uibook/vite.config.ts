@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import postcss from "rollup-plugin-postcss";
-
+import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
@@ -9,11 +8,10 @@ export default defineConfig({
       external: ["ui/styles.css"],
     },
   },
-  plugins: [
-    react(),
-    postcss({
-      modules: true,
-      minimize: true,
-    }),
-  ],
+  resolve: {
+    alias: {
+      ui: path.resolve(__dirname, "../../packages/ui/dist"),
+    },
+  },
+  plugins: [react()],
 });
