@@ -1,6 +1,6 @@
 import React from "react";
 import { MarvelLogo } from "ui/server";
-import { Button, LoadingPulser } from "../components/clientComponents";
+import { Button } from "../components/clientComponents";
 import Link from "next/link";
 import {
   AiFillGithub,
@@ -124,6 +124,15 @@ const Footer = () => {
             >
               <Button variant="text" right={MdOpenInNew}>
                 Sampada Shelf
+              </Button>
+            </Link>
+            <Link
+              href={"https://www.npmjs.com/package/@uvcemarvel/react-ui"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="text" right={MdOpenInNew}>
+                Marvel's UI Library
               </Button>
             </Link>
           </div>

@@ -72,7 +72,7 @@ export default function page() {
       {/*whole thing*/}
       <div className="w-full max-w-5xl flex flex-col pb-48">
         {/* hero box  */}
-        <div className="relative flex flex-col min-h-screen gap-5 px-5 py-10">
+        <div className="relative flex flex-col gap-5 px-5 py-10">
           <MarvelLogoMark
             strokeWidth={4}
             className="w-32 h-16 float-left text-p-0 dark:text-p-10"
