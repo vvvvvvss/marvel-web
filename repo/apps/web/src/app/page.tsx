@@ -87,7 +87,7 @@ export default function page() {
             >
               UVCE
             </Link>
-            's own Makerspace and R&D Lab.
+            &apos;s own Makerspace and R&D Lab.
           </h1>
           <div className="py-5 md:py-0 flex flex-wrap gap-3 my-2">
             <TracksButton />
