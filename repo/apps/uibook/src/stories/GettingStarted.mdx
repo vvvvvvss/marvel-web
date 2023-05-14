@@ -1,0 +1,52 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Introduction/Getting Started" />
+
+# Installation:
+
+get started by installing the component library:
+
+```powershell
+npm install @uvcemarvel/react-ui
+```
+
+if you are using a pnpm monorepo workspace,
+
+```powershell
+pnpm install @uvcemarvel/react-ui --filter app_name
+```
+
+# Usage:
+
+You can start importing components and use them like so:
+
+```tsx
+import { Button } from "@uvcemarvel/react-ui";
+```
+
+# Next.js and other SSR frameworks:
+
+Next.js 13^ requires the client component file to have a `“use client”;` directive at the top. To support this, the library has separate exports for client and server components.
+
+### Import server components as:
+
+```tsx
+import { MarvelLogo, MarvelLogoMark } from "@uvcemarvel/react-ui/server";
+```
+
+### Import client components as:
+
+You can export all client components from within your Next.js project like so:
+
+in your components/marvel-ui.tsx:
+
+```tsx
+"use client";
+export * from "@uvcemarvel/react-ui/client";
+```
+
+and you can import client components like so:
+
+```tsx
+import { Button } from "../components/marvel-ui.tsx";
+```

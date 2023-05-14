@@ -1,1 +1,3 @@
-# UVCE Marvel's design system. Built for hub.uvcemarvel.in
+# UVCE Marvel Design System's Component library
+
+Documentation: https://uvcemarvel-ui.vercel.app/?path=/docs/example-introduction--docs
