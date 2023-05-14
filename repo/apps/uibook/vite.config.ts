@@ -4,6 +4,11 @@ import postcss from "rollup-plugin-postcss";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      external: ["ui/styles.css"],
+    },
+  },
   plugins: [
     react(),
     postcss({
