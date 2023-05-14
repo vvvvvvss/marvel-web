@@ -39,8 +39,8 @@ export const DefaultDialog: Story = {
   render: ({ ...args }) => {
     const [open, setOpen] = useState<boolean>(false);
     return (
-      <div className="relative h-40 py-10 px-5 bg-[url(image.jpg)] bg-no-repeat bg-cover">
-        <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+      <div className="relative h-40 py-10 px-5 bg-p-10 dark:bg-p-0 bg-no-repeat bg-cover">
+        <Button onPress={() => setOpen(true)}>Open Dialog</Button>
 
         <Dialog {...args} open={open} onClose={() => setOpen(false)}>
           <div className="flex w-full flex-col items-start gap-5 text-p-0 dark:text-p-10">
@@ -51,7 +51,7 @@ export const DefaultDialog: Story = {
             </p>
             <div className="w-full flex gap-5 justify-end">
               <Button>Agree</Button>
-              <Button variant="outlined" onClick={() => setOpen(false)}>
+              <Button variant="outlined" onPress={() => setOpen(false)}>
                 Cancel
               </Button>
             </div>
@@ -66,8 +66,8 @@ export const DialogWithCloseButton: Story = {
   render: () => {
     const [open, setOpen] = useState<boolean>(false);
     return (
-      <div className="relative h-40 py-10 px-5 bg-[url(image.jpg)] bg-no-repeat bg-cover">
-        <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+      <div className="relative h-40 py-10 px-5 bg-p-10 dark:bg-p-0 bg-no-repeat bg-cover">
+        <Button onPress={() => setOpen(true)}>Open Dialog</Button>
 
         <Dialog displayCloseButton open={open} onClose={() => setOpen(false)}>
           <div className="flex w-full flex-col items-start gap-5 text-p-0 dark:text-p-10">
@@ -78,7 +78,7 @@ export const DialogWithCloseButton: Story = {
             </p>
             <div className="w-full flex gap-5 justify-end">
               <Button>Agree</Button>
-              <Button variant="outlined" onClick={() => setOpen(false)}>
+              <Button variant="outlined" onPress={() => setOpen(false)}>
                 Cancel
               </Button>
             </div>

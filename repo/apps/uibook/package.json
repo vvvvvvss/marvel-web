@@ -1,7 +1,7 @@
 {
   "name": "uibook",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "engines": {
     "node": "16"
@@ -15,7 +15,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@uvcemarvel/react-ui": "0.0.0",
+    "@uvcemarvel/react-ui": "0.0.1",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "react": "^18.2.0",

@@ -31,7 +31,7 @@ const meta = {
         defaultValue: { summary: "medium" },
       },
     },
-    disabled: {
+    isDisabled: {
       control: {
         type: "boolean",
       },
@@ -40,6 +40,16 @@ const meta = {
           summary: "Disabled?",
         },
         defaultValue: { summary: false },
+      },
+    },
+    onPress: {
+      control: {
+        type: "action",
+      },
+    },
+    onLongPress: {
+      control: {
+        type: "action",
       },
     },
   },
@@ -87,11 +97,11 @@ export const DisabledButton: Story = {
   render: () => {
     return (
       <div className="flex gap-5 flex-wrap bg-p-10 dark:bg-p-0 p-10">
-        <Button disabled>Button</Button>
-        <Button variant="outlined" disabled>
+        <Button isDisabled>Button</Button>
+        <Button variant="outlined" isDisabled>
           Button
         </Button>
-        <Button variant="text" disabled>
+        <Button variant="text" isDisabled>
           Button
         </Button>
       </div>

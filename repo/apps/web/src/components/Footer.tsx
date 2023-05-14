@@ -132,7 +132,7 @@ const Footer = () => {
               rel="noopener noreferrer"
             >
               <Button variant="text" right={MdOpenInNew}>
-                Marvel's UI Library
+                Marvel&apos;s UI Library
               </Button>
             </Link>
           </div>

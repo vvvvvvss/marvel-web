@@ -14,9 +14,9 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const LogoMark: Story = {
-  render: () => <MarvelLogoMark stroke="black" />,
+  render: () => <MarvelLogoMark />,
 };
 
 export const LogoMarkWhiteStroke: Story = {
-  render: () => <MarvelLogoMark stroke="white" className="bg-p-0" />,
+  render: () => <MarvelLogoMark className="bg-p-0 text-p-10" />,
 };

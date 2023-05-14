@@ -212,8 +212,7 @@ export const WithDescription: Story = {
   args: {
     label: "Number",
     placeholder: "Enter the Number",
-    description:
-      "Names can be upto 60 characters long and also include emojis!",
+    description: "Enter the number",
   },
 };
 
