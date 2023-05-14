@@ -1,8 +1,9 @@
 "use client";
 
-import { Appbar, Button, IconButton, LoadingPulser } from "ui";
+import { Appbar, Button, IconButton } from "ui";
+import { LoadingPulser } from "./clientComponents";
 import { Avatar } from "./Avatar";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import {
   HiChevronDoubleDown as DownIcon,
@@ -47,7 +48,7 @@ const Navbar = () => {
         >
           <div className="flex items-center">
             <IconButton
-              onClick={() => setMenuOpen((p) => !p)}
+              onPress={() => setMenuOpen((p) => !p)}
               variant={"text"}
               className="mr-2"
             >
@@ -77,7 +78,7 @@ const Navbar = () => {
           ) : status === "loading" ? (
             <LoadingPulser />
           ) : (
-            <Button onClick={() => signIn("google", { redirect: false })}>
+            <Button onPress={() => signIn("google", { redirect: false })}>
               Sign In
             </Button>
           )}

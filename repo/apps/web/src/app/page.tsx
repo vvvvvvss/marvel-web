@@ -1,36 +1,68 @@
 import Link from "next/link";
-import { Window, Button, MarvelLogo } from "ui";
+import { Window, MarvelLogoMark } from "ui/server";
+import { Button } from "../components/clientComponents";
 import { TrackDescription } from "../types";
 import TracksButton from "../components/TracksButton";
+import {
+  MdOutlineBook,
+  MdAutoAwesome,
+  MdOutlineOpenInNew,
+} from "../components/ReactIcons";
+import Image from "next/image";
 
 const tracks: TrackDescription[] = [
   {
     title: "Student",
     suffix: "Track",
     desc: "With Student Track, you'll be able to gain valuable experience in your areas of interest through a comprehensive, hands-on curriculum that utilizes Marvel's resources from the very beginning. The program is designed as a batch program and applications for enrollment will be accepted twice a year, giving students a unique opportunity to learn and grow with a cohort of like-minded individuals.",
-    link: "/courses",
-    buttonText: "Explore Courses",
+    buttons: [
+      {
+        link: "/courses",
+        buttonText: "Explore Courses",
+        variant: "outlined",
+      },
+    ],
   },
   {
     title: "Project",
     suffix: "Track",
     desc: "Project Track is for UVCE students with project ideas but limited resources. Marvel provides facilities and resources to support these projects. Interested students can submit an abstract, timeline, team details, and budget estimate for consideration. Marvel's team screens applications and selects candidates for an interview or abstract presentation. Selected teams work closely with Marvel to turn their ideas into reality.",
-    link: "https://forms.gle/aiD3WWXUBngknHzX9",
-    buttonText: "Apply with an Idea",
+    buttons: [
+      {
+        link: "https://forms.gle/aiD3WWXUBngknHzX9",
+        buttonText: "Apply with an Idea",
+        variant: "outlined",
+      },
+    ],
   },
   {
     title: "Competition",
     suffix: "Track",
     desc: "MARVEL's Competition Track supports UVCE students who want to participate in technical competitions across domains. Students can submit competition details and budget estimates, and MARVEL will screen and select promising entries. MARVEL provides resources such as financial assistance, mentorship, and guidance to ensure team success.",
-    link: "https://forms.gle/Ds6EoHK7iYt6Ki6NA",
-    buttonText: "Apply with an Idea",
+    buttons: [
+      {
+        link: "https://forms.gle/Ds6EoHK7iYt6Ki6NA",
+        buttonText: "Apply with an Idea",
+        variant: "outlined",
+      },
+    ],
   },
   {
     title: "Open Learner",
     suffix: "Programme",
     desc: "While admission to Marvel's Student Track is limited, we invite you to continue upskilling yourself through our Open Learner Programme. Access any of Marvel's courses, utilize your own resources, and complete the tasks at your own pace. Upon completion of the coursework and submission of the final report, you will receive a certificate that highlights your achievement and dedication to continuous learning.",
-    link: "https://forms.gle/QCdFiTSu5K6hyysq5",
-    buttonText: "Apply to OLP",
+    buttons: [
+      {
+        buttonText: "Explore Courses",
+        link: "/courses",
+        variant: "standard",
+      },
+      {
+        link: "https://forms.gle/QCdFiTSu5K6hyysq5",
+        buttonText: "Apply to OLP",
+        variant: "outlined",
+      },
+    ],
   },
 ];
 
@@ -40,38 +72,80 @@ export default function page() {
       {/*whole thing*/}
       <div className="w-full max-w-5xl flex flex-col pb-48">
         {/* hero box  */}
-        <div className="relative flex flex-col md:flex-row min-h-screen gap-10 md:justify-center items-center p-10">
-          <MarvelLogo className="z-10 aspect-square border border-p-6 shadow-2xl shadow-p-3 min-h-[280px] max-h-[280px] max-w-[280px]" />
-          <div className="z-10">
-            <div className="py-5 md:py-0 flex flex-wrap gap-3">
-              <TracksButton />
-              <Link href={"/courses"} className="flex-1 md:flex-auto">
-                <Button variant="outlined" className="w-full">
-                  Courses
-                </Button>
-              </Link>
-              <Link href={"/events"} className="flex-1 md:flex-auto">
-                <Button variant="outlined" className="w-full">
-                  Events
-                </Button>
-              </Link>
-              <Link
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 md:flex-auto"
-                href={"https://www.playbook.com/s/marvel/uvce-marvel"}
+        <div className="relative flex flex-col min-h-screen gap-5 px-5 py-10">
+          <MarvelLogoMark
+            strokeWidth={4}
+            className="w-32 h-16 float-left text-p-0 dark:text-p-10"
+          />
+          <h1 className="text-p-0 dark:text-p-8 text-5xl md:text-7xl font-light">
+            <span className="font-normal dark:text-p-10">Marvel</span> is{" "}
+            <Link
+              href={"https://uvce.karnataka.gov.in"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#E73857] hover:brightness-75 transition duration-300 ease-in-out"
+            >
+              UVCE
+            </Link>
+            's own Makerspace and R&D Lab.
+          </h1>
+          <div className="py-5 md:py-0 flex flex-wrap gap-3 my-2">
+            <TracksButton />
+            <Link href={"/courses"} className="flex-1 md:flex-none">
+              <Button
+                variant="outlined"
+                className="w-full"
+                left={MdOutlineBook}
               >
-                <Button variant="outlined" className="w-full">
-                  Annual Report 2022
-                </Button>
-              </Link>
-            </div>
-            <p className="text-p-0 dark:text-p-8 max-w-xl text-lg font-normal my-5 p-5 bg-p-9 dark:bg-p-1 rounded-lg">
-              Makerspace for Advanced Research, Vital Education and Learning AKA
+                Courses
+              </Button>
+            </Link>
+            <Link href={"/events"} className="flex-1 md:flex-none">
+              <Button
+                variant="outlined"
+                className="w-full"
+                left={MdAutoAwesome}
+              >
+                Events
+              </Button>
+            </Link>
+            <Link
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 md:flex-none"
+              href={
+                "https://www.playbook.com/s/marvel/uvce-marvel?assetToken=1gSGCFMHguSACtL8jj1foG7Q"
+              }
+            >
+              <Button
+                variant="outlined"
+                className="flex-1 md:flex-none"
+                right={MdOutlineOpenInNew}
+              >
+                Annual Report 2022
+              </Button>
+            </Link>
+          </div>
+          <div className="flex flex-wrap gap-5">
+            <Image
+              width={800}
+              height={600}
+              alt="UVCE Marvel on Open Day"
+              src={"/images/image1.jpg"}
+              className="rounded-lg flex-1 max-h-60 object-cover"
+            />
+            <Image
+              width={800}
+              height={600}
+              alt="UVCE Marvel on Open Day"
+              src={"/images/image3.jpg"}
+              className="rounded-lg flex-1 max-h-60 object-cover"
+            />
+            <p className="flex-1 p-5 rounded-lg border-[1.5px] dark:border border-p-0 dark:border-p-7 font-normal text-base bg-p-10 dark:bg-p-1">
               Marvel at University of Visvesvaraya College of Engineering, is
-              poised to spur genuine passion in every learner and redefine
-              conventional education. The goal is to set the ball rolling,
-              perpetuate a sense of innovation in students.
+              poised to spur genuine passion in every learner, inspire decisive
+              action, and redefine conventional education. The goal is to turn
+              UVCE into a hub of Research and Innovation.
             </p>
           </div>
         </div>
@@ -96,15 +170,24 @@ export default function page() {
                 </h2>
                 <div className="max-w-sm flex flex-col gap-10">
                   <p className="text-p-0 dark:text-p-9">{t?.desc}</p>
-                  <Link
-                    href={t?.link}
-                    target={t?.link?.startsWith("http") ? "_blank" : "_self"}
-                    rel={
-                      t?.link?.startsWith("http") ? "noopener noreferrer" : ""
-                    }
-                  >
-                    <Button variant="outlined">{t?.buttonText}</Button>
-                  </Link>
+                  <div className="flex gap-3 flex-wrap">
+                    {t?.buttons?.map((b, k) => (
+                      <Link
+                        key={k}
+                        href={b?.link}
+                        target={
+                          b?.link?.startsWith("http") ? "_blank" : "_self"
+                        }
+                        rel={
+                          b?.link?.startsWith("http")
+                            ? "noopener noreferrer"
+                            : ""
+                        }
+                      >
+                        <Button variant={b?.variant}>{b?.buttonText}</Button>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -112,13 +195,16 @@ export default function page() {
         </div>
 
         {/*events section*/}
-        <div className="flex flex-col items-center justify-center md:flex-row gap-10 h-fit p-10">
-          <div className="flex flex-col gap-5 w-full">
-            <h2 className="text-5xl flex-wrap leading-snug ">
-              Events
-              <span className="text-p-5"> at Marvel</span>
-            </h2>
-            <p className="max-w-sm">
+        <div className="flex flex-wrap gap-5 p-5">
+          <Image
+            src={"/images/eatm.jpg"}
+            alt="Events at Marvel"
+            width={1000}
+            height={720}
+            className="flex-1 w-full md:max-w-[50%] rounded-lg max-h-80 object-cover object-center"
+          />
+          <div className="flex max-w-sm flex-col gap-5">
+            <p>
               Marvel conducts workshops, competitions, talks, and other events
               throughout the year. Please check our event page for updates on
               the latest events at Marvel.

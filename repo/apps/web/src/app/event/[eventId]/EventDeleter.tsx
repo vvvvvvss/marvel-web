@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "ui";
+import { Button } from "../../../components/clientComponents";
 import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -32,8 +32,8 @@ const EventDeleter = ({ event }) => {
       <>
         <Button
           className="z-10 w-min"
-          disabled={isLoading}
-          onClick={() =>
+          isDisabled={isLoading}
+          onPress={() =>
             confirmApprove === 2
               ? sendDelete()
               : setConfirmApprove((p) => p + 1)

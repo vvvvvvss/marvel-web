@@ -2,18 +2,17 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import {
-  Button,
-  TextField,
   FullScreenDialog,
-  IconButton,
+  TextField,
   LoadingPulser,
-} from "ui";
+  Button,
+} from "../../../components/clientComponents";
+
 import { MarkdownEditor } from "../../../components/MarkdownEditor";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useRouter } from "next/navigation";
 
 const ReportEditor = ({ report, work }) => {
@@ -53,30 +52,25 @@ const ReportEditor = ({ report, work }) => {
   ) {
     return (
       <>
-        <Button variant="standard" onClick={() => setModalOpen(true)}>
+        <Button variant="standard" onPress={() => setModalOpen(true)}>
           Edit Report
         </Button>
         {modalOpen && (
-          <FullScreenDialog open={modalOpen}>
-            <div className="w-full max-w-2xl py-24 gap-5">
-              <IconButton
-                onClick={() => {
-                  setModalOpen((p) => !p);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+          <FullScreenDialog
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <div className="w-full pb-24">
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
                 {!(work?.typeOfWork === "PROJECT" && report?.isOverview) && (
                   <TextField
-                    required
+                    isRequired
                     id="title"
-                    fullwidth
+                    fullWidth
                     placeholder="Title of the Report..."
                     value={formData?.title}
                     onChange={(e) => {
-                      setFormData({ ...formData, title: e.target.value });
+                      setFormData({ ...formData, title: e });
                       setChanged(true);
                     }}
                     maxLength={190}
@@ -95,11 +89,11 @@ const ReportEditor = ({ report, work }) => {
                 <div className="w-full pb-48">
                   <Button
                     type="submit"
-                    disabled={isUpdating || !changed}
+                    isDisabled={isUpdating || !changed}
                     className={`float-right m-5 ${
                       isUpdating ? "animate-pulse" : "animate-none"
                     }`}
-                    onClick={() => updateReport()}
+                    onPress={() => updateReport()}
                   >
                     <span className="flex items-center gap-3">
                       {isUpdating && <LoadingPulser className="h-5" />}

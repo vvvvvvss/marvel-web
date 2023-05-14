@@ -51,8 +51,8 @@ const ReportReviewer = ({ report, work }) => {
       <>
         {!feedback.isOpen && (
           <Button
-            disabled={isLoading}
-            onClick={() =>
+            isDisabled={isLoading}
+            onPress={() =>
               confirmApprove === 2
                 ? sendAction("approve")
                 : setConfirmApprove((p) => p + 1)
@@ -66,11 +66,11 @@ const ReportReviewer = ({ report, work }) => {
           </Button>
         )}
         <Button
-          onClick={() => {
+          onPress={() => {
             setFeedback({ ...feedback, isOpen: !feedback.isOpen });
             setConfirmApprove(0);
           }}
-          disabled={feedback.isOpen || isLoading}
+          isDisabled={feedback.isOpen || isLoading}
         >
           Flag and give feedback
         </Button>
@@ -88,17 +88,17 @@ const ReportReviewer = ({ report, work }) => {
             ></textarea>
             <div className="flex gap-5">
               <Button
-                onClick={() => sendAction("feedback")}
+                onPress={() => sendAction("feedback")}
                 className="mt-5"
-                disabled={isLoading}
+                isDisabled={isLoading}
                 type="submit"
               >
                 Submit Feedback
               </Button>
               <Button
-                disabled={isLoading}
+                isDisabled={isLoading}
                 className="mt-5 "
-                onClick={() => setFeedback({ ...feedback, isOpen: false })}
+                onPress={() => setFeedback({ ...feedback, isOpen: false })}
               >
                 Cancel
               </Button>

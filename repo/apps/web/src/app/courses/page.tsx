@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { CourseCard } from "../../components/Cards";
 import dbClient from "../../utils/dbConnector";
-import { Window } from "ui";
+import { Window } from "ui/server";
 import CourseCreator from "./CourseCreator";
 
 const getCourseList = async () => {

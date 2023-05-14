@@ -41,10 +41,11 @@ const CourseForm = ({
           </p>
           <TextField
             id="courseCode"
-            required
+            fullWidth
+            isRequired
             value={formData.courseCode}
             onChange={(e) => {
-              setFormData({ ...formData, courseCode: e.target?.value });
+              setFormData({ ...formData, courseCode: e });
             }}
             placeholder="Enter Course Code"
             maxLength={12}
@@ -56,10 +57,11 @@ const CourseForm = ({
         GitHub Repo URL
       </label>
       <TextField
+        fullWidth
         id="repoURL"
         value={formData.repoURL}
         onChange={(e) => {
-          setFormData({ ...formData, repoURL: e.target?.value });
+          setFormData({ ...formData, repoURL: e });
         }}
         placeholder="link to the GitHub Repo that has course data."
         maxLength={60}
@@ -68,10 +70,11 @@ const CourseForm = ({
         Caption
       </label>
       <TextField
+        fullWidth
         id="caption"
         value={formData?.caption}
         onChange={(e) => {
-          setFormData({ ...formData, caption: e.target?.value });
+          setFormData({ ...formData, caption: e });
         }}
         placeholder="Caption..."
         maxLength={200}
@@ -80,17 +83,18 @@ const CourseForm = ({
         Course duration
       </label>
       <TextField
+        fullWidth
         id="duration"
         value={formData?.courseDuration}
         onChange={(e) => {
-          setFormData({ ...formData, courseDuration: e.target?.value });
+          setFormData({ ...formData, courseDuration: e });
         }}
         placeholder="Course duration"
         maxLength={20}
       />
       <ImageUploader
         className="my-5"
-        value={formData?.coverPhoto}
+        value={formData?.coverPhoto as string}
         onClick={() => {
           setFormData({ ...formData, coverPhoto: "" });
         }}
@@ -100,7 +104,7 @@ const CourseForm = ({
       />
       <Button
         className="max-w-max self-end"
-        disabled={submitDisabled}
+        isDisabled={submitDisabled}
         type="submit"
       >
         {submitLabel}

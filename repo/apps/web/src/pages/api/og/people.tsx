@@ -45,7 +45,7 @@ export default async function handler(req: NextRequest) {
             PROFILE
           </h3>
           <img
-            src={searchParams.get("profilePic")}
+            src={searchParams.get("profilePic") as string}
             style={{
               borderRadius: "500px",
               margin: "40px 40px 20px 50px",

@@ -40,7 +40,7 @@ export const authOptions: AuthOptions = {
       console.info("auth called");
       if (!existingUser) {
         // if no user, create slug and new user with the available data.
-        let newSlug = slugify(token?.name, {
+        let newSlug = slugify(token?.name as string, {
           lower: true,
           strict: true,
           trim: true,
@@ -59,10 +59,10 @@ export const authOptions: AuthOptions = {
         session.user = await dbClient.people.create({
           data: {
             slug: newSlug,
-            googleId: token?.sub,
-            name: token?.name,
-            profilePic: token?.picture,
-            email: token?.email,
+            googleId: token?.sub as string,
+            name: token?.name as string,
+            profilePic: token?.picture as string,
+            email: token?.email as string,
           },
           select: {
             name: true,

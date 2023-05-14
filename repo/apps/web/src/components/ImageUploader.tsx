@@ -1,12 +1,12 @@
 import React from "react";
 import ReactImageUploading, { ImageListType } from "react-images-uploading";
-import { Paper } from "ui";
+import { Paper } from "ui/server";
 import ImageCompressor from "browser-image-compression";
 import Image from "next/image";
 
 type ImageUploaderProps = {
   onClick: () => void;
-  onChange: (result: string | ArrayBuffer) => void;
+  onChange: (result: string | ArrayBuffer | null) => void;
   value: ImageListType | ArrayBuffer | string;
   className?: string;
 };

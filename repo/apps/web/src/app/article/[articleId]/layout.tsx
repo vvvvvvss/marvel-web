@@ -1,5 +1,5 @@
-import { Window, Paper, Button, MarkdownRender } from "ui";
-import { Avatar } from "../../../components/Avatar";
+import { Window, Paper, MarkdownRender } from "ui/server";
+import { Avatar, Button } from "../../../components/clientComponents";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import ArticleEditor from "./ArticleEditor";
 import { getCroppedCloudinaryImage } from "shared-utils";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { Article } from "database";
 import { Metadata } from "next";
 
 const getArticle = cache(async (id: string) => {
@@ -164,7 +163,6 @@ export default async function layout({ children, params }) {
                         <Link key={i} href={`/u/${p?.person?.slug}`}>
                           <td className="flex gap-3 items-center py-3 px-5 text-base">
                             <Avatar
-                              className="w-6"
                               alt={p?.person?.name}
                               src={p?.person?.profilePic}
                             />

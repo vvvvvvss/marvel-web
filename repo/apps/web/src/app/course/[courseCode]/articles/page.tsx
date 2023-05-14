@@ -1,4 +1,4 @@
-import { Tab, TabGroup } from "ui";
+import { Tab, TabGroup } from "ui/server";
 import Link from "next/link";
 import { cache } from "react";
 import dbClient from "../../../../utils/dbConnector";

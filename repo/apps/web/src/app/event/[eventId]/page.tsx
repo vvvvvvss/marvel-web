@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { cache } from "react";
 import dbClient from "../../../utils/dbConnector";
-import { Button, Chip, MarkdownRender, Paper, Window } from "ui";
+import { Chip, MarkdownRender, Paper, Window } from "ui/server";
+import { Button } from "../../../components/clientComponents";
 import EventTimingText from "../../../components/EventTimingText";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,16 +30,19 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const event = await getEvent(params?.eventId);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/event`);
-  og_url.searchParams.append("title", event?.title);
-  og_url.searchParams.append("caption", event?.caption);
-  og_url.searchParams.append("typeOfEvent", event?.typeOfEvent);
+  og_url.searchParams.append("title", event?.title as string);
+  og_url.searchParams.append("caption", event?.caption as string);
+  og_url.searchParams.append("typeOfEvent", event?.typeOfEvent as string);
   og_url.searchParams.append(
     "startTime",
-    event?.eventStartTime?.toLocaleDateString("en-IN", DATE_OPTIONS)
+    event?.eventStartTime?.toLocaleDateString("en-IN", DATE_OPTIONS) as string
   );
   og_url.searchParams.append(
     "coverPhoto",
-    getCroppedCloudinaryImage(event?.coverPhoto, event?.typeOfEvent)
+    getCroppedCloudinaryImage(
+      event?.coverPhoto as string,
+      event?.typeOfEvent as any
+    )
   );
 
   return {
@@ -83,14 +87,14 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({
   const params = new URLSearchParams();
 
   params.append("action", "TEMPLATE");
-  params.append("text", calendarTitle); // replace with your event name
+  params.append("text", calendarTitle);
   params.append(
     "dates",
     `${startTime?.toISOString().replace(/-|:|\.\d+/g, "")}/${endTime
       ?.toISOString()
       .replace(/-|:|\.\d+/g, "")}`
-  ); // replace with your event start and end dates
-  params.append("details", calendarDescription); // replace with your event details
+  );
+  params.append("details", calendarDescription);
 
   const link = `${baseUrl}?${params.toString()}`;
   return (
@@ -110,8 +114,8 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({
 export default async function page({ params }) {
   const event = await getEvent(params?.eventId);
   const imageSrc = getCroppedCloudinaryImage(
-    event?.coverPhoto,
-    event?.typeOfEvent
+    event?.coverPhoto as string,
+    event?.typeOfEvent as any
   );
 
   return (
@@ -134,7 +138,7 @@ export default async function page({ params }) {
               {event?.eventStartTime.toLocaleDateString("en-IN", DATE_OPTIONS)}
             </div>
             <Image
-              alt={event?.title}
+              alt={event?.title || "Event Cover Photo"}
               src={imageSrc}
               width={800}
               height={800}
@@ -158,7 +162,7 @@ export default async function page({ params }) {
             </div>
             <EventTimingText
               data={JSON.parse(JSON.stringify(event))}
-              className="w-full font-medium border-y-[1.5px] dark:border-y dark:border-p-6 dark:font-normal flex justify-center px-5 py-3"
+              className="w-full font-medium border-y-[1.5px] dark:border-y dark:border-p-6 dark:font-normal flex items-center px-5 py-3"
             >
               <InfoIcon className="w-8 h-8 mr-3" />
             </EventTimingText>
@@ -169,7 +173,7 @@ export default async function page({ params }) {
                 <TimeLineItem
                   title="Registrations"
                   startTime={event?.registrationStartTime}
-                  endTime={event?.registrationEndTime}
+                  endTime={event?.registrationEndTime as Date}
                   calendarTitle={event?.title + " registrations"}
                   calendarDescription={
                     process?.env?.NEXTAUTH_URL + "/event/" + event?.id
@@ -178,9 +182,9 @@ export default async function page({ params }) {
               )}
               <TimeLineItem
                 title="Event"
-                startTime={event?.eventStartTime}
-                endTime={event?.eventEndTime}
-                calendarTitle={event?.title}
+                startTime={event?.eventStartTime as Date}
+                endTime={event?.eventEndTime as Date}
+                calendarTitle={event?.title as string}
                 calendarDescription={
                   process?.env?.NEXTAUTH_URL + "/event/" + event?.id
                 }
@@ -194,7 +198,7 @@ export default async function page({ params }) {
               border
               className="p-5 h-min w-full z-10 bg-[rgba(255,255,255,0.8)] dark:bg-[rgba(0,0,0,0.8)]"
             >
-              <MarkdownRender content={event?.description} />
+              <MarkdownRender content={event?.description as string} />
             </Paper>
             <div className="z-10 w-full flex justify-end gap-5">
               <EventDeleter event={JSON.parse(JSON.stringify(event))} />

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Paper } from "ui";
+import { Paper } from "ui/server";
+import { Button } from "../../../components/clientComponents";
 
 const ContentsIndex = ({ course }) => {
   return (
@@ -10,7 +11,7 @@ const ContentsIndex = ({ course }) => {
         {Array.from({ length: course?.totalLevels })?.map((_, i) => (
           <Button
             key={i}
-            onClick={() => (window.location.hash = "#" + (i + 1))}
+            onPress={() => (window.location.hash = "#" + (i + 1))}
           >
             Level {i + 1}
           </Button>

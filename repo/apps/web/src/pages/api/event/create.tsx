@@ -32,8 +32,11 @@ export default async function create_event(
     const cleanContent = sanitize(formData.description, SANITIZE_OPTIONS);
 
     if (
+      //@ts-ignore
       formData?.eventStartTime > formData?.eventEndTime ||
+      //@ts-ignore
       formData?.registrationStartTime > formData?.registrationEndTime ||
+      //@ts-ignore
       formData?.eventStartTime > new Date()
     ) {
       return res.status(400).json({
@@ -48,7 +51,7 @@ export default async function create_event(
         caption: formData?.caption,
         coverPhoto: "",
         description: cleanContent,
-        eventStartTime: formData?.eventStartTime,
+        eventStartTime: formData?.eventStartTime as Date,
         eventEndTime: formData?.eventEndTime,
         ...(formData?.requiresRegistration && {
           registrationStartTime: formData?.registrationStartTime,

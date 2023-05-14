@@ -1,16 +1,15 @@
-// styles
 import "./styles.css";
 
-// components
-export * from "./Window";
 export * from "./Appbar";
-export * from "./Button";
-export * from "./Button";
+export * from "./Buttons";
 export * from "./Chip";
+export * from "./Layout";
+export * from "./Logos";
+export * from "./MarkdownRender";
 export * from "./Surfaces";
 export * from "./Tabs";
-export * from "./MardownRender";
 export * from "./Dialog";
+export * from "./Inputs";
 export * from "./Loading";
-export * from "./TextField";
-export * from "./MarvelLogo";
+export * from "./MarkdownEditor";
+export * from "./Avatar";

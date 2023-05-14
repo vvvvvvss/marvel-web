@@ -5,6 +5,7 @@ import "ui/styles.css";
 import "../styles/globals.css";
 import { Metadata } from "next";
 import Script from "next/script";
+import Footer from "../components/Footer";
 
 //fonts
 const sans = IBM_Plex_Sans({
@@ -30,8 +31,8 @@ const mono = IBM_Plex_Mono({
 
 //seo
 export const metadata: Metadata = {
-  title: "marvel.",
-  description: "UVCE's own Makerspace",
+  title: "UVCE MARVEL | Makerspace and R&D Lab.",
+  description: "UVCE's own Makerspace and R&D Lab",
   applicationName: "UVCE Marvel",
   authors: [{ name: "UVCE" }, { name: "UVCE MARVEL" }],
   category: "Education and Research",
@@ -80,6 +81,10 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
       style={{ scrollbarGutter: "stable" }}
     >
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="utf-8" />
+        <meta name="theme-color" content="#000000" />
+
         {/* microsoft clarity tracking */}
         <Script id="clarity-ms" strategy="afterInteractive">
           {`
@@ -90,11 +95,13 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
             })(window, document, "clarity", "script", "aew7b13k2i");
           `}
         </Script>
+
         {/* google analytics tracking */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-VV9ZYE0VC2"
         ></Script>
+
         <Script strategy="afterInteractive" id="g-tag">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -109,6 +116,7 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
         <Context>
           {children}
           <Navbar />
+          <Footer />
         </Context>
       </body>
     </html>

@@ -1,5 +1,10 @@
 "use client";
-import { Button, FullScreenDialog, IconButton } from "ui";
+import {
+  FullScreenDialog,
+  Button,
+  IconButton,
+} from "../../components/clientComponents";
+
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { VscClose as CloseIcon } from "react-icons/vsc";
@@ -42,7 +47,7 @@ const CourseCreator = () => {
   if (sessionUser?.scope?.map((s) => s.scope)?.includes("ADMIN")) {
     return (
       <>
-        <Button onClick={() => setModalOpen((p) => !p)} variant="standard">
+        <Button onPress={() => setModalOpen((p) => !p)} variant="standard">
           Create New Course
         </Button>
         {modalOpen && (
@@ -51,15 +56,7 @@ const CourseCreator = () => {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
           >
-            <div className="w-full max-w-2xl pt-24 gap-5 pb-48">
-              <IconButton
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+            <div className="w-full pb-48">
               <CourseForm
                 formData={formData}
                 setFormData={setFormData}

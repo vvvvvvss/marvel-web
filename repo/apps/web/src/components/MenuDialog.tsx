@@ -1,15 +1,8 @@
 "use client";
-import {
-  Button,
-  FullScreenDialog,
-  IconButton,
-  LoadingPulser,
-  Tab,
-  TabGroup,
-  TextField,
-} from "ui";
+import { Button, IconButton, Tab, TabGroup } from "ui";
+import { FullScreenDialog, TextField, LoadingPulser } from "./clientComponents";
+
 import { signIn, signOut, useSession } from "next-auth/react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import { useState } from "react";
 import { Course, ScopeEnum } from "database";
 import { BsSearch, BsXLg } from "react-icons/bs";
@@ -45,58 +38,51 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
   const [queryTemp, setQueryTemp] = useState<string>("");
   const [selectedTab, setSelectedTab] = useState<Tab>("people");
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery(
-    [selectedTab, query],
-    async ({ pageParam }) =>
-      (
-        await axios.get(
-          `/api/${selectedTab}/search?q=${query}&skip=${pageParam}`
-        )
-      ).data?.data,
-    {
-      enabled: !!query || false,
-      getNextPageParam: (lastPage, pages) =>
-        lastPage?.length == 12 ? pages?.length * 12 : null,
-    }
-  );
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery(
+      [selectedTab, query],
+      async ({ pageParam }) =>
+        (
+          await axios.get(
+            `/api/${selectedTab}/search?q=${query}&skip=${pageParam}`
+          )
+        ).data?.data,
+      {
+        enabled: !!query || false,
+        getNextPageParam: (lastPage, pages) =>
+          lastPage?.length == 12 ? pages?.length * 12 : null,
+      }
+    );
   return (
     <FullScreenDialog
       open={menuOpen}
-      className="z-max"
+      className="z-max overflow-y-auto"
       onClose={() => setMenuOpen(false)}
     >
-      <div className="w-full max-w-2xl py-24">
-        <IconButton className="mb-5" onClick={() => setMenuOpen((p) => !p)}>
-          <CloseIcon className="h-10 w-20" />
-        </IconButton>
+      <div className="w-full flex flex-col items-start min-w-full pb-24">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             setQuery(queryTemp);
           }}
-          className="flex gap-2 w-full"
+          className="flex items-center gap-2 w-full"
         >
           <TextField
             id="query"
-            className="flex-1"
+            className="flex-1 w-full"
+            fullWidth
             placeholder="Search Marvel"
             autoComplete="Off"
             autoFocus
             value={queryTemp}
-            onChange={(e) => setQueryTemp(e.target.value)}
+            onChange={(e) => setQueryTemp(e)}
           />
           <IconButton
             type="reset"
-            disabled={queryTemp === ""}
+            isDisabled={queryTemp === ""}
             variant="outlined"
-            onClick={() => {
+            className="aspect-square h-full"
+            onPress={() => {
               setQueryTemp("");
               setQuery("");
             }}
@@ -105,7 +91,8 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
           </IconButton>
           <IconButton
             type="submit"
-            disabled={queryTemp === ""}
+            className="aspect-square h-full"
+            isDisabled={queryTemp === ""}
             variant="outlined"
           >
             <BsSearch className="w-6" />
@@ -113,7 +100,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
         </form>
         {query !== "" || queryTemp !== "" ? (
           <>
-            <div className="w-full flex">
+            <div className="w-full flex max-w-2xl">
               <TabGroup className={`overflow-auto max-w-full mt-5`}>
                 {Object.keys(tabs)?.map((t: Tab, i) => (
                   <Tab
@@ -137,7 +124,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
               </>
             ) : isLoading ? (
               <div className="w-full flex justify-center">
-                <LoadingPulser />
+                <LoadingPulser label="Breathe in. Breathe out." />
               </div>
             ) : (
               <div className="w-full flex flex-wrap gap-5 pb-48">
@@ -182,7 +169,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
                   {isFetchingNextPage ? (
                     <p className="text-p-6 text-sm">Loading...</p>
                   ) : hasNextPage ? (
-                    <Button onClick={() => fetchNextPage()}>Load more</Button>
+                    <Button onPress={() => fetchNextPage()}>Load more</Button>
                   ) : (
                     <p className="text-p-6 text-sm">That&apos;s it. </p>
                   )}
@@ -214,13 +201,13 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
               <Button className="w-full">Events</Button>
             </Link>
             {!!sessionUser?.id ? (
-              <Button onClick={() => signOut()}>
+              <Button onPress={() => signOut()}>
                 <span className="whitespace-nowrap flex gap-3 items-center">
                   <GoSignOut /> Sign Out
                 </span>
               </Button>
             ) : (
-              <Button onClick={() => signIn("google", { redirect: false })}>
+              <Button onPress={() => signIn("google", { redirect: false })}>
                 <span className="whitespace-nowrap flex gap-3 items-center">
                   <GoSignIn /> Sign In
                 </span>
@@ -228,7 +215,7 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
             )}
             <Button
               className="whitespace-nowrap flex gap-3 items-center"
-              onClick={() =>
+              onPress={() =>
                 theme.theme === "light"
                   ? theme.setTheme("dark")
                   : theme.setTheme("light")

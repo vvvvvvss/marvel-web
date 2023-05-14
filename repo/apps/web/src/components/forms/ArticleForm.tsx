@@ -38,7 +38,7 @@ const ArticleForm = ({
       }}
     >
       <TextField
-        fullwidth
+        fullWidth
         id="title"
         placeholder="Title of the Article"
         type={"text"}
@@ -46,16 +46,16 @@ const ArticleForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            title: e.target.value,
+            title: e,
           }))
         }
         maxLength={50}
-        required
+        isRequired
         minLength={3}
       />
       <TextField
         className="mt-5"
-        fullwidth
+        fullWidth
         id="caption"
         placeholder="A short caption for your article..."
         type={"text"}
@@ -63,11 +63,11 @@ const ArticleForm = ({
         onChange={(e) =>
           setFormData((p) => ({
             ...p,
-            caption: e.target.value,
+            caption: e,
           }))
         }
         maxLength={200}
-        required
+        isRequired
         minLength={3}
       />
       <MarkdownEditor
@@ -81,7 +81,7 @@ const ArticleForm = ({
       />
       <hr className="w-full my-5" />
       <ImageUploader
-        value={formData?.coverPhoto}
+        value={formData?.coverPhoto as string}
         onClick={() => {
           setFormData({ ...formData, coverPhoto: "" });
         }}
@@ -145,8 +145,8 @@ const ArticleForm = ({
 
       <div className="w-full flex gap-5 justify-end pb-48 mt-5">
         <Button
-          onClick={() => onSubmit && onSubmit()}
-          disabled={submitDisabled || isCourseListLoading}
+          onPress={() => onSubmit && onSubmit()}
+          isDisabled={submitDisabled || isCourseListLoading}
         >
           {submitLabel}
         </Button>

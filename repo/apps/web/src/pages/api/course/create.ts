@@ -55,7 +55,7 @@ export default async function create_course(
 
     const createdCourse = await dbClient?.course?.create({
       data: {
-        courseCode: formData?.courseCode,
+        courseCode: formData?.courseCode as string,
         caption: formData?.caption,
         courseDuration: formData?.courseDuration,
         repoURL: formData?.repoURL,

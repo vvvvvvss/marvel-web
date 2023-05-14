@@ -1,11 +1,11 @@
 "use client";
-import { Button, FullScreenDialog, LoadingPulser, TextField } from "ui";
+import { Button, LoadingPulser, TextField } from "ui";
+import { FullScreenDialog } from "ui";
+
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { IconButton } from "ui";
-import { VscClose as CloseIcon } from "react-icons/vsc";
+import { useMutation } from "react-query";
 import { MarkdownEditor } from "../../../components/MarkdownEditor";
 import { useRouter } from "next/navigation";
 
@@ -46,16 +46,15 @@ const ReportWriter = ({ work }) => {
   ) {
     return (
       <>
-        <Button variant="standard" onClick={() => setModalOpen(true)}>
+        <Button variant="standard" onPress={() => setModalOpen(true)}>
           Write Report!
         </Button>
         {modalOpen && (
-          <FullScreenDialog open={modalOpen}>
-            <div className="w-full max-w-2xl py-24 gap-5">
-              <IconButton onClick={() => setModalOpen((p) => !p)}>
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
+          <FullScreenDialog
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <div className="w-full pb-24">
               <form onSubmit={(e) => e.preventDefault()} className="pt-10">
                 {!(
                   work?.typeOfWork === "PROJECT" && work?._count?.Reports === 0
@@ -63,13 +62,11 @@ const ReportWriter = ({ work }) => {
                   <TextField
                     id="title"
                     maxLength={190}
-                    required
-                    fullwidth
+                    isRequired
+                    fullWidth
                     placeholder="Title of the Report..."
                     value={formData?.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, title: e })}
                   />
                 )}
                 <MarkdownEditor
@@ -84,11 +81,11 @@ const ReportWriter = ({ work }) => {
                 <div className="w-full pb-48">
                   <Button
                     type="submit"
-                    disabled={isCreating}
+                    isDisabled={isCreating}
                     className={`float-right m-5 ${
                       isCreating ? "animate-pulse" : "animate-none"
                     }`}
-                    onClick={() => createReport()}
+                    onPress={() => createReport()}
                   >
                     <span className="flex gap-3 items-center">
                       {isCreating && <LoadingPulser className="h-5" />}

@@ -1,5 +1,6 @@
 "use client";
-import { Button, LoadingPulser, Tab, TabGroup } from "ui";
+import { Tab, TabGroup } from "ui/server";
+import { LoadingPulser, Button } from "../../components/clientComponents";
 import { ScopeEnum } from "@prisma/client";
 import { ArticleCard, PersonCard, ReportCard } from "../../components/Cards";
 import axios from "axios";
@@ -106,7 +107,7 @@ const Dashboard = () => {
             {isFetchingNextPage ? (
               <p className="text-p-6 text-sm">Loading...</p>
             ) : hasNextPage ? (
-              <Button onClick={() => fetchNextPage()}>Load more</Button>
+              <Button onPress={() => fetchNextPage()}>Load more</Button>
             ) : (
               <p className="text-p-6 text-sm">That&apos;s it. </p>
             )}

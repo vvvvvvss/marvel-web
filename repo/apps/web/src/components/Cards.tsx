@@ -1,4 +1,4 @@
-import { Paper, Chip } from "ui";
+import { Paper, Chip } from "ui/server";
 import Link from "next/link";
 import { Avatar } from "./Avatar";
 import { Event } from "database";
@@ -107,7 +107,10 @@ export const ReportCard = ({ data: d }) => {
 };
 
 export const EventCard = ({ data: d }: { data: Event }) => {
-  const imageSrc = getCroppedCloudinaryImage(d?.coverPhoto, d?.typeOfEvent);
+  const imageSrc = getCroppedCloudinaryImage(
+    d?.coverPhoto as string,
+    d?.typeOfEvent
+  );
   return (
     <Link href={`/event/${d?.id}`} prefetch={false} className="w-full">
       <Paper

@@ -5,8 +5,8 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
-import { Button, FullScreenDialog, IconButton } from "ui";
-import { VscClose as CloseIcon } from "react-icons/vsc";
+import { Button, IconButton } from "../../../components/clientComponents";
+import { FullScreenDialog } from "../../../components/clientComponents";
 import { useRouter } from "next/navigation";
 import { ArticleFormData } from "../../../types";
 import ArticleForm from "../../../components/forms/ArticleForm";
@@ -66,14 +66,14 @@ const ArticleEditor = ({ article }) => {
   ) {
     return (
       <>
-        <Button variant="standard" onClick={() => setModalOpen(true)}>
+        <Button variant="standard" onPress={() => setModalOpen(true)}>
           Edit Article
         </Button>
         <Button
           variant="outlined"
           className="border border-[red]"
-          disabled={isDeleting}
-          onClick={() =>
+          isDisabled={isDeleting}
+          onPress={() =>
             confirmDelete === 2 ? sendDelete() : setConfirmDelete((p) => p + 1)
           }
         >
@@ -84,31 +84,24 @@ const ArticleEditor = ({ article }) => {
             : "Confirm."}
         </Button>
         {modalOpen && (
-          <FullScreenDialog open={modalOpen}>
-            <div className="w-full max-w-2xl py-24">
-              <IconButton
-                onClick={() => {
-                  setModalOpen((p) => !p);
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
-
-              <div className="py-5">
-                <ArticleForm
-                  formData={formData}
-                  setFormData={setFormData}
-                  typeOfArticle={article?.typeOfArticle}
-                  onSubmit={updateArticle}
-                  submitDisabled={
-                    isUpdating ||
-                    isDeleting ||
-                    (article?.typeOfArticle === "RESOURCE" &&
-                      !formData?.courseIds?.length)
-                  }
-                  submitLabel="Update Article"
-                />
-              </div>
+          <FullScreenDialog
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <div className="w-full p-5">
+              <ArticleForm
+                formData={formData}
+                setFormData={setFormData}
+                typeOfArticle={article?.typeOfArticle}
+                onSubmit={updateArticle}
+                submitDisabled={
+                  isUpdating ||
+                  isDeleting ||
+                  (article?.typeOfArticle === "RESOURCE" &&
+                    !formData?.courseIds?.length)
+                }
+                submitLabel="Update Article"
+              />
             </div>
           </FullScreenDialog>
         )}

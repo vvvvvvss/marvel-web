@@ -1,4 +1,6 @@
-import { Button, Paper, TextField } from "ui";
+"use client";
+import { Button, Paper } from "ui";
+import { TextField } from "../../../../components/clientComponents";
 import { Avatar } from "../../../../components/Avatar";
 import axios, { AxiosError } from "axios";
 import { memo, useState } from "react";
@@ -89,7 +91,7 @@ const ManagePeople = ({ work }) => {
                   </td>
                   <td>
                     <Button
-                      onClick={() =>
+                      onPress={() =>
                         mutate({
                           action: "remove-person",
                           personId: p?.personId,
@@ -97,7 +99,7 @@ const ManagePeople = ({ work }) => {
                           status: p?.status,
                         })
                       }
-                      disabled={
+                      isDisabled={
                         (p?.role === "AUTHOR" &&
                           work?.People?.filter(
                             (p) => p?.role == "AUTHOR" && p?.status == "ACTIVE"
@@ -121,14 +123,15 @@ const ManagePeople = ({ work }) => {
 
       <div className="flex w-full gap-5">
         <TextField
+          fullWidth
           className="flex-1"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e)}
           placeholder="Search to add Authors or Coordinators..."
         />
         <Button
-          onClick={() => fetchPeople()}
-          disabled={search === "" || isPeopleLoading}
+          onPress={() => fetchPeople()}
+          isDisabled={search === "" || isPeopleLoading}
         >
           Search
         </Button>
@@ -153,7 +156,7 @@ const ManagePeople = ({ work }) => {
                         p?.scope?.map((s) => s?.scope)?.includes(s)
                       ) && (
                         <Button
-                          onClick={() =>
+                          onPress={() =>
                             mutate({
                               action: "add-person",
                               personId: p?.id,
@@ -168,7 +171,7 @@ const ManagePeople = ({ work }) => {
                   </td>
                   <td className="px-5 py-3 text-xs">
                     <Button
-                      onClick={() =>
+                      onPress={() =>
                         mutate({
                           action: "add-person",
                           personId: p?.id,

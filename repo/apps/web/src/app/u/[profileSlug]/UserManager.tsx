@@ -1,9 +1,10 @@
 "use client";
 
-import { Button, FullScreenDialog, IconButton, Paper } from "ui";
+import { Paper } from "ui/server";
+import { FullScreenDialog, Button } from "../../../components/clientComponents";
+
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { VscClose as CloseIcon } from "react-icons/vsc";
 import {
   AiOutlineMinusCircle as MinusIcon,
   AiOutlinePlusCircle as PlusIcon,
@@ -41,20 +42,15 @@ const Manager = ({ dude }: { dude: any }) => {
     return (
       <>
         <div className="w-full">
-          <Button onClick={() => setDialogOpen((p) => !p)}>Manage User</Button>
+          <Button onPress={() => setDialogOpen((p) => !p)}>Manage User</Button>
         </div>
         {dialogOpen && (
-          <FullScreenDialog open={dialogOpen} className="z-10">
-            <div className="w-full max-w-2xl py-24">
-              <IconButton
-                className="mb-5"
-                onClick={() => {
-                  setDialogOpen((p) => !p);
-                  return;
-                }}
-              >
-                <CloseIcon className="h-10 w-20" />
-              </IconButton>
+          <FullScreenDialog
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            className="z-10"
+          >
+            <div className="w-full pb-24">
               <div
                 className={isLoading ? "opacity-60 pointer-events-none" : ""}
               >
@@ -71,7 +67,7 @@ const Manager = ({ dude }: { dude: any }) => {
                       {dude?.scope?.map((s: Scope, i) => (
                         <Button
                           key={i}
-                          onClick={() =>
+                          onPress={() =>
                             sendMutation({ action: "remove", scope: s?.scope })
                           }
                           variant="outlined"
@@ -95,7 +91,7 @@ const Manager = ({ dude }: { dude: any }) => {
                           !dude?.scope?.map((s) => s.scope)?.includes(s) && (
                             <Button
                               key={i}
-                              onClick={() =>
+                              onPress={() =>
                                 sendMutation({ action: "add", scope: s })
                               }
                               variant="outlined"
@@ -115,6 +111,8 @@ const Manager = ({ dude }: { dude: any }) => {
         )}
       </>
     );
+  } else {
+    return <></>;
   }
 };
 
