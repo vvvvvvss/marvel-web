@@ -42,7 +42,7 @@ const Navbar = () => {
   return (
     <>
       {menuOpen && <MenuDialog menuOpen={menuOpen} setMenuOpen={setMenuOpen} />}
-      <Appbar className={"bottom-0 z-max border-y-0"}>
+      <Appbar className={"bottom-0 z-max border-y-0 fixed inset-x-0"}>
         <div
           className={`w-full max-w-screen-lg flex justify-between items-center relative `}
         >
