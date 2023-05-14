@@ -45,7 +45,7 @@
     "shared-utils": "undefined",
     "slugify": "^1.6.6",
     "tslib": "^2.5.0",
-    "@uvcemarvel/react-ui": "workspace:*"
+    "@uvcemarvel/react-ui": "0.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.6",
