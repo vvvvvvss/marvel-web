@@ -1,5 +1,5 @@
 {
-    "name": "ui/client",
+    "name": "@uvcemarvel/react-ui",
     "type": "module",
     "main": "../dist/client.js",
     "module": "../dist/client.mjs",

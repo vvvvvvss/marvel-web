@@ -4,13 +4,13 @@
     "types": "./index.ts",
     "devDependencies": {
         "eslint": "^8.40.0",
-        "eslint-config-custom": "workspace:*",
-        "tsconfig": "workspace:*",
+        "eslint-config-custom": "0.0.0",
+        "tsconfig": "0.0.0",
         "typescript": "^5.0.4"
     },
     "dependencies": {
         "@types/sanitize-html": "^2.9.0",
-        "database": "workspace:*",
+        "database": "undefined",
         "sanitize-html": "^2.10.0"
     }
 }

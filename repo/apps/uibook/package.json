@@ -1,7 +1,7 @@
 {
   "name": "uibook",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "sb dev -p 6006",
@@ -17,9 +17,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
-    "tailwind-config": "workspace:*",
+    "tailwind-config": "0.0.0",
     "tailwindcss": "^3.3.2",
-    "ui": "workspace:*"
+    "ui": "0.0.1"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.9",

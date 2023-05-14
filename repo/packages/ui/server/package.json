@@ -1,5 +1,5 @@
 {
-    "name": "ui/server",
+    "name": "@uvcemarvel/react-ui",
     "type": "module",
     "main": "../dist/server.js",
     "module": "../dist/server.mjs",
