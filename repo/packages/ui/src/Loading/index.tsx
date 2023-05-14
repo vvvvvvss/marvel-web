@@ -18,22 +18,25 @@ export const LoadingPulser = ({ ...props }: LoadingPulserProps) => {
       {...progressBarProps}
       className={clsx(
         props?.className,
-        "flex w-fit h-fit flex-col gap-2 items-center"
+        "um-flex um-w-fit um-h-fit um-flex-col um-gap-2 um-items-center"
       )}
     >
-      <div className="flex gap-1 items-center justify-center">
-        <div className="transition rounded-full aspect-square w-2 animate-pulse ease-in-out bg-p-4 dark:bg-p-6" />
+      <div className="um-flex um-gap-1 um-items-center um-justify-center">
+        <div className="um-transition um-rounded-full um-aspect-square um-w-2 um-animate-pulse um-ease-in-out um-bg-p-4 dark:um-bg-p-6" />
         <div
-          className="transition rounded-full aspect-square w-2 animate-pulse ease-in-out bg-p-4 dark:bg-p-6"
+          className="um-transition um-rounded-full um-aspect-square um-w-2 um-animate-pulse um-ease-in-out um-bg-p-4 dark:um-bg-p-6"
           style={{ animationDelay: "150ms" }}
         />
         <div
-          className="transition rounded-full aspect-square w-2 animate-pulse ease-in-out bg-p-4 dark:bg-p-6"
+          className="um-transition um-rounded-full um-aspect-square um-w-2 um-animate-pulse um-ease-in-out um-bg-p-4 dark:um-bg-p-6"
           style={{ animationDelay: "300ms" }}
         />
       </div>
       {showLabel && (
-        <label className="text-xs text-p-3 dark:text-p-6" {...labelProps}>
+        <label
+          className="um-text-xs um-text-p-3 dark:um-text-p-6"
+          {...labelProps}
+        >
           {props?.label}
         </label>
       )}

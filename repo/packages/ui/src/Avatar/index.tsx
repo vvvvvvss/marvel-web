@@ -36,26 +36,26 @@ export const Avatar = ({
   return (
     <div
       className={clsx(
-        "select-none",
-        "flex items-center justify-center aspect-square",
-        "bg-p-8 dark:bg-p-3 rounded-full",
-        "border-[1.5px] dark:border border-p-0 dark:border-p-7",
+        "um-select-none",
+        "um-flex um-items-center um-justify-center um-aspect-square",
+        "um-bg-p-8 dark:um-bg-p-3 um-rounded-full",
+        "um-border-[1.5px] dark:um-border um-border-p-0 dark:um-border-p-7",
         {
-          "w-8 h-8": size == "small",
-          "w-10 h-10": size == "medium",
-          "w-12 h-12": size == "large",
+          "um-w-8 um-h-8": size == "small",
+          "um-w-10 um-h-10": size == "medium",
+          "um-w-12 um-h-12": size == "large",
         },
         className
       )}
     >
       {status === "error" ? (
-        <span className="text-p-4 dark:text-p-7 p-2">
+        <span className="um-text-p-4 dark:um-text-p-7 um-p-2">
           {fallbackChar?.[0] || alt?.[0]}
         </span>
       ) : (
         <img
           src={src}
-          className="w-full h-full object-cover object-center rounded-full"
+          className="um-w-full um-h-full um-object-cover um-object-center um-rounded-full"
           alt={alt}
           onLoad={handleLoad}
           onError={handleError}

@@ -16,35 +16,51 @@ export const MarkdownRender = memo(
         rehypePlugins={[rehypeRaw]}
         remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
         components={{
-          h1: ({ children }) => <h1 className="text-5xl my-5">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-4xl my-5">{children}</h2>,
-          h3: ({ children }) => <h3 className="text-3xl my-5">{children}</h3>,
-          h4: ({ children }) => <h4 className="text-2xl my-5">{children}</h4>,
-          h5: ({ children }) => <h5 className="text-xl my-5">{children}</h5>,
-          h6: ({ children }) => <h6 className="text-xl my-5">{children}</h6>,
+          h1: ({ children }) => (
+            <h1 className="um-text-5xl um-my-5">{children}</h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className="um-text-4xl um-my-5">{children}</h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="um-text-3xl um-my-5">{children}</h3>
+          ),
+          h4: ({ children }) => (
+            <h4 className="um-text-2xl um-my-5">{children}</h4>
+          ),
+          h5: ({ children }) => (
+            <h5 className="um-text-xl um-my-5">{children}</h5>
+          ),
+          h6: ({ children }) => (
+            <h6 className="um-text-xl um-my-5">{children}</h6>
+          ),
           blockquote: ({ children }) => (
-            <blockquote className="p-5 my-5 bg-p-9 dark:bg-p-2 border-l-2 shadow-2xl shadow-p-2">
+            <blockquote className="um-p-5 um-my-5 um-bg-p-9 dark:um-bg-p-2 um-border-l-2 um-shadow-2xl um-shadow-p-2">
               {children}
             </blockquote>
           ),
           ol: ({ children }) => (
-            <ol className="space-y-1 list-decimal list-inside">{children}</ol>
+            <ol className="um-space-y-1 um-list-decimal um-list-inside">
+              {children}
+            </ol>
           ),
           ul: ({ children }) => (
-            <ul className="space-y-1 list-disc list-inside">{children}</ul>
+            <ul className="um-space-y-1 um-list-disc um-list-inside">
+              {children}
+            </ul>
           ),
           code: ({ children, inline }) => (
             <code
               className={clsx(
-                inline && " bg-p-9 rounded px-1 dark:bg-p-2",
-                "font-mono"
+                inline && "um-bg-p-9 um-rounded-none um-px-1 dark:um-bg-p-2",
+                "um-font-mono"
               )}
             >
               {children}
             </code>
           ),
           pre: ({ children }) => (
-            <pre className="border-[1.5px] dark:border border-p-0 dark:border-p-6 rounded-lg my-5 p-5 whitespace-pre-wrap break-words">
+            <pre className="um-border-[1.5px] dark:um-border um-border-p-0 dark:um-border-p-6 um-rounded-lg um-my-5 um-p-5 um-whitespace-pre-wrap um-break-words">
               {children}
             </pre>
           ),
@@ -52,18 +68,18 @@ export const MarkdownRender = memo(
             <a
               target="_blank"
               rel="noopener noreferrer"
-              className="text-base text-s-4 dark:text-s-6 hover:underline break-words"
+              className="um-text-base um-text-s-4 dark:um-text-s-6 hover:um-underline um-break-words"
               {...props}
             >
               {children}
             </a>
           ),
           img: ({ ...props }) => (
-            <img className="my-5 rounded-lg w-full" {...props} />
+            <img className="um-my-5 um-rounded-lg um-w-full" {...props} />
           ),
           iframe: ({ ...props }) => (
             <iframe
-              className="w-full max-h-[500px] rounded-lg bg-p-0"
+              className="um-w-full um-max-h-[500px] um-rounded-lg um-bg-p-0"
               {...props}
             />
           ),

@@ -23,49 +23,56 @@ export const Chip = ({
       className={clsx(
         props?.className,
         //base classes
-        "overflow-hidden min-w-max whitespace-nowrap select-none max-w-fit transition ease-out cursor-default",
-        "flex flex-nowrap items-center gap-2",
-        "rounded-md px-[0.7em] py-[0.2em]",
-        { "active:scale-95": clickable },
-        { "cursor-pointer": clickable },
-        { "hover:translate-y-[-1.5px]": clickable },
-        "disabled:opacity-50",
-        "disabled:cursor-not-allowed",
-        "disabled:active:transform-none",
-        "disabled:hover:transform-none",
-        "font-medium dark:font-normal",
-        "text-p-0 dark:text-p-10",
+        "um-overflow-hidden um-min-w-max um-whitespace-nowrap um-select-none um-max-w-fit um-transition um-ease-out um-cursor-default",
+        "um-flex um-flex-nowrap um-items-center um-gap-2",
+        "um-rounded-md um-px-[0.7em] um-py-[0.2em]",
+        { "active:um-scale-95": clickable },
+        { "um-cursor-pointer": clickable },
+        { "hover:um-translate-y-[-1.5px]": clickable },
+        "disabled:um-opacity-50",
+        "disabled:um-cursor-not-allowed",
+        "disabled:active:um-transform-none",
+        "disabled:hover:um-transform-none",
+        "um-font-medium dark:um-font-normal",
+        "um-text-p-0 dark:um-text-p-10",
         //size
         {
-          "text-xs": size == "small",
-          "text-sm": size == "medium",
-          "text-base": size == "large",
+          "um-text-xs": size == "small",
+          "um-text-sm": size == "medium",
+          "um-text-base": size == "large",
         },
         //variants
         {
           //standard
-          "bg-p-9 dark:bg-p-2": variant == "standard",
-          "border-[1.5px] border-p-8  dark:border-p-2 dark:hover:border-p-3":
+          "um-bg-p-9 dark:um-bg-p-2": variant == "standard",
+          "um-border-[1.5px] um-border-p-8 dark:um-border-p-2 dark:hover:um-border-p-3":
             variant == "standard",
-          "hover:border-p-0 dark:hover:border-p-3":
+          "hover:um-border-p-0 dark:hover:um-border-p-3":
             variant == "standard" && clickable,
           //outlined
-          "bg-p-10 dark:bg-p-1 ": variant == "outlined",
-          "hover:bg-p-9 dark:hover:bg-p-2": variant == "outlined" && clickable,
-          "border-[1.5px] dark:border-[1px] border-p-0 dark:border-p-6":
+          "um-bg-p-10 dark:um-bg-p-1 ": variant == "outlined",
+          "hover:um-bg-p-9 dark:hover:um-bg-p-2":
+            variant == "outlined" && clickable,
+          "um-border-[1.5px] dark:um-border-[1px] um-border-p-0 dark:um-border-p-6":
             variant == "outlined",
         }
       )}
     >
       {Left ? (
         <Left
-          className={clsx("h-full aspect-square", "text-p-0 dark:text-p-10")}
+          className={clsx(
+            "um-h-full um-aspect-square",
+            "um-text-p-0 dark:um-text-p-10"
+          )}
         />
       ) : null}
       {props?.children}
       {Right ? (
         <Right
-          className={clsx("h-full aspect-square", "text-p-0 dark:text-p-10")}
+          className={clsx(
+            "um-h-full um-aspect-square",
+            "um-text-p-0 dark:um-text-p-10"
+          )}
         />
       ) : null}
     </button>

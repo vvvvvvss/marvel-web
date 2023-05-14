@@ -14,16 +14,16 @@ export const TabGroup = ({
     <div
       className={clsx(
         className,
-        "flex",
-        "transition ease-out",
-        "overflow-auto",
-        orientation == "vertical" && "flex-col",
-        "border-[1.5px] dark:border",
-        orientation === "vertical" ? "rounded-lg" : "rounded-full",
-        "max-w-min",
-        "p-2",
-        "border-p-0 dark:border-p-6",
-        "w-min"
+        "um-flex",
+        "um-transition um-ease-out",
+        "um-overflow-auto",
+        orientation == "vertical" && "um-flex-col",
+        "um-border-[1.5px] dark:um-border",
+        orientation === "vertical" ? "um-rounded-lg" : "um-rounded-full",
+        "um-max-w-min",
+        "um-p-2",
+        "um-border-p-0 dark:um-border-p-6",
+        "um-w-min"
       )}
       {...props}
     >
@@ -46,30 +46,30 @@ export const Tab = ({
     <button
       className={clsx(
         className,
-        "relative",
-        "overflow-hidden",
-        "rounded-full",
-        "px-[1.2em]",
-        "py-[0.5em]",
-        "min-w-max",
-        "whitespace-nowrap",
-        "cursor-pointer",
-        "select-none",
-        "transition",
-        "active:scale-95",
-        "border-[1.5px] dark:border",
-        "border-transparent",
-        "disabled:opacity-50",
-        "disabled:cursor-not-allowed",
-        "hover:bg-p-9 dark:hover:bg-p-1",
-        "text-p-0 dark:text-p-10",
-        "hover:border-p-0 dark:hover:border-p-6",
-        "dark:active:text-p-8",
-        active && "text-p-0 dark:text-p-10",
-        active && "bg-p-8 dark:bg-p-2",
-        active && "border-p-8 dark:border-p-2",
-        active && "pointer-events-none",
-        active && "cursor-not-allowed"
+        "um-relative",
+        "um-overflow-hidden",
+        "um-rounded-full",
+        "um-px-[1.2em]",
+        "um-py-[0.5em]",
+        "um-min-w-max",
+        "um-whitespace-nowrap",
+        "um-cursor-pointer",
+        "um-select-none",
+        "um-transition",
+        "active:um-scale-95",
+        "um-border-[1.5px] dark:um-border",
+        "um-border-transparent",
+        "disabled:um-opacity-50",
+        "disabled:um-cursor-not-allowed",
+        "hover:um-bg-p-9 dark:hover:um-bg-p-1",
+        "um-text-p-0 dark:um-text-p-10",
+        "hover:um-border-p-0 dark:hover:um-border-p-6",
+        "dark:active:um-text-p-8",
+        active && "um-text-p-0 dark:um-text-p-10",
+        active && "um-bg-p-8 dark:um-bg-p-2",
+        active && "um-border-p-8 dark:um-border-p-2",
+        active && "um-pointer-events-none",
+        active && "um-cursor-not-allowed"
       )}
       {...props}
     >

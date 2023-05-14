@@ -37,14 +37,14 @@ export const FullScreenDialog = ({
       <div
         className={clsx(
           className,
-          "fixed inset-0 z-max dark:backdrop-brightness-50 backdrop-blur-xl flex w-full h-full justify-center overflow-y-auto",
-          "p-5",
-          { hidden: !open }
+          "um-fixed um-inset-0 um-z-max dark:um-backdrop-brightness-50 um-backdrop-blur-xl um-flex um-w-full um-h-full um-justify-center um-overflow-y-auto",
+          "um-p-5",
+          { "um-hidden": !open }
         )}
         {...props}
       >
-        <div className="flex flex-col items-start w-full h-full max-w-2xl py-20">
-          <IconButton variant="outlined" className="mb-8" onPress={onClose}>
+        <div className="um-flex um-flex-col um-items-start um-w-full um-h-full um-max-w-2xl um-py-20">
+          <IconButton variant="outlined" className="um-mb-8" onPress={onClose}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -105,8 +105,8 @@ export const Dialog = ({
     <div
       ref={dialogRef}
       className={clsx(
-        "fixed inset-0 z-max dark:backdrop-brightness-50 backdrop-blur-xl grid place-items-center",
-        { hidden: !open }
+        "um-fixed um-inset-0 um-z-max dark:um-backdrop-brightness-50 um-backdrop-blur-xl um-grid um-place-items-center",
+        { "um-hidden": !open }
       )}
       onClick={(event) => {
         if (event.target === dialogRef.current) {
@@ -118,21 +118,25 @@ export const Dialog = ({
         open={open}
         className={clsx(
           className,
-          "bg-p-10 dark:bg-p-1",
-          "relative appearance-none max-w-sm w-auto rounded-lg",
-          "p-5 m-5",
-          "border-[1.5px] dark:border border-p-0 dark:border-p-6",
-          "shadow-xl"
+          "um-bg-p-10 dark:um-bg-p-1",
+          "um-relative um-appearance-none um-max-w-sm um-w-auto um-rounded-lg",
+          "um-p-5 um-m-5",
+          "um-border-[1.5px] dark:um-border um-border-p-0 dark:um-border-p-6",
+          "um-shadow-xl"
         )}
       >
         {displayCloseButton ? (
           <IconButton
             variant="outlined"
             size="small"
-            className="absolute -top-16 right-0"
+            className="um-absolute -um-top-16 um-right-0"
             onPress={onClose}
           >
-            <svg viewBox="0 0 20 20" fill="currentColor" className="x w-6 h-6">
+            <svg
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="um-w-6 um-h-6"
+            >
               <path
                 fillRule="evenodd"
                 d="M14.348 5.652a.5.5 0 010 .707L10.707 10l3.64 3.64a.5.5 0 11-.707.707L10 10.707l-3.64 3.64a.5.5 0 11-.707-.707L9.293 10 5.652 6.36a.5.5 0 11.707-.707L10 9.293l3.64-3.64a.5.5 0 01.708 0z"

@@ -18,8 +18,8 @@ export const DefaultAppbar: Story = {
   render: () => {
     return (
       <div className="relative py-10 px-5 bg-p-10 dark:bg-p-0 bg-no-repeat bg-cover">
-        <Appbar className="relative w-full">
-          <div className="flex w-full justify-between items-center">
+        <Appbar className={"block"}>
+          <div className="flex w-full text-p-0 dark:text-p-10 justify-between items-center">
             <IconButton variant="text">
               <MdMenu />
             </IconButton>

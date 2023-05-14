@@ -17,6 +17,7 @@
     "@swc/helpers": "~0.5.1",
     "@types/he": "^1.2.0",
     "@types/sanitize-html": "^2.9.0",
+    "@uvcemarvel/react-ui": "0.0.1",
     "@vercel/og": "^0.5.4",
     "axios": "^1.4.0",
     "browser-image-compression": "^2.0.2",
@@ -44,8 +45,7 @@
     "server-only": "^0.0.1",
     "shared-utils": "undefined",
     "slugify": "^1.6.6",
-    "tslib": "^2.5.0",
-    "@uvcemarvel/react-ui": "0.0.1"
+    "tslib": "^2.5.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.6",

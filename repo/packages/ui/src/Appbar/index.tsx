@@ -9,17 +9,14 @@ export const Appbar = ({ children, className, ...props }: AppbarProps) => {
   return (
     <nav
       className={clsx(
-        className,
-        "fixed",
-        "z-max",
-        "inset-x-0",
-        "backdrop-blur-md",
-        "border-y-[1.5px] dark:border-y",
-        "dark:border-p-1 border-p-9",
-        "flex",
-        "justify-center",
-        "py-2",
-        "px-5"
+        "um-backdrop-blur-md",
+        "um-border-y-[1.5px] dark:um-border-y",
+        "um-border-p-9 dark:um-border-p-1",
+        "um-flex",
+        "um-justify-center",
+        "um-py-2",
+        "um-px-5",
+        className
       )}
       {...props}
     >

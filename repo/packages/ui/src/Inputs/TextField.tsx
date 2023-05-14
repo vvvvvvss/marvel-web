@@ -26,16 +26,16 @@ export const TextField = ({
     <div
       className={clsx(
         className,
-        "flex flex-col items-start",
-        fullWidth ? "w-full" : "w-fit"
+        "um-flex um-flex-col um-items-start",
+        fullWidth ? "um-w-full" : "um-w-fit"
       )}
     >
       {props?.label ? (
         <label
           className={clsx(
-            "font-medium max-w-full cursor-pointer text-p-0 dark:text-p-10",
+            "um-font-medium um-max-w-full um-cursor-pointer um-text-p-0 dark:um-text-p-10",
             {
-              "after:content-[*]": props?.isRequired,
+              "after:um-content-[*]": props?.isRequired,
             }
           )}
           {...labelProps}
@@ -45,7 +45,9 @@ export const TextField = ({
       ) : null}
       {props?.description ? (
         <p
-          className={clsx("text-xs text-p-3 dark:text-p-7 max-w-full")}
+          className={clsx(
+            "um-text-xs um-text-p-3 dark:um-text-p-7 um-max-w-full"
+          )}
           {...descriptionProps}
         >
           {props?.description}
@@ -54,30 +56,30 @@ export const TextField = ({
 
       <div
         className={clsx(
-          "w-full relative",
-          "transition ease-out",
-          "hover:-translate-y-[1.5px] active:-translate-y-[1.5px] focus-within:-translate-y-[1.5px]"
+          "um-w-full um-relative",
+          "um-transition um-ease-out",
+          "hover:-um-translate-y-[1.5px] active:-um-translate-y-[1.5px] focus-within:-um-translate-y-[1.5px]"
         )}
       >
         {Icon ? (
           <Icon
             className={clsx(
-              "ml-3 z-10 pointer-events-none absolute h-full aspect-square",
-              "max-h-full max-w-full text-base text-p-2 dark:text-p-6"
+              "um-ml-3 um-z-10 um-pointer-events-none um-absolute um-h-full um-aspect-square",
+              "um-max-h-full um-max-w-full um-text-base um-text-p-2 dark:um-text-p-6"
             )}
           />
         ) : null}
         <input
           className={clsx(
-            "my-1 py-2 px-3",
-            { "pl-9": Icon },
-            "transition ease-out",
-            "w-full rounded-md dark:bg-p-2 bg-p-9 dark:text-p-10 relative",
-            "focus:bg-p-10 focus:dark:bg-p-1",
-            "border-[1.5px] dark:border border-p-4 dark:border-p-5",
-            "focus:outline-none",
-            "placeholder:text-p-4 dark:placeholder:text-p-6",
-            "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+            "um-my-1 um-py-2 um-px-3",
+            { "um-pl-9": Icon },
+            "um-transition um-ease-out",
+            "um-w-full um-rounded-md dark:um-bg-p-2 um-bg-p-9 dark:um-text-p-10 um-relative",
+            "focus:um-bg-p-10 focus:dark:um-bg-p-1",
+            "um-border-[1.5px] dark:um-border um-border-p-4 dark:um-border-p-5",
+            "focus:um-outline-none",
+            "placeholder:um-text-p-4 dark:placeholder:um-text-p-6",
+            "disabled:um-opacity-50 disabled:um-cursor-not-allowed disabled:um-pointer-events-none"
           )}
           {...inputProps}
           ref={ref}
@@ -85,7 +87,10 @@ export const TextField = ({
       </div>
 
       {props?.errorMessage ? (
-        <p className="text-xs text-[red] max-w-full" {...errorMessageProps}>
+        <p
+          className="um-text-xs um-text-[red] um-max-w-full"
+          {...errorMessageProps}
+        >
           {props?.errorMessage}
         </p>
       ) : null}

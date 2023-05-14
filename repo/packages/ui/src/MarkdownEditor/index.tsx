@@ -17,7 +17,7 @@ export const MarkdownEditor = ({
   const [editorMode, setEditorMode] = useState<"write" | "preview">("write");
   return (
     <div className={clsx(className)}>
-      <TabGroup className="mb-5">
+      <TabGroup className="um-mb-5">
         <Tab
           active={editorMode === "write"}
           onClick={() => setEditorMode("write")}
@@ -33,7 +33,7 @@ export const MarkdownEditor = ({
       </TabGroup>
       {editorMode == "write" ? (
         <textarea
-          className="bg-p-9 dark:bg-p-2 p-5 pb-10 rounded-lg w-full min-h-[300px]"
+          className="um-bg-p-9 dark:um-bg-p-2 um-p-5 um-pb-10 um-rounded-lg um-w-full um-min-h-[300px]"
           onChange={onChange}
           value={value}
           {...props}
