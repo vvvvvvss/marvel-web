@@ -20,7 +20,7 @@ export default create({
 
   // UI
   appBg: "#000",
-  appContentBg: "#222",
+  appContentBg: "#111",
   appBorderColor: "#aaa",
   appBorderRadius: 0,
 
