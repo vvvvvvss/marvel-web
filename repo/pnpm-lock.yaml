@@ -38,7 +38,7 @@ importers:
   apps/uibook:
     dependencies:
       '@uvcemarvel/react-ui':
-        specifier: 0.0.1
+        specifier: 0.0.2
         version: link:../../packages/ui
       autoprefixer:
         specifier: ^10.4.14
@@ -162,7 +162,7 @@ importers:
         specifier: ^2.9.0
         version: 2.9.0
       '@uvcemarvel/react-ui':
-        specifier: 0.0.1
+        specifier: 0.0.2
         version: link:../../packages/ui
       '@vercel/og':
         specifier: ^0.5.4
