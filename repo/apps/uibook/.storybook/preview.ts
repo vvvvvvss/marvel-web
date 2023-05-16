@@ -8,7 +8,7 @@ export const decorators = [
   withThemeByDataAttribute({
     themes: {
       light: "light",
-      dark: "dark",
+      dark: "dark um-dark",
     },
     defaultTheme: "dark",
     attributeName: "class",

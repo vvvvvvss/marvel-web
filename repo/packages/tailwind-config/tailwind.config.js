@@ -4,7 +4,6 @@ const primaryHue = 0;
 const secondaryHue = 170;
 
 module.exports = {
-  darkMode: "class",
   future: {
     hoverOnlyWhenSupported: true,
   },

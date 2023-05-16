@@ -1,3 +1,4 @@
+import "../styles/globals.css";
 import "ui/styles.css";
 import Navbar from "../components/Navbar";
 import Context from "./Context";
@@ -5,7 +6,6 @@ import { IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono } from "next/font/google";
 import { Metadata } from "next";
 import Script from "next/script";
 import Footer from "../components/Footer";
-import "../styles/globals.css";
 
 //fonts
 const sans = IBM_Plex_Sans({

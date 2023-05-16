@@ -68,12 +68,11 @@ const MenuDialog = ({ menuOpen, setMenuOpen }) => {
           className="flex items-center gap-2 w-full"
         >
           <TextField
-            id="query"
+            id="search-marvel"
             className="flex-1 w-full"
             fullWidth
             placeholder="Search Marvel"
             autoComplete="Off"
-            autoFocus
             value={queryTemp}
             onChange={(e) => setQueryTemp(e)}
           />

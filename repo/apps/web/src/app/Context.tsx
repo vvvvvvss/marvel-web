@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react'; //session context.
-import { ThemeProvider } from 'next-themes'; //provides theme context. not related to tailwind
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { SessionProvider } from "next-auth/react"; //session context.
+import { ThemeProvider } from "next-themes"; //provides theme context. not related to tailwind
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,10 +26,9 @@ function Context({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider refetchOnWindowFocus={false}>
       <ThemeProvider
-        attribute="class"
-        enableSystem={false}
-        defaultTheme={'dark'}
-        themes={['light', 'dark']}
+        defaultTheme={"dark"}
+        themes={["light", "dark"]}
+        enableSystem
       >
         <QueryClientProvider client={queryClient}>
           {children}

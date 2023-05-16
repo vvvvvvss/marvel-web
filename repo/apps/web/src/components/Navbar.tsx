@@ -30,6 +30,7 @@ const Navbar = () => {
           if (e.ctrlKey && e.key == "m") {
             if (!menuOpen) {
               setMenuOpen(true);
+              document.getElementById("search-marvel")?.focus();
             }
           } else if (e.key == "Escape") {
             setMenuOpen(false);
