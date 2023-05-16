@@ -58,3 +58,13 @@ and you can import client components like so:
 ```tsx
 import { Button } from "../components/marvel-ui.tsx";
 ```
+
+# Dark mode:
+
+The components are styled for both light and dark mode. Toggling between the two modes can be done by setting the data-theme attribute to light or dark in the root HTML tag of your page. The implementation of how you toggle the modes is up to you. If you are using Next.js, we recommend using the next-themes package to manage the persistence and toggling of modes.
+
+```html
+<html lang="en" data-theme="dark">
+  <!-- page contents -->
+</html>
+```

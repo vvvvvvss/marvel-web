@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "dev": "set PORT=4200 && next dev",
@@ -17,7 +17,7 @@
     "@swc/helpers": "~0.5.1",
     "@types/he": "^1.2.0",
     "@types/sanitize-html": "^2.9.0",
-    "@uvcemarvel/react-ui": "0.0.1",
+    "@uvcemarvel/react-ui": "0.0.2",
     "@vercel/og": "^0.5.4",
     "axios": "^1.4.0",
     "browser-image-compression": "^2.0.2",
