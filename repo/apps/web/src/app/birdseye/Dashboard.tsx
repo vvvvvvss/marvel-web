@@ -78,13 +78,13 @@ const Dashboard = () => {
             {selectedTab == "report" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
-                  <ReportCard key={i} data={d} />
+                  <ReportCard className={"min-w-[250px]"} key={i} data={d} />
                 ))}
               </>
             ) : selectedTab == "article" ? (
               <>
                 {data?.pages?.flat()?.map((d, i) => (
-                  <ArticleCard key={i} data={d} />
+                  <ArticleCard key={i} data={d} className={"min-w-[250px]"} />
                 ))}
               </>
             ) : selectedTab == "people" ? (

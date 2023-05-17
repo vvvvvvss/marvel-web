@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { v2 as cloudinary } from "cloudinary";
 import { CourseFormData } from "../../../types";
+import { ScopeEnum } from "database";
 
 export default async function edit_meta(
   req: NextApiRequest & { url: string },
@@ -36,9 +37,9 @@ export default async function edit_meta(
       },
     });
 
-    const condition = session?.user?.scope
-      ?.map((s) => s.scope)
-      .includes("ADMIN");
+    const condition = ["ADMIN", "CRDN"]?.some((s: ScopeEnum) =>
+      session?.user?.scope?.map((s) => s?.scope)?.includes(s)
+    );
 
     if (!condition) {
       return res.status(403).json({ message: "Access denied." });

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getCroppedCloudinaryImage } from "shared-utils";
 import EventTimingText from "./EventTimingText";
 import { DATE_OPTIONS } from "../utils/DATE_OPTIONS";
+import clsx from "clsx";
 
 export const PersonCard = ({ data: d }) => {
   return (
@@ -72,9 +73,14 @@ export const WorkCard = ({ data: d }) => {
   );
 };
 
-export const ArticleCard = ({ data: d }) => {
+export const ArticleCard = ({ data: d, className = null, ...props }: any) => {
   return (
-    <Link href={`/article/${d?.id}`} prefetch={false} className="flex-1">
+    <Link
+      href={`/article/${d?.id}`}
+      prefetch={false}
+      className={clsx("flex-1", className)}
+      {...props}
+    >
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
           {d?.typeOfArticle && <>{d?.typeOfArticle} &#183;</>}
@@ -89,12 +95,13 @@ export const ArticleCard = ({ data: d }) => {
   );
 };
 
-export const ReportCard = ({ data: d }) => {
+export const ReportCard = ({ data: d, className = null, ...props }: any) => {
   return (
     <Link
       href={`/work/${d?.workId}${d?.isOverview ? "" : `/${d?.id}`}`}
       prefetch={false}
-      className="flex-1"
+      className={clsx("flex-1", className)}
+      {...props}
     >
       <Paper border elevateOnHover className="rounded-lg p-5 w-full h-full">
         <p className="w-full text-p-4 dark:text-p-5 text-sm whitespace-nowrap">
