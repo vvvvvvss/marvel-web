@@ -8,10 +8,10 @@ export const decorators = [
   withThemeByDataAttribute({
     themes: {
       light: "light",
-      dark: "dark um-dark",
+      dark: "dark",
     },
     defaultTheme: "dark",
-    attributeName: "class",
+    attributeName: "data-theme",
   }),
 ];
 const preview: Preview = {
