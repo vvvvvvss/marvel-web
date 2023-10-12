@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper } from "ui/server";
+import { Paper } from "@uvcemarvel/react-ui/server";
 import {
   FullScreenDialog,
   Button,

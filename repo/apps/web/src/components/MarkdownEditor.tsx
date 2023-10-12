@@ -1,6 +1,6 @@
 "use client";
 
-import { TabGroup, Tab, MarkdownRender } from "ui/server";
+import { TabGroup, Tab, MarkdownRender } from "@uvcemarvel/react-ui/server";
 import { useState } from "react";
 
 type MarkdownEditorProps = JSX.IntrinsicElements["textarea"];

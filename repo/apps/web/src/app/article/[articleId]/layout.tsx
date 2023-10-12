@@ -1,4 +1,4 @@
-import { Window, Paper, MarkdownRender } from "ui/server";
+import { Window, Paper, MarkdownRender } from "@uvcemarvel/react-ui/server";
 import { Avatar, Button } from "../../../components/clientComponents";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";

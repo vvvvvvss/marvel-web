@@ -1,2 +1,2 @@
 "use client";
-export * from "ui/client";
+export * from "@uvcemarvel/react-ui/client";

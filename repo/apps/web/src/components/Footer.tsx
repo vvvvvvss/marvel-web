@@ -1,5 +1,5 @@
 import React from "react";
-import { MarvelLogo } from "ui/server";
+import { MarvelLogo } from "@uvcemarvel/react-ui/server";
 import { Button } from "../components/clientComponents";
 import Link from "next/link";
 import {

@@ -45,8 +45,7 @@
     "server-only": "^0.0.1",
     "shared-utils": "undefined",
     "slugify": "^1.6.6",
-    "tslib": "^2.5.0",
-    "ui": "workspace:*"
+    "tslib": "^2.5.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.6",

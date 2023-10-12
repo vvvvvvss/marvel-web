@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper } from "ui/server";
+import { Paper } from "@uvcemarvel/react-ui/server";
 import { Button } from "../../../components/clientComponents";
 
 const ContentsIndex = ({ course }) => {

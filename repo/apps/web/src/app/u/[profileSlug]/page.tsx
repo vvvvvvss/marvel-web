@@ -1,4 +1,9 @@
-import { Paper, TabGroup, Tab, MarkdownRender } from "ui/server";
+import {
+  Paper,
+  TabGroup,
+  Tab,
+  MarkdownRender,
+} from "@uvcemarvel/react-ui/server";
 import Link from "next/link";
 import dbClient from "../../../utils/dbConnector";
 import ReadMeEditor from "./ReadMeEditor";

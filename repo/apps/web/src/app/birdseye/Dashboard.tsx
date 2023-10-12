@@ -1,5 +1,5 @@
 "use client";
-import { Tab, TabGroup } from "ui/server";
+import { Tab, TabGroup } from "@uvcemarvel/react-ui/server";
 import { LoadingPulser, Button } from "../../components/clientComponents";
 import { ScopeEnum } from "@prisma/client";
 import { ArticleCard, PersonCard, ReportCard } from "../../components/Cards";

@@ -1,5 +1,5 @@
 import { ReactNode, cache } from "react";
-import { Window, Paper } from "ui/server";
+import { Window, Paper } from "@uvcemarvel/react-ui/server";
 import { Avatar, Button } from "../../../components/clientComponents";
 import dbClient from "../../../utils/dbConnector";
 import Manager from "./UserManager";

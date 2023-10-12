@@ -1,4 +1,4 @@
-import { Window } from "ui/server";
+import { Window } from "@uvcemarvel/react-ui/server";
 import Dashboard from "./Dashboard";
 
 export default function page() {

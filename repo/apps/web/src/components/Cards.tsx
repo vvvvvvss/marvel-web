@@ -1,4 +1,4 @@
-import { Paper, Chip } from "ui/server";
+import { Paper, Chip } from "@uvcemarvel/react-ui/server";
 import Link from "next/link";
 import { Avatar } from "./Avatar";
 import { Event } from "database";

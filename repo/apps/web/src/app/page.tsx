@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Window, MarvelLogoMark } from "ui/server";
+import { Window, MarvelLogoMark } from "@uvcemarvel/react-ui/server";
 import { Button } from "../components/clientComponents";
 import { TrackDescription } from "../types";
 import TracksButton from "../components/TracksButton";

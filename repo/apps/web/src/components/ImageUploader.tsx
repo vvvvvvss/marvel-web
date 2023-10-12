@@ -1,6 +1,6 @@
 import React from "react";
 import ReactImageUploading, { ImageListType } from "react-images-uploading";
-import { Paper } from "ui/server";
+import { Paper } from "@uvcemarvel/react-ui/server";
 import ImageCompressor from "browser-image-compression";
 import Image from "next/image";
 

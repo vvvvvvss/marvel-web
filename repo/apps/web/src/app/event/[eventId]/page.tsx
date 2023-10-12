@@ -1,7 +1,12 @@
 import { Metadata } from "next";
 import { cache } from "react";
 import dbClient from "../../../utils/dbConnector";
-import { Chip, MarkdownRender, Paper, Window } from "ui/server";
+import {
+  Chip,
+  MarkdownRender,
+  Paper,
+  Window,
+} from "@uvcemarvel/react-ui/server";
 import { Button } from "../../../components/clientComponents";
 import EventTimingText from "../../../components/EventTimingText";
 import Link from "next/link";

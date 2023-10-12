@@ -1,4 +1,4 @@
-import { MarkdownRender, Tab, TabGroup } from "ui/server";
+import { MarkdownRender, Tab, TabGroup } from "@uvcemarvel/react-ui/server";
 import dbClient from "../../../utils/dbConnector";
 import axios from "axios";
 import ContentsIndex from "./ContentsIndex";

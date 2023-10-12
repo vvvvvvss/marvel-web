@@ -1,4 +1,4 @@
-import { Paper, Tab, TabGroup } from "ui/server";
+import { Paper, Tab, TabGroup } from "@uvcemarvel/react-ui/server";
 import Link from "next/link";
 import dbClient from "../../../../utils/dbConnector";
 import Writer from "./Writer";

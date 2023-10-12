@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper } from "ui/server";
+import { Paper } from "@uvcemarvel/react-ui/server";
 import { FullScreenDialog, Button } from "../../../components/clientComponents";
 
 import { useSession } from "next-auth/react";

@@ -1,4 +1,4 @@
-import { MarkdownRender, Paper } from "ui/server";
+import { MarkdownRender, Paper } from "@uvcemarvel/react-ui/server";
 import dbClient from "../../../utils/dbConnector";
 import ReportWriter from "./ReportWriter";
 import ReportReviewer from "./ReportReviewer";

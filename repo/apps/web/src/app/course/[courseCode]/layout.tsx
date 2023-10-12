@@ -1,4 +1,4 @@
-import { Window, Paper } from "ui/server";
+import { Window, Paper } from "@uvcemarvel/react-ui/server";
 import dbClient from "../../../utils/dbConnector";
 import Image from "next/image";
 import EditMeta from "./EditMeta/EditMeta";

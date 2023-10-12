@@ -1,5 +1,5 @@
 "use client";
-import { Window } from "ui/server";
+import { Window } from "@uvcemarvel/react-ui/server";
 import { LoadingPulser, Button } from "../../components/clientComponents";
 import EventCreatingForm from "./EventCreator";
 import { EventCard } from "../../components/Cards";
