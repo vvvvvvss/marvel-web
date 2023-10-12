@@ -21,6 +21,11 @@ const tracks: TrackDescription[] = [
         buttonText: "Explore Courses",
         variant: "outlined",
       },
+      {
+        link: "https://bit.ly/marvelstudent",
+        buttonText: "Apply Now",
+        variant: "standard",
+      },
     ],
   },
   {
