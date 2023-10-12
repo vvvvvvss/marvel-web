@@ -1,5 +1,5 @@
 "use client";
-import { Button, IconButton, Tab, TabGroup } from "@uvcemarvel/react-ui/client";
+import { Button, IconButton, Tab, TabGroup } from "@uvcemarvel/react-ui";
 import { FullScreenDialog, TextField, LoadingPulser } from "./clientComponents";
 
 import { signIn, signOut, useSession } from "next-auth/react";

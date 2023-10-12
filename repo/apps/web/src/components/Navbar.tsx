@@ -1,6 +1,6 @@
 "use client";
 
-import { Appbar, Button, IconButton } from "@uvcemarvel/react-ui/client";
+import { Appbar, Button, IconButton } from "@uvcemarvel/react-ui";
 import { LoadingPulser } from "./clientComponents";
 import { Avatar } from "./Avatar";
 import { useSession, signIn } from "next-auth/react";

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { EventFormData } from "../../types";
 import { TypeOfEvent } from "database";

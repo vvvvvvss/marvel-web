@@ -1,5 +1,5 @@
 "use client";
-import { Tab, TabGroup } from "@uvcemarvel/react-ui/client";
+import { Tab, TabGroup } from "@uvcemarvel/react-ui";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Paper } from "@uvcemarvel/react-ui/client";
+import { Button, Paper } from "@uvcemarvel/react-ui";
 import { TextField } from "../../../../components/clientComponents";
 import { Avatar } from "../../../../components/Avatar";
 import axios, { AxiosError } from "axios";

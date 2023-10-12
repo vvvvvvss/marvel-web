@@ -2,7 +2,7 @@
 import React from "react";
 import { ArticleFormData } from "../../types";
 import { TypeOfArticle } from "database";
-import { Button, Paper, TextField } from "@uvcemarvel/react-ui/client";
+import { Button, Paper, TextField } from "@uvcemarvel/react-ui";
 import { MarkdownEditor } from "../MarkdownEditor";
 import ImageUploader from "../ImageUploader";
 import { useQuery } from "react-query";
