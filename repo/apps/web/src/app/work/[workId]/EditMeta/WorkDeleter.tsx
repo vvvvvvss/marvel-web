@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import { useMutation } from "react-query";
-import { Button, Paper, TextField } from "ui";
+import { Button, Paper, TextField } from "@uvcemarvel/react-ui/client";
 
 const confirmationText = "delete sim sim";
 

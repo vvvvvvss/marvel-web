@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "ui";
+import { Button } from "@uvcemarvel/react-ui/client";
 import { MdAltRoute } from "react-icons/md";
 
 const TracksButton = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, TextField } from "ui";
+import { Button, TextField } from "@uvcemarvel/react-ui/client";
 import { CourseFormData } from "../../types";
 import ImageUploader from "../ImageUploader";
 

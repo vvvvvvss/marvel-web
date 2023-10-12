@@ -1,7 +1,7 @@
 import React from "react";
 import { EventFormData } from "../../types";
 import { TypeOfEvent } from "database";
-import { Button } from "ui";
+import { Button } from "@uvcemarvel/react-ui/client";
 import { TextField } from "../../components/clientComponents";
 import { MarkdownEditor } from "../MarkdownEditor";
 import ImageUploader from "../ImageUploader";

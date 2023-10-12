@@ -1,6 +1,6 @@
 "use client";
-import { Button, LoadingPulser, TextField } from "ui";
-import { FullScreenDialog } from "ui";
+import { Button, LoadingPulser, TextField } from "@uvcemarvel/react-ui/client";
+import { FullScreenDialog } from "@uvcemarvel/react-ui/client";
 
 import axios from "axios";
 import { useSession } from "next-auth/react";

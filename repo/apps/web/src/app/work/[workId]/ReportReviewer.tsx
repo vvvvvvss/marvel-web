@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "ui";
+import { Button } from "@uvcemarvel/react-ui/client";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

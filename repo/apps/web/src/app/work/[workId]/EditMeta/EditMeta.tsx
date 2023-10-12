@@ -1,6 +1,11 @@
 "use client";
-import { Button, IconButton, NumberField, TextField } from "ui";
-import { FullScreenDialog } from "ui";
+import {
+  Button,
+  IconButton,
+  NumberField,
+  TextField,
+} from "@uvcemarvel/react-ui/client";
+import { FullScreenDialog } from "@uvcemarvel/react-ui/client";
 
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
