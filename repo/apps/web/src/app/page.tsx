@@ -69,6 +69,23 @@ const tracks: TrackDescription[] = [
       },
     ],
   },
+  {
+    title: "Equipment",
+    suffix: "Support",
+    desc: "Students who are not part of Marvel can get access to the Lab's Equipments and Components through the Equipment Support Programme. Marvel is eager to help you build and innovate. To get started, fill the form below, specifying the Equipments and Components needed. T&C apply.",
+    buttons: [
+      {
+        buttonText: "Apply",
+        link: "https://forms.gle/CgAEdANBq3R17sdQA",
+        variant: "standard",
+      },
+      {
+        link: "https://docs.google.com/spreadsheets/d/14dbank2PsEFPxTKj9mVxcH3g4bW-Yhc3ZTqOtvyKphw/",
+        buttonText: "View Catalogue",
+        variant: "outlined",
+      },
+    ],
+  },
 ];
 
 export default function page() {
