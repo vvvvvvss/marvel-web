@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 //scope of user
@@ -23,7 +23,7 @@ model People {
   name         String
   profilePic   String
   scope        Scope[]
-  readMe       String?           @db.Text
+  readMe       String?
   rankingScore Int               @default(1)
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
@@ -78,7 +78,7 @@ model Work {
   coverPhoto   String?
   course       Course? @relation(fields: [courseCode], references: [courseCode])
   courseCode   String? //not used in case of project
-  note         String? @db.TinyText
+  note         String?
   searchTerms  String?
   rankingScore Int     @default(1)
 
@@ -127,10 +127,10 @@ model Report {
   workId       String
   isOverview   Boolean?
   reviewStatus ReviewStatus
-  feedback     String?      @db.TinyText
+  feedback     String?
 
   title   String
-  content String @db.Text
+  content String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -149,11 +149,11 @@ model Article {
   typeOfArticle TypeOfArticle
 
   title        String
-  caption      String?           @db.VarChar(200)
+  caption      String?
   coverPhoto   String?
-  content      String            @db.Text
+  content      String
   reviewStatus ReviewStatus
-  feedback     String?           @db.TinyText
+  feedback     String?
   rankingScore Int               @default(1)
   People       ArticleToPeople[]
   Courses      ArticleToCourse[]
@@ -162,7 +162,6 @@ model Article {
   updatedAt DateTime @updatedAt
 
   @@index([title, typeOfArticle, reviewStatus, caption])
-  @@map("articles")
 }
 
 enum ArticleAuthorRole {
@@ -206,9 +205,9 @@ model Event {
   id          String      @id @default(uuid())
   title       String
   typeOfEvent TypeOfEvent
-  caption     String      @db.VarChar(200)
+  caption     String
   coverPhoto  String?
-  description String      @db.Text
+  description String
 
   registrationStartTime DateTime?
   registrationEndTime   DateTime?
