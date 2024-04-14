@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "set PORT=4200 && next dev --turbo",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
