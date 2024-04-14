@@ -86,7 +86,7 @@ export const TextField = ({
 
       {props?.errorMessage ? (
         <p className="text-xs text-[red] max-w-full" {...errorMessageProps}>
-          {props?.errorMessage}
+          {props?.errorMessage as string}
         </p>
       ) : null}
     </div>

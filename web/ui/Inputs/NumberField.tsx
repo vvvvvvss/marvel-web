@@ -107,7 +107,9 @@ export const NumberField = ({
       </div>
 
       {props?.errorMessage ? (
-        <p className="text-xs text-[red] max-w-full">{props?.errorMessage}</p>
+        <p className="text-xs text-[red] max-w-full">
+          {props?.errorMessage as string}
+        </p>
       ) : null}
     </div>
   );

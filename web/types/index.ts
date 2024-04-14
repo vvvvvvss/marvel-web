@@ -1,4 +1,4 @@
-import { TypeOfEvent } from "database";
+import { TypeOfEvent } from "@prisma/client";
 import { ImageListType } from "react-images-uploading";
 
 export type ArticleFormData = {
