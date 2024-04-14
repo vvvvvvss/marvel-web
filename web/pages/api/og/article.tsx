@@ -1,12 +1,11 @@
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
-
 export const config = {
   runtime: "edge",
 };
 
 const font = fetch(
-  new URL("../../../../assets/IBMPlexSans-Medium.ttf", import.meta.url)
+  new URL("../../../assets/IBMPlexSans-Medium.ttf", import.meta.url)
 ).then((res) => res.arrayBuffer());
 
 export default async function handler(req: NextRequest) {
