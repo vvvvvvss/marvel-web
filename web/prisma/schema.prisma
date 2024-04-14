@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+//scope of user
+enum ScopeEnum {
+  PROFILE
+  CRDN
+  ADMIN
+}
+
+model People {
+  id           String            @id @default(uuid())
+  googleId     String            @unique
+  slug         String            @unique
+  email        String            @unique
+  name         String
+  profilePic   String
+  scope        Scope[]
+  readMe       String?
+  rankingScore Int               @default(1)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  Works        PeopleOnWork[]
+  Articles     ArticleToPeople[]
+
+  @@index([googleId, slug, email, name])
+}
+
+// scope. many-to-one relation. between Scope and People
+model Scope {
+  person   People    @relation(fields: [personId], references: [id])
+  personId String
+  scope    ScopeEnum
+
+  @@id([personId, scope])
+  @@index([personId])
+  @@index([scope])
+}
+
+model Course {
+  id             String            @id @default(uuid())
+  courseCode     String            @unique
+  courseDuration String
+  caption        String
+  coverPhoto     String?
+  totalLevels    Int
+  repoURL        String            @default("")
+  rankingScore   Int               @default(1)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  Works          Work[]
+  Articles       ArticleToCourse[]
+
+  @@index([courseCode, caption])
+}
+
+//in works
+enum TypeOfWork {
+  COURSE
+  PROJECT
+}
+
+model Work {
+  id          String         @id @default(uuid())
+  typeOfWork  TypeOfWork
+  People      PeopleOnWork[]
+  Reports     Report[]
+  totalLevels Int? //not used in case of project
+
+  name         String? //not used in case of coursework
+  coverPhoto   String?
+  course       Course? @relation(fields: [courseCode], references: [courseCode])
+  courseCode   String? //not used in case of project
+  note         String?
+  searchTerms  String?
+  rankingScore Int     @default(1)
+
+  @@index([courseCode, name, searchTerms])
+}
+
+// role in work
+enum Role {
+  AUTHOR
+  COORDINATOR
+}
+
+// status in work
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+//explicit many-to-many relation between work and people
+model PeopleOnWork {
+  person   People @relation(fields: [personId], references: [id])
+  personId String
+  work     Work   @relation(fields: [workId], references: [id])
+  workId   String
+  role     Role
+  status   Status @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+
+  @@id([personId, workId])
+  @@index([personId])
+  @@index([workId])
+}
+
+//in articles and reports only
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  FLAGGED
+  FEATURED
+}
+
+model Report {
+  id           String       @id @default(uuid())
+  work         Work         @relation(fields: [workId], references: [id])
+  workId       String
+  isOverview   Boolean?
+  reviewStatus ReviewStatus
+  feedback     String?
+
+  title   String
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([workId, title, reviewStatus])
+}
+
+//in articles
+enum TypeOfArticle {
+  BLOG
+  RESOURCE
+}
+
+model Article {
+  id            String        @id @default(uuid())
+  typeOfArticle TypeOfArticle
+
+  title        String
+  caption      String?
+  coverPhoto   String?
+  content      String
+  reviewStatus ReviewStatus
+  feedback     String?
+  rankingScore Int               @default(1)
+  People       ArticleToPeople[]
+  Courses      ArticleToCourse[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([title, typeOfArticle, reviewStatus, caption])
+}
+
+enum ArticleAuthorRole {
+  OP
+  PENDING
+  GUEST
+}
+
+model ArticleToPeople {
+  article   Article           @relation(fields: [articleId], references: [id])
+  person    People            @relation(fields: [personId], references: [id])
+  role      ArticleAuthorRole @default(OP)
+  articleId String
+  personId  String
+
+  @@id([articleId, personId])
+  @@index([articleId])
+  @@index([personId])
+}
+
+model ArticleToCourse {
+  article Article @relation(fields: [articleId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+
+  articleId String
+  courseId  String
+
+  @@id([articleId, courseId])
+  @@index([articleId])
+  @@index([courseId])
+}
+
+enum TypeOfEvent {
+  EVENT
+  WORKSHOP
+  COMPETITION
+  TALK
+}
+
+model Event {
+  id          String      @id @default(uuid())
+  title       String
+  typeOfEvent TypeOfEvent
+  caption     String
+  coverPhoto  String?
+  description String
+
+  registrationStartTime DateTime?
+  registrationEndTime   DateTime?
+  eventStartTime        DateTime
+  eventEndTime          DateTime?
+
+  actionLink String?
+  actionText String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([title, caption])
+}
