@@ -46,6 +46,7 @@ const getReport = async (workId: string) => {
       feedback: true,
       createdAt: true,
       isOverview: true,
+      updatedAt: true,
     },
   });
   if (report?.content) {

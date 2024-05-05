@@ -37,6 +37,7 @@ const getArticle = cache(async (id: string) => {
         reviewStatus: true,
         coverPhoto: true,
         createdAt: true,
+        updatedAt: true,
         People: {
           select: {
             personId: true,
