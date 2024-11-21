@@ -13,6 +13,7 @@ const getSyllabus = cache(async (courseCode: string) => {
     select: {
       repoURL: true,
       totalLevels: true,
+      updatedAt: true,
     },
   });
   const repoName = course?.repoURL?.slice(

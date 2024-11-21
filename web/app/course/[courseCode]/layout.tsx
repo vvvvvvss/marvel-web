@@ -21,6 +21,7 @@ const getCourse = cache(async (id: string) => {
         coverPhoto: true,
         repoURL: true,
         totalLevels: true,
+        updatedAt: true,
       },
     });
     console.info({ info: "got course" });
