@@ -1,7 +1,0 @@
-{
-    "name": "@uvcemarvel/react-ui",
-    "type": "module",
-    "main": "../dist/index.css",
-    "module": "../dist/index.css",
-    "sideEffects": false
-  }
