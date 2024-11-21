@@ -144,7 +144,7 @@ export default function page() {
                 className="flex-1 md:flex-none"
                 right={MdOutlineOpenInNew}
               >
-                Annual Report 2023
+                Annual Reports
               </Button>
             </Link>
           </div>
