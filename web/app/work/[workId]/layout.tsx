@@ -40,6 +40,7 @@ const getWork = cache(async (id: string) => {
           select: {
             id: true,
             reviewStatus: true,
+            updatedAt: true,
           },
           orderBy: {
             createdAt: "asc",
