@@ -56,7 +56,8 @@ const getSyllabus = cache(async (courseCode: string) => {
   return { content, course };
 });
 
-export default async function page({ params }) {
+export default async function page(props) {
+  const params = await props.params;
   const { content, course } = await getSyllabus(params?.courseCode);
   return (
     <div className="flex flex-col w-full gap-5 items-center">

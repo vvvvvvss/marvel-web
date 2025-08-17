@@ -1,6 +1,8 @@
-"use client";
+"use client";;
 import { Event } from "@prisma/client";
 import { DATE_OPTIONS } from "../utils/DATE_OPTIONS";
+
+import type { JSX } from "react";
 
 const EventTimingText = ({
   data,

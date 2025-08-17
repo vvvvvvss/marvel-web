@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import { Tab } from "../Tabs";
 import { TabGroup } from "../Tabs";
 import { MarkdownRender } from "../MarkdownRender";

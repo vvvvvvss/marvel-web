@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import type { JSX } from "react";
+
 type PaperProps = JSX.IntrinsicElements["div"] & {
   shadow?: Boolean | "hover";
   border?: Boolean;

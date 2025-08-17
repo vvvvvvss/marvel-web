@@ -21,7 +21,8 @@ const getUserReadmeBySlug = async (slug: string) => {
   return person;
 };
 
-export default async function page({ params, searchParams }) {
+export default async function page(props) {
+  const params = await props.params;
   const readMeData = await getUserReadmeBySlug(params?.profileSlug as string);
   return (
     <div className="flex flex-col w-full rounded-lg gap-5 justify-center">

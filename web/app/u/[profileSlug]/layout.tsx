@@ -31,7 +31,8 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const person = await getUserBySlug(params?.profileSlug);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/people`);
@@ -58,13 +59,18 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   } as Metadata;
 }
 
-export default async function layout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { profileSlug?: String };
-}) {
+export default async function layout(
+  props: {
+    children: ReactNode;
+    params: Promise<{ profileSlug?: String }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const dude = await getUserBySlug(params?.profileSlug as string);
   if (!dude) {
     notFound();

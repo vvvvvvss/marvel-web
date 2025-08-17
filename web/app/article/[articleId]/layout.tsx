@@ -63,11 +63,12 @@ const getArticle = cache(async (id: string) => {
   }
 });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: any;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<any>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const article = await getArticle(params?.articleId);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/article`);
@@ -104,7 +105,13 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export default async function layout({ children, params }: any) {
+export default async function layout(props: any) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const article = await getArticle(params?.articleId);
 
   if (!article) {

@@ -25,7 +25,8 @@ const getUserWorksBySlug = async (slug: string) => {
   return works;
 };
 
-export default async function page({ params, searchParams }) {
+export default async function page(props) {
+  const params = await props.params;
   const works = await getUserWorksBySlug(params?.profileSlug as string);
   return (
     <div className="flex flex-col pb-36">

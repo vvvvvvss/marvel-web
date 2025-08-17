@@ -62,7 +62,8 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const work = await getWork(params?.workId);
 
   const title = `${
@@ -101,7 +102,13 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   } as Metadata;
 }
 
-export default async function layout({ children, params }) {
+export default async function layout(props) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const work = await getWork(params?.workId);
   if (!work) {
     notFound();

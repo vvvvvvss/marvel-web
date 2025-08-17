@@ -1,5 +1,5 @@
 "use client";
-import { ReactEventHandler, SyntheticEvent, useState } from "react";
+import { ReactEventHandler, SyntheticEvent, useState, type JSX } from "react";
 import clsx from "clsx";
 
 export type AvatarProps = JSX.IntrinsicElements["image"] & {

@@ -56,7 +56,8 @@ const getReport = async (workId: string, stageId: string) => {
   return JSON.parse(JSON.stringify({ report, work }));
 };
 
-export default async function page({ params, searchParams }) {
+export default async function page(props) {
+  const params = await props.params;
   const { report, work } = await getReport(params?.workId, params?.reportId);
   return (
     <div className="flex flex-col w-full gap-5 items-center">

@@ -32,7 +32,8 @@ const getEvent = cache(async (id: string) => {
   }
 });
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const event = await getEvent(params?.eventId);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/event`);
@@ -117,7 +118,8 @@ const TimeLineItem: React.FC<TimeLineItemProps> = ({
   );
 };
 
-export default async function page({ params }) {
+export default async function page(props) {
+  const params = await props.params;
   const event = await getEvent(params?.eventId);
   const imageSrc = getCroppedCloudinaryImage(
     event?.coverPhoto as string,

@@ -31,7 +31,8 @@ const getCourse = cache(async (id: string) => {
   }
 });
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const course = await getCourse(params?.courseCode);
 
   const og_url = new URL(`${process.env.NEXTAUTH_URL}/api/og/course`);
@@ -71,7 +72,13 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = true;
 
-export default async function layout({ children, params }) {
+export default async function layout(props) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const course = await getCourse(params?.courseCode);
 
   if (!course) {

@@ -1,6 +1,8 @@
-"use client";
+"use client";;
 import * as RadixAvatar from "@radix-ui/react-avatar";
 import clsx from "clsx";
+
+import type { JSX } from "react";
 
 type AvatarProps = JSX.IntrinsicElements["img"];
 

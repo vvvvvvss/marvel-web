@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import type { JSX } from "react";
+
 export const Window = ({
   children,
   className,

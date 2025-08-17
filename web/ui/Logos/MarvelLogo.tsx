@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import type { JSX } from "react";
+
 type MarvelLogoProps = JSX.IntrinsicElements["svg"];
 
 export const MarvelLogo = ({ ...props }: MarvelLogoProps) => {

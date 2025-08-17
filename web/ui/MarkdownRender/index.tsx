@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, type JSX } from "react";
 import Markdown from "react-markdown";
 import he from "he";
 import sanitizer from "sanitize-html";

@@ -28,7 +28,8 @@ const getArticles = cache(async (courseCode: string) => {
   return JSON.parse(JSON.stringify(articles));
 });
 
-export default async function page({ params }) {
+export default async function page(props) {
+  const params = await props.params;
   const articles = await getArticles(params?.courseCode as string);
   return (
     <div className="flex flex-col w-full gap-5 items-center">
