@@ -27,7 +27,6 @@ const getEvent = cache(async (id: string) => {
         await axios.get(event?.description as string)
       ).data;
     }
-    console.info({ info: "got event" });
     return event;
   } catch (error) {
     return null;
@@ -39,9 +38,8 @@ export async function generateMetadata(props): Promise<Metadata> {
   const event = await getEvent(params?.eventId);
 
   return {
-    title: `${
-      event?.title
-    } | ${event?.typeOfEvent?.toLowerCase()} at UVCE MARVEL`,
+    title: `${event?.title
+      } | ${event?.typeOfEvent?.toLowerCase()} at UVCE MARVEL`,
     description: event?.caption,
   } as Metadata;
 }

@@ -10,17 +10,18 @@ const getEvents = async () => {
     orderBy: {
       eventStartTime: "desc",
     },
-    select:{
-        id: true,
-        title: true,
-        typeOfEvent: true,
-        caption: true,
-        coverPhoto: true,
-        eventStartTime: true,
-        eventEndTime: true,
-        registrationStartTime: true,
-        registrationEndTime: true,
-    }
+    select: {
+      id: true,
+      title: true,
+      typeOfEvent: true,
+      caption: true,
+      coverPhoto: true,
+      eventStartTime: true,
+      eventEndTime: true,
+      registrationStartTime: true,
+      registrationEndTime: true,
+    },
+    take: 18
   });
   return events;
 };

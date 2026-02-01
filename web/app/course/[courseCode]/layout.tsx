@@ -26,7 +26,6 @@ const getCourse = cache(async (id: string) => {
         updatedAt: true,
       },
     });
-    console.info({ info: "got course" });
     return course;
   } catch (error) {
     return null;

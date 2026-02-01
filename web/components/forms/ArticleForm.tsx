@@ -123,22 +123,21 @@ const ArticleForm = ({
                     onClick={() => {
                       setFormData((p: any) => ({
                         ...p,
-                        courseIds: formData?.courseIds?.includes(course?.id)
-                          ? formData?.courseIds.filter((i) => i !== course?.id)
+                        courseIds: formData?.courseIds?.includes(course?.courseCode)
+                          ? formData?.courseIds.filter((i) => i !== course?.courseCode)
                           : [
-                              ...(formData?.courseIds
-                                ? formData?.courseIds
-                                : []),
-                              course?.id,
-                            ],
+                            ...(formData?.courseIds
+                              ? formData?.courseIds
+                              : []),
+                            course?.courseCode,
+                          ],
                       }));
                     }}
-                    border={formData?.courseIds?.includes(course?.id)}
-                    className={`rounded-lg ${
-                      formData?.courseIds?.includes(course?.id)
-                        ? "dark:bg-p-2 bg-p-9 border-2 dark:border-p-10"
-                        : "dark:bg-p-1 bg-p-9 border-2 border-transparent"
-                    } p-5 select-none cursor-pointer box-border`}
+                    border={formData?.courseIds?.includes(course?.courseCode)}
+                    className={`rounded-lg ${formData?.courseIds?.includes(course?.courseCode)
+                      ? "dark:bg-p-2 bg-p-9 border-2 dark:border-p-10"
+                      : "dark:bg-p-1 bg-p-9 border-2 border-transparent"
+                      } p-5 select-none cursor-pointer box-border`}
                   >
                     <h3 className="text-2xl">{course?.courseCode}</h3>
                     <h6 className="text-xs tracking-wider">

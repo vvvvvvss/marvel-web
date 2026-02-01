@@ -43,6 +43,11 @@ const tracks: TrackDescription[] = [
         buttonText: "Apply with an Idea",
         variant: "outlined",
       },
+      {
+        link: "/projects",
+        buttonText: "View Projects",
+        variant: "standard",
+      },
     ],
   },
   {

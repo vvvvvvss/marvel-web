@@ -22,13 +22,14 @@ const ArticleEditor = ({ article }: { article: any }) => {
     title: article?.title,
     caption: article?.caption,
     content: article?.content,
-    courseIds: article?.Courses?.map((c: any) => c?.courseId),
+    courseIds: article?.Courses?.map((c: any) => c?.course?.courseCode),
     coverPhoto: article?.coverPhoto,
   });
 
   const handleUpdate = async () => {
     setError(null);
     startTransition(async () => {
+      console.log(formData)
       const response = await updateArticle(article.id, formData);
       if (response.success) {
         router.refresh();
@@ -60,9 +61,9 @@ const ArticleEditor = ({ article }: { article: any }) => {
   ) {
     return (
       <>
-        {error && (
+        {/* {error && (
           <div className="text-red-500 mb-4">{error}</div>
-        )}
+        )} */}
         <Button variant="standard" onPress={() => setModalOpen(true)}>
           Edit Article
         </Button>
@@ -77,8 +78,8 @@ const ArticleEditor = ({ article }: { article: any }) => {
           {confirmDelete === 0
             ? "Delete Article"
             : confirmDelete === 1
-            ? "Are you sure?"
-            : "Confirm."}
+              ? "Are you sure?"
+              : "Confirm."}
         </Button>
         {modalOpen && (
           <FullScreenDialog

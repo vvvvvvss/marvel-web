@@ -52,7 +52,6 @@ const getWork = cache(async (id: string) => {
         typeOfWork: true,
       },
     });
-    console.info({ info: "got work" });
     return work;
   } catch (error) {
     return null;
@@ -68,13 +67,12 @@ export async function generateMetadata(props): Promise<Metadata> {
   const params = await props.params;
   const work = await getWork(params?.workId);
 
-  const title = `${
-    work?.typeOfWork === "COURSE"
+  const title = `${work?.typeOfWork === "COURSE"
       ? `${work?.People?.map((p) => p?.person?.name?.split(" ")[0])?.join(
-          " and "
-        )}'s ${work?.courseCode} course work.`
+        " and "
+      )}'s ${work?.courseCode} course work.`
       : work?.name
-  }`;
+    }`;
 
   return {
     title: title + " | UVCE MARVEL",
@@ -158,8 +156,8 @@ export default async function layout(props) {
                       className="border-t-[1.5px] dark:border-t p-5 border-p-3 dark:border-p-6"
                     >
                       <td className="py-3 px-5">
-                        <Link 
-                          key={i} 
+                        <Link
+                          key={i}
                           href={`/u/${p?.person?.slug}`}
                           className="flex gap-3 items-center text-base"
                         >
