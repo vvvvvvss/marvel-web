@@ -58,6 +58,23 @@ const tracks: TrackDescription[] = [
     ],
   },
   {
+    title: "Research",
+    suffix: "Track",
+    desc: "The Research Track is designed for UVCE students who are interested in exploring research but need structured guidance to get started. This track helps students develop strong research foundations by guiding them through problem formulation, literature review, methodology design, experimentation, and academic writing.",
+    buttons: [
+      {
+        buttonText: "Research Starter Kit",
+        link: "https://drive.google.com/file/d/1ilJ-m_prJD_7hA9vXDhsFyiiqwdvFL_A/view?usp=sharing",
+        variant: "standard",
+      },
+      {
+        link: "https://forms.gle/59c6WxZxXQ3naC9f8",
+        buttonText: "Apply",
+        variant: "outlined",
+      },
+    ],
+  },
+  {
     title: "Open Learner",
     suffix: "Programme",
     desc: "While admission to Marvel's Student Track is limited, we invite you to continue upskilling yourself through our Open Learner Programme. Access any of Marvel's courses, utilize your own resources, and complete the tasks at your own pace. Upon completion of the coursework and submission of the final report, you will receive a certificate that highlights your achievement and dedication to continuous learning.",
