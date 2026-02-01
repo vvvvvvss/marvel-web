@@ -24,7 +24,6 @@ const getUserWritingsBySlug = async (slug: string) => {
       reviewStatus: true,
     },
   });
-  console.log({ info: "find() on articles" });
   return writings;
 };
 

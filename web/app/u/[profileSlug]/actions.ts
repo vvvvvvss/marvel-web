@@ -215,19 +215,19 @@ export async function spawnWork(
               : []),
             ...(type == "COURSE" && formData?.selectedCourse
               ? [
-                  {
-                    AND: [
-                      { courseCode: formData?.selectedCourse },
-                      {
-                        People: {
-                          some: {
-                            personId: author?.id,
-                          },
+                {
+                  AND: [
+                    { courseCode: formData?.selectedCourse },
+                    {
+                      People: {
+                        some: {
+                          personId: author?.id,
                         },
                       },
-                    ],
-                  },
-                ]
+                    },
+                  ],
+                },
+              ]
               : []),
           ],
         },
@@ -284,15 +284,15 @@ export async function spawnWork(
             },
             ...(type !== "COURSE"
               ? [
-                  {
-                    person: {
-                      connect: {
-                        id: sessionUser?.id,
-                      },
+                {
+                  person: {
+                    connect: {
+                      id: sessionUser?.id,
                     },
-                    role: "COORDINATOR" as Role,
                   },
-                ]
+                  role: "COORDINATOR" as Role,
+                },
+              ]
               : []),
           ],
         },
@@ -348,8 +348,8 @@ export async function createArticle(
         content: "",
         reviewStatus:
           session &&
-          (session.user.scope?.map((s) => s.scope)?.includes("CRDN") ||
-            session.user.scope?.map((s) => s.scope)?.includes("ADMIN"))
+            (session.user.scope?.map((s) => s.scope)?.includes("CRDN") ||
+              session.user.scope?.map((s) => s.scope)?.includes("ADMIN"))
             ? "APPROVED"
             : "PENDING",
         People: {
@@ -362,12 +362,12 @@ export async function createArticle(
         },
         ...(typeOfArticle === "RESOURCE"
           ? {
-              Courses: {
-                create: formData?.courseIds?.map((c) => ({
-                  course: { connect: { id: c } },
-                })),
-              },
-            }
+            Courses: {
+              create: formData?.courseIds?.map((c) => ({
+                course: { connect: { courseCode: c } },
+              })),
+            },
+          }
           : null),
         feedback: "",
       },

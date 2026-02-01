@@ -23,7 +23,6 @@ const getUserWorksBySlug = async (slug: string) => {
       typeOfWork: true,
     },
   });
-  console.log({ info: "find() on works" });
   return works;
 };
 

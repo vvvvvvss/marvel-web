@@ -152,7 +152,7 @@ export async function updateArticle(
         title: true,
         typeOfArticle: true,
         coverPhoto: true,
-        Courses: { select: { courseId: true } },
+        Courses: { select: { course: { select: { courseCode: true, id: true } } } },
         People: { select: { personId: true } },
       },
     });
@@ -191,29 +191,33 @@ export async function updateArticle(
       coverPhoto = null;
     }
 
+    let coursesUpdate: any = undefined;
     if (existingArticle.typeOfArticle === "RESOURCE") {
-      const oldCourseIds = existingArticle.Courses.map((c) => c.courseId);
-      const newCourseIds = formData.courseIds || [];
-      const coursesToAdd = newCourseIds.filter((id) => !oldCourseIds.includes(id));
-      const coursesToDelete = oldCourseIds.filter(
-        (id) => !newCourseIds.includes(id)
+      const oldCourses = existingArticle.Courses.map((c) => ({
+        id: c.course.id,
+        code: c.course.courseCode,
+      }));
+      const newCourseCodes = formData.courseIds || [];
+
+      const idsToDelete = oldCourses
+        .filter((c) => !newCourseCodes.includes(c.code))
+        .map((c) => c.id);
+
+      const codesToAdd = newCourseCodes.filter(
+        (code) => !oldCourses.some((oc) => oc.code === code)
       );
 
-      if (coursesToAdd.length > 0) {
-        await dbClient.articleToCourse.createMany({
-          data: coursesToAdd.map((courseId) => ({
-            articleId: existingArticle.id,
-            courseId,
-          })),
-        });
-      }
-      if (coursesToDelete.length > 0) {
-        await dbClient.articleToCourse.deleteMany({
-          where: {
-            articleId: existingArticle.id,
-            courseId: { in: coursesToDelete },
-          },
-        });
+      if (idsToDelete.length > 0 || codesToAdd.length > 0) {
+        coursesUpdate = {
+          ...(idsToDelete.length > 0 && {
+            deleteMany: { courseId: { in: idsToDelete } },
+          }),
+          ...(codesToAdd.length > 0 && {
+            create: codesToAdd.map((code) => ({
+              course: { connect: { courseCode: code } },
+            })),
+          }),
+        };
       }
     }
 
@@ -232,6 +236,7 @@ export async function updateArticle(
         coverPhoto: coverPhoto,
         reviewStatus: "PENDING",
         feedback: "",
+        ...(coursesUpdate && { Courses: coursesUpdate }),
       },
     });
 

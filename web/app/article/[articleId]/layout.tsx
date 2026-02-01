@@ -55,7 +55,6 @@ const getArticle = cache(async (id: string) => {
         },
       },
     });
-    console.info({ info: "got article" });
     if (article.content) {
       article.content = (await axios.get(article.content)).data;
     }
